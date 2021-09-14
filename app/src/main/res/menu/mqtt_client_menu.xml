@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_subscribe"
+        android:icon="@drawable/ic_subscribe"
+        android:title="@string/connect_subscribe"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_publish_tvocs"
+        android:icon="@drawable/ic_tvocs"
+        android:title="@string/connect_publish"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_publish_fan"
+        android:icon="@drawable/ic_fan"
+        android:title="@string/connect_publish"
+        app:showAsAction="ifRoom" />
+</menu>

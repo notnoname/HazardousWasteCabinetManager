@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@drawable/background_info_area"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/csDetailInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/llConNo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/llSupplier"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/tvConNoLabel"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_container_no" />
+
+            <TextView
+                android:id="@+id/tvConNoValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSupplier"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/llConNo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/tvSupplierLabel"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_supplier" />
+
+            <TextView
+                android:id="@+id/tvSupplierValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPurity"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/llPack"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llConNo"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/tvPurityLabel"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_purity" />
+
+            <TextView
+                android:id="@+id/tvPurityValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPack"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/llPurity"
+            app:layout_constraintEnd_toStartOf="@id/llWeight"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/llPurity"
+            app:layout_constraintTop_toTopOf="@+id/llPurity"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/tvPackSpecLabel"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_spec" />
+
+            <TextView
+                android:id="@+id/tvPackSpecValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llWeight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/llPack"
+            app:layout_constraintEnd_toStartOf="@id/llDevice"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/llPack"
+            app:layout_constraintTop_toTopOf="@+id/llPack"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/tvWeightLabel"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_weight" />
+
+            <TextView
+                android:id="@+id/tvWeightValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llDevice"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/llWeight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/llWeight"
+            app:layout_constraintTop_toTopOf="@+id/llWeight"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/tvDeviceLabel"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_cell" />
+
+            <TextView
+                android:id="@+id/tvDeviceValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnMore"
+        android:layout_width="120dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/background_button"
+        android:text="@string/load_more"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

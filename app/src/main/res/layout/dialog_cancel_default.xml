@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/tv_dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="提示"
+            android:textColor="#9F9F9F"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="#e5e5e5" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="#fff"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        android:text="取消"
+        android:textColor="#666666"
+        android:textSize="18sp" />
+
+</LinearLayout>

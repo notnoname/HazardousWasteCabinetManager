@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog"
+    android:minWidth="480dp"
+    tools:context=".PrintActivity">
+
+    <TextView
+        android:id="@+id/tvTip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/print_label"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPrinterName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPrinterName" />
+
+    <TextView
+        android:id="@+id/tvPrinterName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/set_printer_tip"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPrinterState"
+        app:layout_constraintEnd_toStartOf="@+id/ivPrinterState"
+        app:layout_constraintTop_toTopOf="@+id/ivPrinterState" />
+
+    <ImageView
+        android:id="@+id/ivPrinterState"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/app_name"
+        android:onClick="onBluetoothListButtonClick"
+        android:padding="5dp"
+        android:src="@drawable/ic_connect_devices_false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ImageView
+        android:id="@+id/ivPrintValue"
+        android:layout_width="430dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/background_info_area_white"
+        android:contentDescription="@string/app_name"
+        android:padding="15dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/lab_test"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPrinterState" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPrintValue">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancel"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/background_button"
+            android:gravity="center"
+            android:onClick="onCancelButtonClick"
+            android:text="@string/cancel"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOK"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/background_button"
+            android:gravity="center"
+            android:onClick="onPrintButtonClick"
+            android:text="@string/print_label"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

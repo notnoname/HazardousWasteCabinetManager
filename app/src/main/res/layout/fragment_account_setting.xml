@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".AccountSettingActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/background_input_area"
+        android:paddingBottom="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/llAccountName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvAccountNameLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="@string/admin_name"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/etAccountNameValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.6"
+                android:background="@drawable/background_edit_normal"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:maxLength="32"
+                android:padding="10dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llAccountID"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llAccountName">
+
+            <TextView
+                android:id="@+id/tvAccountIDLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="@string/id"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/etAccountIDValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.6"
+                android:background="@drawable/background_edit_normal"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:maxLength="32"
+                android:padding="10dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llAccountPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llAccountID">
+
+            <TextView
+                android:id="@+id/tvAccountPasswordLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="@string/password"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                tools:ignore="TextContrastCheck" />
+
+            <EditText
+                android:id="@+id/etAccountPasswordValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.6"
+                android:background="@drawable/background_edit_normal"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:maxLength="32"
+                android:padding="10dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llAccountPasswordConfirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="48dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llAccountPassword">
+
+            <TextView
+                android:id="@+id/tvAccountPasswordConfirmLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="@string/password_confirm"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/etAccountPasswordConfirmValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.6"
+                android:importantForAutofill="no"
+                android:background="@drawable/background_edit_normal"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:maxLength="32"
+                android:padding="10dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                tools:ignore="LabelFor" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnFaceId"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/background_button"
+        android:onClick="onFaceIdInputClick"
+        android:text="@string/input_face_id"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

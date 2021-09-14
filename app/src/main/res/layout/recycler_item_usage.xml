@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="0dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="0dp"
+    android:paddingBottom="10dp">
+
+    <ImageButton
+        android:id="@+id/btnAdd"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
+        android:padding="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/add_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/csDetailInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAdd">
+
+        <TextView
+            android:id="@+id/tvUseWeightValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvConNoLabel"
+            app:layout_constraintEnd_toStartOf="@+id/tvCreateTimeLabel"
+            app:layout_constraintStart_toEndOf="@+id/ivUseWeightLabel"
+            app:layout_constraintTop_toTopOf="@+id/tvConNoLabel"
+            app:layout_constraintVertical_bias="0.666" />
+
+        <ImageView
+            android:id="@+id/ivUseWeightLabel"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_weight"
+            app:layout_constraintBottom_toBottomOf="@+id/tvConNoValue"
+            app:layout_constraintStart_toEndOf="@+id/tvConNoValue"
+            app:layout_constraintTop_toTopOf="@+id/tvConNoValue" />
+
+        <TextView
+            android:id="@+id/tvConNoValue"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvConNoLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvConNoLabel"
+            app:layout_constraintTop_toTopOf="@+id/tvConNoLabel" />
+
+        <ImageView
+            android:id="@+id/tvConNoLabel"
+            android:layout_width="20dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_container_no"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCreateTimeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCreateTimeLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvCreateTimeLabel" />
+
+        <ImageView
+            android:id="@+id/tvCreateTimeLabel"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_date"
+            app:layout_constraintBottom_toBottomOf="@+id/tvConNoLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvCreateTimeValue"
+            app:layout_constraintTop_toTopOf="@+id/tvConNoLabel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

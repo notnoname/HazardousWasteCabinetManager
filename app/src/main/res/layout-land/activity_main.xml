@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/llRightMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnFirstIn"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_button"
+                android:onClick="onFirstTakeInButtonClick"
+                android:text="@string/first_save_in"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOut"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/background_button"
+                android:onClick="onTakeOutButtonClick"
+                android:text="@string/take_out"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toStartOf="@+id/btnIn"
+                app:layout_constraintStart_toEndOf="@+id/btnFirstIn"
+                app:layout_constraintTop_toBottomOf="@+id/btnFirstIn" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnIn"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/background_button"
+                android:onClick="onReturnAfterUseButtonClick"
+                android:text="@string/take_in"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOut" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnStockQuery"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/background_button"
+                android:onClick="onInventoryQueryButtonClick"
+                android:text="@string/stock_query"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnIn" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnInOutQuery"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/background_button"
+                android:onClick="onStandingBookQueryButtonClick"
+                android:text="@string/in_out_query"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnStockQuery" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCamera"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/background_button"
+                android:onClick="onCameraButtonClick"
+                android:text="@string/watch_camera"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnInOutQuery" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_input_area"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/llSubBoardStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llFanStatus">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSubBoard"
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_button"
+                    android:onClick="onSubBoardButtonClick"
+                    android:text="@string/sub_board_info"
+                    android:textColor="@color/white" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnLockManage"
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/background_button"
+                    android:onClick="onSubCabinetLockerButtonClick"
+                    android:text="@string/sub_board_lock"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llFanStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llLocker">
+
+                <TextView
+                    android:id="@+id/tvFanStatusLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fan_status"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/ivFanStatusValue"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:src="@drawable/ic_red_circle"
+                    tools:ignore="ContentDescription" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnFan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_button"
+                    android:onClick="onFanButtonClick"
+                    android:text="@string/fan_start"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llLocker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llTVOCs2">
+
+                <TextView
+                    android:id="@+id/tvLockerLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/locker_status"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/ivLockerValue"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:src="@drawable/ic_red_circle"
+                    tools:ignore="ContentDescription" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnLocker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_button"
+                    android:onClick="onLockerButtonClick"
+                    android:text="@string/unlock"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llTVOCs2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#40000000"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llTVOCs1">
+
+                <TextView
+                    android:id="@+id/tvTVOCs2Label"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/tvocs2"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/tvTVOCs2Value"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/background_edit_normal"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/ppm"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTVOCs1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llHumidity">
+
+                <TextView
+                    android:id="@+id/tvTVOCs1Label"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/tvocs1"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/tvTVOCs1Value"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/background_edit_normal"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/ppm"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llHumidity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#40000000"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llTemperature">
+
+                <TextView
+                    android:id="@+id/tvHumidityLabel"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/humidity"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/tvHumidityValue"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/background_edit_normal"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textColor="#ff8400"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="24dp"
+                    android:cropToPadding="true"
+                    android:src="@drawable/ic_percent_sign"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTemperature"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/split">
+
+                <TextView
+                    android:id="@+id/tvTemperatureLabel"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/temperature"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/tvTemperatureValue"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/background_edit_normal"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textColor="#ff4200"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="24dp"
+                    android:cropToPadding="true"
+                    android:src="@drawable/ic_celsius"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/split"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                android:background="#0c729d"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llTitle" />
+
+            <LinearLayout
+                android:id="@+id/llTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivAlert"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_red_circle"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/app_name"
+                    android:textColor="#ff8400"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/tvSetup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:onClick="onSettingButtonClick"
+                    android:text="@string/setting"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:theme="@style/Theme.CabinetManager.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tool_bar_height"
+            android:background="@android:color/transparent"
+            app:popupTheme="@style/Theme.CabinetManager.PopupOverlay">
+
+            <TextView
+                android:id="@+id/toolbar_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/toolbar_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

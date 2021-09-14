@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".DeviceBluetoothListActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:theme="@style/Theme.CabinetManager.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tool_bar_height"
+            android:background="@android:color/transparent"
+            app:popupTheme="@style/Theme.CabinetManager.PopupOverlay">
+
+            <ImageButton
+                android:id="@+id/toolbar_back"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
+                android:layout_gravity="start|center_vertical"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/app_name"
+                android:onClick="onBackButtonClick"
+                android:scaleType="fitCenter"
+                android:src="@drawable/back_button" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/hardware_setup"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="@dimen/tool_bar_height"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/background_info_area"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_10">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

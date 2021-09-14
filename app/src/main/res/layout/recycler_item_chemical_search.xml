@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/background_info_area"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingStart="5dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="5dp"
+    android:paddingBottom="5dp">
+
+    <TextView
+        android:id="@+id/tvChemicalName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="start|center_vertical"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="5dp"
+        android:textColor="#f18a34"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/llOtherInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvCAS"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvChemicalType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
