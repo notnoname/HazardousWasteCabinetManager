@@ -37,6 +37,7 @@ import me.liuxy.cabinet.Steelyard;
 import me.liuxy.cabinet.SubBoard;
 import me.liuxy.cabinet.TDA09C;
 import me.liuxy.cabinet.TVOCs;
+import me.liuzs.cabinetmanager.BuildConfig;
 import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.CtrlFunc;
@@ -186,6 +187,9 @@ public class HardwareService extends Service {
             return;
         }
         if (mManager != null) {
+            return;
+        }
+        if (BuildConfig.DEBUG) {
             return;
         }
         isSingleDevice = cabinetInfo.tankType == 2;

@@ -84,9 +84,9 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
         }
     });
 
-    private TextView mARCState, mARCInfo, mScalesSelect, mPrinterName, mTitle, mTVOCSelectCount;
-    private Button mARCActive, mWeight, mCalibration, mTVOCSelect;
-    private EditText mBarcode, mSubBoardPeriod, mLockDelay, mGetNEVPeriod;
+    private TextView mARCState, mARCInfo, mPrinterName, mTitle;
+    private Button mARCActive, mWeight, mCalibration, mModbusTest;
+    private EditText mBarcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,18 +95,13 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
         Util.fullScreen(this);
         mARCState = findViewById(R.id.tvARCStateValue);
         mARCInfo = findViewById(R.id.tvActiveInfo);
-        mScalesSelect = findViewById(R.id.tvWeightSelect);
         mARCActive = findViewById(R.id.btnARCActive);
         mWeight = findViewById(R.id.btnWeight);
         mCalibration = findViewById(R.id.btnCalibration);
         mPrinterName = findViewById(R.id.tvPrinterNameValue);
-        mTVOCSelect = findViewById(R.id.btnTvocSelect);
-        mTVOCSelectCount = findViewById(R.id.tvTvocsNameValue);
+        mModbusTest = findViewById(R.id.btnModBusTest);
 
         mBarcode = (EditText) findViewById(R.id.etBarcode);
-        mSubBoardPeriod = (EditText) findViewById(R.id.etSubBoardPeriod);
-        mLockDelay = (EditText) findViewById(R.id.etSubBoardLockDelayPeriod);
-        mGetNEVPeriod = (EditText) findViewById(R.id.etLoadEnvPeriod);
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mBarcode.getWindowToken(), 0);
         CtrlFunc.checkARCActive(this, this);
@@ -200,7 +195,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
         PrintActivity.startPrintContainerLabel(this, pc);
     }
 
-    public void onTVOCSelectButtonClick(View view) {
+    public void onModBusTestButtonClick(View view) {
         List<String> options = new ArrayList<>();
         options.add(String.valueOf(1));
         options.add(String.valueOf(2));

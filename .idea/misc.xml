@@ -6,6 +6,7 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable-land/background_corner_orange.xml" value="0.23984375" />
         <entry key="app/src/main/res/drawable-land/background_corner_white.xml" value="0.23984375" />
+        <entry key="app/src/main/res/drawable/background.xml" value="0.3546875" />
         <entry key="app/src/main/res/drawable/background_button.xml" value="0.29765625" />
         <entry key="app/src/main/res/drawable/background_button_orange.xml" value="0.31796875" />
         <entry key="app/src/main/res/drawable/background_corner.xml" value="0.31796875" />
@@ -13,14 +14,14 @@
         <entry key="app/src/main/res/drawable/background_input_area.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_back_white.xml" value="0.17" />
         <entry key="app/src/main/res/layout-land/activity_cabinet_name.xml" value="0.55" />
-        <entry key="app/src/main/res/layout-land/activity_hardware_setup.xml" value="0.5" />
+        <entry key="app/src/main/res/layout-land/activity_hardware_setup.xml" value="0.4033989266547406" />
         <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.5" />
         <entry key="app/src/main/res/layout-land/fragment_setting_main.xml" value="0.31875" />
         <entry key="app/src/main/res/layout/activity_account_setting.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_auth.xml" value="0.3328125" />
         <entry key="app/src/main/res/layout/activity_cabinet_name.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_camera_list.xml" value="0.27109375" />
-        <entry key="app/src/main/res/layout/activity_hardware_setup.xml" value="0.55" />
+        <entry key="app/src/main/res/layout/activity_hardware_setup.xml" value="0.3366733466933868" />
         <entry key="app/src/main/res/layout/activity_inventory_detail.xml" value="0.45" />
         <entry key="app/src/main/res/layout/activity_inventory_query.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/activity_launcher.xml" value="0.4546875" />

@@ -5,7 +5,7 @@ plugins {
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "me.liuzs.cabinetmanager"
+        applicationId 'me.liuzs.hazardouswastecabinetmanager'
         minSdkVersion 24
         targetSdkVersion 31
         versionCode 72

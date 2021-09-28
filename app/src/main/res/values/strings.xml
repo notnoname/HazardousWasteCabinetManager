@@ -165,4 +165,5 @@
     <string name="stop">停止</string>
     <string name="fanopen">打开</string>
     <string name="TVOC">TVOC</string>
+    <string name="modbus_test">Modbus测试</string>
 </resources>
