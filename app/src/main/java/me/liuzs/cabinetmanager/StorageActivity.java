@@ -12,10 +12,10 @@ import androidx.lifecycle.Lifecycle;
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DepositItem;
 import me.liuzs.cabinetmanager.model.DepositRecord;
-import me.liuzs.cabinetmanager.model.UserInfo;
+import me.liuzs.cabinetmanager.model.User;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.ui.storage.DepositItemCreateFragment;
@@ -58,15 +58,15 @@ public class StorageActivity extends BaseActivity {
         mDepositItemCount = findViewById(R.id.tvDepositCountValue);
         mToolBack = findViewById(R.id.toolbar_back);
 
-        mDepositRecord = CtrlFunc.getUnSubmitDepositRecord(this);
+        mDepositRecord = CabinetCore.getUnSubmitDepositRecord(this);
         if (mDepositRecord == null) {
-            CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
-            UserInfo userInfo = CabinetApplication.getInstance().getAdminUser();
+            Cabinet cabinet = CabinetCore.getCabinetInfo();
+            User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
             mDepositRecord = new DepositRecord();
-            mDepositRecord.labName = cabinetInfo.labName;
-            mDepositRecord.labId = cabinetInfo.labId;
-            mDepositRecord.userId = userInfo.userId;
-            mDepositRecord.userName = userInfo.userName;
+//            mDepositRecord.labName = cabinet.labName;
+//            mDepositRecord.labId = cabinet.labId;
+            mDepositRecord.userId = user.id;
+            mDepositRecord.userName = user.name;
             ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.first_save_in);
             new CreateDepositTask(this).execute();
         } else {
@@ -178,7 +178,7 @@ public class StorageActivity extends BaseActivity {
             if (result != null) {
                 mActivity.get().mDepositRecord.putNo = result[0];
                 mActivity.get().mDepositRecord.putId = Integer.parseInt(result[1]);
-                CtrlFunc.saveUnSubmitDepositRecord(mActivity.get(), mActivity.get().mDepositRecord);
+                CabinetCore.saveUnSubmitDepositRecord(mActivity.get(), mActivity.get().mDepositRecord);
                 mActivity.get().transToFirstDepositFragment();
                 mActivity.get().showDepositRecord();
             } else {

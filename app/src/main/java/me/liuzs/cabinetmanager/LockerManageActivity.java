@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import me.liuxy.cabinet.SubBoard;
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DeviceInfo;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.LockerStatus;
@@ -50,16 +50,16 @@ public class LockerManageActivity extends BaseActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-        CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+        Cabinet cabinet = CabinetCore.getCabinetInfo();
 
-        if (cabinetInfo != null) {
-            for (DeviceInfo info : cabinetInfo.devices) {
-                LockerStatus status = new LockerStatus();
-                status.deviceName = info.devName;
-                status.devId = info.devId;
-                mLockerStatus.add(status);
-            }
-        }
+//        if (cabinet != null) {
+//            for (DeviceInfo info : cabinet.devices) {
+//                LockerStatus status = new LockerStatus();
+//                status.deviceName = info.devName;
+//                status.devId = info.devId;
+//                mLockerStatus.add(status);
+//            }
+//        }
 
         mAdapter.setResult(mLockerStatus);
 

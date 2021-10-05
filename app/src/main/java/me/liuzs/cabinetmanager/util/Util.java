@@ -104,7 +104,7 @@ public class Util {
             }
             hex.append(Integer.toHexString(b & 0xFF));
         }
-        return hex.toString();
+        return hex.toString().toUpperCase();
     }
 
     public static byte[] getBooleanArray(byte b) {
@@ -190,6 +190,10 @@ public class Util {
     public static double dpiToPix(float dpi, float width_mm) {
         double dpi_mm = dpi / 25.4;
         return dpi_mm * width_mm;
+    }
+
+    public static void main(String[] args) {
+        System.out.print(md5("00000000"));
     }
 
 }

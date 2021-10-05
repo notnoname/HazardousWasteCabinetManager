@@ -7,7 +7,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import me.liuzs.cabinetmanager.CtrlFunc;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.model.SetupValue;
 import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;

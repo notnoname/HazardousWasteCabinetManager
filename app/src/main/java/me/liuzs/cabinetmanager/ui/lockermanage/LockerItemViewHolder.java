@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import me.liuxy.cabinet.SubBoard;
 import me.liuzs.cabinetmanager.CabinetApplication;
-import me.liuzs.cabinetmanager.CtrlFunc;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.LockerManageActivity;
 import me.liuzs.cabinetmanager.R;
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.LockerStatus;
 import me.liuzs.cabinetmanager.service.HardwareService;
 
@@ -37,17 +37,17 @@ public class LockerItemViewHolder extends RecyclerView.ViewHolder implements Vie
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "LockerServiceConnected success");
             HardwareService.HardwareServiceBinder binder = (HardwareService.HardwareServiceBinder) service;
-            CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
-            int index = CtrlFunc.getDevIndex(info, lockerStatus.devId);
-            lockerStatus.lock = LockerStatus.Status.Unknown;
-            activity.notifyDataSetChanged();
-            SubBoard.ControlResult result = null;
-            if (isWantUnlock) {
-                result = binder.getHardwareService().switchLockerControl(index);
-            } else {
-                result = binder.getHardwareService().switchLockerControlUnlock(index);
-            }
-            activity.showToast(result);
+            Cabinet info = CabinetCore.getCabinetInfo();
+//            int index = CabinetCore.getDevIndex(info, lockerStatus.devId);
+//            lockerStatus.lock = LockerStatus.Status.Unknown;
+//            activity.notifyDataSetChanged();
+//            SubBoard.ControlResult result = null;
+//            if (isWantUnlock) {
+//                result = binder.getHardwareService().switchLockerControl(index);
+//            } else {
+//                result = binder.getHardwareService().switchLockerControlUnlock(index);
+//            }
+//            activity.showToast(result);
             activity.unbindService(mlockServiceConnection);
         }
 

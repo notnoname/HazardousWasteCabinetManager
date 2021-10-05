@@ -2,7 +2,6 @@ package me.liuzs.cabinetmanager.net;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
@@ -22,11 +20,11 @@ import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.client.methods.HttpRequestBase;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
-import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import me.liuzs.cabinetmanager.CabinetApplication;
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.CabinetCore;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.DepositItem;
 import me.liuzs.cabinetmanager.model.DeviceInfo;
@@ -40,7 +38,7 @@ import me.liuzs.cabinetmanager.model.TakeOutInfo;
 import me.liuzs.cabinetmanager.model.TakeOutItemInfo;
 import me.liuzs.cabinetmanager.model.UsageInfo;
 import me.liuzs.cabinetmanager.model.UsageItemInfo;
-import me.liuzs.cabinetmanager.model.UserInfo;
+import me.liuzs.cabinetmanager.model.User;
 
 public class RemoteAPI {
 
@@ -49,17 +47,16 @@ public class RemoteAPI {
     /**
      * HTTP接口Root地址
      */
-    public static final String API_ROOT = "http://idburgsafe.com:1080/collage_pro";
+    public static final String API_ROOT = "http://mockapi.eolinker.com/RvgW5arf86a8060ba89c248670915e44a97647837a7dade";
     //http://47.104.235.225:1080/collage
     //http://idburgsafe.com:1080/collage_pro
-    private static final Gson _Gson = new Gson();
     private static final Random _Random = new Random();
 
     private static void generalBaseHeader(HttpRequestBase httpRequest) {
 //        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
-        Header authorization = new BasicHeader("Authorization", CabinetApplication.getInstance().getAdminUser().token);
+//        Header authorization = new BasicHeader("Token", CabinetApplication.getInstance().getAdminUser().token);
 //        httpRequest.addHeader(contentType);
-        httpRequest.addHeader(authorization);
+//        httpRequest.addHeader(authorization);
     }
 
     /**
@@ -127,7 +124,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<Chemical>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -169,7 +166,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<DictType>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -211,7 +208,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<DictType>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -253,7 +250,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<DictType>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -295,7 +292,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<DictType>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -376,7 +373,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<TakeOutItemInfo>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -406,11 +403,9 @@ public class RemoteAPI {
         public static APIJSON<List<TakeOutItemInfo>> getContainerNoList(String devId) {
 
             try {
-                CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+                Cabinet cabinetInfo = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("labId", cabinetInfo.labId));
-                valuePairs.add(new BasicNameValuePair("tankId", cabinetInfo.tankId));
                 valuePairs.add(new BasicNameValuePair("devId", devId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_GET_CONTAINER_LIST + devId + "?" + params);
@@ -424,7 +419,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<TakeOutItemInfo>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -457,16 +452,14 @@ public class RemoteAPI {
         public static APIJSON<String> createTakeOutTask(String address, String devId, int isControl) {
 
             try {
-                CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
-                UserInfo userInfo = CabinetApplication.getInstance().getAdminUser();
+                Cabinet info = CabinetCore.getCabinetInfo();
+                User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("outLabId", info.labId));
                 valuePairs.add(new BasicNameValuePair("useAddress", address));
-                valuePairs.add(new BasicNameValuePair("tankId", info.tankId));
                 valuePairs.add(new BasicNameValuePair("devId", devId));
                 valuePairs.add(new BasicNameValuePair("isControl", String.valueOf(isControl)));
-                valuePairs.add(new BasicNameValuePair("user1Id", userInfo.userId));
+                valuePairs.add(new BasicNameValuePair("user1Id", user.id));
                 HttpPost httpPost = new HttpPost(API_CREATE_TAKE_OUT_TASK);
                 generalBaseHeader(httpPost);
                 httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
@@ -478,7 +471,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -523,7 +516,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<TakeOutInfo>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     APIJSON<List<TakeOutInfo>> result = new APIJSON<>();
                     result.code = code;
@@ -562,7 +555,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<TakeOutItemInfo>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     APIJSON<List<TakeOutItemInfo>> result = new APIJSON<>();
                     result.code = code;
@@ -587,10 +580,9 @@ public class RemoteAPI {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                String labId = CabinetApplication.getInstance().getCabinetInfo().labId;
-                valuePairs.add(new BasicNameValuePair("labId", labId));
+
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_STORAGE_LABORATORY_DETAIL + labId + "?" + params);
+                HttpGet httpGet = new HttpGet(API_GET_STORAGE_LABORATORY_DETAIL + "?" + params);
                 generalBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
@@ -600,7 +592,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<StorageLaboratoryDetail>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     APIJSON<StorageLaboratoryDetail> result = new APIJSON<>();
                     result.code = code;
@@ -640,7 +632,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -706,10 +698,9 @@ public class RemoteAPI {
         public static APIJSON<String> createUsageTask() {
 
             try {
-                CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
+                Cabinet info = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("putLabId", info.labId));
                 HttpPost httpPost = new HttpPost(API_CREATE_USAGE_TASK);
                 generalBaseHeader(httpPost);
                 httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
@@ -721,7 +712,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -766,7 +757,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<UsageItemInfo>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -812,7 +803,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<UsageInfo>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     APIJSON<List<UsageInfo>> result = new APIJSON<>();
                     result.code = code;
@@ -835,12 +826,11 @@ public class RemoteAPI {
         public static APIJSON<List<UsageItemInfo>> getContainerNoList() {
 
             try {
-                CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+                Cabinet cabinetInfo = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("labId", cabinetInfo.labId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_CONTAINER_LIST + cabinetInfo.labId + "?" + params);
+                HttpGet httpGet = new HttpGet(API_GET_CONTAINER_LIST + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
                 generalBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
@@ -851,7 +841,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<UsageItemInfo>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -897,7 +887,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<UsageItemInfo>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     APIJSON<List<UsageItemInfo>> result = new APIJSON<>();
                     result.code = code;
@@ -922,10 +912,8 @@ public class RemoteAPI {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                String labId = CabinetApplication.getInstance().getCabinetInfo().labId;
-                valuePairs.add(new BasicNameValuePair("labId", labId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_STORAGE_LABORATORY_DETAIL + labId + "?" + params);
+                HttpGet httpGet = new HttpGet(API_GET_STORAGE_LABORATORY_DETAIL + "?" + params);
                 generalBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
@@ -935,7 +923,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<StorageLaboratoryDetail>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     APIJSON<StorageLaboratoryDetail> result = new APIJSON<>();
                     result.code = code;
@@ -976,7 +964,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1022,14 +1010,12 @@ public class RemoteAPI {
         public static APIJSON<List<InventoryItem>> queryInventoryList(String chemicalName, String currentPage) {
 
             try {
-                CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+                Cabinet cabinetInfo = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("chemicalName", chemicalName));
                 valuePairs.add(new BasicNameValuePair("pageSize", "1024"));
                 valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-                valuePairs.add(new BasicNameValuePair("labId", cabinetInfo.labId));
-                valuePairs.add(new BasicNameValuePair("tankId", cabinetInfo.tankId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_INVENTORY_QUERY_LIST + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
@@ -1042,7 +1028,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<InventoryItem>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1076,7 +1062,6 @@ public class RemoteAPI {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("chemicalId", chemicalId));
-                valuePairs.add(new BasicNameValuePair("labId", CabinetApplication.getInstance().getCabinetInfo().labId));
                 valuePairs.add(new BasicNameValuePair("pageSize", "1024"));
                 valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
@@ -1091,7 +1076,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<InventoryDetail>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1169,7 +1154,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<DepositItem>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     APIJSON<List<DepositItem>> result = new APIJSON<>();
                     result.code = code;
@@ -1194,10 +1179,8 @@ public class RemoteAPI {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                String labId = CabinetApplication.getInstance().getCabinetInfo().labId;
-                valuePairs.add(new BasicNameValuePair("labId", labId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_DEPOSIT_NO + labId + "?" + params);
+                HttpGet httpGet = new HttpGet(API_GET_DEPOSIT_NO + "?" + params);
                 generalBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
@@ -1207,7 +1190,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     APIJSON<String> result = new APIJSON<>();
                     result.code = code;
@@ -1232,10 +1215,6 @@ public class RemoteAPI {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                String labId = CabinetApplication.getInstance().getCabinetInfo().labId;
-                String orgId = CabinetApplication.getInstance().getCabinetInfo().orgId;
-                valuePairs.add(new BasicNameValuePair("labId", labId));
-                valuePairs.add(new BasicNameValuePair("orgId", orgId));
                 valuePairs.add(new BasicNameValuePair("putNo", putNo));
                 valuePairs.add(new BasicNameValuePair("putNum", putNum));
                 valuePairs.add(new BasicNameValuePair("totalAmount", totalAmount));
@@ -1250,7 +1229,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1294,7 +1273,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1349,7 +1328,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1395,7 +1374,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1441,7 +1420,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1493,13 +1472,11 @@ public class RemoteAPI {
          */
         public static APIJSON<List<StandingBookItem>> queryStandingBookDeposit(String currentPage) {
             try {
-                CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+                Cabinet cabinet = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("pageSize", "20"));
                 valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-                valuePairs.add(new BasicNameValuePair("labId", cabinetInfo.labId));
-                valuePairs.add(new BasicNameValuePair("tankId", cabinetInfo.tankId));
 //                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_STANDING_BOOK_DEPOSIT + "?" + params);
@@ -1513,7 +1490,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<StandingBookItem>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1542,13 +1519,11 @@ public class RemoteAPI {
          */
         public static APIJSON<List<StandingBookItem>> queryStandingBookUsage(String currentPage) {
             try {
-                CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+                Cabinet cabinet = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("pageSize", "20"));
                 valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-                valuePairs.add(new BasicNameValuePair("labId", cabinetInfo.labId));
-                valuePairs.add(new BasicNameValuePair("tankId", cabinetInfo.tankId));
 //                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_STANDING_BOOK_USAGE + "?" + params);
@@ -1562,7 +1537,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<StandingBookItem>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1591,13 +1566,11 @@ public class RemoteAPI {
          */
         public static APIJSON<List<StandingBookItem>> queryStandingBookTakeOut(String currentPage) {
             try {
-                CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+                Cabinet cabinet = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("pageSize", "20"));
                 valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-                valuePairs.add(new BasicNameValuePair("labId", cabinetInfo.labId));
-                valuePairs.add(new BasicNameValuePair("tankId", cabinetInfo.tankId));
 //                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_STANDING_BOOK_TAKE_OUT + "?" + params);
@@ -1611,7 +1584,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<StandingBookItem>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1640,13 +1613,11 @@ public class RemoteAPI {
          */
         public static APIJSON<List<StandingBookItem>> queryStandingBookTakeIn(String currentPage) {
             try {
-                CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+                Cabinet cabinet = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("pageSize", "20"));
                 valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-                valuePairs.add(new BasicNameValuePair("labId", cabinetInfo.labId));
-                valuePairs.add(new BasicNameValuePair("tankId", cabinetInfo.tankId));
 //                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_STANDING_BOOK_TAKE_IN + "?" + params);
@@ -1660,7 +1631,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<StandingBookItem>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1688,15 +1659,11 @@ public class RemoteAPI {
         /**
          * 登录
          */
-        public static final String API_LOGIN = API_ROOT + "/drug/v1/login";
+        public static final String API_LOGIN = API_ROOT + "/login";
         /**
          * 用户名下一体机设备搜索
          */
-        public static final String API_TANK_LIST = API_ROOT + "/drug/v1/storageTanks/selectPageList";
-        /**
-         * 获取Tank下Device列表
-         */
-        public static final String API_DEVICE_LIST = API_ROOT + "/drug/v1/storageDevs/pageList";
+        public static final String API_CABINET_LIST = API_ROOT + "/findCabinetByAdmin";
 
         /**
          * 获取柜子绑定摄像头列表
@@ -1704,30 +1671,32 @@ public class RemoteAPI {
         public static final String API_GET_CAMERA_LIST = API_ROOT + "/drug/v1/YSYVoder/getCameraStreamForApp/";
 
         /**
-         * 获得一体机下所有存储设备列表
+         * 查询管理员名下所有暂存柜列表
          *
-         * @param tankId tankId
-         * @return 存储设备列表
+         * @param userId 管理员Id
+         * @param token  token
+         * @return 暂存柜列表
          */
-        public static APIJSON<List<DeviceInfo>> getDeviceList(String tankId) {
+        public static APIJSON<List<Cabinet>> getCabinetList(String userId, String token) {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
+                HttpPost httpPost = new HttpPost(API_CABINET_LIST);
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("tankId", tankId));
-                valuePairs.add(new BasicNameValuePair("pageSize", "100"));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_DEVICE_LIST + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
+                valuePairs.add(new BasicNameValuePair("userId", userId));
+                valuePairs.add(new BasicNameValuePair("token", token));
+                httpPost.setEntity(new UrlEncodedFormEntity(valuePairs, "utf-8"));
+                Log.d(TAG, httpPost.getURI().toString());
+                Log.d(TAG, httpPost.getEntity().toString());
+                generalBaseHeader(httpPost);
+                HttpResponse httpResponse = httpClient.execute(httpPost);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, "utf-8");
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<DeviceInfo>>>() {
+                    Type jsonType = new TypeToken<APIJSON<List<Cabinet>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1736,63 +1705,15 @@ public class RemoteAPI {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    APIJSON<List<DeviceInfo>> result = new APIJSON<>();
+                    APIJSON<List<Cabinet>> result = new APIJSON<>();
                     result.code = code;
                     result.message = "服务器返回错误";
                     return result;
                 }
-            } catch (IOException e) {
-                APIJSON<List<DeviceInfo>> result = new APIJSON<>();
+            } catch (Exception e) {
+                APIJSON<List<Cabinet>> result = new APIJSON<>();
                 result.code = -1;
-                result.message = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 查询管理员名下所有一体机设备列表
-         *
-         * @param safetyPerson 管理员名
-         * @param personMobile 管理员手机号码
-         * @return 一体机列表
-         */
-        public static APIJSON<List<CabinetInfo>> getTankList(String safetyPerson, String personMobile) {
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("safetyPerson", safetyPerson));
-                valuePairs.add(new BasicNameValuePair("personMobile", personMobile));
-                valuePairs.add(new BasicNameValuePair("pageSize", "100"));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_TANK_LIST + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<CabinetInfo>>>() {
-                    }.getType();
-                    return _Gson.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<CabinetInfo>> result = new APIJSON<>();
-                    result.code = code;
-                    result.message = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<CabinetInfo>> result = new APIJSON<>();
-                result.code = -1;
-                result.message = "网络请求异常";
+                result.message = e.getMessage();
                 return result;
             }
         }
@@ -1820,7 +1741,7 @@ public class RemoteAPI {
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<List<SurveillanceCamera>>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
                     try {
                         HttpEntity entity = httpResponse.getEntity();
@@ -1834,10 +1755,10 @@ public class RemoteAPI {
                     result.message = "服务器返回错误";
                     return result;
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 APIJSON<List<SurveillanceCamera>> result = new APIJSON<>();
                 result.code = -1;
-                result.message = "网络请求异常";
+                result.message = e.getMessage();
                 return result;
             }
         }
@@ -1849,38 +1770,39 @@ public class RemoteAPI {
          * @param passwordMD5 账号密码MD5
          * @return 登录结果信息
          */
-        public static APIJSON<LoginJSON> login(String account, String passwordMD5) {
+        public static APIJSON<User> login(String account, String passwordMD5) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 HttpPost httpPost = new HttpPost(API_LOGIN);
-                List<NameValuePair> nameValuePairs = new ArrayList<>();
-                nameValuePairs.add(new BasicNameValuePair("userAccount", account));
-                nameValuePairs.add(new BasicNameValuePair("password", passwordMD5));
-                nameValuePairs.add(new BasicNameValuePair("platformFlag", "saas"));
-                nameValuePairs.add(new BasicNameValuePair("randomCode", String.valueOf(_Random.nextInt())));
-                nameValuePairs.add(new BasicNameValuePair("captchaCode", String.valueOf(_Random.nextInt())));
-                nameValuePairs.add(new BasicNameValuePair("appFlag", "app"));
-                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                List<NameValuePair> valuePairs = new ArrayList<>();
+                valuePairs.add(new BasicNameValuePair("account", account));
+                valuePairs.add(new BasicNameValuePair("password", passwordMD5));
+                valuePairs.add(new BasicNameValuePair("platformFlag", "saas"));
+                valuePairs.add(new BasicNameValuePair("randomCode", String.valueOf(_Random.nextInt())));
+                valuePairs.add(new BasicNameValuePair("appFlag", "app"));
+                httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
+                Log.d(TAG, httpPost.getURI().toString());
+                Log.d(TAG, httpPost.getEntity().toString());
                 HttpResponse httpResponse = httpClient.execute(httpPost);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, "utf-8");
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<LoginJSON>>() {
+                    Type jsonType = new TypeToken<APIJSON<User>>() {
                     }.getType();
-                    return _Gson.fromJson(content, jsonType);
+                    return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
-                    APIJSON<LoginJSON> result = new APIJSON<>();
+                    APIJSON<User> result = new APIJSON<>();
                     result.code = code;
                     result.message = "服务器返回错误";
                     return result;
                 }
-            } catch (IOException e) {
-                APIJSON<LoginJSON> result = new APIJSON<>();
+            } catch (Exception e) {
+                APIJSON<User> result = new APIJSON<>();
                 result.code = -1;
-                result.message = "网络请求异常";
+                result.message = e.getMessage();
                 return result;
             }
         }

@@ -17,11 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AuthActivity extends AppCompatActivity {
 
-    public static final String KEY_AUTH_SUCCESS_ID = "KEY_AUTH_SUCCESS_ID";
     public static final String KEY_AUTH_TYPE = "KEY_AUTH_TYPE";
     public static final String TAG = "AuthActivity";
     private final Handler mHandler = new Handler();
-    private BaseActivity.AuthType mType = BaseActivity.AuthType.Admin;
+    private CabinetCore.RoleType mType = CabinetCore.RoleType.Admin;
     private Button mOK, mCancel, mFaceId;
     private EditText mPassword;
     private TextView mInfo;
@@ -36,9 +35,8 @@ public class AuthActivity extends AppCompatActivity {
                 mCancel.setEnabled(false);
                 mFaceId.setEnabled(false);
                 mHandler.postDelayed(() -> {
-                    String id = CtrlFunc.getAdminUserID(AuthActivity.this);
                     Intent data = new Intent();
-                    data.putExtra(KEY_AUTH_SUCCESS_ID, id);
+                    data.putExtra(KEY_AUTH_TYPE, mType);
                     setResult(RESULT_OK, data);
                     finish();
                 }, 1000);
@@ -55,12 +53,20 @@ public class AuthActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         setContentView(R.layout.activity_auth);
-        mType = (BaseActivity.AuthType) getIntent().getSerializableExtra(KEY_AUTH_TYPE);
+        mType = (CabinetCore.RoleType) getIntent().getSerializableExtra(KEY_AUTH_TYPE);
         mOK = findViewById(R.id.btnOK);
         mCancel = findViewById(R.id.btnCancel);
         mFaceId = findViewById(R.id.btnFaceId);
         mPassword = findViewById(R.id.editTextTextPassword);
         mInfo = findViewById(R.id.tvInfo);
+        switch (mType) {
+            case Admin:
+                mPassword.setHint(R.string.admin_password_input);
+                break;
+            case Operator:
+                mPassword.setHint(R.string.operator_password_input);
+                break;
+        }
     }
 
     public void onCancelButtonClick(View view) {
@@ -69,8 +75,8 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void onOKButtonClick(View view) {
-        String id = CtrlFunc.checkAdminUser(this, mPassword.getText().toString());
-        if (id != null) {
+        boolean check = CabinetCore.validateCabinetUser(mPassword.getText().toString(), mType);
+        if (check) {
             mInfo.setText("验证成功！");
             mPassword.setEnabled(false);
             mOK.setEnabled(false);
@@ -78,7 +84,7 @@ public class AuthActivity extends AppCompatActivity {
             mFaceId.setEnabled(false);
             mHandler.postDelayed(() -> {
                 Intent data = new Intent();
-                data.putExtra(KEY_AUTH_SUCCESS_ID, id);
+                data.putExtra(KEY_AUTH_TYPE, mType);
                 setResult(RESULT_OK, data);
                 finish();
             }, 1000);
@@ -91,7 +97,8 @@ public class AuthActivity extends AppCompatActivity {
     public void onFaceIDButtonClick(View view) {
         Intent intent = new Intent(this, RegisterAndRecognizeActivity.class);
         intent.putExtra(RegisterAndRecognizeActivity.PARAM_IS_FOR_REG, false);
-        intent.putExtra(RegisterAndRecognizeActivity.PARAM_NAME, CtrlFunc.getAdminUserID(this));
+        String account = CabinetCore.getCabinetUser(mType).account;
+        intent.putExtra(RegisterAndRecognizeActivity.PARAM_AUTH_ACCOUNT, account);
         mLauncher.launch(intent);
     }
 }

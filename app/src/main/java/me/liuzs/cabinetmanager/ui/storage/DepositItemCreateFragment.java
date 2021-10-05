@@ -32,19 +32,16 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.liuxy.cabinet.SubBoard;
-import me.liuzs.cabinetmanager.CabinetApplication;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.ChemicalSearchActivity;
-import me.liuzs.cabinetmanager.CtrlFunc;
 import me.liuzs.cabinetmanager.PrintActivity;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SpinnerActivity;
 import me.liuzs.cabinetmanager.StorageActivity;
 import me.liuzs.cabinetmanager.WeightActivity;
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.DepositItem;
-import me.liuzs.cabinetmanager.model.DeviceInfo;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
@@ -60,14 +57,14 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "LockerServiceConnected success");
             HardwareService.HardwareServiceBinder binder = (HardwareService.HardwareServiceBinder) service;
-            CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
-            int index = CtrlFunc.getDevIndex(info, mNewItem.devId);
-            if (info.tankType == 1 && index != -1) {
-                SubBoard.ControlResult result = binder.getHardwareService().switchLockerControl(index);
-                mActivity.showToast(result);
-            } else {
-                binder.getHardwareService().switchLockerControl(true);
-            }
+            Cabinet info = CabinetCore.getCabinetInfo();
+//            int index = CabinetCore.getDevIndex(info, mNewItem.devId);
+//            if (info.tankType == 1 && index != -1) {
+//                SubBoard.ControlResult result = binder.getHardwareService().switchLockerControl(index);
+//                mActivity.showToast(result);
+//            } else {
+//                binder.getHardwareService().switchLockerControl(true);
+//            }
             mActivity.unbindService(this);
         }
 
@@ -269,14 +266,14 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
     private void onFragmentVisible() {
         mActivity.showDepositRecord();
 
-        DeviceInfo info = CabinetApplication.getSingleDevice();
-        if (info != null) {
-            mDeviceName.setEnabled(false);
-            mNewItem.devId = info.devId;
-            mNewItem.devName = info.devName;
-        } else {
-            mDeviceName.setEnabled(true);
-        }
+//        DeviceInfo info = CabinetCore.getSingleDevice();
+//        if (info != null) {
+//            mDeviceName.setEnabled(false);
+//            mNewItem.devId = info.devId;
+//            mNewItem.devName = info.devName;
+//        } else {
+//            mDeviceName.setEnabled(true);
+//        }
 
         if (!mNewItem.isInit) {
             if (mNewItem.conNo == null) {
@@ -337,9 +334,9 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
             mChemicalSearchLauncher.launch(intent);
         } else if (v == mDeviceName) {
             List<String> options = new ArrayList<>();
-            for (DeviceInfo dev : CabinetApplication.getInstance().getCabinetInfo().devices) {
-                options.add(dev.devId + " - " + dev.devName);
-            }
+//            for (DeviceInfo dev : CabinetApplication.getInstance().getCabinetInfo().devices) {
+//                options.add(dev.devId + " - " + dev.devName);
+//            }
             Intent intent = new Intent(mActivity, SpinnerActivity.class);
             intent.putExtra(SpinnerActivity.KEY_OPTIONS, mGson.toJson(options));
             intent.putExtra(SpinnerActivity.KEY_TIP_INFO, "请选择存储区域：");
@@ -665,7 +662,7 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
                     mActivity.get().getDepositRecord().items.remove(mFragment.get().mOriginItem);
                 }
                 mActivity.get().getDepositRecord().items.add(mFragment.get().mNewItem);
-                CtrlFunc.saveUnSubmitDepositRecord(mActivity.get(), mActivity.get().getDepositRecord());
+                CabinetCore.saveUnSubmitDepositRecord(mActivity.get(), mActivity.get().getDepositRecord());
                 mActivity.get().transToFirstDepositFragment();
             } else {
                 mActivity.get().showToast("服务器错误：" + json.msg);

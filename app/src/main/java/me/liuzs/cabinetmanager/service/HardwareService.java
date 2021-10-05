@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,10 +38,9 @@ import me.liuxy.cabinet.TDA09C;
 import me.liuxy.cabinet.TVOCs;
 import me.liuzs.cabinetmanager.BuildConfig;
 import me.liuzs.cabinetmanager.CabinetApplication;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
-import me.liuzs.cabinetmanager.CtrlFunc;
-import me.liuzs.cabinetmanager.model.CabinetInfo;
-import me.liuzs.cabinetmanager.model.DeviceInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.SetupValue;
 import me.liuzs.cabinetmanager.model.TVOCValue;
@@ -182,8 +180,8 @@ public class HardwareService extends Service {
     }
 
     private void initCabinetManager() {
-        CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
-        if (cabinetInfo == null || !CabinetApplication.getInstance().isInitHardwareManager()) {
+        Cabinet cabinet = CabinetCore.getCabinetInfo();
+        if (cabinet == null || !CabinetApplication.getInstance().isInitHardwareManager()) {
             return;
         }
         if (mManager != null) {
@@ -192,8 +190,8 @@ public class HardwareService extends Service {
         if (BuildConfig.DEBUG) {
             return;
         }
-        isSingleDevice = cabinetInfo.tankType == 2;
-        mSubCabinetSize = isSingleDevice ? 0 : cabinetInfo.devices.size();
+        isSingleDevice = false;
+        mSubCabinetSize = isSingleDevice ? 0 : 1;
         isSubDevicesFanRun = new boolean[mSubCabinetSize];
         isSubDevicesLightRed = new boolean[mSubCabinetSize];
         isSubDevicesLightGreen = new boolean[mSubCabinetSize];
@@ -206,15 +204,15 @@ public class HardwareService extends Service {
             settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[0];
         } else {
             //Address:0的子板用于室内风扇和红绿灯控制，子板数比副柜数多1；
-            settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[cabinetInfo.devices.size() + 1];
-            for (int i = 0; i < mSubCabinetSize; i++) {
-                settings.SubBoardConfigs[i] = new CabinetManager.SubBoardConfig((byte) cabinetInfo.devices.get(i).hardwareAddress);//按实际设备地址填写
-            }
+//            settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[cabinet.devices.size() + 1];
+//            for (int i = 0; i < mSubCabinetSize; i++) {
+//                settings.SubBoardConfigs[i] = new CabinetManager.SubBoardConfig((byte) cabinet.devices.get(i).hardwareAddress);//按实际设备地址填写
+//            }
             //最后一块板子地址为0；
-            settings.SubBoardConfigs[mSubCabinetSize] = new CabinetManager.SubBoardConfig((byte) 0);
+//            settings.SubBoardConfigs[mSubCabinetSize] = new CabinetManager.SubBoardConfig((byte) 0);
         }
         settings.TDA09C485Configs = new CabinetManager.TDA09C485Config[1];
-        int c485 = CtrlFunc.getTDA09C485Config(this);
+        int c485 = CabinetCore.getTDA09C485Config(this);
         settings.TDA09C485Configs[0] = new CabinetManager.TDA09C485Config((byte) c485);//按实际设备地址填写
         settings.TVOCsDeviceName = new String[2];
         settings.TVOCsDeviceName[0] = "/dev/ttysWK2";
@@ -236,7 +234,7 @@ public class HardwareService extends Service {
         if (mPublishClient == null) {
             mPublishClient = new MqttAndroidClient(this, RemoteAPI.MQTT.MQTT_ROOT, PublisherID);
         }
-        mPeriods = CtrlFunc.getSubBoardPeriod(this);
+        mPeriods = CabinetCore.getSubBoardPeriod(this);
 //        initMQTTPublishClient();
         initCabinetManager();
         initHardwareValueQueryTimer(mPeriods[2]);
@@ -296,16 +294,16 @@ public class HardwareService extends Service {
     }
 
     private void publishValue(HardwareValue value) {
-        CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
-        if (info != null) {
-            DeviceInfo single = CabinetApplication.getSingleDevice();
-            String mainDevId = single != null ? single.devId : null;
-            List<String> devIds = new LinkedList<>();
-            for (DeviceInfo device : info.devices) {
-                devIds.add(device.devId);
-            }
-            publishValue(value, String.valueOf(info.tankType), info.tankId, mainDevId, devIds);
-        }
+        Cabinet info = CabinetCore.getCabinetInfo();
+//        if (info != null) {
+//            DeviceInfo single = CabinetApplication.getSingleDevice();
+//            String mainDevId = single != null ? single.devId : null;
+//            List<String> devIds = new LinkedList<>();
+//            for (DeviceInfo device : info.devices) {
+//                devIds.add(device.devId);
+//            }
+//            publishValue(value, 1, info.id, mainDevId, devIds);
+//        }
     }
 
     private void publishValue(HardwareValue value, String tankType, String tankId, String mainDeviceId, List<String> subDeviceId) {
@@ -365,7 +363,7 @@ public class HardwareService extends Service {
     }
 
     private void doHardwarePolicy(HardwareValue value) {
-        SetupValue setup = CtrlFunc.getSetupValue(this);
+        SetupValue setup = CabinetCore.getSetupValue(this);
         if (setup == null || value == null) {
             return;
         }
@@ -450,7 +448,7 @@ public class HardwareService extends Service {
             value1.temperature = env1.temp;
 
             TVOCValue value2 = new TVOCValue();
-            if (CtrlFunc.getMainTVOCModelCount(HardwareService.this) == 2) {
+            if (CabinetCore.getMainTVOCModelCount(HardwareService.this) == 2) {
                 TVOCs tvocs2 = mManager.getTVOCsInstance(1);
                 TVOCs.ENVData env2 = tvocs2.getEnvdata();
                 Log.d(TAG, "TVOCs2 value PPB:" + env2.concentration_ppb + " Range:" + env2.range + " PM3:" + env2.concentration_ugpmm3 + " TEMP:" + env2.temp + " HUMI:" + env2.humi);

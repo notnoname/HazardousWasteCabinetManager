@@ -44,7 +44,7 @@ public class WeightActivity extends AppCompatActivity implements Steelyard.Steel
         setContentView(R.layout.activity_weight);
         mWeight = findViewById(R.id.tvWeightValue);
         mTip = findViewById(R.id.tvTip);
-        int index = CtrlFunc.getCurrentScalesDevice(this);
+        int index = CabinetCore.getCurrentScalesDevice();
         String scalesName = Config.ScalesDeviceName[index];
         mTip.setText("称重[" + scalesName + "]");
         if (index == 0) {

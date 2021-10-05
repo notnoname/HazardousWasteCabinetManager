@@ -164,7 +164,7 @@ public class PrintActivity extends BaseActivity {
         mHandler.postDelayed(() -> {
             Log.d(TAG, "Check connected printer state.");
             if (isFoundSavedPrinter) {
-                PrinterBluetoothInfo info = CtrlFunc.getConnectedPrinterInfo(CabinetApplication.getInstance());
+                PrinterBluetoothInfo info = CabinetCore.getConnectedPrinterInfo(CabinetApplication.getInstance());
                 if (info != null) {
                     connectPrinter(info);
                 } else {
@@ -208,7 +208,7 @@ public class PrintActivity extends BaseActivity {
             public void sppConnected(BluetoothDevice device) {//蓝牙连接成功回调
                 PrinterBluetoothInfo info = new PrinterBluetoothInfo(device.getName(), device.getAddress());
                 CurrentPrinterInfo = info;
-                CtrlFunc.saveConnectedPrinterInfo(CabinetApplication.getInstance(), info);
+                CabinetCore.saveConnectedPrinterInfo(CabinetApplication.getInstance(), info);
                 showInfo();
                 dismissProgressDialog();
             }
@@ -216,7 +216,7 @@ public class PrintActivity extends BaseActivity {
     }
 
     private void matchSavedPrinter(PrinterBluetoothInfo bean) {//添加设备的时候把重复的过滤掉
-        PrinterBluetoothInfo info = CtrlFunc.getConnectedPrinterInfo(CabinetApplication.getInstance());
+        PrinterBluetoothInfo info = CabinetCore.getConnectedPrinterInfo(CabinetApplication.getInstance());
         if (info != null && bean.address.equals(info.address)) {
             isFoundSavedPrinter = true;
         }

@@ -68,7 +68,7 @@ import me.liuzs.cabinetmanager.util.RequestFeatureStatus;
 public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTreeObserver.OnGlobalLayoutListener {
 
     public static final String PARAM_IS_FOR_REG = "PARAM_IS_FOR_REG";
-    public static final String PARAM_NAME = "PARAM_NAME";
+    public static final String PARAM_AUTH_ACCOUNT = "PARAM_AUTH_ACCOUNT";
     private static final String TAG = "RegisterAndRecognize";
     private static final int MAX_DETECT_NUM = 10;
     /**
@@ -126,7 +126,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
     /**
      * 优先打开的摄像头，本界面主要用于单目RGB摄像头设备，因此默认打开前置
      */
-    private Integer rgbCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
+    private final Integer rgbCameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
     /**
      * VIDEO模式人脸检测引擎，用于预览帧人脸追踪
      */
@@ -167,7 +167,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
     private FaceRectView faceRectView;
     private Switch switchLiveDetect;
     private Button mRegister, mBack;
-    private String mName;
+    private String mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +182,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
         //本地人脸库初始化
         FaceServer.getInstance().init(this);
         isForRegister = getIntent().getBooleanExtra(PARAM_IS_FOR_REG, false);
-        mName = getIntent().getStringExtra(PARAM_NAME);
+        mAccount = getIntent().getStringExtra(PARAM_AUTH_ACCOUNT);
         initView();
     }
 
@@ -529,7 +529,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
 //                            facePreviewInfoList.get(0).getFaceInfo(), "registered " + faceHelper.getTrackedFaceCount());
                     //用输入的用户名来注册
                     boolean success = FaceServer.getInstance().registerNv21(RegisterAndRecognizeActivity.this, nv21.clone(), previewSize.width, previewSize.height,
-                            facePreviewInfoList.get(0).getFaceInfo(), mName);
+                            facePreviewInfoList.get(0).getFaceInfo(), mAccount);
                     emitter.onNext(success);
                 }
             }).subscribeOn(Schedulers.computation())
@@ -546,7 +546,7 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
                             registerStatus = REGISTER_STATUS_DONE;
                             if (isForRegister && success) {
                                 Intent data = new Intent();
-                                data.putExtra(PARAM_NAME, mName);
+                                data.putExtra(PARAM_AUTH_ACCOUNT, mAccount);
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -711,8 +711,8 @@ public class RegisterAndRecognizeActivity extends BaseActivity implements ViewTr
                             }
                             requestFeatureStatusMap.put(requestId, RequestFeatureStatus.SUCCEED);
                             faceHelper.setName(requestId, getString(R.string.recognize_success_notice, compareResult.getUserName()));
-                            Log.d(TAG, "AdminID:" + mName + "      FaceId:" + compareResult.getUserName());
-                            if (!isForRegister && mName.equals(compareResult.getUserName())) {
+                            Log.d(TAG, "Account:" + mAccount + "    FaceId:" + compareResult.getUserName());
+                            if (!isForRegister && mAccount.equals(compareResult.getUserName())) {
                                 setResult(RESULT_OK);
                                 finish();
                             }

@@ -4,8 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context=".AccountSettingActivity">
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/background" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -15,6 +22,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
+            android:padding="16px"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tool_bar_height"
             android:background="@android:color/transparent"
@@ -26,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:text=""
-                android:textSize="16sp" />
+                android:textSize="24px" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -34,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/title_activity_account_setting"
-                android:textSize="30sp"
+                android:textSize="@dimen/tool_bar_title_height"
                 android:textStyle="bold" />
 
             <TextView
@@ -43,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:text=""
-                android:textSize="16sp" />
+                android:textSize="24px" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

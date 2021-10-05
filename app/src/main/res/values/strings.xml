@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">埃德伯格安全柜管理终端</string>
+    <string name="app_name">危废暂存柜管理终端</string>
     <string name="cancel">取消</string>
     <string name="ok">确认</string>
+    <string name="tip">提示</string>
     <string name="title_system_setting">系统设置</string>
     <string name="temperature">温度</string>
     <string name="humidity">湿度</string>
@@ -41,10 +42,15 @@
     <string name="title_activity_account_setting">使用人员管理</string>
     <string name="admin_name">管理员姓名：</string>
     <string name="id">ID：</string>
+    <string name="admin_id">管理员账号：</string>
+    <string name="operator_id">操作员账号：</string>
     <string name="password">密码：</string>
     <string name="password_confirm">确认密码：</string>
     <string name="password_input">请输入密码</string>
-    <string name="input_face_id">人脸录入</string>
+    <string name="admin_password_input">请输入管理员密码</string>
+    <string name="operator_password_input">请输入操作员密码</string>
+    <string name="input_face_id">登录后将进行人像识别</string>
+    <string name="login">登录</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -69,6 +75,7 @@
     <string name="active">激活</string>
     <string name="hardware_setup">硬件设置</string>
     <string name="active_success">人像识别引擎激活成功</string>
+    <string name="login_success">登录成功</string>
     <string name="already_activated">人像识别引擎已经激活</string>
     <string name="activated">已激活</string>
     <string name="unactivated">未激活</string>
@@ -80,6 +87,8 @@
 
     <string name="input_error_tip">请输入完整信息</string>
     <string name="init">初始化</string>
+    <string name="title_login_admin">管理员登录</string>
+    <string name="title_login_operator">操作员登录</string>
     <string name="title_auth">用户验证</string>
     <string name="title_spinner">选项</string>
     <string name="title_weight">称重</string>

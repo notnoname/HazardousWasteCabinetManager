@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.TextUtils;
@@ -31,16 +30,10 @@ import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.SetupValue;
-import me.liuzs.cabinetmanager.model.UserInfo;
-import me.liuzs.cabinetmanager.net.APIJSON;
-import me.liuzs.cabinetmanager.net.LoginJSON;
-import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.util.Util;
 
@@ -96,7 +89,7 @@ public class MainActivity extends BaseActivity {
             Log.d(TAG, "LockerServiceConnected fail");
         }
     };
-    private Timer mAuthTimer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,13 +115,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private boolean isTvocs2Exist() {
-        return CtrlFunc.getMainTVOCModelCount(this) == 2;
+        return CabinetCore.getMainTVOCModelCount(this) == 2;
     }
 
     private void showHardwareValue(HardwareValue value) {
-        CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
+        Cabinet info = CabinetCore.getCabinetInfo();
         if (info != null) {
-            mName.setText(info.tankName);
+            mName.setText(info.name);
         }
         mValue = value;
         if (mValue == null) {
@@ -153,20 +146,20 @@ public class MainActivity extends BaseActivity {
         float temp = mValue.tvoCsValue.TVOC1.temperature;
         mTemperature.setText(mTempDecimalFormat.format(temp / 100));
 
-        if (CabinetApplication.getSingleDevice() == null) {
-            findViewById(R.id.llLocker).setVisibility(View.GONE);
-            findViewById(R.id.llSubBoardStatus).setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.llLocker).setVisibility(View.VISIBLE);
-            findViewById(R.id.llSubBoardStatus).setVisibility(View.GONE);
-            if (mValue.lock) {
-                mLockerState.setImageResource(R.drawable.ic_green_circle);
-                mLocker.setText(R.string.lock);
-            } else {
-                mLockerState.setImageResource(R.drawable.ic_red_circle);
-                mLocker.setText(R.string.unlock);
-            }
-        }
+//        if (CabinetApplication.getSingleDevice() == null) {
+//            findViewById(R.id.llLocker).setVisibility(View.GONE);
+//            findViewById(R.id.llSubBoardStatus).setVisibility(View.VISIBLE);
+//        } else {
+//            findViewById(R.id.llLocker).setVisibility(View.VISIBLE);
+//            findViewById(R.id.llSubBoardStatus).setVisibility(View.GONE);
+//            if (mValue.lock) {
+//                mLockerState.setImageResource(R.drawable.ic_green_circle);
+//                mLocker.setText(R.string.lock);
+//            } else {
+//                mLockerState.setImageResource(R.drawable.ic_red_circle);
+//                mLocker.setText(R.string.unlock);
+//            }
+//        }
 
         if (mValue.greenLight) {
             mAlert.setImageResource(R.drawable.ic_green_circle);
@@ -203,67 +196,13 @@ public class MainActivity extends BaseActivity {
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
         } else {
-            systemInti();
+            CabinetCore.startValidateSystem();
         }
         mHardwareValueBroadcastReceiver = new HardwareValueBroadcastReceiver();
         IntentFilter filter = new IntentFilter(Config.ACTION_HARDWARE_VALUE_SEND);
         registerReceiver(mHardwareValueBroadcastReceiver, filter);
         Log.d(TAG, "RegisterReceiver");
 
-    }
-
-    /**
-     * 系统初始化
-     */
-    private void systemInti() {
-        //检查是人像识别库是否全
-//        if (!Config.isLibraryExists(this)) {
-//            showToast(getString(R.string.library_not_found));
-//            return;
-//        }
-        //检查人像识别库是否激活。
-        CtrlFunc.checkARCActive(this, new CtrlFunc.CheckARCActiveListener() {
-            @Override
-            public void onCheckARCActiveFailure(String message, int code) {
-                startActivity(new Intent(MainActivity.this, HardwareSetupActiveActivity.class));
-            }
-
-            @Override
-            public void onCheckARCActiveSuccess() {
-                startCheckAdminUserInfo();
-            }
-        });
-    }
-
-    /**
-     * 检查用户登录信息
-     */
-    private void startCheckAdminUserInfo() {
-        UserInfo userInfo = CtrlFunc.getAdministratorInfo(MainActivity.this);
-//        userInfo = null;
-        if (userInfo == null) {
-            startActivity(new Intent(MainActivity.this, AccountSettingActivity.class));
-        } else {
-            CabinetApplication.getInstance().setAdminUser(userInfo);
-            startCabinetNameSetting();
-            startAuthTimer();
-        }
-    }
-
-    /**
-     * 鉴权信息会过期，每半个小时重新登录一次
-     */
-    private void startAuthTimer() {
-        if (mAuthTimer == null) {
-            mAuthTimer = new Timer();
-            mAuthTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    new LoginTask().execute(
-                            CtrlFunc.getAdminUserID(MainActivity.this), CtrlFunc.getAdminPasswordMD5(MainActivity.this));
-                }
-            }, 10 * 1000, 30 * 60 * 1000);
-        }
     }
 
     @Override
@@ -293,7 +232,7 @@ public class MainActivity extends BaseActivity {
     void afterRequestPermission(int requestCode, boolean isAllGranted) {
         if (requestCode == ACTION_REQUEST_PERMISSIONS) {
             if (isAllGranted) {
-                systemInti();
+                CabinetCore.startValidateSystem();
             } else {
                 showToast(getString(R.string.permission_denied));
             }
@@ -304,44 +243,40 @@ public class MainActivity extends BaseActivity {
         if (mValue == null) {
             return;
         }
-        if (CabinetApplication.getSingleDevice() == null) {
-            showAuthActivity(AuthType.Admin, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
+        showAuthActivity(CabinetCore.RoleType.Admin, new AuthListener() {
+            @Override
+            public void onAuthCancel() {
+            }
 
-                @Override
-                public void onAuthSuccess(String id) {
-                    Intent intent = new Intent(MainActivity.this, LockerManageActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+            @Override
+            public void onAuthSuccess(CabinetCore.RoleType type) {
+                Intent intent = new Intent(MainActivity.this, LockerManageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onLockerButtonClick(View view) {
         if (mValue == null) {
             return;
         }
-        if (CabinetApplication.getSingleDevice() != null) {
-            if (mValue.lock) {
-                Intent intent = new Intent();
-                intent.setClassName(getPackageName(), HardwareService.class.getName());
-                bindService(intent, mLockerServiceConnection, BIND_AUTO_CREATE);
-            } else {
-                showAuthActivity(AuthType.Admin, new AuthListener() {
-                    @Override
-                    public void onAuthCancel() {
-                    }
+        if (mValue.lock) {
+            Intent intent = new Intent();
+            intent.setClassName(getPackageName(), HardwareService.class.getName());
+            bindService(intent, mLockerServiceConnection, BIND_AUTO_CREATE);
+        } else {
+            showAuthActivity(CabinetCore.RoleType.Admin, new AuthListener() {
+                @Override
+                public void onAuthCancel() {
+                }
 
-                    @Override
-                    public void onAuthSuccess(String id) {
-                        Intent intent = new Intent();
-                        intent.setClassName(getPackageName(), HardwareService.class.getName());
-                        bindService(intent, mLockerServiceConnection, BIND_AUTO_CREATE);
-                    }
-                });
-            }
+                @Override
+                public void onAuthSuccess(CabinetCore.RoleType type) {
+                    Intent intent = new Intent();
+                    intent.setClassName(getPackageName(), HardwareService.class.getName());
+                    bindService(intent, mLockerServiceConnection, BIND_AUTO_CREATE);
+                }
+            });
         }
     }
 
@@ -349,7 +284,7 @@ public class MainActivity extends BaseActivity {
         if (mValue == null) {
             return;
         }
-        SetupValue setup = CtrlFunc.getSetupValue(this);
+        SetupValue setup = CabinetCore.getSetupValue(this);
         if (mValue.fan) {
             assert setup != null;
             if (setup.fanAuto) {
@@ -358,7 +293,7 @@ public class MainActivity extends BaseActivity {
             } else {
                 showToast("手动模式下关闭风机将会将风机设置切换为自动模式！");
                 setup.fanAuto = true;
-                CtrlFunc.saveSetupValue(MainActivity.this, setup);
+                CabinetCore.saveSetupValue(MainActivity.this, setup);
             }
         }
         view.setEnabled(false);
@@ -377,13 +312,13 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(MainActivity.this, SystemSettingActivity.class);
             startActivity(intent);
         } else {
-            showAuthActivity(AuthType.Admin, new AuthListener() {
+            showAuthActivity(CabinetCore.RoleType.Admin, new AuthListener() {
                 @Override
                 public void onAuthCancel() {
                 }
 
                 @Override
-                public void onAuthSuccess(String id) {
+                public void onAuthSuccess(CabinetCore.RoleType type) {
                     Intent intent = new Intent(MainActivity.this, SystemSettingActivity.class);
                     startActivity(intent);
                 }
@@ -396,13 +331,13 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(MainActivity.this, TakeOutActivity.class);
             startActivity(intent);
         } else {
-            showAuthActivity(AuthType.Admin, new AuthListener() {
+            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
                 @Override
                 public void onAuthCancel() {
                 }
 
                 @Override
-                public void onAuthSuccess(String id) {
+                public void onAuthSuccess(CabinetCore.RoleType type) {
                     Intent intent = new Intent(MainActivity.this, TakeOutActivity.class);
                     startActivity(intent);
                 }
@@ -420,13 +355,13 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(MainActivity.this, StorageActivity.class);
             startActivity(intent);
         } else {
-            showAuthActivity(AuthType.Admin, new AuthListener() {
+            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
                 @Override
                 public void onAuthCancel() {
                 }
 
                 @Override
-                public void onAuthSuccess(String id) {
+                public void onAuthSuccess(CabinetCore.RoleType type) {
                     Intent intent = new Intent(MainActivity.this, StorageActivity.class);
                     startActivity(intent);
                 }
@@ -444,13 +379,13 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(MainActivity.this, StandingBookActivity.class);
             startActivity(intent);
         } else {
-            showAuthActivity(AuthType.Admin, new AuthListener() {
+            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
                 @Override
                 public void onAuthCancel() {
                 }
 
                 @Override
-                public void onAuthSuccess(String id) {
+                public void onAuthSuccess(CabinetCore.RoleType type) {
                     Intent intent = new Intent(MainActivity.this, StandingBookActivity.class);
                     startActivity(intent);
                 }
@@ -463,13 +398,13 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(MainActivity.this, ReturnAfterUseActivity.class);
             startActivity(intent);
         } else {
-            showAuthActivity(AuthType.Admin, new AuthListener() {
+            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
                 @Override
                 public void onAuthCancel() {
                 }
 
                 @Override
-                public void onAuthSuccess(String id) {
+                public void onAuthSuccess(CabinetCore.RoleType type) {
                     Intent intent = new Intent(MainActivity.this, ReturnAfterUseActivity.class);
                     startActivity(intent);
                 }
@@ -477,46 +412,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void startCabinetNameSetting() {
-        CabinetInfo cabinetInfo = CtrlFunc.getCabinetInfo(this);
-        if (cabinetInfo == null) {
-            Intent intent = new Intent(this, CabinetNameActivity.class);
-            startActivity(intent);
-        } else {
-            CabinetApplication.getInstance().setCabinetInfo(cabinetInfo);
-            //        startService(new Intent(this, MQTTService.class));
-            startService(new Intent(this, HardwareService.class));
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class LoginTask extends AsyncTask<String, Void, APIJSON<LoginJSON>> {
-
-        @Override
-        protected APIJSON<LoginJSON> doInBackground(String... strings) {
-            return RemoteAPI.System.login(strings[0], strings[1]);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(APIJSON<LoginJSON> json) {
-            super.onPostExecute(json);
-            if (json.code == 200) {
-                UserInfo userInfo = json.data.userInfo;
-                String token = json.data.token;
-                userInfo.token = token;
-                CtrlFunc.saveAdmin1(MainActivity.this, token, userInfo);
-                CabinetApplication.getInstance().setAdminUser(CtrlFunc.getAdministratorInfo(MainActivity.this));
-            } else if (json.code == 102) {
-                CtrlFunc.removeAdminUserInfo(MainActivity.this);
-                startActivity(new Intent(MainActivity.this, AccountSettingActivity.class));
-            }
-        }
-    }
 
     private class HardwareValueBroadcastReceiver extends BroadcastReceiver {
         @Override

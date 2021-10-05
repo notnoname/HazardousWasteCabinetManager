@@ -18,10 +18,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import me.liuxy.cabinet.SubBoard;
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DeviceInfo;
 import me.liuzs.cabinetmanager.model.HardwareValue;
-import me.liuzs.cabinetmanager.model.LockerStatus;
 import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;
 import me.liuzs.cabinetmanager.ui.subboardinfo.SubBoardListAdapter;
 import me.liuzs.cabinetmanager.ui.subboardinfo.SubBoardStatusItemViewHolder;
@@ -32,7 +31,7 @@ import me.liuzs.cabinetmanager.util.Util;
  */
 public class SubBoardInfoActivity extends BaseActivity {
 
-    public static final String TAG = "LockerManageActivity";
+    public static final String TAG = "SubBoardInfoActivity";
     private final SubBoardListAdapter mAdapter = new SubBoardListAdapter(this);
     private final Gson mGson = new Gson();
     private final List<SubBoardStatusInfo> mSubBoardStatusInfo = new LinkedList<>();
@@ -61,14 +60,14 @@ public class SubBoardInfoActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(gm);
 
 
-        CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+        Cabinet cabinet = CabinetCore.getCabinetInfo();
 
-        if (cabinetInfo != null) {
-            for (DeviceInfo info : cabinetInfo.devices) {
-                SubBoardStatusInfo statusInfo = new SubBoardStatusInfo();
-                statusInfo.name = info.devName;
-                mSubBoardStatusInfo.add(statusInfo);
-            }
+        if (cabinet != null) {
+//            for (DeviceInfo info : cabinet.devices) {
+//                SubBoardStatusInfo statusInfo = new SubBoardStatusInfo();
+//                statusInfo.name = info.devName;
+//                mSubBoardStatusInfo.add(statusInfo);
+//            }
         }
 
         if (HardwareValue._Cache != null) {
@@ -80,7 +79,7 @@ public class SubBoardInfoActivity extends BaseActivity {
             }
         }
 
-        SubBoardStatusItemViewHolder.setup = CtrlFunc.getSetupValue(this);
+        SubBoardStatusItemViewHolder.setup = CabinetCore.getSetupValue(this);
         mAdapter.setResult(mSubBoardStatusInfo);
 
     }

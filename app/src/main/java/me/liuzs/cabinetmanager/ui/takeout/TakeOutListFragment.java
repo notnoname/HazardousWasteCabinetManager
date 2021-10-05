@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import me.liuzs.cabinetmanager.CtrlFunc;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.TakeOutActivity;
 import me.liuzs.cabinetmanager.model.TakeOutItemInfo;
@@ -76,7 +76,7 @@ public class TakeOutListFragment extends Fragment {
     }
 
     public void submit() {
-        CtrlFunc.removeUnSubmitTakeOutInfo(mActivity);
+        CabinetCore.removeUnSubmitTakeOutInfo(mActivity);
         mActivity.finish();
     }
 

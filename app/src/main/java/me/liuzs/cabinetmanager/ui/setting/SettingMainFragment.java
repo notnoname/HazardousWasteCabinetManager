@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.Gson;
 
 import me.liuzs.cabinetmanager.CabinetApplication;
-import me.liuzs.cabinetmanager.CabinetNameActivity;
-import me.liuzs.cabinetmanager.CtrlFunc;
+import me.liuzs.cabinetmanager.CabinetBindActivity;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.HardwareSetupActiveActivity;
 import me.liuzs.cabinetmanager.LauncherActivity;
 import me.liuzs.cabinetmanager.R;
@@ -59,9 +59,7 @@ public class SettingMainFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (mCabinetSetup.equals(v)) {
-            Intent intent = new Intent(getActivity(), CabinetNameActivity.class);
-            intent.putExtra(CabinetNameActivity.KEY_INIT, new Gson().toJson(CabinetApplication.getInstance().getCabinetInfo()));
-            startActivity(intent);
+            CabinetBindActivity.start(getActivity(), CabinetCore.getCabinetInfo());
         } else if (mEquipmentManage.equals(v)) {
             mActivity.transToEquipmentManageFragment();
         } else if (mEquipmentLog.equals(v)) {
@@ -75,16 +73,14 @@ public class SettingMainFragment extends Fragment implements View.OnClickListene
     }
 
     private void reset() {
-        CtrlFunc.removeAdminUserInfo(getActivity());
-        CtrlFunc.removeUnSubmitDepositRecord(getActivity());
-        CtrlFunc.removeCabinetInfo(getActivity());
-        CtrlFunc.removeUnSubmitTakeOutInfo(getActivity());
-        CtrlFunc.removeUnSubmitUsageInfo(getActivity());
-        CtrlFunc.removeConnectedPrinterInfo(getActivity());
+        CabinetCore.clearCabinetUser(CabinetCore.RoleType.Admin);
+        CabinetCore.clearCabinetUser(CabinetCore.RoleType.Operator);
+        CabinetCore.removeUnSubmitDepositRecord(getActivity());
+        CabinetCore.clearCabinetInfo();
+        CabinetCore.removeUnSubmitTakeOutInfo(getActivity());
+        CabinetCore.removeUnSubmitUsageInfo(getActivity());
+        CabinetCore.removeConnectedPrinterInfo(getActivity());
         FaceServer.getInstance().clearAllFaces(getActivity());
-        Intent intent = new Intent(getActivity(), LauncherActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        android.os.Process.killProcess(android.os.Process.myPid());
+        CabinetCore.restart();
     }
 }

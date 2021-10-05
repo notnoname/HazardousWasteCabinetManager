@@ -39,12 +39,12 @@ import java.util.Map;
 
 import me.liuxy.cabinet.SubBoard;
 import me.liuzs.cabinetmanager.CabinetApplication;
-import me.liuzs.cabinetmanager.CtrlFunc;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.ReturnAfterUseActivity;
 import me.liuzs.cabinetmanager.SpinnerActivity;
 import me.liuzs.cabinetmanager.WeightActivity;
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.UsageItemInfo;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
@@ -74,14 +74,14 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "LockerServiceConnected success");
             HardwareService.HardwareServiceBinder binder = (HardwareService.HardwareServiceBinder) service;
-            CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
-            int index = CtrlFunc.getDevIndex(info, mItem.devId);
-            if (info.tankType == 1 && index != -1) {
-                SubBoard.ControlResult result = binder.getHardwareService().switchLockerControl(index);
-                mActivity.showToast(result);
-            } else {
-                binder.getHardwareService().switchLockerControl(true);
-            }
+            Cabinet info = CabinetCore.getCabinetInfo();
+//            int index = CabinetCore.getDevIndex(info, mItem.devId);
+//            if (info.tankType == 1 && index != -1) {
+//                SubBoard.ControlResult result = binder.getHardwareService().switchLockerControl(index);
+//                mActivity.showToast(result);
+//            } else {
+//                binder.getHardwareService().switchLockerControl(true);
+//            }
             mActivity.unbindService(this);
         }
 
@@ -342,7 +342,7 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
             mActivity.get().dismissProgressDialog();
             if (json.code == 200) {
                 mActivity.get().getUsageInfo().items.add(mFragment.get().mItem);
-                CtrlFunc.saveUnSubmitUsageInfo(mActivity.get(), mActivity.get().getUsageInfo());
+                CabinetCore.saveUnSubmitUsageInfo(mActivity.get(), mActivity.get().getUsageInfo());
                 mActivity.get().transToReturnListFragment();
             } else {
                 mActivity.get().showToast("服务器错误：" + json.code);
@@ -359,18 +359,19 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
         @Override
         protected UsageItemInfo doInBackground(String... v) {
             APIJSON<List<UsageItemInfo>> infoListJson = RemoteAPI.ReturnAfterUse.getContainerDetail(v[0]);
-            if (infoListJson.code == 200 && infoListJson.data.size() > 0) {
-                UsageItemInfo result = infoListJson.data.get(0);
-                if (CtrlFunc.isInThisTank(CabinetApplication.getInstance().getCabinetInfo(), result.devId)) {
-                    result.conNo = v[0];
-                    result.outWeight = v[1];
-                    return result;
-                } else {
-                    return null;
-                }
-            } else {
-                return null;
-            }
+//            if (infoListJson.code == 200 && infoListJson.data.size() > 0) {
+//                UsageItemInfo result = infoListJson.data.get(0);
+//                if (CabinetCore.isInThisTank(CabinetApplication.getInstance().getCabinetInfo(), result.devId)) {
+//                    result.conNo = v[0];
+//                    result.outWeight = v[1];
+//                    return result;
+//                } else {
+//                    return null;
+//                }
+//            } else {
+//                return null;
+//            }
+            return null;
         }
 
         @Override

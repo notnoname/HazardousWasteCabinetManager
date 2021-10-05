@@ -3,13 +3,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 30
     defaultConfig {
         applicationId 'me.liuzs.hazardouswastecabinetmanager'
         minSdkVersion 24
-        targetSdkVersion 31
-        versionCode 72
-        versionName '0.71'
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 25
+        versionCode 1
+        versionName '0.01'
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import me.liuzs.cabinetmanager.CtrlFunc;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.StorageActivity;
 import me.liuzs.cabinetmanager.model.DepositItem;
@@ -196,12 +196,12 @@ public class FirstDepositFragment extends Fragment {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
             if (json.code == 200) {
-                CtrlFunc.removeUnSubmitDepositRecord(mActivity.get());
+                CabinetCore.removeUnSubmitDepositRecord(mActivity.get());
                 mActivity.get().finish();
             } else {
 
                 if (json.code == 500 && json.msg.contains("不允许重复入库")) {
-                    CtrlFunc.removeUnSubmitDepositRecord(mActivity.get());
+                    CabinetCore.removeUnSubmitDepositRecord(mActivity.get());
                     mActivity.get().showToast(json.msg);
                     mActivity.get().finish();
                 } else {

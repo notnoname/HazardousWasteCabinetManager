@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="460dp"
+    android:layout_height="480px"
     android:background="@drawable/background_dialog"
-    android:minWidth="480dp"
+    android:minWidth="800px"
     tools:context=".SpinnerActivity">
 
     <TextView
         android:id="@+id/tvTip"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24px"
+        android:layout_marginTop="16px"
+        android:layout_marginEnd="24px"
         android:text="@string/select"
         android:textColor="@android:color/darker_gray"
-        android:textSize="14sp"
+        android:textSize="24px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,14 +26,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="24px"
+        android:layout_marginTop="16px"
+        android:layout_marginEnd="24px"
+        android:layout_marginBottom="24px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTip">
+        app:layout_constraintTop_toBottomOf="@+id/tvTip"
+        tools:ignore="SpeakableTextPresentCheck">
 
         <LinearLayout
             android:id="@+id/llOptions"

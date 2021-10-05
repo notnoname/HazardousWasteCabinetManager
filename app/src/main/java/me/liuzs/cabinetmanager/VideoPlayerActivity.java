@@ -1,7 +1,6 @@
 package me.liuzs.cabinetmanager;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
@@ -9,18 +8,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.gson.Gson;
 import com.videogo.errorlayer.ErrorInfo;
@@ -64,7 +59,7 @@ public class VideoPlayerActivity extends BaseActivity {
                                 .setView(et)
                                 .setPositiveButton("确定", (dialog, which) -> {
                                     String input = et.getText().toString().trim();
-                                    CtrlFunc.saveCameraVerifyCode(VideoPlayerActivity.this, mCamera.serialNo, mCamera.channelNo, input);
+                                    CabinetCore.saveCameraVerifyCode(VideoPlayerActivity.this, mCamera.serialNo, mCamera.channelNo, input);
                                     startRealPlay();
                                 })
                                 .setNegativeButton("取消", (dialogInterface, i) -> finish())
@@ -145,7 +140,7 @@ public class VideoPlayerActivity extends BaseActivity {
 
     private void startRealPlay() {
         if (mPlayer != null) {
-            mPlayer.setPlayVerifyCode(CtrlFunc.getCameraVerifyCode(this, mCamera.serialNo, mCamera.channelNo));
+            mPlayer.setPlayVerifyCode(CabinetCore.getCameraVerifyCode(this, mCamera.serialNo, mCamera.channelNo));
             mPlayer.startRealPlay();
         }
     }

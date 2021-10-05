@@ -122,7 +122,7 @@ public class DeviceBluetoothListActivity extends BaseActivity {
             public void sppConnected(BluetoothDevice device) {//蓝牙连接成功回调
                 PrinterBluetoothInfo info = new PrinterBluetoothInfo(device.getName(), device.getAddress());
                 PrintActivity.CurrentPrinterInfo = info;
-                CtrlFunc.saveConnectedPrinterInfo(CabinetApplication.getInstance(), info);
+                CabinetCore.saveConnectedPrinterInfo(CabinetApplication.getInstance(), info);
                 if (mProgressDialog != null) {
                     mProgressDialog.dismiss();
                 }

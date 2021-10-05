@@ -14,12 +14,10 @@ import com.videogo.openapi.bean.EZDeviceInfo;
 
 import java.lang.ref.WeakReference;
 import java.net.URL;
-import java.net.URLStreamHandler;
-import java.net.URLStreamHandlerFactory;
 import java.util.LinkedList;
 import java.util.List;
 
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.SurveillanceCamera;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
@@ -56,9 +54,9 @@ public class CameraListActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
-        if (info != null && !TextUtils.isEmpty(info.tankId)) {
-            new GetCameraListTask(this).execute(info.tankId);
+        Cabinet info = CabinetCore.getCabinetInfo();
+        if (info != null && !TextUtils.isEmpty(info.id)) {
+            new GetCameraListTask(this).execute(info.id);
         }
     }
 

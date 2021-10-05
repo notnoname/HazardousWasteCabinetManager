@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import me.liuzs.cabinetmanager.CtrlFunc;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.ReturnAfterUseActivity;
 import me.liuzs.cabinetmanager.model.UsageItemInfo;
@@ -81,7 +81,7 @@ public class ReturnListFragment extends Fragment {
     }
 
     public void submit() {
-        CtrlFunc.removeUnSubmitUsageInfo(mActivity);
+        CabinetCore.removeUnSubmitUsageInfo(mActivity);
         mActivity.finish();
     }
 

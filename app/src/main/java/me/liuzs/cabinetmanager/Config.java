@@ -17,16 +17,9 @@ public class Config {
     public static final String DATABASE_NAME = "CabinetDatabase";
     public static final int DATABASE_VERSION = 1;
     public static final String EZ_APP_KEY = "15e1da4c183a470c89ebb68c3a26a349";
-    /*
-     *升级到V2
-     */
-    public static final String SYSTEM_PREFERENCE_NAME = "SystemPreference_V2";
-    public static final String SYSPRE_Administrator1_Name = "SysPre_Admin1_Name";
-    public static final String SYSPRE_Administrator1_ID = "SysPre_Admin1_ID";
-    public static final String SYSPRE_Administrator1_PASSWORD_MD5 = "SYSPRE_Administrator1_PASSWORD_MD5";
-    public static final String SYSPRE_Administrator1_USER_INFO = "SysPre_Admin1_USER_INFO";
-    public static final String SYSPRE_Administrator1_FACE_ID = "SysPre_Admin1_FACE_ID";
-    public static final String SYSPRE_Administrator1_TOKEN = "SysPre_Admin1_Token";
+
+    public static final String SYSTEM_PREFERENCE_NAME = "SystemPreference";
+    public static final String SYSPRE_Cabinet_User = "SYSPRE_Cabinet_User";
     public static final String SYSPRE_SYSTEM_SETUP = "SYSTEM_SETUP";
     public static final String SYSPRE_CABINET_INFO = "CABINET_INFO_FULL_VERSION_3";
     public static final String UN_SUBMIT_DEPOSIT_INFO = "UN_SUBMIT_DEPOSIT_INFO";
@@ -37,8 +30,8 @@ public class Config {
     public static final String SUB_BOARD_PERIOD = "SUB_BOARD_PERIOD";
     public static final String SYSPRE_CAMERA_VERIFY_CODE = "SYSPRE_CAMERA_VERIFY_CODE";
 
-    public static final String ARC_APP_ID = "5UQUZXBwq4RknCfrk4zs7nBQcEf5v63BSseKVQVkPkyw";
-    public static final String ARC_SDK_KEY = "HnWfJteg4da51MUbydW3zeMyhMQUhUzCZjL2V23WgEfv";
+    public static final String ARC_APP_ID = "5UQUZXBwq4RknCfrk4zs7nBew3BQrNh7ZQH1ALQybdNR";
+    public static final String ARC_SDK_KEY = "AzFyDx3GmvuvVWDSGZW9ZCe8uerNp1zoVcYfj45eXcNd";
 
     //    public static final String SUB_BOARD_CONFIG = "SUB_BOARD_CONFIG";
     public static final String TDA09C485_CONFIG = "TDA09C485_CONFIG";
@@ -75,7 +68,7 @@ public class Config {
             // 图像库相关
             "libarcsoft_image_util.so",
     };
-    public static String[] ScalesDeviceName = {"金珂华天平 (1kg/ 0.01g)", "欧路达(3kg/0.5g)"};
+    public static String[] ScalesDeviceName = {"欧路达(100kg/10g)"};
 
     public static boolean setTrackedFaceCount(Context context, int trackedFaceCount) {
         if (context == null) {

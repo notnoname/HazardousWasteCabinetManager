@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DeviceInfo;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.StorageLaboratoryDetail;
@@ -225,7 +225,7 @@ public class TakeOutActivity extends BaseActivity {
 
         @Override
         protected TakeOutInfo doInBackground(String... args) {
-            CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+            Cabinet cabinet = CabinetCore.getCabinetInfo();
             TakeOutInfo result = new TakeOutInfo();
 
             APIJSON<StorageLaboratoryDetail> storageLaboratoryDetailJSON = RemoteAPI.TakeOut.getStorageLaboratoryDetail();
@@ -249,12 +249,12 @@ public class TakeOutActivity extends BaseActivity {
             if (takeOutInfoListJson.code != 200 || takeOutInfoListJson.data == null || takeOutInfoListJson.data.size() == 0) {
                 return null;
             } else {
-                for (TakeOutInfo info : takeOutInfoListJson.data) {
-                    if (TextUtils.equals(info.devId, args[0]) && TextUtils.equals(info.tankId, cabinetInfo.tankId)) {
-                        takeOutInfo = info;
-                        break;
-                    }
-                }
+//                for (TakeOutInfo info : takeOutInfoListJson.data) {
+//                    if (TextUtils.equals(info.devId, args[0]) && TextUtils.equals(info.tankId, cabinet.tankId)) {
+//                        takeOutInfo = info;
+//                        break;
+//                    }
+//                }
             }
 
             if (takeOutInfo == null) {
@@ -284,7 +284,7 @@ public class TakeOutActivity extends BaseActivity {
             mActivity.get().dismissProgressDialog();
             if (result != null) {
                 mActivity.get().mTakeOutInfo = result;
-                CtrlFunc.saveUnSubmitTakeOutInfo(mActivity.get(), mActivity.get().mTakeOutInfo);
+                CabinetCore.saveUnSubmitTakeOutInfo(mActivity.get(), mActivity.get().mTakeOutInfo);
                 mActivity.get().transToTakeOutListFragment();
                 mActivity.get().showTakeOutInfo();
             } else {
@@ -337,21 +337,21 @@ public class TakeOutActivity extends BaseActivity {
             super.onPostExecute(info);
             mActivity.get().dismissProgressDialog();
             if (info) {
-                mActivity.get().mTakeOutInfo = CtrlFunc.getUnSubmitTakeOutInfo(mActivity.get());
+                mActivity.get().mTakeOutInfo = CabinetCore.getUnSubmitTakeOutInfo(mActivity.get());
                 if (mActivity.get().mTakeOutInfo == null) {
-                    DeviceInfo deviceInfo = CabinetApplication.getSingleDevice();
-                    if (deviceInfo != null) {
-                        new CreateTakeOutInfoTask(mActivity.get()).execute(deviceInfo.devId);
-                    } else {
-                        List<String> options = new ArrayList<>();
-                        for (DeviceInfo dev : CabinetApplication.getInstance().getCabinetInfo().devices) {
-                            options.add(dev.devId + " - " + dev.devName);
-                        }
-                        Intent intent = new Intent(mActivity.get(), SpinnerActivity.class);
-                        intent.putExtra(SpinnerActivity.KEY_OPTIONS, mActivity.get().mGson.toJson(options));
-                        intent.putExtra(SpinnerActivity.KEY_TIP_INFO, "请先选择存储区域：");
-                        mActivity.get().mDeviceSelectLauncher.launch(intent);
-                    }
+//                    DeviceInfo deviceInfo = CabinetApplication.getSingleDevice();
+//                    if (deviceInfo != null) {
+//                        new CreateTakeOutInfoTask(mActivity.get()).execute(deviceInfo.devId);
+//                    } else {
+//                        List<String> options = new ArrayList<>();
+//                        for (DeviceInfo dev : CabinetApplication.getInstance().getCabinetInfo().devices) {
+//                            options.add(dev.devId + " - " + dev.devName);
+//                        }
+//                        Intent intent = new Intent(mActivity.get(), SpinnerActivity.class);
+//                        intent.putExtra(SpinnerActivity.KEY_OPTIONS, mActivity.get().mGson.toJson(options));
+//                        intent.putExtra(SpinnerActivity.KEY_TIP_INFO, "请先选择存储区域：");
+//                        mActivity.get().mDeviceSelectLauncher.launch(intent);
+//                    }
                 } else {
                     mActivity.get().transToTakeOutListFragment();
                     mActivity.get().showTakeOutInfo();

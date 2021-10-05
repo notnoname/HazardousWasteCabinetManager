@@ -86,10 +86,10 @@ public class DepositRecordAdapter extends RecyclerView.Adapter<DepositRecordView
                 holder.depositNo.setText("试剂" + (position + 1));
                 holder.containerNo.setText(record.conNo);
                 holder.chemicalName.setText(record.chemicalName);
-                DeviceInfo info = CabinetApplication.getInstance().getDeviceInfoById(record.devId);
-                if (info != null) {
-                    record.devName = info.devName;
-                }
+//                DeviceInfo info = CabinetApplication.getInstance().getDeviceInfoById(record.devId);
+//                if (info != null) {
+//                    record.devName = info.devName;
+//                }
                 holder.deviceName.setText(record.devName);
                 //holder.weight.setText(record.specification + (record.measureSpec != null ? record.measureSpec : ""));
                 holder.weight.setText(record.weight + "g");

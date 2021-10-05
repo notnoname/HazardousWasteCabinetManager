@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:padding="16px"
         android:theme="@style/Theme.CabinetManager.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -33,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:text=""
-                android:textSize="16sp" />
+                android:textSize="24px" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -42,7 +43,7 @@
                 android:layout_gravity="center"
                 android:onClick="onTitleClick"
                 android:text="@string/hardware_setup"
-                android:textSize="40px"
+                android:textSize="@dimen/tool_bar_title_height"
                 android:textStyle="bold"
                 tools:ignore="TouchTargetSizeCheck" />
 
@@ -52,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:text=""
-                android:textSize="16sp" />
+                android:textSize="24px" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -71,7 +72,7 @@
             android:layout_marginTop="8px"
             android:layout_marginEnd="32px"
             android:background="@drawable/background_input_area"
-            android:padding="8dp"
+            android:padding="16px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +80,7 @@
 
             <TextView
                 android:id="@+id/tvARCLabel"
-                android:layout_width="0dp"
+                android:layout_width="220px"
                 android:layout_height="wrap_content"
                 android:text="@string/engine_state"
                 android:textAlignment="center"
@@ -94,7 +95,7 @@
                 android:id="@+id/tvARCStateValue"
                 android:layout_width="160px"
                 android:layout_height="60px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_state_red"
                 android:gravity="center"
                 android:padding="5dp"
@@ -110,7 +111,7 @@
                 android:id="@+id/btnARCActive"
                 android:layout_width="160px"
                 android:layout_height="60px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_button"
                 android:onClick="onActiveButtonClick"
                 android:text="@string/active"
@@ -126,11 +127,11 @@
                 android:id="@+id/tvActiveInfo"
                 android:layout_width="0dp"
                 android:layout_height="60px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_info_area"
                 android:gravity="center"
                 android:hint="@string/arc_active_tip"
-                android:padding="3dp"
+                android:padding="3px"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/darker_gray"
                 android:textSize="24px"
@@ -152,14 +153,14 @@
             android:background="@drawable/background_input_area"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:padding="8dp"
+            android:padding="16px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/csARC">
 
             <TextView
                 android:id="@+id/tvBarcodeLabel"
-                android:layout_width="0dp"
+                android:layout_width="220px"
                 android:layout_height="wrap_content"
                 android:text="@string/barcode_test"
                 android:textAlignment="center"
@@ -174,7 +175,7 @@
                 android:id="@+id/etBarcode"
                 android:layout_width="0dp"
                 android:layout_height="70px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_edit"
                 android:ems="10"
                 android:importantForAutofill="no"
@@ -197,16 +198,34 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32px"
             android:background="@drawable/background_input_area"
-            android:padding="8dp"
+            android:padding="16px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/csScan">
+
+            <TextView
+                android:id="@+id/tvScalesName"
+                android:layout_width="0dp"
+                android:layout_height="60px"
+                android:layout_marginStart="16px"
+                android:background="@drawable/background_info_area"
+                android:gravity="center"
+                android:hint="@string/select_scales"
+                android:padding="3px"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/darker_gray"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnWeight"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TextContrastCheck" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnWeight"
                 android:layout_width="160px"
                 android:layout_height="60px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_button"
                 android:onClick="onWeightButtonClick"
                 android:text="@string/weight_test"
@@ -222,7 +241,7 @@
                 android:id="@+id/btnCalibration"
                 android:layout_width="160px"
                 android:layout_height="60px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_button"
                 android:onClick="onCalibrationButtonClick"
                 android:text="@string/calibration"
@@ -236,7 +255,7 @@
 
             <TextView
                 android:id="@+id/tvSteelyardLabel"
-                android:layout_width="0dp"
+                android:layout_width="220px"
                 android:layout_height="wrap_content"
                 android:text="@string/weight_setup"
                 android:textAlignment="center"
@@ -256,7 +275,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32px"
             android:background="@drawable/background_input_area"
-            android:padding="8dp"
+            android:padding="16px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/csWeight">
@@ -265,11 +284,11 @@
                 android:id="@+id/tvPrinterNameValue"
                 android:layout_width="0dp"
                 android:layout_height="60px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_info_area"
                 android:gravity="center"
                 android:hint="@string/printer_name"
-                android:padding="3dp"
+                android:padding="3px"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/darker_gray"
                 android:textSize="24px"
@@ -283,7 +302,7 @@
                 android:id="@+id/btnPrinter"
                 android:layout_width="160px"
                 android:layout_height="60px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_button"
                 android:onClick="onPrinterButtonClick"
                 android:text="@string/test"
@@ -297,7 +316,7 @@
 
             <TextView
                 android:id="@+id/tvPrinterLabel"
-                android:layout_width="0dp"
+                android:layout_width="220px"
                 android:layout_height="wrap_content"
                 android:text="@string/print_test"
                 android:textAlignment="center"
@@ -314,22 +333,22 @@
             android:id="@+id/csTvocs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32px"
+            android:layout_marginTop="8px"
+            android:layout_marginEnd="32px"
             android:background="@drawable/background_input_area"
-            android:padding="8dp"
+            android:padding="16px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/csPrint">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnModBusTest"
+                android:id="@+id/btnModbusTest"
                 android:layout_width="160px"
                 android:layout_height="60px"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="16px"
                 android:background="@drawable/background_button"
-                android:onClick="onModBusTestButtonClick"
+                android:onClick="onModbusTestButtonClick"
                 android:text="@string/start"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
@@ -341,7 +360,7 @@
 
             <TextView
                 android:id="@+id/tvModBusLabel"
-                android:layout_width="0dp"
+                android:layout_width="220px"
                 android:layout_height="wrap_content"
                 android:text="@string/modbus_test"
                 android:textAlignment="center"
@@ -358,7 +377,7 @@
             android:id="@+id/btnFinish"
             android:layout_width="220px"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24px"
             android:background="@drawable/background_button"
             android:onClick="onFinishButtonClick"
             android:text="@string/finish"

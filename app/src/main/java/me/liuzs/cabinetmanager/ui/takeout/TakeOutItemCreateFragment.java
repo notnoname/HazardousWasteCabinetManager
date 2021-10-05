@@ -34,11 +34,11 @@ import java.util.List;
 
 import me.liuxy.cabinet.SubBoard;
 import me.liuzs.cabinetmanager.CabinetApplication;
-import me.liuzs.cabinetmanager.CtrlFunc;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SpinnerActivity;
 import me.liuzs.cabinetmanager.TakeOutActivity;
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.TakeOutItemInfo;
 import me.liuzs.cabinetmanager.net.APIJSON;
@@ -71,14 +71,14 @@ public class TakeOutItemCreateFragment extends Fragment implements View.OnClickL
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "LockerServiceConnected success");
             HardwareService.HardwareServiceBinder binder = (HardwareService.HardwareServiceBinder) service;
-            CabinetInfo info = CabinetApplication.getInstance().getCabinetInfo();
-            int index = CtrlFunc.getDevIndex(info, mItemInfo.devId);
-            if (info.tankType == 1 && index != -1) {
-                SubBoard.ControlResult result = binder.getHardwareService().switchLockerControl(index);
-                mActivity.showToast(result);
-            } else {
-                binder.getHardwareService().switchLockerControl(true);
-            }
+            Cabinet info = CabinetCore.getCabinetInfo();
+//            int index = CabinetCore.getDevIndex(info, mItemInfo.devId);
+//            if (info.tankType == 1 && index != -1) {
+//                SubBoard.ControlResult result = binder.getHardwareService().switchLockerControl(index);
+//                mActivity.showToast(result);
+//            } else {
+//                binder.getHardwareService().switchLockerControl(true);
+//            }
             mActivity.unbindService(this);
         }
 
@@ -324,7 +324,7 @@ public class TakeOutItemCreateFragment extends Fragment implements View.OnClickL
                     mActivity.get().getTakeOutInfo().items.remove(mFragment.get().mItemInfo);
                 }
                 mActivity.get().getTakeOutInfo().items.add(mFragment.get().mItemInfo);
-                CtrlFunc.saveUnSubmitTakeOutInfo(mActivity.get(), mActivity.get().getTakeOutInfo());
+                CabinetCore.saveUnSubmitTakeOutInfo(mActivity.get(), mActivity.get().getTakeOutInfo());
                 mActivity.get().transToTakeOutListFragment();
             } else {
                 mActivity.get().showToast("服务器错误：" + json.code);

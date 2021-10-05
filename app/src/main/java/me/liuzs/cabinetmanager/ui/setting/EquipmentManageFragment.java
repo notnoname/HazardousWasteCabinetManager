@@ -15,7 +15,7 @@ import com.kyleduo.switchbutton.SwitchButton;
 
 import java.text.DecimalFormat;
 
-import me.liuzs.cabinetmanager.CtrlFunc;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SystemSettingActivity;
 import me.liuzs.cabinetmanager.model.SetupValue;
@@ -60,7 +60,7 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
-        mValue = CtrlFunc.getSetupValue(mActivity);
+        mValue = CabinetCore.getSetupValue(mActivity);
         showValue();
     }
 
@@ -91,7 +91,7 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
                 mSave.setEnabled(false);
                 newValue.fanAuto = mValue.fanAuto;
                 mValue = newValue;
-                CtrlFunc.saveSetupValue(mActivity, mValue);
+                CabinetCore.saveSetupValue(mActivity, mValue);
                 showValue();
                 mActivity.showToast("设置保存成功!");
                 mSave.setEnabled(true);

@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Objects;
 
-import me.liuzs.cabinetmanager.model.CabinetInfo;
+import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.StorageLaboratoryDetail;
 import me.liuzs.cabinetmanager.model.UsageInfo;
@@ -190,7 +190,7 @@ public class ReturnAfterUseActivity extends BaseActivity {
 
         @Override
         protected UsageInfo doInBackground(Void... voids) {
-            CabinetInfo cabinetInfo = CabinetApplication.getInstance().getCabinetInfo();
+            Cabinet cabinet = CabinetCore.getCabinetInfo();
             UsageInfo result = new UsageInfo();
             APIJSON<StorageLaboratoryDetail> storageLaboratoryDetailJSON = RemoteAPI.ReturnAfterUse.getStorageLaboratoryDetail();
             if (storageLaboratoryDetailJSON.code != 200.) {
@@ -202,8 +202,6 @@ public class ReturnAfterUseActivity extends BaseActivity {
                 result.useAddress = detail.address;
                 result.roomNum = detail.roomNum;
                 result.building = detail.building;
-//                result.devId = cabinetInfo.devId;
-                result.tankId = cabinetInfo.tankId;
             }
 
             APIJSON<String> usageNoJSON = RemoteAPI.ReturnAfterUse.createUsageTask();
@@ -216,12 +214,12 @@ public class ReturnAfterUseActivity extends BaseActivity {
             if (usageInfoListJson.code != 200 || usageInfoListJson.data == null || usageInfoListJson.data.size() == 0) {
                 return null;
             } else {
-                for (UsageInfo info : usageInfoListJson.data) {
-                    if (TextUtils.equals(info.putLabId, cabinetInfo.labId)) {
-                        usageInfo = info;
-                        break;
-                    }
-                }
+//                for (UsageInfo info : usageInfoListJson.data) {
+//                    if (TextUtils.equals(info.putLabId, cabinet.labId)) {
+//                        usageInfo = info;
+//                        break;
+//                    }
+//                }
             }
 
             if (usageInfo == null) {
@@ -249,7 +247,7 @@ public class ReturnAfterUseActivity extends BaseActivity {
             mActivity.get().dismissProgressDialog();
             if (result != null) {
                 mActivity.get().mUsageInfo = result;
-                CtrlFunc.saveUnSubmitUsageInfo(mActivity.get(), mActivity.get().mUsageInfo);
+                CabinetCore.saveUnSubmitUsageInfo(mActivity.get(), mActivity.get().mUsageInfo);
                 mActivity.get().transToReturnListFragment();
                 mActivity.get().showUsageInfo();
             } else {
@@ -302,7 +300,7 @@ public class ReturnAfterUseActivity extends BaseActivity {
             super.onPostExecute(info);
             mActivity.get().dismissProgressDialog();
             if (info) {
-                mActivity.get().mUsageInfo = CtrlFunc.getUnSubmitUsageInfo(mActivity.get());
+                mActivity.get().mUsageInfo = CabinetCore.getUnSubmitUsageInfo(mActivity.get());
                 if (mActivity.get().mUsageInfo == null) {
                     new CreateUsageInfoTask(mActivity.get()).execute();
                 } else {

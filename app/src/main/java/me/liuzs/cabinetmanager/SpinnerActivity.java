@@ -23,7 +23,6 @@ public class SpinnerActivity extends AppCompatActivity implements View.OnClickLi
     public static final String KEY_OPTIONS = "KEY_OPTIONS";
     public static final String KEY_TIP_INFO = "KEY_TIP_INFO";
     public static final String TAG = "SpinnerActivity";
-    private final Gson mGson = new Gson();
     private LinearLayout mLLOptions;
     private TextView mTip;
     private List<String> mOptions;
@@ -40,7 +39,7 @@ public class SpinnerActivity extends AppCompatActivity implements View.OnClickLi
         String json = getIntent().getStringExtra(KEY_OPTIONS);
         Type jsonType = new TypeToken<List<String>>() {
         }.getType();
-        mOptions = mGson.fromJson(json, jsonType);
+        mOptions = CabinetCore.GSON.fromJson(json, jsonType);
 
         showOptions();
     }
@@ -54,7 +53,7 @@ public class SpinnerActivity extends AppCompatActivity implements View.OnClickLi
             textView.setText(option);
             textView.setTextColor(Color.WHITE);
             textView.setPadding(10, 10, 10, 10);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, 28);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.topMargin = 10;
             lp.bottomMargin = 10;

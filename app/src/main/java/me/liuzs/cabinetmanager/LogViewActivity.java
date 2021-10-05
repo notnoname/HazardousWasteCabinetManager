@@ -83,10 +83,10 @@ public class LogViewActivity extends BaseActivity {
         sb.append("\n");
         sb.append("-------------------");
         sb.append("\n");
-        if (CabinetApplication.getInstance().getCabinetInfo() != null) {
+        if (CabinetCore.getCabinetInfo() != null) {
             sb.append("Cabinet Info:");
             sb.append("\n");
-            sb.append(mGson.toJson(CabinetApplication.getInstance().getCabinetInfo()));
+            sb.append(mGson.toJson(CabinetCore.getCabinetInfo()));
             sb.append("\n");
         }
         mLog.setText(sb.toString());

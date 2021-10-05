@@ -22,11 +22,10 @@ import java.util.List;
 import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.util.Util;
 
-public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFunc.CheckARCActiveListener {
+public class HardwareSetupActiveActivity extends BaseActivity implements CabinetCore.CheckARCActiveListener {
 
     public static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
     private static final String TAG = "HardwareSetupActiveActivity";
-    private final Gson _Gson = new Gson();
     private final ActivityResultLauncher<Intent> mWeightLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -40,51 +39,8 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
             }
         }
     });
-    private final ActivityResultLauncher<Intent> mScalesDeviceSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            int resultCode = result.getResultCode();
-            if (resultCode == RESULT_OK) {
-                try {
-                    Intent data = result.getData();
-                    assert data != null;
-                    String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_VALUE);
-                    assert selectValue != null;
-                    String index = selectValue.split(" - ")[0];
-                    int sIndex = Integer.parseInt(index);
-                    if (sIndex != CtrlFunc.getCurrentScalesDevice(HardwareSetupActiveActivity.this)) {
-                        CtrlFunc.saveCurrentScalesDevice(HardwareSetupActiveActivity.this, sIndex);
-                        stopService(new Intent(HardwareSetupActiveActivity.this, HardwareService.class));
-                        startService(new Intent(HardwareSetupActiveActivity.this, HardwareService.class));
-                    }
-                } catch (Exception e) {
 
-                }
-                showScalesDeviceName();
-            }
-        }
-    });
-
-    private final ActivityResultLauncher<Intent> mMainTVOCModelSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            int resultCode = result.getResultCode();
-            if (resultCode == RESULT_OK) {
-                try {
-                    Intent data = result.getData();
-                    assert data != null;
-                    String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_VALUE);
-                    assert selectValue != null;
-                    CtrlFunc.saveMainTVOCModelCount(getApplicationContext(), Integer.parseInt(selectValue));
-                } catch (Exception e) {
-
-                }
-                showMainTVOCModelCount();
-            }
-        }
-    });
-
-    private TextView mARCState, mARCInfo, mPrinterName, mTitle;
+    private TextView mARCState, mARCInfo, mPrinterName, mTitle, mScalesName;
     private Button mARCActive, mWeight, mCalibration, mModbusTest;
     private EditText mBarcode;
 
@@ -99,12 +55,13 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
         mWeight = findViewById(R.id.btnWeight);
         mCalibration = findViewById(R.id.btnCalibration);
         mPrinterName = findViewById(R.id.tvPrinterNameValue);
-        mModbusTest = findViewById(R.id.btnModBusTest);
+        mScalesName = findViewById(R.id.tvScalesName);
+        mModbusTest = findViewById(R.id.btnModbusTest);
 
-        mBarcode = (EditText) findViewById(R.id.etBarcode);
+        mBarcode = findViewById(R.id.etBarcode);
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mBarcode.getWindowToken(), 0);
-        CtrlFunc.checkARCActive(this, this);
+        CabinetCore.validateARCActive( this);
     }
 
     @Override
@@ -116,30 +73,11 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
             mPrinterName.setText("");
         }
         showScalesDeviceName();
-        showMainTVOCModelCount();
-        showSubBoardPeriod();
     }
 
     private void showScalesDeviceName() {
-        String name = Config.ScalesDeviceName[CtrlFunc.getCurrentScalesDevice(this)];
-        mScalesSelect.setText(name);
-        if (CtrlFunc.getCurrentScalesDevice(this) == 1) {
-            mCalibration.setVisibility(View.VISIBLE);
-        } else {
-            mCalibration.setVisibility(View.GONE);
-        }
-    }
-
-    private void showMainTVOCModelCount() {
-        int count = CtrlFunc.getMainTVOCModelCount(this);
-        mTVOCSelectCount.setText(String.valueOf(count));
-    }
-
-    private void showSubBoardPeriod() {
-        int[] periods = CtrlFunc.getSubBoardPeriod(this);
-        mSubBoardPeriod.setText(String.valueOf(periods[0]));
-        mLockDelay.setText(String.valueOf(periods[1]));
-        mGetNEVPeriod.setText(String.valueOf(periods[2]));
+        String name = Config.ScalesDeviceName[CabinetCore.getCurrentScalesDevice()];
+        mScalesName.setText(name);
     }
 
     @Override
@@ -162,7 +100,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
 
     public void onActiveButtonClick(View view) {
         mARCActive.setEnabled(false);
-        CtrlFunc.checkARCActive(this, this);
+        CabinetCore.validateARCActive( this);
     }
 
     @Override
@@ -195,29 +133,15 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
         PrintActivity.startPrintContainerLabel(this, pc);
     }
 
-    public void onModBusTestButtonClick(View view) {
+    public void onModbusTestButtonClick(View view) {
         List<String> options = new ArrayList<>();
         options.add(String.valueOf(1));
         options.add(String.valueOf(2));
 
         Intent intent = new Intent(this, SpinnerActivity.class);
-        intent.putExtra(SpinnerActivity.KEY_OPTIONS, _Gson.toJson(options));
+        intent.putExtra(SpinnerActivity.KEY_OPTIONS, CabinetCore.GSON.toJson(options));
         intent.putExtra(SpinnerActivity.KEY_TIP_INFO, "请选主TVOC模块数量：");
-        mMainTVOCModelSelectLauncher.launch(intent);
-    }
 
-    public void onSubBoardSaveButtonClick(View view) {
-        try {
-            int period1 = Integer.parseInt(mSubBoardPeriod.getText().toString());
-            int period2 = Integer.parseInt(mLockDelay.getText().toString());
-            int period3 = Integer.parseInt(mGetNEVPeriod.getText().toString());
-            CtrlFunc.saveSubBoardPeriod(this, period1, period2, period3);
-            stopService(new Intent(HardwareSetupActiveActivity.this, HardwareService.class));
-            startService(new Intent(HardwareSetupActiveActivity.this, HardwareService.class));
-        } catch (Exception e) {
-            showToast("输入有误，请检查");
-        }
-        showSubBoardPeriod();
     }
 
     public void onCalibrationButtonClick(View view) {
@@ -230,17 +154,6 @@ public class HardwareSetupActiveActivity extends BaseActivity implements CtrlFun
                     dialog.dismiss();
                 });
         alertDialog.show();
-    }
-
-    public void onScalesSelectClick(View view) {
-        List<String> options = new ArrayList<>();
-        for (int i = 0; i < Config.ScalesDeviceName.length; i++) {
-            options.add(i + " -  " + Config.ScalesDeviceName[i]);
-        }
-        Intent intent = new Intent(this, SpinnerActivity.class);
-        intent.putExtra(SpinnerActivity.KEY_OPTIONS, _Gson.toJson(options));
-        intent.putExtra(SpinnerActivity.KEY_TIP_INFO, "请选择秤：");
-        mScalesDeviceSelectLauncher.launch(intent);
     }
 
     public void onTitleClick(View view) {

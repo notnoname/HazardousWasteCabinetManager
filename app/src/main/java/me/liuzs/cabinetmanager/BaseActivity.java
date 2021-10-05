@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -53,8 +54,8 @@ abstract class BaseActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             Intent data = result.getData();
             assert data != null;
-            String id = data.getStringExtra(AuthActivity.KEY_AUTH_SUCCESS_ID);
-            mAuthListener.onAuthSuccess(id);
+            CabinetCore.RoleType type = (CabinetCore.RoleType) data.getSerializableExtra(AuthActivity.KEY_AUTH_TYPE);
+            mAuthListener.onAuthSuccess(type);
         } else if (resultCode == RESULT_CANCELED) {
             mAuthListener.onAuthCancel();
         }
@@ -76,17 +77,15 @@ abstract class BaseActivity extends AppCompatActivity {
     }
 
     public synchronized void showToast(CharSequence info) {
-        if (info == null) {
-            info = "";
-        }
+        if (info == null) info = "";
         if (mToast == null) {
             mToast = Toast.makeText(this, info, Toast.LENGTH_SHORT);
-            TextView v = (TextView) mToast.getView().findViewById(android.R.id.message);
-            v.setTextColor(Color.WHITE);
-            v.setTextSize(21);
-        } else {
-            mToast.setText(info);
+            TextView v = mToast.getView().findViewById(android.R.id.message);
+            v.setTextColor(Color.GRAY);
+            v.setTextSize(40);
+            mToast.setGravity(Gravity.CENTER, 0, 0);
         }
+        mToast.setText(info);
         mToast.show();
     }
 
@@ -156,10 +155,7 @@ abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //|| TextUtils.equals(BuildConfig.BUILD_TYPE,"debug")
-        if (TextUtils.equals(BuildConfig.BUILD_TYPE, "release_landscape")) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Override
@@ -196,7 +192,7 @@ abstract class BaseActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings("SameParameterValue")
-    protected void showAuthActivity(AuthType type, AuthListener lsn) {
+    protected void showAuthActivity(CabinetCore.RoleType type, AuthListener lsn) {
         Intent intent = new Intent(BaseActivity.this, AuthActivity.class);
         intent.putExtra(AuthActivity.KEY_AUTH_TYPE, type);
         mAuthListener = lsn;
@@ -235,13 +231,9 @@ abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressWarnings("unused")
-    enum AuthType {
-        Admin, User, Both
-    }
-
     public interface AuthListener {
         void onAuthCancel();
-        void onAuthSuccess(String id);
+
+        void onAuthSuccess(CabinetCore.RoleType roleType);
     }
 }
