@@ -106,7 +106,7 @@ public class FirstDepositFragment extends Fragment {
         @Override
         protected List<DepositItem> doInBackground(String... strings) {
             APIJSON<List<DepositItem>> listJson = RemoteAPI.Storage.getDepositItemList(String.valueOf(mActivity.get().getDepositRecord().putId));
-            if (listJson.code == 200) {
+            if (listJson.status == APIJSON.Status.ok) {
                 return listJson.data;
             } else {
                 return null;
@@ -162,12 +162,12 @@ public class FirstDepositFragment extends Fragment {
         protected void onPostExecute(APIJSON<String> json) {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 mActivity.get().getDepositRecord().items.remove(mItem);
                 mActivity.get().showDepositRecord();
                 mFragment.get().mAdapter.notifyItemsChanged();
             } else {
-                mActivity.get().showToast("服务器错误：" + json.code);
+                mActivity.get().showToast("服务器错误：" + json.status);
             }
         }
     }
@@ -195,18 +195,18 @@ public class FirstDepositFragment extends Fragment {
         protected void onPostExecute(APIJSON<String> json) {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 CabinetCore.removeUnSubmitDepositRecord(mActivity.get());
                 mActivity.get().finish();
             } else {
 
-                if (json.code == 500 && json.msg.contains("不允许重复入库")) {
-                    CabinetCore.removeUnSubmitDepositRecord(mActivity.get());
-                    mActivity.get().showToast(json.msg);
-                    mActivity.get().finish();
-                } else {
-                    mActivity.get().showToast("服务器错误：" + json.code);
-                }
+//                if (json.status == 500 && json.msg.contains("不允许重复入库")) {
+//                    CabinetCore.removeUnSubmitDepositRecord(mActivity.get());
+//                    mActivity.get().showToast(json.msg);
+//                    mActivity.get().finish();
+//                } else {
+//                    mActivity.get().showToast("服务器错误：" + json.status);
+//                }
             }
         }
     }

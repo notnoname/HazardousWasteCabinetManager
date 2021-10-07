@@ -18,12 +18,12 @@
         android:textColor="#f18a34"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ivLockerValue"
+        app:layout_constraintEnd_toStartOf="@+id/ivACCtrlOption"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ivLockerValue"
+        android:id="@+id/ivACCtrlOption"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"

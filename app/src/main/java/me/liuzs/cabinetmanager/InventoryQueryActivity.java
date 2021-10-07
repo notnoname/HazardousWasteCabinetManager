@@ -88,7 +88,7 @@ public class InventoryQueryActivity extends BaseActivity {
     static class QueryInventoryTask extends AsyncTask<String, Void, APIJSON<List<InventoryItem>>> {
 
         private final boolean isLoadMore;
-        private WeakReference<InventoryQueryActivity> mActivity;
+        private final WeakReference<InventoryQueryActivity> mActivity;
 
         public QueryInventoryTask(InventoryQueryActivity activity, boolean isLoadMore) {
             this.isLoadMore = isLoadMore;
@@ -109,17 +109,17 @@ public class InventoryQueryActivity extends BaseActivity {
         @Override
         protected void onPostExecute(APIJSON<List<InventoryItem>> json) {
             super.onPostExecute(json);
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 if (isLoadMore) {
-                    mActivity.get().mAdapter.addResult(json.data, json.count);
+                    mActivity.get().mAdapter.addResult(json.data, 100);
                 } else {
-                    mActivity.get().mAdapter.setResult(json.data, json.count);
+                    mActivity.get().mAdapter.setResult(json.data, 100);
                 }
             } else {
                 if (isLoadMore) {
                     mActivity.get().mCurrentPage--;
                 }
-                mActivity.get().showToast(json.message != null ? json.message : json.msg);
+                mActivity.get().showToast(json.errors);
             }
             mActivity.get().dismissProgressDialog();
             mActivity.get().hideInputMethod();

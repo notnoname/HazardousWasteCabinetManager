@@ -24,6 +24,7 @@ import java.util.Objects;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.User;
 import me.liuzs.cabinetmanager.net.APIJSON;
+import me.liuzs.cabinetmanager.net.CabinetListJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.util.Util;
 
@@ -166,7 +167,7 @@ public class CabinetBindActivity extends BaseActivity {
         }
     }
 
-    private static class GetCabinetListTask extends AsyncTask<String, Void, APIJSON<List<Cabinet>>> {
+    private static class GetCabinetListTask extends AsyncTask<String, Void, APIJSON<CabinetListJSON>> {
 
         private final WeakReference<CabinetBindActivity> mActivity;
 
@@ -175,7 +176,7 @@ public class CabinetBindActivity extends BaseActivity {
         }
 
         @Override
-        protected APIJSON<List<Cabinet>> doInBackground(String... strings) {
+        protected APIJSON<CabinetListJSON> doInBackground(String... strings) {
             return RemoteAPI.System.getCabinetList(strings[0], strings[1]);
         }
 
@@ -186,13 +187,13 @@ public class CabinetBindActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(APIJSON<List<Cabinet>> json) {
+        protected void onPostExecute(APIJSON<CabinetListJSON> json) {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
-            if (json.code == 0) {
-                mActivity.get().mCabinetInfoList = json.data;
+            if (json.status == APIJSON.Status.ok) {
+                mActivity.get().mCabinetInfoList = json.data.cabinetList;
             } else {
-                mActivity.get().showToast("服务器错误");
+                mActivity.get().showToast(json.errors);
             }
         }
     }

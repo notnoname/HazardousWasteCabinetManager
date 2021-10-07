@@ -6,8 +6,8 @@
     <string name="title_system_setting">系统设置</string>
     <string name="temperature">温度</string>
     <string name="humidity">湿度</string>
-    <string name="tvocs1">TVOCs1</string>
-    <string name="tvocs2">TVOCs2</string>
+    <string name="tvocs">VOC</string>
+    <string name="flammable_gas">可燃气体</string>
     <string name="ppm">PPM</string>
     <string name="connect_broker">连接Broker</string>
     <string name="connect_publish">发布</string>
@@ -21,6 +21,7 @@
     <string name="camera_status">视频状态</string>
     <string name="printer_status">打印机状态</string>
     <string name="locker_status">门锁状态</string>
+    <string name="ac_status">空调状态</string>
     <string name="unlock">开锁</string>
     <string name="lock">关锁</string>
     <string name="mqtt">MQTT</string>
@@ -30,7 +31,7 @@
     <string name="sub_board_info">副柜环境信息</string>
     <string name="sub_board_lock">副柜门锁控制</string>
     <string name="fan_stop">关闭风机</string>
-    <string name="first_save_in">初次存入</string>
+    <string name="no_manage">单号管理</string>
     <string name="user_management">使用人员管理</string>
     <string name="hardware_management">设备管理</string>
     <string name="hardware_log">设备日志</string>

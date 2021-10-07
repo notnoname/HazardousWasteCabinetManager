@@ -99,8 +99,8 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(null);
         Util.fullScreen(this);
-        mLTVOCs2 = findViewById(R.id.llTVOCs2);
-        mLLocker = findViewById(R.id.llLocker);
+        mLTVOCs2 = findViewById(R.id.llPG);
+        mLLocker = findViewById(R.id.llAC);
         mLFan = findViewById(R.id.llFanStatus);
         mTvoc1 = findViewById(R.id.tvTVOCs1Value);
         mTvoc2 = findViewById(R.id.tvTVOCs2Value);
@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity {
         mTemperature = findViewById(R.id.tvTemperatureValue);
         mAlert = findViewById(R.id.ivAlert);
         mFanState = findViewById(R.id.ivFanStatusValue);
-        mLockerState = findViewById(R.id.ivLockerValue);
+        mLockerState = findViewById(R.id.ivACCtrlOption);
         mFan = findViewById(R.id.btnFan);
         mLocker = findViewById(R.id.btnLocker);
         mName = findViewById(R.id.tvName);

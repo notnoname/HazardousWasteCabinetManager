@@ -98,7 +98,7 @@ public class TakeOutListFragment extends Fragment {
         @Override
         protected List<TakeOutItemInfo> doInBackground(String... strings) {
             APIJSON<List<TakeOutItemInfo>> listJson = RemoteAPI.TakeOut.getTakeOutItemList(String.valueOf(mActivity.get().getTakeOutInfo().outId));
-            if (listJson.code == 200) {
+            if (listJson.status == APIJSON.Status.ok) {
                 return listJson.data;
             } else {
                 return null;

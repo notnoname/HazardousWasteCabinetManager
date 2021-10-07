@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import me.liuxy.cabinet.SubBoard;
-import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SpinnerActivity;
@@ -319,7 +317,7 @@ public class TakeOutItemCreateFragment extends Fragment implements View.OnClickL
         protected void onPostExecute(APIJSON<String> json) {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 if (mFragment.get().mItemInfo != null) {
                     mActivity.get().getTakeOutInfo().items.remove(mFragment.get().mItemInfo);
                 }
@@ -327,7 +325,7 @@ public class TakeOutItemCreateFragment extends Fragment implements View.OnClickL
                 CabinetCore.saveUnSubmitTakeOutInfo(mActivity.get(), mActivity.get().getTakeOutInfo());
                 mActivity.get().transToTakeOutListFragment();
             } else {
-                mActivity.get().showToast("服务器错误：" + json.code);
+                mActivity.get().showToast("服务器错误：" + json.status);
             }
         }
     }
@@ -341,7 +339,7 @@ public class TakeOutItemCreateFragment extends Fragment implements View.OnClickL
         @Override
         protected TakeOutItemInfo doInBackground(String... v) {
             APIJSON<List<TakeOutItemInfo>> takeOutItemInfoJson = RemoteAPI.TakeOut.getContainerDetail(v[0]);
-            if (takeOutItemInfoJson.code == 200 && takeOutItemInfoJson.data.size() > 0) {
+            if (takeOutItemInfoJson.status == APIJSON.Status.ok && takeOutItemInfoJson.data.size() > 0) {
                 return takeOutItemInfoJson.data.get(0);
             } else {
                 return null;
@@ -372,7 +370,7 @@ public class TakeOutItemCreateFragment extends Fragment implements View.OnClickL
         @Override
         protected Boolean doInBackground(Void... v) {
             APIJSON<List<TakeOutItemInfo>> inventoryItemListJSON = RemoteAPI.TakeOut.getContainerNoList(mActivity.getTakeOutInfo().devId);
-            if (inventoryItemListJSON.code == 200) {
+            if (inventoryItemListJSON.status == APIJSON.Status.ok) {
                 mContainerNoList.clear();
                 mContainerNoList.addAll(inventoryItemListJSON.data);
                 return true;

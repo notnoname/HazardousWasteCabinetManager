@@ -488,7 +488,7 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
     }
 
     static class BaseInfo {
-        public int code;
+        public APIJSON.Status status;
         public String reagentContainerNo;
         public List<DictType> unitTypes;
         public List<DictType> purityTypes;
@@ -509,37 +509,37 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
         protected BaseInfo doInBackground(String... strings) {
             BaseInfo result = new BaseInfo();
             APIJSON<String> json = RemoteAPI.Storage.getContainerNo(strings[0]);
-            if (json.code != 200.) {
-                result.code = json.code;
+            if (json.status != APIJSON.Status.ok) {
+                result.status = json.status;
                 return result;
             } else {
                 result.reagentContainerNo = json.data;
             }
 
             APIJSON<List<DictType>> unitTypes = RemoteAPI.BaseInfo.getUnitDictCode();
-            if (unitTypes.code != 200) {
-                result.code = unitTypes.code;
+            if (unitTypes.status != APIJSON.Status.ok) {
+                result.status = unitTypes.status;
                 return result;
             } else {
                 result.unitTypes = unitTypes.data;
             }
             APIJSON<List<DictType>> purityTypes = RemoteAPI.BaseInfo.getPurityDictCode();
-            if (purityTypes.code != 200) {
-                result.code = purityTypes.code;
+            if (purityTypes.status != APIJSON.Status.ok) {
+                result.status = purityTypes.status;
                 return result;
             } else {
                 result.purityTypes = purityTypes.data;
             }
 
             APIJSON<List<DictType>> measureSpecs = RemoteAPI.BaseInfo.getMeasureSpecDictCode();
-            if (measureSpecs.code != 200) {
-                result.code = measureSpecs.code;
+            if (measureSpecs.status != APIJSON.Status.ok) {
+                result.status = measureSpecs.status;
                 return result;
             } else {
                 result.measureSpecs = measureSpecs.data;
             }
 
-            result.code = 200;
+            result.status = APIJSON.Status.ok;
             return result;
         }
 
@@ -553,7 +553,7 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
         protected void onPostExecute(BaseInfo info) {
             super.onPostExecute(info);
             mActivity.get().dismissProgressDialog();
-            if (info.code == 200) {
+            if (info.status == APIJSON.Status.ok) {
                 mFragment.get().mNewItem.isInit = true;
                 mFragment.get().mNewItem.conNo = info.reagentContainerNo;
                 mFragment.get().mUnitTypes = info.unitTypes;
@@ -562,7 +562,7 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
                 mFragment.get().setDefaultValue();
                 mFragment.get().showItem();
             } else {
-                mActivity.get().showToast("服务器错误：" + info.code);
+                mActivity.get().showToast("服务器错误：" + info.status);
                 mActivity.get().transToFirstDepositFragment();
             }
         }
@@ -582,29 +582,29 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
         protected BaseInfo doInBackground(Void... v) {
             BaseInfo result = new BaseInfo();
             APIJSON<List<DictType>> unitTypes = RemoteAPI.BaseInfo.getUnitDictCode();
-            if (unitTypes.code != 200) {
-                result.code = unitTypes.code;
+            if (unitTypes.status != APIJSON.Status.ok) {
+                result.status = unitTypes.status;
                 return result;
             } else {
                 result.unitTypes = unitTypes.data;
             }
             APIJSON<List<DictType>> purityTypes = RemoteAPI.BaseInfo.getPurityDictCode();
-            if (purityTypes.code != 200) {
-                result.code = purityTypes.code;
+            if (purityTypes.status != APIJSON.Status.ok) {
+                result.status = purityTypes.status;
                 return result;
             } else {
                 result.purityTypes = purityTypes.data;
             }
 
             APIJSON<List<DictType>> measureSpecs = RemoteAPI.BaseInfo.getMeasureSpecDictCode();
-            if (measureSpecs.code != 200) {
-                result.code = measureSpecs.code;
+            if (measureSpecs.status != APIJSON.Status.ok) {
+                result.status = measureSpecs.status;
                 return result;
             } else {
                 result.measureSpecs = measureSpecs.data;
             }
 
-            result.code = 200;
+            result.status = APIJSON.Status.ok;
             return result;
         }
 
@@ -618,7 +618,7 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
         protected void onPostExecute(BaseInfo info) {
             super.onPostExecute(info);
             mActivity.get().dismissProgressDialog();
-            if (info.code == 200) {
+            if (info.status == APIJSON.Status.ok) {
                 mFragment.get().mNewItem.isInit = true;
                 mFragment.get().mUnitTypes = info.unitTypes;
                 mFragment.get().mPurityTypes = info.purityTypes;
@@ -626,7 +626,7 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
                 mFragment.get().setDefaultValue();
                 mFragment.get().showItem();
             } else {
-                mActivity.get().showToast("服务器错误：" + info.code);
+                mActivity.get().showToast("服务器错误：" + info.status);
                 mActivity.get().transToFirstDepositFragment();
             }
         }
@@ -657,7 +657,7 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
         protected void onPostExecute(APIJSON<String> json) {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 if (mFragment.get().mOriginItem != null) {
                     mActivity.get().getDepositRecord().items.remove(mFragment.get().mOriginItem);
                 }
@@ -665,7 +665,7 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
                 CabinetCore.saveUnSubmitDepositRecord(mActivity.get(), mActivity.get().getDepositRecord());
                 mActivity.get().transToFirstDepositFragment();
             } else {
-                mActivity.get().showToast("服务器错误：" + json.msg);
+                mActivity.get().showToast("服务器错误：" + json.errors);
             }
         }
     }

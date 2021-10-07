@@ -104,11 +104,11 @@ public class ChemicalSearchActivity extends BaseActivity {
         @Override
         protected void onPostExecute(APIJSON<List<Chemical>> json) {
             super.onPostExecute(json);
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 sortData(json);
                 mActivity.get().mAdapter.setResult(json.data);
             } else {
-                mActivity.get().showToast(json.message != null ? json.message : json.msg);
+                mActivity.get().showToast(json.errors);
             }
             mActivity.get().dismissProgressDialog();
         }

@@ -110,23 +110,23 @@ public class StandingBookActivity extends BaseActivity {
                 List<DictType> mMeasureSpecTypes;
                 APIJSON<List<StandingBookItem>> result = new APIJSON<>();
                 APIJSON<List<DictType>> unitTypes = RemoteAPI.BaseInfo.getUnitDictCode();
-                if (unitTypes.code != 200) {
-                    result.code = unitTypes.code;
+                if (unitTypes.status != APIJSON.Status.ok) {
+                    result.status = unitTypes.status;
                     return result;
                 } else {
                     mUnitTypes = unitTypes.data;
                 }
                 APIJSON<List<DictType>> purityTypes = RemoteAPI.BaseInfo.getPurityDictCode();
-                if (purityTypes.code != 200) {
-                    result.code = purityTypes.code;
+                if (purityTypes.status != APIJSON.Status.ok) {
+                    result.status = purityTypes.status;
                     return result;
                 } else {
                     mPurityTypes = purityTypes.data;
                 }
 
                 APIJSON<List<DictType>> measureSpecs = RemoteAPI.BaseInfo.getMeasureSpecDictCode();
-                if (measureSpecs.code != 200) {
-                    result.code = measureSpecs.code;
+                if (measureSpecs.status != APIJSON.Status.ok) {
+                    result.status = measureSpecs.status;
                     return result;
                 } else {
                     mMeasureSpecTypes = measureSpecs.data;
@@ -154,17 +154,17 @@ public class StandingBookActivity extends BaseActivity {
         @Override
         protected void onPostExecute(APIJSON<List<StandingBookItem>> json) {
             super.onPostExecute(json);
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 if (isLoadMore) {
-                    mActivity.get().mAdapter.addResult(json.data, json.count);
+                    mActivity.get().mAdapter.addResult(json.data, 100);
                 } else {
-                    mActivity.get().mAdapter.setResult(json.data, json.count);
+                    mActivity.get().mAdapter.setResult(json.data, 100);
                 }
             } else {
                 if (isLoadMore) {
                     mActivity.get().mCurrentPage--;
                 }
-                mActivity.get().showToast(json.message != null ? json.message : json.msg);
+                mActivity.get().showToast(json.errors);
             }
             mActivity.get().dismissProgressDialog();
             mActivity.get().hideInputMethod();

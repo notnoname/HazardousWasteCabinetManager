@@ -455,15 +455,15 @@ public class CabinetCore {
         @Override
         protected void onPostExecute(APIJSON<User> json) {
             super.onPostExecute(json);
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 User user = json.data;
+                User oUser = getCabinetUser(type);
+                assert oUser != null;
+                user.faceId = oUser.faceId;
                 CabinetCore.saveCabinetUser(user, type);
-            } else if (json.code == 102) {
+            } else if (json.status == APIJSON.Status.error) {
                 CabinetCore.clearCabinetUser(type);
-                Intent intent = new Intent(mContext, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(LoginActivity.KEY_AUTH_TYPE, type);
-                mContext.startActivity(intent);
+                LoginActivity.start(mContext, type);
             }
         }
     }

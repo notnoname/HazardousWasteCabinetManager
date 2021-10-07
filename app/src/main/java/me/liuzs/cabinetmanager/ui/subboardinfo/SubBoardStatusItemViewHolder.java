@@ -27,7 +27,7 @@ public class SubBoardStatusItemViewHolder extends RecyclerView.ViewHolder {
         tvoc = itemView.findViewById(R.id.tvTVOCs1Value);
         lock = itemView.findViewById(R.id.tvLockerStatus);
         fan = itemView.findViewById(R.id.tvFanStatus);
-        lockStatus = itemView.findViewById(R.id.ivLockerValue);
+        lockStatus = itemView.findViewById(R.id.ivACCtrlOption);
         fanStatus = itemView.findViewById(R.id.ivFanStatusValue);
     }
 

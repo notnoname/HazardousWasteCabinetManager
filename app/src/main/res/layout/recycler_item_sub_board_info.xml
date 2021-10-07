@@ -18,7 +18,7 @@
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llLocker">
+        app:layout_constraintTop_toBottomOf="@id/llAC">
 
         <TextView
             android:id="@+id/tvFanStatusLabel"
@@ -50,7 +50,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llLocker"
+        android:id="@+id/llAC"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#40000000"
@@ -59,10 +59,10 @@
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llTVOCs1">
+        app:layout_constraintTop_toBottomOf="@id/llTVOCs">
 
         <TextView
-            android:id="@+id/tvLockerLabel"
+            android:id="@+id/tvACLabel"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -71,7 +71,7 @@
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/ivLockerValue"
+            android:id="@+id/ivACCtrlOption"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
@@ -91,7 +91,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llTVOCs1"
+        android:id="@+id/llTVOCs"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|center_vertical"
@@ -102,7 +102,7 @@
         app:layout_constraintTop_toBottomOf="@id/llHumidity">
 
         <TextView
-            android:id="@+id/tvTVOCs1Label"
+            android:id="@+id/tvTVOCsLabel"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:gravity="center"

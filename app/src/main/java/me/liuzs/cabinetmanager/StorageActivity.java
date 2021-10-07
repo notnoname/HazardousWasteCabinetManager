@@ -67,7 +67,7 @@ public class StorageActivity extends BaseActivity {
 //            mDepositRecord.labId = cabinet.labId;
             mDepositRecord.userId = user.id;
             mDepositRecord.userName = user.name;
-            ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.first_save_in);
+            ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.no_manage);
             new CreateDepositTask(this).execute();
         } else {
             if (savedInstanceState == null) {
@@ -145,13 +145,13 @@ public class StorageActivity extends BaseActivity {
         protected String[] doInBackground(String... strings) {
             String[] result = new String[2];
             APIJSON<String> putNoJson = RemoteAPI.Storage.getDepositNo();
-            if (putNoJson.code != 200.) {
+            if (putNoJson.status != APIJSON.Status.ok) {
                 return null;
             } else {
                 result[0] = putNoJson.data;
             }
             APIJSON<String> putIdJson = RemoteAPI.Storage.saveDeposit(result[0], "1", "1");
-            if (putIdJson.code != 200.) {
+            if (putIdJson.status != APIJSON.Status.ok) {
                 return null;
             } else {
                 result[1] = putIdJson.data;

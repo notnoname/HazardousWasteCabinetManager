@@ -17,12 +17,10 @@ import androidx.lifecycle.Lifecycle;
 import com.google.gson.Gson;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import me.liuzs.cabinetmanager.model.Cabinet;
-import me.liuzs.cabinetmanager.model.DeviceInfo;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.StorageLaboratoryDetail;
 import me.liuzs.cabinetmanager.model.TakeOutInfo;
@@ -229,7 +227,7 @@ public class TakeOutActivity extends BaseActivity {
             TakeOutInfo result = new TakeOutInfo();
 
             APIJSON<StorageLaboratoryDetail> storageLaboratoryDetailJSON = RemoteAPI.TakeOut.getStorageLaboratoryDetail();
-            if (storageLaboratoryDetailJSON.code != 200) {
+            if (storageLaboratoryDetailJSON.status != APIJSON.Status.ok) {
                 return null;
             } else {
                 StorageLaboratoryDetail detail = storageLaboratoryDetailJSON.data;
@@ -240,13 +238,13 @@ public class TakeOutActivity extends BaseActivity {
             }
 
             APIJSON<String> takeOutNoJson = RemoteAPI.TakeOut.createTakeOutTask(result.address, args[0], 0);
-            if (takeOutNoJson.code != 200) {
+            if (takeOutNoJson.status != APIJSON.Status.ok) {
                 return null;
             }
 
             TakeOutInfo takeOutInfo = null;
             APIJSON<List<TakeOutInfo>> takeOutInfoListJson = RemoteAPI.TakeOut.getLastTakeOutTaskList();
-            if (takeOutInfoListJson.code != 200 || takeOutInfoListJson.data == null || takeOutInfoListJson.data.size() == 0) {
+            if (takeOutInfoListJson.status != APIJSON.Status.ok || takeOutInfoListJson.data == null || takeOutInfoListJson.data.size() == 0) {
                 return null;
             } else {
 //                for (TakeOutInfo info : takeOutInfoListJson.data) {
@@ -305,20 +303,20 @@ public class TakeOutActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(Void... v) {
             APIJSON<List<DictType>> unitTypes = RemoteAPI.BaseInfo.getUnitDictCode();
-            if (unitTypes.code != 200) {
+            if (unitTypes.status != APIJSON.Status.ok) {
                 return false;
             } else {
                 mActivity.get().mUnitTypes = unitTypes.data;
             }
             APIJSON<List<DictType>> purityTypes = RemoteAPI.BaseInfo.getPurityDictCode();
-            if (purityTypes.code != 200) {
+            if (purityTypes.status != APIJSON.Status.ok) {
                 return false;
             } else {
                 mActivity.get().mPurityTypes = purityTypes.data;
             }
 
             APIJSON<List<DictType>> purposeTypes = RemoteAPI.BaseInfo.getPurposeDictCode();
-            if (purposeTypes.code != 200) {
+            if (purposeTypes.status != APIJSON.Status.ok) {
                 return false;
             } else {
                 mActivity.get().mPurposeTypes = purposeTypes.data;

@@ -193,7 +193,7 @@ public class ReturnAfterUseActivity extends BaseActivity {
             Cabinet cabinet = CabinetCore.getCabinetInfo();
             UsageInfo result = new UsageInfo();
             APIJSON<StorageLaboratoryDetail> storageLaboratoryDetailJSON = RemoteAPI.ReturnAfterUse.getStorageLaboratoryDetail();
-            if (storageLaboratoryDetailJSON.code != 200.) {
+            if (storageLaboratoryDetailJSON.status != APIJSON.Status.ok) {
                 return null;
             } else {
                 StorageLaboratoryDetail detail = storageLaboratoryDetailJSON.data;
@@ -205,13 +205,13 @@ public class ReturnAfterUseActivity extends BaseActivity {
             }
 
             APIJSON<String> usageNoJSON = RemoteAPI.ReturnAfterUse.createUsageTask();
-            if (usageNoJSON.code != 200) {
+            if (usageNoJSON.status != APIJSON.Status.ok) {
                 return null;
             }
 
             UsageInfo usageInfo = null;
             APIJSON<List<UsageInfo>> usageInfoListJson = RemoteAPI.ReturnAfterUse.getLastUsageTaskList();
-            if (usageInfoListJson.code != 200 || usageInfoListJson.data == null || usageInfoListJson.data.size() == 0) {
+            if (usageInfoListJson.status != APIJSON.Status.ok || usageInfoListJson.data == null || usageInfoListJson.data.size() == 0) {
                 return null;
             } else {
 //                for (UsageInfo info : usageInfoListJson.data) {
@@ -268,20 +268,20 @@ public class ReturnAfterUseActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(Void... v) {
             APIJSON<List<DictType>> unitTypes = RemoteAPI.BaseInfo.getUnitDictCode();
-            if (unitTypes.code != 200) {
+            if (unitTypes.status != APIJSON.Status.ok) {
                 return false;
             } else {
                 mActivity.get().mUnitTypes = unitTypes.data;
             }
             APIJSON<List<DictType>> purityTypes = RemoteAPI.BaseInfo.getPurityDictCode();
-            if (purityTypes.code != 200) {
+            if (purityTypes.status != APIJSON.Status.ok) {
                 return false;
             } else {
                 mActivity.get().mPurityTypes = purityTypes.data;
             }
 
             APIJSON<List<DictType>> measureSpecs = RemoteAPI.BaseInfo.getMeasureSpecDictCode();
-            if (measureSpecs.code != 200) {
+            if (measureSpecs.status != APIJSON.Status.ok) {
                 return false;
             } else {
                 mActivity.get().mMeasureSpecs = measureSpecs.data;

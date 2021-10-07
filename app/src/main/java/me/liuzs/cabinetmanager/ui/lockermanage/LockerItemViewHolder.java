@@ -14,8 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import me.liuxy.cabinet.SubBoard;
-import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.LockerManageActivity;
 import me.liuzs.cabinetmanager.R;
@@ -61,7 +59,7 @@ public class LockerItemViewHolder extends RecyclerView.ViewHolder implements Vie
     public LockerItemViewHolder(@NonNull View itemView) {
         super(itemView);
         deviceName = itemView.findViewById(R.id.tvDeviceName);
-        status = itemView.findViewById(R.id.ivLockerValue);
+        status = itemView.findViewById(R.id.ivACCtrlOption);
         lock = itemView.findViewById(R.id.btnLock);
         unlock = itemView.findViewById(R.id.btnUnlock);
         lock.setOnClickListener(this);

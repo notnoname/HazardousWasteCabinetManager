@@ -37,8 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.liuxy.cabinet.SubBoard;
-import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.ReturnAfterUseActivity;
@@ -340,12 +338,12 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
         protected void onPostExecute(APIJSON<String> json) {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
-            if (json.code == 200) {
+            if (json.status == APIJSON.Status.ok) {
                 mActivity.get().getUsageInfo().items.add(mFragment.get().mItem);
                 CabinetCore.saveUnSubmitUsageInfo(mActivity.get(), mActivity.get().getUsageInfo());
                 mActivity.get().transToReturnListFragment();
             } else {
-                mActivity.get().showToast("服务器错误：" + json.code);
+                mActivity.get().showToast("服务器错误：" + json.status);
             }
         }
     }
@@ -414,7 +412,7 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
         @Override
         protected Boolean doInBackground(Void... v) {
             APIJSON<List<UsageItemInfo>> listJSON = RemoteAPI.ReturnAfterUse.getContainerNoList();
-            if (listJSON.code == 200) {
+            if (listJSON.status == APIJSON.Status.ok) {
                 mContainerNoList.clear();
                 for (UsageItemInfo info : listJSON.data) {
                     mContainerNoList.put(info.conNo, info);

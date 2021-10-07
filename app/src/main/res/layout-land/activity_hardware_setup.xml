@@ -22,6 +22,7 @@
         android:theme="@style/Theme.CabinetManager.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
+            android:padding="16px"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tool_bar_height"
