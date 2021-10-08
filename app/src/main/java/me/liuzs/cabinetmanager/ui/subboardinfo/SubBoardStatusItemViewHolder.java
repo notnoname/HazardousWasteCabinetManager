@@ -21,7 +21,7 @@ public class SubBoardStatusItemViewHolder extends RecyclerView.ViewHolder {
 
     public SubBoardStatusItemViewHolder(@NonNull View itemView) {
         super(itemView);
-        name = itemView.findViewById(R.id.tvName);
+        name = itemView.findViewById(R.id.tvCabinetName);
         temp = itemView.findViewById(R.id.tvTemperatureValue);
         humi = itemView.findViewById(R.id.tvHumidityValue);
         tvoc = itemView.findViewById(R.id.tvTVOCs1Value);

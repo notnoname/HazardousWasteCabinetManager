@@ -141,7 +141,7 @@
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llTemperature">
+        app:layout_constraintTop_toBottomOf="@id/llTemp">
 
         <TextView
             android:id="@+id/tvHumidityLabel"
@@ -174,7 +174,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llTemperature"
+        android:id="@+id/llTemp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
@@ -239,7 +239,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tvCabinetName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

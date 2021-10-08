@@ -116,7 +116,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnInOutQuery" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSubBoard"
+                android:id="@+id/btnCtrl"
                 android:layout_width="230px"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24px"
@@ -139,9 +139,9 @@
                 android:text="@string/sub_board_lock"
                 android:textColor="@color/white"
                 android:textSize="28px"
-                app:layout_constraintEnd_toEndOf="@+id/btnSubBoard"
-                app:layout_constraintStart_toStartOf="@+id/btnSubBoard"
-                app:layout_constraintTop_toBottomOf="@+id/btnSubBoard" />
+                app:layout_constraintEnd_toEndOf="@+id/btnCtrl"
+                app:layout_constraintStart_toStartOf="@+id/btnCtrl"
+                app:layout_constraintTop_toBottomOf="@+id/btnCtrl" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -150,6 +150,7 @@
             android:id="@+id/constraintLayout"
             android:layout_width="1000px"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="160px"
             android:background="@drawable/background_input_area"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -164,11 +165,39 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="16px"
-                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/llFanStatus">
 
+                <TextView
+                    android:id="@+id/tvAlertStatusLabel"
+                    android:layout_width="130px"
+                    android:layout_height="wrap_content"
+                    android:text="@string/alert_status"
+                    android:textColor="@color/white"
+                    android:textSize="32px" />
+
+                <ImageView
+                    android:id="@+id/ivAlertStatusValue"
+                    android:layout_width="48px"
+                    android:layout_height="48px"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="20px"
+                    android:layout_marginEnd="10px"
+                    android:src="@drawable/ic_normal"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvAlertStatus"
+                    android:layout_width="345px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10px"
+                    android:layout_marginEnd="99px"
+                    android:background="@drawable/background_edit_normal"
+                    android:gravity="center"
+                    android:padding="5px"
+                    android:textColor="@color/black"
+                    android:textSize="32px" />
             </LinearLayout>
 
             <LinearLayout
@@ -184,7 +213,7 @@
 
                 <TextView
                     android:id="@+id/tvFanStatusLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="130px"
                     android:layout_height="wrap_content"
                     android:text="@string/fan_status"
                     android:textColor="@color/white"
@@ -192,23 +221,45 @@
 
                 <ImageView
                     android:id="@+id/ivFanStatusValue"
-                    android:layout_width="24px"
-                    android:layout_height="24px"
+                    android:layout_width="48px"
+                    android:layout_height="48px"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="40px"
-                    android:layout_marginRight="40px"
-                    android:src="@drawable/ic_red_circle"
+                    android:layout_marginStart="20px"
+                    android:layout_marginEnd="10px"
+                    android:src="@drawable/ic_run"
                     tools:ignore="ContentDescription" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFan"
-                    android:layout_width="220px"
+                <ImageView
+                    android:id="@+id/ivACCtrlOption2"
+                    android:layout_width="48px"
+                    android:layout_height="48px"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10px"
+                    android:layout_marginEnd="25px"
+                    android:src="@drawable/ic_auto"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvACTempValue2"
+                    android:layout_width="120px"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_button"
-                    android:onClick="onFanButtonClick"
-                    android:text="@string/fan_start"
+                    android:layout_marginStart="150px"
+                    android:layout_marginEnd="10px"
+                    android:background="@drawable/background_edit_normal"
+                    android:gravity="center"
+                    android:padding="5px"
+                    android:textColor="@color/black"
+                    android:textSize="32px" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="90px"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/rpm"
                     android:textColor="@color/white"
-                    android:textSize="28px" />
+                    android:textSize="32px" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -219,38 +270,72 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="16px"
-                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/llPG">
 
                 <TextView
                     android:id="@+id/tvACLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="130px"
                     android:layout_height="wrap_content"
-                    android:text="@string/locker_status"
+                    android:layout_marginLeft="0px"
+                    android:layout_marginRight="0px"
+                    android:gravity="center"
+                    android:text="@string/ac_status"
                     android:textColor="@color/white"
                     android:textSize="32px" />
 
                 <ImageView
-                    android:id="@+id/ivACCtrlOption"
-                    android:layout_width="24px"
-                    android:layout_height="24px"
+                    android:id="@+id/ivACStatus"
+                    android:layout_width="48px"
+                    android:layout_height="48px"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="40px"
-                    android:layout_marginRight="40px"
-                    android:src="@drawable/ic_red_circle"
+                    android:layout_marginStart="20px"
+                    android:layout_marginEnd="10px"
+                    android:src="@drawable/ic_run"
                     tools:ignore="ContentDescription" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnLocker"
-                    android:layout_width="220px"
+                <ImageView
+                    android:id="@+id/ivACCtrlOption"
+                    android:layout_width="48px"
+                    android:layout_height="48px"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10px"
+                    android:layout_marginEnd="25px"
+                    android:src="@drawable/ic_auto"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/ivACWorkOption"
+                    android:layout_width="48px"
+                    android:layout_height="48px"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="86px"
+                    android:layout_marginEnd="10px"
+                    android:src="@drawable/ic_refrigeration"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvACTempValue"
+                    android:layout_width="120px"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_button"
-                    android:onClick="onLockerButtonClick"
-                    android:text="@string/unlock"
-                    android:textColor="@color/white"
-                    android:textSize="28px" />
+                    android:layout_marginStart="5px"
+                    android:layout_marginEnd="10px"
+                    android:background="@drawable/background_edit_normal"
+                    android:gravity="center"
+                    android:padding="5px"
+                    android:textColor="@color/black"
+                    android:textSize="32px" />
+
+                <ImageView
+                    android:layout_width="90px"
+                    android:layout_height="28px"
+                    android:layout_marginLeft="0px"
+                    android:layout_marginRight="0px"
+                    android:cropToPadding="true"
+                    android:src="@drawable/ic_celsius"
+                    tools:ignore="ContentDescription" />
+
             </LinearLayout>
 
 
@@ -261,7 +346,6 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="16px"
-                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/llTVOCs">
@@ -286,6 +370,7 @@
                     android:padding="5px"
                     android:textColor="@color/black"
                     android:textSize="32px" />
+
                 <TextView
                     android:id="@+id/tvFGValueB"
                     android:layout_width="200px"
@@ -299,7 +384,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:layout_width="130px"
+                    android:layout_width="90px"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/ppm"
@@ -353,7 +438,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:layout_width="130px"
+                    android:layout_width="90px"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/ppm"
@@ -370,10 +455,9 @@
                 android:padding="16px"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/llTemperature">
+                app:layout_constraintTop_toBottomOf="@id/llTemp">
 
                 <TextView
-                    android:id="@+id/tvHumidityLabel"
                     android:layout_width="130px"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -382,7 +466,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:id="@+id/tvHumidityValueA"
+                    android:id="@+id/tvHumidityAValue"
                     android:layout_width="200px"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
@@ -394,7 +478,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:id="@+id/tvHumidityValueB"
+                    android:id="@+id/tvHumidityBValue"
                     android:layout_width="200px"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
@@ -406,8 +490,8 @@
                     android:textSize="32px" />
 
                 <ImageView
-                    android:layout_width="130px"
-                    android:layout_height="24px"
+                    android:layout_width="90px"
+                    android:layout_height="28px"
                     android:cropToPadding="true"
                     android:src="@drawable/ic_percent_sign"
                     tools:ignore="ContentDescription" />
@@ -415,7 +499,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/llTemperature"
+                android:id="@+id/llTemp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="#40000000"
@@ -427,7 +511,6 @@
                 app:layout_constraintTop_toBottomOf="@id/split">
 
                 <TextView
-                    android:id="@+id/tvTemperatureLabel"
                     android:layout_width="130px"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -436,7 +519,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:id="@+id/tvTemperatureValueA"
+                    android:id="@+id/tvTempAValue"
                     android:layout_width="200px"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
@@ -448,7 +531,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:id="@+id/tvTemperatureValueB"
+                    android:id="@+id/tvTempBValue"
                     android:layout_width="200px"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
@@ -460,8 +543,8 @@
                     android:textSize="32px" />
 
                 <ImageView
-                    android:layout_width="130px"
-                    android:layout_height="24px"
+                    android:layout_width="90px"
+                    android:layout_height="28px"
                     android:cropToPadding="true"
                     android:src="@drawable/ic_celsius"
                     tools:ignore="ContentDescription" />
@@ -493,15 +576,15 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/ivAlert"
-                    android:layout_width="32px"
-                    android:layout_height="32px"
+                    android:id="@+id/ivNetworkStatus"
+                    android:layout_width="36px"
+                    android:layout_height="36px"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_red_circle"
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/tvName"
+                    android:id="@+id/tvCabinetName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -52,7 +51,6 @@ public class MainActivity extends BaseActivity {
     private final DecimalFormat mTempDecimalFormat = new DecimalFormat("0.0");
     private TextView mTvoc1, mTvoc2, mHumi, mTemperature, mName;
     private ImageView mFanState, mLockerState, mAlert;
-    private AppCompatButton mFan, mLocker;
     private LinearLayout mLTVOCs2, mLLocker, mLFan;
     private HardwareValueBroadcastReceiver mHardwareValueBroadcastReceiver;
     private HardwareValue mValue = null;
@@ -64,7 +62,6 @@ public class MainActivity extends BaseActivity {
             mValue.fan = !mValue.fan;
             binder.getHardwareService().switchFanControl(mValue.fan);
             unbindService(this);
-            mFan.setEnabled(true);
         }
 
         @Override
@@ -106,12 +103,10 @@ public class MainActivity extends BaseActivity {
         mTvoc2 = findViewById(R.id.tvTVOCs2Value);
         mHumi = findViewById(R.id.tvHumidityValue);
         mTemperature = findViewById(R.id.tvTemperatureValue);
-        mAlert = findViewById(R.id.ivAlert);
+        mAlert = findViewById(R.id.ivNetworkStatus);
         mFanState = findViewById(R.id.ivFanStatusValue);
         mLockerState = findViewById(R.id.ivACCtrlOption);
-        mFan = findViewById(R.id.btnFan);
-        mLocker = findViewById(R.id.btnLocker);
-        mName = findViewById(R.id.tvName);
+        mName = findViewById(R.id.tvCabinetName);
     }
 
     private boolean isTvocs2Exist() {
@@ -165,13 +160,6 @@ public class MainActivity extends BaseActivity {
             mAlert.setImageResource(R.drawable.ic_green_circle);
         } else {
             mAlert.setImageResource(R.drawable.ic_red_circle);
-        }
-        if (mValue.fan) {
-            mFanState.setImageResource(R.drawable.ic_green_circle);
-            mFan.setText(R.string.fan_stop);
-        } else {
-            mFanState.setImageResource(R.drawable.ic_red_circle);
-            mFan.setText(R.string.fan_start);
         }
 
         ConstraintLayout infoViewGroup = findViewById(R.id.constraintLayout);
