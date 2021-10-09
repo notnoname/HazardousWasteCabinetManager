@@ -31,7 +31,7 @@ public class ModbusUtil {
      */
     public static ModbusMaster getMaster() throws ModbusInitException {
         IpParameters params = new IpParameters();
-        params.setHost("localhost");
+        params.setHost("127.0.0.1");
         params.setPort(502);
         //
         // modbusFactory.createRtuMaster(wapper); //RTU 协议
@@ -151,7 +151,7 @@ public class ModbusUtil {
 //        master.init();
         try {
             // 01测试
-            Boolean v011 = readCoilStatus(1, 0);
+            Boolean v011 = readCoilStatus(17, 1);
             Boolean v012 = readCoilStatus(1, 1);
             Boolean v013 = readCoilStatus(1, 6);
             System.out.println("v011:" + v011);
