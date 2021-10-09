@@ -79,6 +79,7 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.2'
     implementation 'com.apkfuns.xprogressdialog:xprogressdialog:1.2.0'
     implementation 'pub.devrel:easypermissions:2.0.1'
+    implementation 'com.github.infiniteautomation:modbus4j:3.0.5'
 //    implementation 'com.ezviz.sdk:ezuikit:2.2.1'
     /*萤石SDK核心模块，必须依赖*/
     implementation 'io.github.ezviz-open:ezviz-sdk:4.16.6.3'
