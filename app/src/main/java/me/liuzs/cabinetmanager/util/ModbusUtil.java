@@ -151,36 +151,37 @@ public class ModbusUtil {
 //        master.init();
         try {
             // 01测试
-//            Boolean v011 = readCoilStatus(17, 0);
-//            Boolean v012 = readCoilStatus(1, 1);
-//            Boolean v013 = readCoilStatus(1, 6);
-//            System.out.println("v011:" + v011);
-//            System.out.println("v012:" + v012);
-//            System.out.println("v013:" + v013);
-//            // 02测试
-//            Boolean v021 = readInputStatus(1, 0);
-//            Boolean v022 = readInputStatus(1, 1);
-//            Boolean v023 = readInputStatus(1, 2);
-//            System.out.println("v021:" + v021);
-//            System.out.println("v022:" + v022);
-//            System.out.println("v023:" + v023);
+            Boolean v011 = readCoilStatus(17, 0);
+            for(int i = 0; i < 65536; i++) {
+                v011 = readCoilStatus(17, i);
+                System.out.println(v011);
+            }
+            Boolean v012 = readCoilStatus(1, 1);
+            Boolean v013 = readCoilStatus(1, 6);
+            System.out.println("v011:" + v011);
+            System.out.println("v012:" + v012);
+            System.out.println("v013:" + v013);
+            // 02测试
+            Boolean v021 = readInputStatus(1, 0);
+            Boolean v022 = readInputStatus(1, 1);
+            Boolean v023 = readInputStatus(1, 2);
+            System.out.println("v021:" + v021);
+            System.out.println("v022:" + v022);
+            System.out.println("v023:" + v023);
 
             // 03测试
-
-            int address = 40513;
-            for (int i = 0; i < 100; i++) {
-                Number v031 = readHoldingRegister(1, address - 1, DataType.TWO_BYTE_INT_SIGNED);// 注意,Int
-                System.out.println("v031:" + i + " - " + v031);
-                Util.sleep(1000);
-            }
+            Number v031 = readHoldingRegister(1, 1, DataType.FOUR_BYTE_FLOAT);// 注意,float
+            Number v032 = readHoldingRegister(1, 3, DataType.FOUR_BYTE_FLOAT);// 同上
+            System.out.println("v031:" + v031);
+            System.out.println("v032:" + v032);
 
             // 04测试
-//            Number v041 = readInputRegisters(1, 1, DataType.FOUR_BYTE_FLOAT);//
-//            Number v042 = readInputRegisters(1, 3, DataType.FOUR_BYTE_FLOAT);//
-//            System.out.println("v041:" + v041);
-//            System.out.println("v042:" + v042);
+            Number v041 = readInputRegisters(1, 1, DataType.FOUR_BYTE_FLOAT);//
+            Number v042 = readInputRegisters(1, 3, DataType.FOUR_BYTE_FLOAT);//
+            System.out.println("v041:" + v041);
+            System.out.println("v042:" + v042);
             // 批量读取
-//            batchRead();
+            batchRead();
 
         } catch (Exception e) {
             e.printStackTrace();
