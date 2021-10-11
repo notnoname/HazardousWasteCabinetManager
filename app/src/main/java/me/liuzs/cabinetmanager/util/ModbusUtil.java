@@ -151,11 +151,11 @@ public class ModbusUtil {
 //        master.init();
         try {
             // 01测试
-            Boolean v011 = readCoilStatus(17, 0);
-            for(int i = 0; i < 65536; i++) {
-                v011 = readCoilStatus(17, i);
-                System.out.println(v011);
-            }
+            Boolean v011 = readCoilStatus(1, 1);
+//            for(int i = 0; i < 65536; i++) {
+//                v011 = readCoilStatus(1, i);
+//                System.out.println(v011);
+//            }
             Boolean v012 = readCoilStatus(1, 1);
             Boolean v013 = readCoilStatus(1, 6);
             System.out.println("v011:" + v011);
