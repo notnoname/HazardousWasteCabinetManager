@@ -21,6 +21,9 @@ import me.liuzs.cabinetmanager.SystemSettingActivity;
 import me.liuzs.cabinetmanager.model.SetupValue;
 import me.liuzs.cabinetmanager.service.ModbusService;
 
+/**
+ * 参数设置
+ */
 public class EquipmentManageFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     public static final String TAG = "EquipmentManageFragment";
@@ -92,18 +95,27 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
             case Auto:
                 mFanRunTimeValue.setEnabled(true);
                 mFanStopTimeValue.setEnabled(true);
+                mFanFrequencyValue.setEnabled(true);
+                mUnionVOCHigh.setEnabled(true);
+                mUnionVOCLow.setEnabled(true);
                 mFanWorkModelValue.setText(R.string.auto);
                 mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
                 break;
             case Manual:
                 mFanRunTimeValue.setEnabled(false);
                 mFanStopTimeValue.setEnabled(false);
+                mFanFrequencyValue.setEnabled(false);
+                mUnionVOCHigh.setEnabled(false);
+                mUnionVOCLow.setEnabled(false);
                 mFanWorkModelValue.setText(R.string.manual);
                 mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
                 break;
             case None:
                 mFanRunTimeValue.setEnabled(false);
                 mFanStopTimeValue.setEnabled(false);
+                mFanFrequencyValue.setEnabled(false);
+                mUnionVOCHigh.setEnabled(false);
+                mUnionVOCLow.setEnabled(false);
                 mFanWorkModelValue.setText(R.string.none);
                 mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
                 break;
@@ -115,7 +127,16 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
         mUnionVOCHigh.setText(String.valueOf(mValue.vocThresholdMax));
         mUnionVOCLow.setText(String.valueOf(mValue.vocThresholdMin));
 
+
         mAlertVOC.setChecked(mValue.vocAlertAuto);
+        if (mValue.vocAlertAuto) {
+            mAlertVOCValue.setEnabled(true);
+        } else {
+            mAlertVOCValue.setEnabled(false);
+        }
+        mAlertVOCValue.setText(String.valueOf(mValue.vocAlertThreshold));
+
+
         mAlertTempHigh.setChecked(mValue.temperatureHighAlertAuto);
         mAlertTempLow.setChecked(mValue.temperatureLowAlertAuto);
 
@@ -159,7 +180,21 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        mValue.workModel = isChecked ? SetupValue.WorkModel.Auto : SetupValue.WorkModel.Manual;
+        if (buttonView == mFanWorkModel) {
+            mValue.workModel = isChecked ? SetupValue.WorkModel.Auto : SetupValue.WorkModel.Manual;
+        } else if (buttonView == mAlertVOC) {
+            mValue.vocAlertAuto = isChecked;
+        } else if (buttonView == mAlertFG) {
+            mValue.vocAlertAuto = isChecked;
+        } else if (buttonView == mAlertTempHigh) {
+            mValue.vocAlertAuto = isChecked;
+        } else if (buttonView == mAlertTempLow) {
+            mValue.vocAlertAuto = isChecked;
+        } else if (buttonView == mAlertHumidityHigh) {
+            mValue.vocAlertAuto = isChecked;
+        } else if (buttonView == mAlertHumidityLow) {
+            mValue.vocAlertAuto = isChecked;
+        }
         showValue();
     }
 }

@@ -3,7 +3,7 @@ package me.liuzs.cabinetmanager.model;
 public class SetupValue {
     public enum WorkModel {None, Auto, Manual};
 
-    public WorkModel workModel;
+    public WorkModel workModel = WorkModel.None;
 
     public int vocThresholdMax;
     public int vocThresholdMin;

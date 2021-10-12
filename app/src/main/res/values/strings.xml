@@ -40,7 +40,7 @@
     <string name="fan_stop">关闭风机</string>
     <string name="no_manage">单号管理</string>
     <string name="user_management">使用人员管理</string>
-    <string name="hardware_management">设备管理</string>
+    <string name="set_value_management">参数设置</string>
     <string name="hardware_log">设备日志</string>
     <string name="take_out">危废出柜</string>
     <string name="watch_camera">视频监控</string>
@@ -143,7 +143,7 @@
     <string name="deposit_user">入柜人员：</string>
     <string name="deposit_unit">入柜单位：</string>
     <string name="deposit_number">入柜单号：</string>
-    <string name="title_activity_cabinet_name">安全柜信息设置</string>
+    <string name="title_activity_cabinet_name">暂存柜信息设置</string>
     <string name="empty_blank" />
     <string name="select_storage_area">选择存储区域：</string>
     <string name="measure_spec">计量规格：</string>
