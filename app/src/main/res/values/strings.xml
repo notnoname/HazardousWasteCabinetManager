@@ -9,6 +9,8 @@
     <string name="tvocs">VOC</string>
     <string name="flammable_gas">可燃气体</string>
     <string name="ppm">PPM</string>
+    <string name="icon_celsius">℃</string>
+    <string name="icon_percent_sign">%</string>
     <string name="ppm_low">PPM(低位)</string>
     <string name="ppm_upper">PPM(高位)</string>
     <string name="rpm">RPM</string>
@@ -109,6 +111,12 @@
     <string name="init_frequency">初始频率</string>
     <string name="minute">(分钟)</string>
     <string name="fan_ppm_union">风机联动</string>
+    <string name="voc_alert">VOC告警</string>
+    <string name="fg_alert">可燃气体告警</string>
+    <string name="temp_high_alert">温度过高告警</string>
+    <string name="temp_low_alert">温度过低告警</string>
+    <string name="humidity_high_alert">湿度过高告警</string>
+    <string name="humidity_low_alert">湿度过低告警</string>
     <string name="manual">手动</string>
     <string name="auto">自动</string>
     <string name="close">关</string>

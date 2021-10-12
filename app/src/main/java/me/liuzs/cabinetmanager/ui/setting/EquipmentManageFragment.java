@@ -44,12 +44,12 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_equipment_manage, container, false);
-        mFanAuto = view.findViewById(R.id.swFan);
+        mFanAuto = view.findViewById(R.id.swFanModel);
         mWorkTime = view.findViewById(R.id.etFanStartTimeValue);
         mStopTime = view.findViewById(R.id.etFanStopTimeValue);
         mTemp = view.findViewById(R.id.etFanStartTempValue);
         mPPM = view.findViewById(R.id.etFanStartPPMValue);
-        mFanFunc = view.findViewById(R.id.tvFanSetupValue);
+        mFanFunc = view.findViewById(R.id.tvFanModelValue);
         mSave = view.findViewById(R.id.btnSave);
         mSave.setOnClickListener(this);
         mFanAuto.setOnCheckedChangeListener(this);

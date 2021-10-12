@@ -11,6 +11,309 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertHumidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="40px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clAlertTemp">
+
+            <TextView
+                android:id="@+id/tvAlertHumidityHighLabel"
+                android:layout_width="150px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/humidity_high_alert"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertHumidityHigh"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertHumidityHighLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertHumidityHighValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertHumidityHigh"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvAlertHumidityHighDegree"
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/icon_percent_sign"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertHumidityHighValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAlertHumidityLowLabel"
+                android:layout_width="150px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64px"
+                android:gravity="center"
+                android:text="@string/humidity_low_alert"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertHumidityHighDegree"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertHumidityLow"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertHumidityLowLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertHumidityLowValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertHumidityLow"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvHumidityLowPercentSign"
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/icon_percent_sign"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertHumidityLowValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertTemp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="40px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clAlertFG">
+
+            <TextView
+                android:id="@+id/tvAlertTemperatureLowLabel"
+                android:layout_width="150px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64px"
+                android:gravity="center"
+                android:text="@string/temp_low_alert"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertDegree"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertTemperatureHighValue2"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertTemperatureHigh2"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvAlertDegree2"
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/icon_celsius"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertTemperatureHighValue2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertTemperatureHigh2"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertTemperatureLowLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAlertTemperatureHighLabel"
+                android:layout_width="150px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/temp_high_alert"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertTemperatureHigh"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertTemperatureHighLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertTemperatureHighValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertTemperatureHigh"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvAlertDegree"
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/icon_celsius"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertTemperatureHighValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertFG"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="40px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clAlertVOC">
+
+            <TextView
+                android:id="@+id/tvAlertFGLabel"
+                android:layout_width="150px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/fg_alert"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertFG"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertFGLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertFGValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertFG"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvAlertFGPPM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertFGValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clAlertVOC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,20 +321,30 @@
             android:layout_marginTop="64px"
             android:layout_marginEnd="40px"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clFanUnion">
 
             <TextView
                 android:id="@+id/tvAlertVOCLabel"
-                android:layout_width="130px"
+                android:layout_width="150px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/fan_ppm_union"
+                android:text="@string/voc_alert"
                 android:textColor="@color/white"
                 android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swFan2"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertVOCLabel"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
@@ -47,7 +360,7 @@
                 android:textColor="@color/black"
                 android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvAlertVOCLabel"
+                app:layout_constraintStart_toEndOf="@+id/swFan2"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
@@ -56,46 +369,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8px"
-                android:text="@string/ppm_upper"
+                android:text="@string/ppm"
                 android:textColor="@color/white"
                 android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/etAlertVOCValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/etAlertVOCValue2"
-                android:layout_width="wrap_content"
-                android:layout_height="40px"
-                android:layout_marginStart="24px"
-                android:background="@drawable/background_edit"
-                android:ems="3"
-                android:gravity="center"
-                android:importantForAutofill="no"
-                android:inputType="numberDecimal|numberSigned"
-                android:textColor="@color/black"
-                android:textSize="24px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvAlertVOCPPM"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/tvAlertVOCPPM2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8px"
-                android:text="@string/ppm_low"
-                android:textColor="@color/white"
-                android:textSize="24px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/etAlertVOCValue2"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clFanSetup"
+            android:id="@+id/clFanModel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40px"
@@ -106,8 +390,8 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/tvFanSetupLabel"
-                android:layout_width="130px"
+                android:id="@+id/tvFanModelLabel"
+                android:layout_width="150px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/work_model"
@@ -118,7 +402,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvFanSetupValue"
+                android:id="@+id/tvFanModelValue"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32px"
@@ -129,18 +413,18 @@
                 android:textColor="@color/white"
                 android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvFanSetupLabel"
+                app:layout_constraintStart_toEndOf="@+id/tvFanModelLabel"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/swFan"
+                android:id="@+id/swFanModel"
                 android:layout_width="130px"
                 android:layout_height="40px"
-                android:layout_marginStart="48px"
+                android:layout_marginStart="24px"
                 android:gravity="center"
                 android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvFanSetupValue"
+                app:layout_constraintStart_toEndOf="@+id/tvFanModelValue"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -153,7 +437,7 @@
             android:layout_marginTop="32px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clFanSetup">
+            app:layout_constraintTop_toBottomOf="@+id/clFanModel">
 
             <EditText
                 android:id="@+id/etFanStartTimeValue2"
@@ -259,7 +543,7 @@
 
             <TextView
                 android:id="@+id/tvFanTimer1Label"
-                android:layout_width="130px"
+                android:layout_width="150px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/fan_run_stop_time"
@@ -270,7 +554,7 @@
 
             <TextView
                 android:id="@+id/tvFanTimer2Label"
-                android:layout_width="130px"
+                android:layout_width="150px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/minute"
@@ -307,7 +591,7 @@
 
             <TextView
                 android:id="@+id/tvFanUnionLabel"
-                android:layout_width="130px"
+                android:layout_width="150px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/fan_ppm_union"
@@ -374,7 +658,7 @@
             android:padding="10dp"
             android:text="@string/saveSetup"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="24px"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
