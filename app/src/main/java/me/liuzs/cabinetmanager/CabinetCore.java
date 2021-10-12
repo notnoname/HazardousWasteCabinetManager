@@ -189,8 +189,8 @@ public class CabinetCore {
         if (option == null) {
             SetupValue sv = new SetupValue();
             sv.fanAuto = true;
-            sv.fanStopTime = Config.DEFAULT_FAN_STOP_TIME;
-            sv.fanWorkTime = Config.DEFAULT_FAN_WORK_TIME;
+            sv.stopTime = Config.DEFAULT_FAN_STOP_TIME;
+            sv.workTime = Config.DEFAULT_FAN_WORK_TIME;
             sv.thresholdTemp = Config.DEFAULT_FAN_TEMP_THRESHOLD;
             sv.thresholdPPM = Config.DEFAULT_FAN_PPM_THRESHOLD;
             String optionStr = GSON.toJson(sv);

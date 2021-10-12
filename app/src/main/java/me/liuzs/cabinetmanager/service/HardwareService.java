@@ -25,11 +25,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 
 import me.liuxy.cabinet.CabinetManager;
 import me.liuxy.cabinet.Steelyard;
@@ -54,7 +52,6 @@ public class HardwareService extends Service {
     @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat mLogTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
     private final static Object mWaitLocker = new Object();
-    private static final AtomicLong mHardwareOPTime = new AtomicLong(0L);
     public static int Qos = 2;
     private static CabinetManager mManager;
     public final String PublisherID = MqttClient.generateClientId();
@@ -82,8 +79,6 @@ public class HardwareService extends Service {
     private boolean isMainDeviceLightGreen, isMainDeviceLightRed, isMainDeviceFanRun;
     //主柜风扇起止时间
     private long mMainFanWorkStartTime = System.currentTimeMillis(), mMainFanWorkEndTime = System.currentTimeMillis();
-    //副柜风扇起止时间
-    private long[] mSubFanWorkStartTime, mSubFanWorkEndTime;
     private Timer mAutoLockTimer;
     private long mHardwareValueQueryInterval;
 
@@ -104,11 +99,6 @@ public class HardwareService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private static void registerHardwareOPTime(String opName) {
-        mHardwareOPTime.set(System.currentTimeMillis());
-        Log.d(TAG, "Register hardware op time:" + opName + ", Time:" + mLogTimeFormat.format(new Date(System.currentTimeMillis())));
     }
 
     public synchronized static void steelyardCalibration(int value) {
@@ -149,24 +139,6 @@ public class HardwareService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void waitForHardwareOPGap(String opName) {
-        Log.d(TAG, "Start wait for hardware op :" + opName + ", Time:" + mLogTimeFormat.format(new Date(System.currentTimeMillis())));
-        long gap = System.currentTimeMillis() - mHardwareOPTime.get();
-        if (gap >= mPeriods[0]) {
-            gap = 0;
-        } else {
-            gap = mPeriods[0] - gap;
-        }
-        if (gap != 0) {
-            try {
-                Thread.sleep(gap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        Log.d(TAG, "End wait for hardware op :" + opName + ", Time:" + mLogTimeFormat.format(new Date(System.currentTimeMillis())));
     }
 
     @Override
@@ -372,14 +344,14 @@ public class HardwareService extends Service {
             } else {
                 long currentTime = System.currentTimeMillis();
                 if (!value.fan) {
-                    long stopTime = setup.fanStopTime * 60 * 1000L;
+                    long stopTime = setup.stopTime * 60 * 1000L;
                     if (currentTime - mMainFanWorkEndTime >= stopTime) {
                         turnOnFan();
                         value.fan = true;
                     }
                 }
                 if (value.fan) {
-                    long workTime = setup.fanWorkTime * 60 * 1000L;
+                    long workTime = setup.workTime * 60 * 1000L;
                     if (currentTime - mMainFanWorkStartTime >= workTime) {
                         turnOffFan();
                         value.fan = false;
@@ -484,67 +456,6 @@ public class HardwareService extends Service {
         }
         HardwareValue value = getHardwareValue();
         notifyValue(value);
-    }
-
-    /**
-     * 子板开锁
-     *
-     * @param index 子板index
-     * @return 子板操作结果
-     */
-    public SubBoard.ControlResult switchLockerControl(int index) {
-
-        synchronized (mWaitLocker) {
-            if (mManager == null) {
-                return null;
-            }
-            String indexKey = String.valueOf(index);
-            if (mLockerAutoUnlockTimer.containsKey(indexKey)) {
-                Objects.requireNonNull(mLockerAutoUnlockTimer.get(indexKey)).cancel();
-                mLockerAutoUnlockTimer.remove(indexKey);
-            }
-            waitForHardwareOPGap("Switch locker ,index:" + index);
-            SubBoard.ControlResult result = mManager.getSubBoardInstance(index).control(SubBoard.ControlType.ECONTROL_LOCK, true);
-            registerHardwareOPTime("Switch locker ,index:" + index);
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    synchronized (mWaitLocker) {
-                        waitForHardwareOPGap("Switch unlock ,index:" + index);
-                        mManager.getSubBoardInstance(index).control(SubBoard.ControlType.ECONTROL_LOCK, false);
-                        registerHardwareOPTime("Switch unlock ,index:" + index);
-                    }
-                    mLockerAutoUnlockTimer.remove(indexKey);
-                }
-            }, mPeriods[1] * 1000L);
-            mLockerAutoUnlockTimer.put(indexKey, timer);
-            return result;
-        }
-    }
-
-    /**
-     * 子板关锁
-     *
-     * @param index 子板index
-     * @return 子板操作结果
-     */
-    public SubBoard.ControlResult switchLockerControlUnlock(int index) {
-
-        synchronized (mWaitLocker) {
-            if (mManager == null) {
-                return null;
-            }
-            String indexKey = String.valueOf(index);
-            if (mLockerAutoUnlockTimer.containsKey(indexKey)) {
-                Objects.requireNonNull(mLockerAutoUnlockTimer.get(indexKey)).cancel();
-                mLockerAutoUnlockTimer.remove(indexKey);
-            }
-            waitForHardwareOPGap("Switch unlock,index:" + index);
-            SubBoard.ControlResult result = mManager.getSubBoardInstance(index).control(SubBoard.ControlType.ECONTROL_LOCK, false);
-            registerHardwareOPTime("Switch unlock,index:" + index);
-            return result;
-        }
     }
 
     public synchronized void switchLockerControl(boolean onOff) {

@@ -9,6 +9,8 @@
     <string name="tvocs">VOC</string>
     <string name="flammable_gas">可燃气体</string>
     <string name="ppm">PPM</string>
+    <string name="ppm_low">PPM(低位)</string>
+    <string name="ppm_upper">PPM(高位)</string>
     <string name="rpm">RPM</string>
     <string name="connect_broker">连接Broker</string>
     <string name="connect_publish">发布</string>
@@ -101,7 +103,10 @@
     <string name="equipment_manage_fragment">设备管理</string>
     <string name="title_activity_launcher">LauncherActivity</string>
     <string name="fan_setup">风机设置</string>
+    <string name="work_model">运行模式</string>
     <string name="fan_start_timer">风机定时</string>
+    <string name="fan_run_stop_time">启停时长</string>
+    <string name="init_frequency">初始频率</string>
     <string name="minute">(分钟)</string>
     <string name="fan_ppm_union">风机联动</string>
     <string name="manual">手动</string>
@@ -109,6 +114,7 @@
     <string name="close">关</string>
     <string name="saveSetup">保存设置</string>
     <string name="open">开</string>
+    <string name="Hz">Hz</string>
     <string name="engine_state">引擎状态</string>
     <string name="barcode_test">扫描测试</string>
     <string name="arc_active_tip">激活需要联网，请确保网络正常！</string>

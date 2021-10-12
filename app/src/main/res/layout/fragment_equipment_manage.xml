@@ -11,50 +11,134 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertVOC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40px"
+            android:layout_marginTop="64px"
+            android:layout_marginEnd="40px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clFanUnion">
+
+            <TextView
+                android:id="@+id/tvAlertVOCLabel"
+                android:layout_width="130px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/fan_ppm_union"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertVOCValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertVOCLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvAlertVOCPPM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm_upper"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertVOCValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertVOCValue2"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="24px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal|numberSigned"
+                android:textColor="@color/black"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertVOCPPM"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvAlertVOCPPM2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm_low"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertVOCValue2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clFanSetup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="64dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40px"
+            android:layout_marginTop="64px"
+            android:layout_marginEnd="40px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tvFanSetupLabel"
-                android:layout_width="130dp"
+                android:layout_width="130px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/fan_setup"
+                android:text="@string/work_model"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvFanSetupValue"
-                android:layout_width="120dp"
+                android:layout_width="120px"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
+                android:layout_marginStart="32px"
                 android:background="@drawable/background_state_red"
                 android:gravity="center"
-                android:padding="5dp"
+                android:padding="5px"
                 android:text="@string/manual"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanSetupLabel"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.kyleduo.switchbutton.SwitchButton
                 android:id="@+id/swFan"
-                android:layout_width="130dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="48dp"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="48px"
                 android:gravity="center"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanSetupValue"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -64,20 +148,64 @@
             android:id="@+id/clFanTimer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginStart="40px"
+            android:layout_marginEnd="40px"
+            android:layout_marginTop="32px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clFanSetup">
+
+            <EditText
+                android:id="@+id/etFanStartTimeValue2"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanTimer1Label2"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvFanStart2"
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:gravity="center"
+                android:text="@string/Hz"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etFanStartTimeValue2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFanTimer1Label2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64px"
+                android:gravity="center"
+                android:text="@string/init_frequency"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanStop"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvFanStop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="8px"
                 android:text="@string/close"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/etFanStopTimeValue"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -85,29 +213,29 @@
             <EditText
                 android:id="@+id/etFanStopTimeValue"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
+                android:layout_height="40px"
+                android:layout_marginStart="24px"
                 android:background="@drawable/background_edit"
                 android:ems="3"
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanStart"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/tvFanStart"
-                android:layout_width="30dp"
+                android:layout_width="30px"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="8px"
                 android:gravity="center"
                 android:text="@string/open"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/etFanStartTimeValue"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -115,39 +243,39 @@
             <EditText
                 android:id="@+id/etFanStartTimeValue"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="64dp"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
                 android:background="@drawable/background_edit"
                 android:ems="3"
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="number"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanTimer1Label"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/tvFanTimer1Label"
-                android:layout_width="130dp"
+                android:layout_width="130px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/fan_start_timer"
+                android:text="@string/fan_run_stop_time"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvFanTimer2Label"
-                android:layout_width="130dp"
+                android:layout_width="130px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/minute"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvFanTimer1Label"
@@ -158,21 +286,33 @@
             android:id="@+id/clFanUnion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="40px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clFanTimer">
 
             <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm_upper"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etFanStartPPMValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/tvFanUnionLabel"
-                android:layout_width="130dp"
+                android:layout_width="130px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/fan_ppm_union"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -180,57 +320,47 @@
             <EditText
                 android:id="@+id/etFanStartTempValue"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="64dp"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
                 android:background="@drawable/background_edit"
                 android:ems="3"
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="numberSigned"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanUnionLabel"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor" />
-
-            <ImageView
-                android:id="@+id/ivTemp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="8dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_celsius"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/etFanStartTempValue"
-                app:layout_constraintTop_toTopOf="parent" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
             <EditText
                 android:id="@+id/etFanStartPPMValue"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="24dp"
+                android:layout_height="40px"
+                android:layout_marginStart="24px"
                 android:background="@drawable/background_edit"
                 android:ems="3"
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="numberDecimal|numberSigned"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivTemp"
+                app:layout_constraintStart_toEndOf="@+id/textView3"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
             <TextView
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/ppm"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm_low"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="24px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/etFanStartPPMValue"
+                app:layout_constraintStart_toEndOf="@+id/etFanStartTempValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

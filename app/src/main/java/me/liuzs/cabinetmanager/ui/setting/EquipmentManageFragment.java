@@ -66,8 +66,8 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
 
     private void showValue() {
         mFanAuto.setChecked(mValue.fanAuto);
-        mWorkTime.setText(String.valueOf(mValue.fanWorkTime));
-        mStopTime.setText(String.valueOf(mValue.fanStopTime));
+        mWorkTime.setText(String.valueOf(mValue.workTime));
+        mStopTime.setText(String.valueOf(mValue.stopTime));
         mTemp.setText(String.valueOf(mValue.thresholdTemp));
         mPPM.setText(mDecimalFormat.format(mValue.thresholdPPM));
         if (mValue.fanAuto) {
@@ -111,8 +111,8 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
             int tempValue = Integer.parseInt(temp);
             float ppmValue = Float.parseFloat(ppm);
             result = new SetupValue();
-            result.fanWorkTime = workTime;
-            result.fanStopTime = stopTime;
+            result.workTime = workTime;
+            result.stopTime = stopTime;
             result.thresholdTemp = tempValue;
             result.thresholdPPM = ppmValue;
         } catch (Exception e) {
