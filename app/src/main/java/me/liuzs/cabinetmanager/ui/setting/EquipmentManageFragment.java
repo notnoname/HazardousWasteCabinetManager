@@ -19,6 +19,7 @@ import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SystemSettingActivity;
 import me.liuzs.cabinetmanager.model.SetupValue;
+import me.liuzs.cabinetmanager.service.ModbusService;
 
 public class EquipmentManageFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -26,9 +27,9 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     private final DecimalFormat mDecimalFormat = new DecimalFormat("0.00");
     private SystemSettingActivity mActivity;
     private SetupValue mValue;
-    private SwitchButton mFanAuto;
-    private EditText mWorkTime, mStopTime, mTemp, mPPM;
-    private TextView mFanFunc;
+    private SwitchButton mFanWorkModel, mAlertVOC, mAlertFG, mAlertTempHigh, mAlertTempLow, mAlertHumidityHigh, mAlertHumidityLow, mAlertSoundLight;
+    private EditText mFanRunTimeValue, mFanStopTimeValue, mFanFrequencyValue, mUnionVOCHigh, mUnionVOCLow, mAlertVOCValue, mAlertFGValue, mAlertTempHighValue, mAlertTempLowValue, mAlertHumidityHighValue, mAlertHumidityLowValue;
+    private TextView mFanWorkModelValue;
     private Button mSave;
 
     public EquipmentManageFragment() {
@@ -44,15 +45,36 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_equipment_manage, container, false);
-        mFanAuto = view.findViewById(R.id.swFanModel);
-        mWorkTime = view.findViewById(R.id.etFanStartTimeValue);
-        mStopTime = view.findViewById(R.id.etFanStopTimeValue);
-        mTemp = view.findViewById(R.id.etFanStartTempValue);
-        mPPM = view.findViewById(R.id.etFanStartPPMValue);
-        mFanFunc = view.findViewById(R.id.tvFanModelValue);
+        mFanWorkModel = view.findViewById(R.id.swFanModel);
+        mFanWorkModelValue = view.findViewById(R.id.tvFanModelValue);
+
+        mFanRunTimeValue = view.findViewById(R.id.etFanRunTimeValue);
+        mFanStopTimeValue = view.findViewById(R.id.etFanStopTimeValue);
+        mFanFrequencyValue = view.findViewById(R.id.etFanFrequencyValue);
+
+        mUnionVOCHigh = view.findViewById(R.id.etFanHighVOCValue);
+        mUnionVOCLow = view.findViewById(R.id.etFanLowVOCValue);
+
+        mAlertVOC = view.findViewById(R.id.swAlertVOC);
+        mAlertVOCValue = view.findViewById(R.id.etAlertVOCValue);
+
+        mAlertFG = view.findViewById(R.id.swAlertFG);
+        mAlertFGValue = view.findViewById(R.id.etAlertFGValue);
+
+        mAlertTempHigh = view.findViewById(R.id.swAlertTemHigh);
+        mAlertTempHighValue = view.findViewById(R.id.etAlertTempHighValue);
+        mAlertTempLow = view.findViewById(R.id.swAlertTempLow);
+        mAlertTempLowValue = view.findViewById(R.id.etAlertTempLowValue);
+
+        mAlertHumidityHigh = view.findViewById(R.id.swAlertHumidityHigh);
+        mAlertHumidityHighValue = view.findViewById(R.id.etAlertHumidityHighValue);
+        mAlertHumidityLow = view.findViewById(R.id.swAlertHumidityLow);
+        mAlertHumidityLowValue = view.findViewById(R.id.etAlertHumidityLowValue);
+
+
         mSave = view.findViewById(R.id.btnSave);
         mSave.setOnClickListener(this);
-        mFanAuto.setOnCheckedChangeListener(this);
+        mFanWorkModel.setOnCheckedChangeListener(this);
         mActivity = (SystemSettingActivity) getActivity();
         return view;
     }
@@ -60,27 +82,43 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
-        mValue = CabinetCore.getSetupValue(mActivity);
+        mValue = ModbusService.getSetupValue();
         showValue();
     }
 
     private void showValue() {
-        mFanAuto.setChecked(mValue.fanAuto);
-        mWorkTime.setText(String.valueOf(mValue.workTime));
-        mStopTime.setText(String.valueOf(mValue.stopTime));
-        mTemp.setText(String.valueOf(mValue.thresholdTemp));
-        mPPM.setText(mDecimalFormat.format(mValue.thresholdPPM));
-        if (mValue.fanAuto) {
-            mWorkTime.setEnabled(true);
-            mStopTime.setEnabled(true);
-            mFanFunc.setText(R.string.auto);
-            mFanFunc.setBackgroundResource(R.drawable.background_state_green);
-        } else {
-            mWorkTime.setEnabled(false);
-            mStopTime.setEnabled(false);
-            mFanFunc.setText(R.string.manual);
-            mFanFunc.setBackgroundResource(R.drawable.background_state_red);
+        mFanWorkModel.setChecked(mValue.workModel == SetupValue.WorkModel.Auto);
+        switch (mValue.workModel) {
+            case Auto:
+                mFanRunTimeValue.setEnabled(true);
+                mFanStopTimeValue.setEnabled(true);
+                mFanWorkModelValue.setText(R.string.auto);
+                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
+                break;
+            case Manual:
+                mFanRunTimeValue.setEnabled(false);
+                mFanStopTimeValue.setEnabled(false);
+                mFanWorkModelValue.setText(R.string.manual);
+                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
+                break;
+            case None:
+                mFanRunTimeValue.setEnabled(false);
+                mFanStopTimeValue.setEnabled(false);
+                mFanWorkModelValue.setText(R.string.none);
+                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
+                break;
         }
+
+        mFanRunTimeValue.setText(String.valueOf(mValue.workTime));
+        mFanStopTimeValue.setText(String.valueOf(mValue.stopTime));
+        mFanFrequencyValue.setText(String.valueOf(mValue.frequency));
+        mUnionVOCHigh.setText(String.valueOf(mValue.vocThresholdMax));
+        mUnionVOCLow.setText(String.valueOf(mValue.vocThresholdMin));
+
+        mAlertVOC.setChecked(mValue.vocAlertAuto);
+        mAlertTempHigh.setChecked(mValue.temperatureHighAlertAuto);
+        mAlertTempLow.setChecked(mValue.temperatureLowAlertAuto);
+
     }
 
     @Override
@@ -89,9 +127,7 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
             SetupValue newValue = checkValue();
             if (newValue != null) {
                 mSave.setEnabled(false);
-                newValue.fanAuto = mValue.fanAuto;
                 mValue = newValue;
-                CabinetCore.saveSetupValue(mActivity, mValue);
                 showValue();
                 mActivity.showToast("设置保存成功!");
                 mSave.setEnabled(true);
@@ -102,10 +138,10 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     private SetupValue checkValue() {
         SetupValue result = null;
         try {
-            String work = mWorkTime.getEditableText().toString();
-            String stop = mStopTime.getEditableText().toString();
-            String temp = mTemp.getEditableText().toString();
-            String ppm = mPPM.getEditableText().toString();
+            String work = mFanRunTimeValue.getEditableText().toString();
+            String stop = mFanStopTimeValue.getEditableText().toString();
+            String temp = mAlertTempHighValue.getEditableText().toString();
+            String ppm = mUnionVOCHigh.getEditableText().toString();
             int workTime = Integer.parseInt(work);
             int stopTime = Integer.parseInt(stop);
             int tempValue = Integer.parseInt(temp);
@@ -113,8 +149,7 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
             result = new SetupValue();
             result.workTime = workTime;
             result.stopTime = stopTime;
-            result.thresholdTemp = tempValue;
-            result.thresholdPPM = ppmValue;
+
         } catch (Exception e) {
             e.printStackTrace();
             mActivity.showToast("输入有误，请检查！");
@@ -124,7 +159,7 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        mValue.fanAuto = isChecked;
+        mValue.workModel = isChecked ? SetupValue.WorkModel.Auto : SetupValue.WorkModel.Manual;
         showValue();
     }
 }

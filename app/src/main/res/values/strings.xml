@@ -117,8 +117,10 @@
     <string name="temp_low_alert">温度过低告警</string>
     <string name="humidity_high_alert">湿度过高告警</string>
     <string name="humidity_low_alert">湿度过低告警</string>
+    <string name="sound_light_alert">声光报警</string>
     <string name="manual">手动</string>
     <string name="auto">自动</string>
+    <string name="none">无</string>
     <string name="close">关</string>
     <string name="saveSetup">保存设置</string>
     <string name="open">开</string>

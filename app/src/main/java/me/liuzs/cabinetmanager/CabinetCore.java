@@ -28,7 +28,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DepositRecord;
-import me.liuzs.cabinetmanager.model.SetupValue;
 import me.liuzs.cabinetmanager.model.TakeOutInfo;
 import me.liuzs.cabinetmanager.model.UsageInfo;
 import me.liuzs.cabinetmanager.model.User;
@@ -184,41 +183,6 @@ public class CabinetCore {
 
     public static void init(CabinetApplication application) {
         mContext = application;
-        SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String option = sp.getString(Config.SYSPRE_SYSTEM_SETUP, null);
-        if (option == null) {
-            SetupValue sv = new SetupValue();
-            sv.fanAuto = true;
-            sv.stopTime = Config.DEFAULT_FAN_STOP_TIME;
-            sv.workTime = Config.DEFAULT_FAN_WORK_TIME;
-            sv.thresholdTemp = Config.DEFAULT_FAN_TEMP_THRESHOLD;
-            sv.thresholdPPM = Config.DEFAULT_FAN_PPM_THRESHOLD;
-            String optionStr = GSON.toJson(sv);
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString(Config.SYSPRE_SYSTEM_SETUP, optionStr);
-            editor.apply();
-        }
-    }
-
-    public synchronized static SetupValue getSetupValue(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String option = sp.getString(Config.SYSPRE_SYSTEM_SETUP, null);
-        if (option == null) {
-            return null;
-        } else {
-            return GSON.fromJson(option, SetupValue.class);
-        }
-    }
-
-    public synchronized static void saveSetupValue(Context context, SetupValue value) {
-        if (value == null) {
-            return;
-        }
-        String os = GSON.toJson(value);
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(Config.SYSPRE_SYSTEM_SETUP, os);
-        editor.apply();
     }
 
     public synchronized static String getCameraVerifyCode(Context context, String sn, int channel) {

@@ -15,6 +15,7 @@ import com.serotonin.modbus4j.locator.BaseLocator;
 
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
+import me.liuzs.cabinetmanager.model.SetupValue;
 
 public class ModbusService {
     private static final String TAG = "ModbusService";
@@ -167,5 +168,10 @@ public class ModbusService {
 
         Log.d(TAG, CabinetCore.GSON.toJson(environmentStatus));
         return environmentStatus;
+    }
+
+    public synchronized static SetupValue getSetupValue() {
+        SetupValue result = new SetupValue();
+        return result;
     }
 }

@@ -22,6 +22,7 @@ import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DeviceInfo;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;
+import me.liuzs.cabinetmanager.service.ModbusService;
 import me.liuzs.cabinetmanager.ui.subboardinfo.SubBoardListAdapter;
 import me.liuzs.cabinetmanager.ui.subboardinfo.SubBoardStatusItemViewHolder;
 import me.liuzs.cabinetmanager.util.Util;
@@ -79,7 +80,7 @@ public class SubBoardInfoActivity extends BaseActivity {
             }
         }
 
-        SubBoardStatusItemViewHolder.setup = CabinetCore.getSetupValue(this);
+        SubBoardStatusItemViewHolder.setup = ModbusService.getSetupValue();
         mAdapter.setResult(mSubBoardStatusInfo);
 
     }

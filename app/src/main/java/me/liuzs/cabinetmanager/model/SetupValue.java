@@ -23,5 +23,6 @@ public class SetupValue {
     public int temperatureLowAlertThreshold;
     public int humidityHighAlertThreshold;
     public int humidityLowAlertThreshold;
+    public Exception e;
 
 }

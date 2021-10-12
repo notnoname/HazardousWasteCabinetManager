@@ -7,7 +7,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -20,11 +19,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,7 +36,6 @@ import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.HardwareValue;
-import me.liuzs.cabinetmanager.model.SetupValue;
 import me.liuzs.cabinetmanager.model.TVOCValue;
 import me.liuzs.cabinetmanager.model.TVOCsValue;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
@@ -51,12 +46,10 @@ public class HardwareService extends Service {
     public static final String TAG = "HardwareService";
     @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat mLogTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-    private final static Object mWaitLocker = new Object();
     public static int Qos = 2;
     private static CabinetManager mManager;
-    public final String PublisherID = MqttClient.generateClientId();
+    private final String PublisherID = MqttClient.generateClientId();
     private final HardwareServiceBinder mBinder = new HardwareServiceBinder();
-    private final Gson mGson = new Gson();
     private final IMqttActionListener mPublishActionListener = new IMqttActionListener() {
         @Override
         public void onSuccess(IMqttToken asyncActionToken) {
@@ -71,21 +64,13 @@ public class HardwareService extends Service {
         }
     };
     private final AtomicBoolean isDoHardwareValueQuery = new AtomicBoolean(false);
-    private final Map<String, Timer> mLockerAutoUnlockTimer;
     private int[] mPeriods;
     private Timer mHardwareValueQueryTimer;
     private MqttAndroidClient mPublishClient;
-    //一主多副状态下主柜风扇和红绿灯状态
-    private boolean isMainDeviceLightGreen, isMainDeviceLightRed, isMainDeviceFanRun;
     //主柜风扇起止时间
     private long mMainFanWorkStartTime = System.currentTimeMillis(), mMainFanWorkEndTime = System.currentTimeMillis();
     private Timer mAutoLockTimer;
     private long mHardwareValueQueryInterval;
-
-    public HardwareService() {
-        super();
-        mLockerAutoUnlockTimer = Collections.synchronizedMap(new HashMap<>());
-    }
 
     public synchronized static void weight(Steelyard.SteelyardCallback callback) {
         if (mManager == null) {
@@ -220,7 +205,6 @@ public class HardwareService extends Service {
                 Log.d(TAG, "Do hardware value query");
                 initMQTTPublishClient();
                 HardwareValue value = getHardwareValue();
-                doHardwarePolicy(value);
                 notifyValue(value);
                 publishValue(value);
                 isDoHardwareValueQuery.set(false);
@@ -233,7 +217,7 @@ public class HardwareService extends Service {
             return;
         }
         Intent intent = new Intent(Config.ACTION_HARDWARE_VALUE_SEND);
-        String valueJSON = mGson.toJson(value);
+        String valueJSON = CabinetCore.GSON.toJson(value);
         Log.d(TAG, "Hardware JSON:" + valueJSON);
         intent.putExtra(Config.KEY_HARDWARE_VALUE, valueJSON);
         sendBroadcast(intent);
@@ -286,7 +270,7 @@ public class HardwareService extends Service {
                 }
                 jsValue.add("subBoardStatusData", subBoardStatusData);
 
-                String payload = mGson.toJson(jsValue);
+                String payload = CabinetCore.GSON.toJson(jsValue);
 
                 Log.d(TAG, "MQTT JSON:" + payload);
                 MqttMessage message = new MqttMessage();
@@ -306,59 +290,6 @@ public class HardwareService extends Service {
         result.ppb = ppb;
         result.temp = temp;
         return result;
-    }
-
-    private void doHardwarePolicy(HardwareValue value) {
-        SetupValue setup = CabinetCore.getSetupValue(this);
-        if (setup == null || value == null) {
-            return;
-        }
-
-        boolean threshold = false;
-        float thresholdPPB = setup.thresholdPPM * 1000;
-        MaxValue maxValue = getMainCabinetMaxValue(value);
-        long ppb = maxValue.ppb;
-        float vocTemp = maxValue.temp;
-        vocTemp = vocTemp / 100;
-        Log.d(TAG, vocTemp + ":" + setup.thresholdTemp + "     " + ppb + ":" + thresholdPPB);
-        if (vocTemp >= setup.thresholdTemp || ppb >= thresholdPPB) {
-            threshold = true;
-        }
-
-        if (threshold) {
-            if (!value.redLight) {
-                lightRed();
-            }
-        } else {
-            if (!value.greenLight) {
-                lightGreen();
-            }
-        }
-
-        if (setup.fanAuto) {
-            if (threshold) {
-                if (!value.fan) {
-                    turnOnFan();
-                    value.fan = true;
-                }
-            } else {
-                long currentTime = System.currentTimeMillis();
-                if (!value.fan) {
-                    long stopTime = setup.stopTime * 60 * 1000L;
-                    if (currentTime - mMainFanWorkEndTime >= stopTime) {
-                        turnOnFan();
-                        value.fan = true;
-                    }
-                }
-                if (value.fan) {
-                    long workTime = setup.workTime * 60 * 1000L;
-                    if (currentTime - mMainFanWorkStartTime >= workTime) {
-                        turnOffFan();
-                        value.fan = false;
-                    }
-                }
-            }
-        }
     }
 
     private HardwareValue getHardwareValue() {

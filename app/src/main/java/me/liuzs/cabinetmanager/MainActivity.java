@@ -268,27 +268,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public void onFanButtonClick(View view) {
-        if (mValue == null) {
-            return;
-        }
-        SetupValue setup = CabinetCore.getSetupValue(this);
-        if (mValue.fan) {
-            assert setup != null;
-            if (setup.fanAuto) {
-                showToast("风机处于自动工作状态，不能手动关闭！");
-                return;
-            } else {
-                showToast("手动模式下关闭风机将会将风机设置切换为自动模式！");
-                setup.fanAuto = true;
-                CabinetCore.saveSetupValue(MainActivity.this, setup);
-            }
-        }
-        view.setEnabled(false);
-        Intent intent = new Intent();
-        intent.setClassName(getPackageName(), HardwareService.class.getName());
-        bindService(intent, mFanServiceConnection, BIND_AUTO_CREATE);
-    }
 
     public void onSubBoardButtonClick(View view) {
         Intent intent = new Intent(MainActivity.this, SubBoardInfoActivity.class);

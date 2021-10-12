@@ -38,13 +38,13 @@ public class SubBoardStatusItemViewHolder extends RecyclerView.ViewHolder {
             humi.setText(String.valueOf(subBoardStatus.statusData.humi / 10f));
             tvoc.setText(String.valueOf(subBoardStatus.statusData.concentration_ugpm3 / 10f));
             if (setup != null) {
-                long thresholdTemp = setup.thresholdTemp;
+                long thresholdTemp = setup.temperatureHighAlertThreshold;
                 if (subBoardStatus.statusData.temp / 10f > thresholdTemp) {
                     temp.setBackgroundResource(R.drawable.background_corner_orange);
                 } else {
                     temp.setBackgroundResource(R.drawable.background_corner_white);
                 }
-                float thresholdPPM = setup.thresholdPPM;
+                float thresholdPPM = setup.temperatureHighAlertThreshold;
                 if (subBoardStatus.statusData.concentration_ugpm3 / 10f > thresholdPPM) {
                     tvoc.setBackgroundResource(R.drawable.background_corner_orange);
                 } else {

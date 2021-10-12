@@ -20,7 +20,6 @@ public class Config {
 
     public static final String SYSTEM_PREFERENCE_NAME = "SystemPreference";
     public static final String SYSPRE_Cabinet_User = "SYSPRE_Cabinet_User";
-    public static final String SYSPRE_SYSTEM_SETUP = "SYSTEM_SETUP";
     public static final String SYSPRE_CABINET_INFO = "CABINET_INFO_FULL_VERSION_3";
     public static final String UN_SUBMIT_DEPOSIT_INFO = "UN_SUBMIT_DEPOSIT_INFO";
     public static final String UN_SUBMIT_USAGE_INFO = "UN_SUBMIT_USAGE_INFO";
@@ -48,10 +47,6 @@ public class Config {
     public static final int VERTICAL_OFFSET = 0;
     public static final String ACTION_HARDWARE_VALUE_SEND = "ACTION_HARDWARE_VALUE_SEND";
     public static final String KEY_HARDWARE_VALUE = "KEY_HARDWARE_VALUE";
-    public static final int DEFAULT_FAN_WORK_TIME = 10;
-    public static final int DEFAULT_FAN_STOP_TIME = 20;
-    public static final int DEFAULT_FAN_TEMP_THRESHOLD = 30;
-    public static final int DEFAULT_FAN_PPM_THRESHOLD = 3;
     private static final String[] ARC_LIBRARIES = new String[]{
             "libarcsoft_face_engine.so",
             "libarcsoft_face.so",
