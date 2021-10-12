@@ -1,5 +1,7 @@
 package me.liuzs.cabinetmanager.service;
 
+import android.util.Log;
+
 import com.serotonin.modbus4j.BatchRead;
 import com.serotonin.modbus4j.BatchResults;
 import com.serotonin.modbus4j.ModbusFactory;
@@ -11,10 +13,22 @@ import com.serotonin.modbus4j.exception.ModbusTransportException;
 import com.serotonin.modbus4j.ip.IpParameters;
 import com.serotonin.modbus4j.locator.BaseLocator;
 
+import me.liuzs.cabinetmanager.CabinetCore;
+import me.liuzs.cabinetmanager.model.EnvironmentStatus;
+
 public class ModbusService {
+    private static final String TAG = "ModbusService";
     private static final String ModbusIP = "127.0.0.1";
     private static final int ModbusPort = 506;
     private static final int ModbusSlaveId = 1;
+    private static final int VOCLowerAddress = 40513;
+    private static final int VOCUpperAddress = 40518;
+    private static final int FlammableGasLowerAddress = 40524;
+    private static final int FlammableGasUpperAddress = 40528;
+    private static final int TemperatureAAddress = 40534;
+    private static final int TemperatureBAddress = 40543;
+    private static final int HumidityAAddress = 40534;
+    private static final int HumidityBAddress = 40548;
 
     /**
      * 工厂。
@@ -117,24 +131,41 @@ public class ModbusService {
     }
 
     /**
-     * 批量读取使用方法
-     *
-     * @throws ModbusTransportException 异常
-     * @throws ErrorResponseException   异常
-     * @throws ModbusInitException      异常
+     * 读取环境数据
      */
-    public static void batchRead() throws ModbusTransportException, ErrorResponseException, ModbusInitException {
+    public synchronized static EnvironmentStatus readEnvironmentStatus() {
+        EnvironmentStatus environmentStatus = new EnvironmentStatus();
 
-        BatchRead<Integer> batch = new BatchRead<Integer>();
+        try {
+            BatchRead<Integer> batch = new BatchRead<Integer>();
+            batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, VOCLowerAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, VOCUpperAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, FlammableGasLowerAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(3, BaseLocator.holdingRegister(ModbusSlaveId, FlammableGasUpperAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(4, BaseLocator.holdingRegister(ModbusSlaveId, TemperatureAAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(5, BaseLocator.holdingRegister(ModbusSlaveId, TemperatureBAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(6, BaseLocator.holdingRegister(ModbusSlaveId, HumidityAAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(7, BaseLocator.holdingRegister(ModbusSlaveId, HumidityBAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
 
-        batch.addLocator(0, BaseLocator.holdingRegister(1, 1, DataType.FOUR_BYTE_FLOAT));
-        batch.addLocator(1, BaseLocator.inputStatus(1, 0));
+            ModbusMaster master = getMaster();
 
-        ModbusMaster master = getMaster();
+            batch.setContiguousRequests(false);
+            BatchResults<Integer> results = master.send(batch);
 
-        batch.setContiguousRequests(false);
-        BatchResults<Integer> results = master.send(batch);
-        System.out.println(results.getValue(0));
-        System.out.println(results.getValue(1));
+            environmentStatus.vocLowerPart = results.getIntValue(0) / 100f;
+            environmentStatus.vocUpperPart = results.getIntValue(1) / 100f;
+            environmentStatus.flammableGasLowerPart = results.getIntValue(2);
+            environmentStatus.flammableGasUpperPart = results.getIntValue(3);
+            environmentStatus.temperatureA = results.getIntValue(4) / 10f;
+            environmentStatus.temperatureB = results.getIntValue(5) / 10f;
+            environmentStatus.humidityA = results.getIntValue(6) / 10f;
+            environmentStatus.humidityB = results.getIntValue(7) / 10f;
+        } catch (Exception e) {
+            e.printStackTrace();
+            environmentStatus.e = e;
+        }
+
+        Log.d(TAG, CabinetCore.GSON.toJson(environmentStatus));
+        return environmentStatus;
     }
 }

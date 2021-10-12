@@ -78,11 +78,6 @@ public class HardwareService extends Service {
     private int[] mPeriods;
     private Timer mHardwareValueQueryTimer;
     private MqttAndroidClient mPublishClient;
-    private boolean isSingleDevice = true;
-    //副柜数量
-    private int mSubCabinetSize = 0;
-    //副柜红绿灯和风扇状态
-    private boolean[] isSubDevicesLightGreen, isSubDevicesLightRed, isSubDevicesFanRun;
     //一主多副状态下主柜风扇和红绿灯状态
     private boolean isMainDeviceLightGreen, isMainDeviceLightRed, isMainDeviceFanRun;
     //主柜风扇起止时间
@@ -190,27 +185,10 @@ public class HardwareService extends Service {
         if (BuildConfig.DEBUG) {
             return;
         }
-        isSingleDevice = false;
-        mSubCabinetSize = isSingleDevice ? 0 : 1;
-        isSubDevicesFanRun = new boolean[mSubCabinetSize];
-        isSubDevicesLightRed = new boolean[mSubCabinetSize];
-        isSubDevicesLightGreen = new boolean[mSubCabinetSize];
-        mSubFanWorkStartTime = new long[mSubCabinetSize];
-        mSubFanWorkEndTime = new long[mSubCabinetSize];
 
         CabinetManager.Settings settings = new CabinetManager.Settings();
-        if (isSingleDevice) {
-            settings.SwitchesDeviceName = "/dev/ttysWK0";
-            settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[0];
-        } else {
-            //Address:0的子板用于室内风扇和红绿灯控制，子板数比副柜数多1；
-//            settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[cabinet.devices.size() + 1];
-//            for (int i = 0; i < mSubCabinetSize; i++) {
-//                settings.SubBoardConfigs[i] = new CabinetManager.SubBoardConfig((byte) cabinet.devices.get(i).hardwareAddress);//按实际设备地址填写
-//            }
-            //最后一块板子地址为0；
-//            settings.SubBoardConfigs[mSubCabinetSize] = new CabinetManager.SubBoardConfig((byte) 0);
-        }
+        settings.SwitchesDeviceName = "/dev/ttysWK0";
+        settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[0];
         settings.TDA09C485Configs = new CabinetManager.TDA09C485Config[1];
         int c485 = CabinetCore.getTDA09C485Config(this);
         settings.TDA09C485Configs[0] = new CabinetManager.TDA09C485Config((byte) c485);//按实际设备地址填写
@@ -221,10 +199,6 @@ public class HardwareService extends Service {
         mManager = new CabinetManager(settings);
         lightGreen();
         turnOffFan();
-        if (!isSingleDevice) {
-            turnOnAllSubFan();
-            lightGreenAllSub();
-        }
     }
 
     @Override
@@ -389,25 +363,6 @@ public class HardwareService extends Service {
             }
         }
 
-        for (int index = 0; index < mSubCabinetSize; index++) {
-            SubBoard.StatusData data = value.subBoardStatusData.get(index);
-            float subPPb = data.concentration_ugpm3 * 100;
-            float subTemp = data.temp / 10f;
-            boolean subThreshold = false;
-            if (subTemp >= setup.thresholdTemp || subPPb >= thresholdPPB) {
-                subThreshold = true;
-            }
-            if (subThreshold) {
-                if (!isSubDevicesLightRed[index]) {
-                    lightRed(index);
-                }
-            } else {
-                if (!isSubDevicesLightGreen[index]) {
-                    lightGreen(index);
-                }
-            }
-        }
-
         if (setup.fanAuto) {
             if (threshold) {
                 if (!value.fan) {
@@ -460,19 +415,12 @@ public class HardwareService extends Service {
             }
 
             boolean fan, red, green, lock;
-            if (isSingleDevice) {
-                byte s = mManager.getSwitches().Query();
-                byte[] switchStates = Util.getBooleanArray(s);
-                fan = switchStates[7] == 1;
-                red = switchStates[6] == 1;
-                green = switchStates[5] == 1;
-                lock = switchStates[4] == 1;
-            } else {
-                fan = isMainDeviceFanRun;
-                red = isMainDeviceLightRed;
-                green = isMainDeviceLightGreen;
-                lock = true;
-            }
+            byte s = mManager.getSwitches().Query();
+            byte[] switchStates = Util.getBooleanArray(s);
+            fan = switchStates[7] == 1;
+            red = switchStates[6] == 1;
+            green = switchStates[5] == 1;
+            lock = switchStates[4] == 1;
 
             TVOCsValue value = new TVOCsValue();
             value.TVOC1 = value1;
@@ -485,19 +433,6 @@ public class HardwareService extends Service {
             hValue.lock = lock;
             hValue.redLight = red;
             hValue.greenLight = green;
-
-            if (!isSingleDevice) {
-                synchronized (mWaitLocker) {
-                    waitForHardwareOPGap("Get Hardware Value");
-                    for (int i = 0; i < mSubCabinetSize; i++) {
-                        SubBoard subBoard = mManager.getSubBoardInstance(i);
-                        SubBoard.StatusData data = subBoard.getStatus();
-                        sleep();
-                        hValue.subBoardStatusData.add(data);
-                    }
-                    registerHardwareOPTime("Get Hardware Value");
-                }
-            }
 
             Log.d(TAG, "Fan value :" + fan + " Locker value::" + lock);
             HardwareValue._Cache = hValue;
@@ -512,159 +447,32 @@ public class HardwareService extends Service {
         if (mManager == null) {
             return;
         }
-        if (isSingleDevice) {
-            mManager.getSwitches().SwitchControl(0, true);
-        } else {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Turn on fan");
-                SubBoard subBoard = mManager.getSubBoardInstance(mSubCabinetSize);
-                subBoard.Control(SubBoard.ControlType.ECONTROL_FAN, true);
-                isMainDeviceFanRun = true;
-                registerHardwareOPTime("Turn on fan");
-            }
-        }
+        mManager.getSwitches().SwitchControl(0, true);
         mMainFanWorkStartTime = System.currentTimeMillis();
-    }
-
-    private void turnOnFan(int index) {
-        if (mManager != null && !isSingleDevice) {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Turn on fan");
-                SubBoard subBoard = mManager.getSubBoardInstance(index);
-                subBoard.Control(SubBoard.ControlType.ECONTROL_FAN, true);
-                registerHardwareOPTime("Turn on fan");
-                isSubDevicesFanRun[index] = true;
-                mSubFanWorkStartTime[index] = System.currentTimeMillis();
-            }
-        }
-    }
-
-    private void turnOnAllSubFan() {
-        if (mManager != null && !isSingleDevice) {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Turn on fan");
-                for (int index = 0; index < mSubCabinetSize; index++) {
-                    SubBoard subBoard = mManager.getSubBoardInstance(index);
-                    subBoard.Control(SubBoard.ControlType.ECONTROL_FAN, true);
-                    isSubDevicesFanRun[index] = true;
-                    mSubFanWorkStartTime[index] = System.currentTimeMillis();
-                    sleep();
-                }
-                registerHardwareOPTime("Turn on fan");
-            }
-        }
     }
 
     private void turnOffFan() {
         if (mManager == null) {
             return;
         }
-        if (isSingleDevice) {
-            mManager.getSwitches().SwitchControl(0, false);
-        } else {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Turn off fan");
-                SubBoard subBoard = mManager.getSubBoardInstance(mSubCabinetSize);
-                subBoard.Control(SubBoard.ControlType.ECONTROL_FAN, false);
-                registerHardwareOPTime("Turn off fan");
-                isMainDeviceFanRun = false;
-            }
-        }
+        mManager.getSwitches().SwitchControl(0, false);
         mMainFanWorkEndTime = System.currentTimeMillis();
-    }
-
-    private void turnOffFan(int index) {
-        if (mManager != null && !isSingleDevice) {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Turn off fan");
-                SubBoard subBoard = mManager.getSubBoardInstance(index);
-                subBoard.Control(SubBoard.ControlType.ECONTROL_FAN, false);
-                registerHardwareOPTime("Turn off fan");
-                isSubDevicesFanRun[index] = false;
-                mSubFanWorkEndTime[index] = System.currentTimeMillis();
-            }
-        }
-
     }
 
     private void lightGreen() {
         if (mManager == null) {
             return;
         }
-        if (isSingleDevice) {
-            mManager.getSwitches().SwitchControl(1, false);
-            mManager.getSwitches().SwitchControl(2, true);
-        } else {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Light green");
-                SubBoard subBoard = mManager.getSubBoardInstance(mSubCabinetSize);
-                subBoard.Control(SubBoard.ControlType.ECONTROL_ALARM, false);
-                registerHardwareOPTime("Light green");
-                isMainDeviceLightGreen = true;
-                isMainDeviceLightRed = false;
-            }
-        }
-    }
-
-    private void lightGreen(int index) {
-        if (mManager != null && !isSingleDevice) {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Light green");
-                SubBoard subBoard = mManager.getSubBoardInstance(index);
-                subBoard.Control(SubBoard.ControlType.ECONTROL_ALARM, false);
-                registerHardwareOPTime("Light green");
-                isSubDevicesLightGreen[index] = true;
-                isSubDevicesLightRed[index] = false;
-            }
-        }
-    }
-
-    private void lightGreenAllSub() {
-        if (mManager != null && !isSingleDevice) {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Light green all sub");
-                for (int index = 0; index < mSubCabinetSize; index++) {
-                    SubBoard subBoard = mManager.getSubBoardInstance(index);
-                    subBoard.Control(SubBoard.ControlType.ECONTROL_ALARM, false);
-                    isSubDevicesLightGreen[index] = true;
-                    isSubDevicesLightRed[index] = false;
-                    sleep();
-                }
-                registerHardwareOPTime("Light green all sub");
-            }
-        }
+        mManager.getSwitches().SwitchControl(1, false);
+        mManager.getSwitches().SwitchControl(2, true);
     }
 
     private void lightRed() {
         if (mManager == null) {
             return;
         }
-        if (isSingleDevice) {
-            mManager.getSwitches().SwitchControl(1, true);
-            mManager.getSwitches().SwitchControl(2, false);
-        } else {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Light red");
-                SubBoard subBoard = mManager.getSubBoardInstance(mSubCabinetSize);
-                subBoard.Control(SubBoard.ControlType.ECONTROL_ALARM, true);
-                registerHardwareOPTime("Light red");
-                isMainDeviceLightGreen = false;
-                isMainDeviceLightRed = true;
-            }
-        }
-    }
-
-    private void lightRed(int index) {
-        if (mManager != null && !isSingleDevice) {
-            synchronized (mWaitLocker) {
-                waitForHardwareOPGap("Light red");
-                SubBoard subBoard = mManager.getSubBoardInstance(index);
-                subBoard.Control(SubBoard.ControlType.ECONTROL_ALARM, true);
-                registerHardwareOPTime("Light red");
-                isSubDevicesLightGreen[index] = false;
-                isSubDevicesLightRed[index] = true;
-            }
-        }
+        mManager.getSwitches().SwitchControl(1, true);
+        mManager.getSwitches().SwitchControl(2, false);
     }
 
 
