@@ -1,28 +1,74 @@
 package me.liuzs.cabinetmanager.model;
 
 public class SetupValue {
-    public enum WorkModel {None, Auto, Manual};
+    public enum WorkModel {None, Auto, Manual}
 
     public WorkModel workModel = WorkModel.None;
 
-    public int vocThresholdMax;
-    public int vocThresholdMin;
-    public int workTime;
-    public int stopTime;
-    public int frequency;
+    /**
+     * VOC联动，最大值
+     */
+    public float vocUnionMax;
 
+    /**
+     * VOC联动，最小值
+     */
+    public float vocUnionMin;
+
+    /**
+     * 风机联动，工作时长
+     */
+    public int fanUnionWorkTime;
+
+    /**
+     * 风机联动，停止时长
+     */
+    public int fanUnionStopTime;
+
+    /**
+     * 风机联动，启动频率
+     */
+    public float fanUnionFrequency;
+
+    /**
+     * VOC自动告警
+     */
     public boolean vocAlertAuto;
-    public boolean temperatureHighAlertAuto;
-    public boolean temperatureLowAlertAuto;
+    /**
+     * 可燃气体自动告警
+     */
+    public final boolean fgAlertAuto = true;
+    /**
+     * 温度高位自动报警
+     */
+    public boolean tempHighAlertAuto;
+    /**
+     * 温度低位自动报警
+     */
+    public boolean tempLowAlertAuto;
+    /**
+     * 湿度高位自动报警
+     */
     public boolean humidityHighAlertAuto;
+    /**
+     * 湿度低位自动报警
+     */
     public boolean humidityLowAlertAuto;
 
-    public int vocAlertThreshold;
-    public int flammableGasAlertThreshold;
-    public int temperatureHighAlertThreshold;
-    public int temperatureLowAlertThreshold;
-    public int humidityHighAlertThreshold;
-    public int humidityLowAlertThreshold;
+    /**
+     * VOC自动告警阈值
+     */
+    public float vocAlertAutoThreshold;
+
+    /**
+     * 可燃气体自动告警阈值
+     */
+    public float fgAlertThreshold;
+    public float tempHighAlertThreshold;
+    public float tempLowAlertThreshold;
+    public float humidityHighAlertThreshold;
+    public float humidityLowAlertThreshold;
+    public boolean alertSoundLight;
     public Exception e;
 
 }

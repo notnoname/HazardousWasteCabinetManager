@@ -195,21 +195,21 @@ public class HardwareService extends Service {
         }
         mHardwareValueQueryInterval = interval;
         Log.d(TAG, "Init Hardware Value QueryTimer");
-        mHardwareValueQueryTimer = new Timer("HardwareValueQueryTime Thread");
-        mHardwareValueQueryTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (isDoHardwareValueQuery.getAndSet(true)) {
-                    return;
-                }
-                Log.d(TAG, "Do hardware value query");
-                initMQTTPublishClient();
-                HardwareValue value = getHardwareValue();
-                notifyValue(value);
-                publishValue(value);
-                isDoHardwareValueQuery.set(false);
-            }
-        }, 0, mHardwareValueQueryInterval);
+//        mHardwareValueQueryTimer = new Timer("HardwareValueQueryTime Thread");
+//        mHardwareValueQueryTimer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                if (isDoHardwareValueQuery.getAndSet(true)) {
+//                    return;
+//                }
+//                Log.d(TAG, "Do hardware value query");
+//                initMQTTPublishClient();
+//                HardwareValue value = getHardwareValue();
+//                notifyValue(value);
+//                publishValue(value);
+//                isDoHardwareValueQuery.set(false);
+//            }
+//        }, 0, mHardwareValueQueryInterval);
     }
 
     private void notifyValue(HardwareValue value) {

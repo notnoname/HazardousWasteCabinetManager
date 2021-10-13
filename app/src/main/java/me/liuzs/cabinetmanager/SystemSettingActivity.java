@@ -37,6 +37,7 @@ public class SystemSettingActivity extends BaseActivity {
     }
 
     public void onBackButtonClick(View view) {
+        hideInputMethod();
         if (!mMainFragment.isHidden()) {
             finish();
         } else {

@@ -15,7 +15,6 @@ import com.kyleduo.switchbutton.SwitchButton;
 
 import java.text.DecimalFormat;
 
-import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SystemSettingActivity;
 import me.liuzs.cabinetmanager.model.SetupValue;
@@ -74,10 +73,17 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
         mAlertHumidityLow = view.findViewById(R.id.swAlertHumidityLow);
         mAlertHumidityLowValue = view.findViewById(R.id.etAlertHumidityLowValue);
 
+        mAlertSoundLight = view.findViewById(R.id.swAlertSoundLight);
+
 
         mSave = view.findViewById(R.id.btnSave);
         mSave.setOnClickListener(this);
         mFanWorkModel.setOnCheckedChangeListener(this);
+        mAlertVOC.setOnCheckedChangeListener(this);
+        mAlertTempHigh.setOnCheckedChangeListener(this);
+        mAlertTempLow.setOnCheckedChangeListener(this);
+        mAlertHumidityHigh.setOnCheckedChangeListener(this);
+        mAlertHumidityLow.setOnCheckedChangeListener(this);
         mActivity = (SystemSettingActivity) getActivity();
         return view;
     }
@@ -85,11 +91,18 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
-        mValue = ModbusService.getSetupValue();
-        showValue();
+        new Thread(() -> {
+            mValue = ModbusService.readSetupValue();
+            mActivity.runOnUiThread(() -> showValue());
+        }).start();
+
     }
 
     private void showValue() {
+        if(mValue.e != null) {
+            mActivity.showToast(mValue.e.toString());
+            return;
+        }
         mFanWorkModel.setChecked(mValue.workModel == SetupValue.WorkModel.Auto);
         switch (mValue.workModel) {
             case Auto:
@@ -111,34 +124,40 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
                 mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
                 break;
             case None:
-                mFanRunTimeValue.setEnabled(false);
-                mFanStopTimeValue.setEnabled(false);
-                mFanFrequencyValue.setEnabled(false);
-                mUnionVOCHigh.setEnabled(false);
-                mUnionVOCLow.setEnabled(false);
-                mFanWorkModelValue.setText(R.string.none);
-                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
+
                 break;
         }
 
-        mFanRunTimeValue.setText(String.valueOf(mValue.workTime));
-        mFanStopTimeValue.setText(String.valueOf(mValue.stopTime));
-        mFanFrequencyValue.setText(String.valueOf(mValue.frequency));
-        mUnionVOCHigh.setText(String.valueOf(mValue.vocThresholdMax));
-        mUnionVOCLow.setText(String.valueOf(mValue.vocThresholdMin));
+        mFanRunTimeValue.setText(String.valueOf(mValue.fanUnionWorkTime));
+        mFanStopTimeValue.setText(String.valueOf(mValue.fanUnionStopTime));
+        mFanFrequencyValue.setText(String.valueOf(mValue.fanUnionFrequency));
+        mUnionVOCHigh.setText(String.valueOf(mValue.vocUnionMax));
+        mUnionVOCLow.setText(String.valueOf(mValue.vocUnionMin));
 
 
         mAlertVOC.setChecked(mValue.vocAlertAuto);
-        if (mValue.vocAlertAuto) {
-            mAlertVOCValue.setEnabled(true);
-        } else {
-            mAlertVOCValue.setEnabled(false);
-        }
-        mAlertVOCValue.setText(String.valueOf(mValue.vocAlertThreshold));
+        mAlertVOCValue.setEnabled(mValue.vocAlertAuto);
+        mAlertVOCValue.setText(String.valueOf(mValue.vocAlertAutoThreshold));
+
+        mAlertTempHigh.setChecked(mValue.tempHighAlertAuto);
+        mAlertTempHighValue.setEnabled(mValue.tempHighAlertAuto);
+        mAlertTempHighValue.setText(String.valueOf(mValue.tempHighAlertThreshold));
 
 
-        mAlertTempHigh.setChecked(mValue.temperatureHighAlertAuto);
-        mAlertTempLow.setChecked(mValue.temperatureLowAlertAuto);
+        mAlertTempLow.setChecked(mValue.tempLowAlertAuto);
+        mAlertTempLowValue.setEnabled(mValue.tempLowAlertAuto);
+        mAlertTempLowValue.setText(String.valueOf(mValue.tempLowAlertThreshold));
+
+        mAlertHumidityHigh.setChecked(mValue.humidityHighAlertAuto);
+        mAlertHumidityHighValue.setEnabled(mValue.humidityHighAlertAuto);
+        mAlertHumidityHighValue.setText(String.valueOf(mValue.tempHighAlertThreshold));
+
+
+        mAlertHumidityLow.setChecked(mValue.humidityLowAlertAuto);
+        mAlertHumidityLowValue.setEnabled(mValue.humidityLowAlertAuto);
+        mAlertHumidityLowValue.setText(String.valueOf(mValue.tempLowAlertThreshold));
+
+        mAlertSoundLight.setChecked(mValue.alertSoundLight);
 
     }
 
@@ -168,8 +187,8 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
             int tempValue = Integer.parseInt(temp);
             float ppmValue = Float.parseFloat(ppm);
             result = new SetupValue();
-            result.workTime = workTime;
-            result.stopTime = stopTime;
+            result.fanUnionWorkTime = workTime;
+            result.fanUnionStopTime = stopTime;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,16 +203,14 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
             mValue.workModel = isChecked ? SetupValue.WorkModel.Auto : SetupValue.WorkModel.Manual;
         } else if (buttonView == mAlertVOC) {
             mValue.vocAlertAuto = isChecked;
-        } else if (buttonView == mAlertFG) {
-            mValue.vocAlertAuto = isChecked;
         } else if (buttonView == mAlertTempHigh) {
-            mValue.vocAlertAuto = isChecked;
+            mValue.tempHighAlertAuto = isChecked;
         } else if (buttonView == mAlertTempLow) {
-            mValue.vocAlertAuto = isChecked;
+            mValue.tempLowAlertAuto = isChecked;
         } else if (buttonView == mAlertHumidityHigh) {
-            mValue.vocAlertAuto = isChecked;
+            mValue.humidityHighAlertAuto = isChecked;
         } else if (buttonView == mAlertHumidityLow) {
-            mValue.vocAlertAuto = isChecked;
+            mValue.humidityLowAlertAuto = isChecked;
         }
         showValue();
     }

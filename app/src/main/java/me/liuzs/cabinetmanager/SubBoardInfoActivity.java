@@ -19,7 +19,6 @@ import java.util.List;
 
 import me.liuxy.cabinet.SubBoard;
 import me.liuzs.cabinetmanager.model.Cabinet;
-import me.liuzs.cabinetmanager.model.DeviceInfo;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;
 import me.liuzs.cabinetmanager.service.ModbusService;
@@ -80,7 +79,7 @@ public class SubBoardInfoActivity extends BaseActivity {
             }
         }
 
-        SubBoardStatusItemViewHolder.setup = ModbusService.getSetupValue();
+        SubBoardStatusItemViewHolder.setup = ModbusService.readSetupValue();
         mAdapter.setResult(mSubBoardStatusInfo);
 
     }

@@ -315,6 +315,8 @@
                 android:layout_marginStart="32px"
                 android:gravity="center"
                 android:textSize="28px"
+                android:checked="true"
+                android:enabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvAlertFGLabel"
                 app:layout_constraintTop_toTopOf="parent" />

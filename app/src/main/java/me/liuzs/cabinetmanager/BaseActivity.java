@@ -205,7 +205,7 @@ abstract class BaseActivity extends AppCompatActivity {
             if (manager != null && getCurrentFocus() != null) {
                 manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
-        }, 500);
+        }, 0);
 
     }
 

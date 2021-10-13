@@ -7,10 +7,10 @@ public class EnvironmentStatus {
     public long createTime;
     public float vocLowerPart;
     public float vocUpperPart;
-    public float flammableGasLowerPart;
-    public float flammableGasUpperPart;
-    public float temperatureA;
-    public float temperatureB;
+    public float fgLowerPart;
+    public float fgUpperPart;
+    public float tempA;
+    public float tempB;
     public float humidityA;
     public float humidityB;
     public Exception e = null;
