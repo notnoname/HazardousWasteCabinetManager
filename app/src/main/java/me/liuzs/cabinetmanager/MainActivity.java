@@ -54,39 +54,6 @@ public class MainActivity extends BaseActivity {
     private LinearLayout mLTVOCs2, mLLocker, mLFan;
     private HardwareValueBroadcastReceiver mHardwareValueBroadcastReceiver;
     private HardwareValue mValue = null;
-    private final ServiceConnection mFanServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.d(TAG, "FanServiceConnected success");
-            HardwareService.HardwareServiceBinder binder = (HardwareService.HardwareServiceBinder) service;
-            mValue.fan = !mValue.fan;
-            binder.getHardwareService().switchFanControl(mValue.fan);
-            unbindService(this);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            unbindService(mFanServiceConnection);
-            Log.d(TAG, "FanServiceConnected fail");
-        }
-    };
-    private final ServiceConnection mLockerServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.d(TAG, "LockerServiceConnected success");
-            HardwareService.HardwareServiceBinder binder = (HardwareService.HardwareServiceBinder) service;
-            mValue.lock = !mValue.lock;
-            binder.getHardwareService().switchLockerControl(mValue.lock);
-            unbindService(this);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            unbindService(mLockerServiceConnection);
-            Log.d(TAG, "LockerServiceConnected fail");
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,30 +209,6 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    public void onLockerButtonClick(View view) {
-        if (mValue == null) {
-            return;
-        }
-        if (mValue.lock) {
-            Intent intent = new Intent();
-            intent.setClassName(getPackageName(), HardwareService.class.getName());
-            bindService(intent, mLockerServiceConnection, BIND_AUTO_CREATE);
-        } else {
-            showAuthActivity(CabinetCore.RoleType.Admin, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
-
-                @Override
-                public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent();
-                    intent.setClassName(getPackageName(), HardwareService.class.getName());
-                    bindService(intent, mLockerServiceConnection, BIND_AUTO_CREATE);
-                }
-            });
-        }
     }
 
 

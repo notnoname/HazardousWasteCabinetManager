@@ -139,6 +139,8 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
         mAlertVOCValue.setEnabled(mValue.vocAlertAuto);
         mAlertVOCValue.setText(String.valueOf(mValue.vocAlertAutoThreshold));
 
+        mAlertFGValue.setText(String.valueOf(mValue.fgAlertThreshold));
+
         mAlertTempHigh.setChecked(mValue.tempHighAlertAuto);
         mAlertTempHighValue.setEnabled(mValue.tempHighAlertAuto);
         mAlertTempHighValue.setText(String.valueOf(mValue.tempHighAlertThreshold));

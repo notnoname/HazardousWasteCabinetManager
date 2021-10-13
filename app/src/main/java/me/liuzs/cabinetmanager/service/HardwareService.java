@@ -7,9 +7,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -27,19 +24,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import me.liuxy.cabinet.CabinetManager;
 import me.liuxy.cabinet.Steelyard;
-import me.liuxy.cabinet.SubBoard;
 import me.liuxy.cabinet.TDA09C;
-import me.liuxy.cabinet.TVOCs;
 import me.liuzs.cabinetmanager.BuildConfig;
 import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.model.Cabinet;
+import me.liuzs.cabinetmanager.model.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.HardwareValue;
-import me.liuzs.cabinetmanager.model.TVOCValue;
-import me.liuzs.cabinetmanager.model.TVOCsValue;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
-import me.liuzs.cabinetmanager.util.Util;
 
 public class HardwareService extends Service {
 
@@ -67,8 +60,6 @@ public class HardwareService extends Service {
     private int[] mPeriods;
     private Timer mHardwareValueQueryTimer;
     private MqttAndroidClient mPublishClient;
-    //主柜风扇起止时间
-    private long mMainFanWorkStartTime = System.currentTimeMillis(), mMainFanWorkEndTime = System.currentTimeMillis();
     private Timer mAutoLockTimer;
     private long mHardwareValueQueryInterval;
 
@@ -239,38 +230,7 @@ public class HardwareService extends Service {
     private void publishValue(HardwareValue value, String tankType, String tankId, String mainDeviceId, List<String> subDeviceId) {
         if (mPublishClient.isConnected() && value != null) {
             try {
-                JsonObject jsValue = new JsonObject();
-                jsValue.addProperty("tankType", tankType);
-                jsValue.addProperty("tankId", tankId);
-                jsValue.addProperty("createTime", value.createTime);
-
-                JsonObject tvoCsValue = new JsonObject();
-                tvoCsValue.addProperty("deviceId", mainDeviceId);
-                tvoCsValue.addProperty("fan", value.fan ? 1 : 2);
-                tvoCsValue.addProperty("lock", value.lock ? 1 : 2);
-                tvoCsValue.addProperty("voc1", value.tvoCsValue.TVOC1.ppb / 1000f);
-                tvoCsValue.addProperty("voc2", value.tvoCsValue.TVOC2.ppb / 1000f);
-                tvoCsValue.addProperty("hum", value.tvoCsValue.TVOC1.humi / 100f);
-                tvoCsValue.addProperty("tem", value.tvoCsValue.TVOC1.temperature / 100f);
-                jsValue.add("tvoCsValue", tvoCsValue);
-
-                JsonArray subBoardStatusData = new JsonArray();
-                for (int i = 0; i < value.subBoardStatusData.size(); i++) {
-                    SubBoard.StatusData data = value.subBoardStatusData.get(i);
-                    String devId = subDeviceId.get(i);
-                    JsonObject subValue = new JsonObject();
-                    subValue.addProperty("deviceId", devId);
-                    subValue.addProperty("fan", 1);
-                    subValue.addProperty("lock", data.door_lock == 1 ? 2 : 1);
-                    subValue.addProperty("voc1", data.concentration_ugpm3 / 10f);
-                    subValue.addProperty("voc2", 0);
-                    subValue.addProperty("hum", data.humi / 10f);
-                    subValue.addProperty("tem", data.temp / 10f);
-                    subBoardStatusData.add(subValue);
-                }
-                jsValue.add("subBoardStatusData", subBoardStatusData);
-
-                String payload = CabinetCore.GSON.toJson(jsValue);
+                String payload = CabinetCore.GSON.toJson(value);
 
                 Log.d(TAG, "MQTT JSON:" + payload);
                 MqttMessage message = new MqttMessage();
@@ -283,62 +243,17 @@ public class HardwareService extends Service {
         }
     }
 
-    private MaxValue getMainCabinetMaxValue(HardwareValue value) {
-        MaxValue result = new MaxValue();
-        long ppb = Math.max(value.tvoCsValue.TVOC1.ppb, value.tvoCsValue.TVOC2.ppb);
-        float temp = Math.max(value.tvoCsValue.TVOC1.temperature, value.tvoCsValue.TVOC2.temperature);
-        result.ppb = ppb;
-        result.temp = temp;
-        return result;
-    }
-
     private HardwareValue getHardwareValue() {
-        Log.d(TAG, "Get Hardware value: " + mLogTimeFormat.format(new Date(System.currentTimeMillis())));
+        long createTime = System.currentTimeMillis();
+        Log.d(TAG, "Get HardwareValue: " + mLogTimeFormat.format(new Date(createTime)));
         try {
-            TVOCs tvocs1 = mManager.getTVOCsInstance(0);
-            TVOCs.ENVData env1 = tvocs1.getEnvdata();
-            Log.d(TAG, "TVOCs1 value PPB:" + env1.concentration_ppb + " Range:" + env1.range + " PM3:" + env1.concentration_ugpmm3 + " TEMP:" + env1.temp + " HUMI:" + env1.humi);
-            TVOCValue value1 = new TVOCValue();
-            value1.humi = env1.humi;
-            value1.ppb = env1.concentration_ppb;
-            value1.ugpmm3 = env1.concentration_ugpmm3;
-            value1.range = env1.range;
-            value1.temperature = env1.temp;
-
-            TVOCValue value2 = new TVOCValue();
-            if (CabinetCore.getMainTVOCModelCount(HardwareService.this) == 2) {
-                TVOCs tvocs2 = mManager.getTVOCsInstance(1);
-                TVOCs.ENVData env2 = tvocs2.getEnvdata();
-                Log.d(TAG, "TVOCs2 value PPB:" + env2.concentration_ppb + " Range:" + env2.range + " PM3:" + env2.concentration_ugpmm3 + " TEMP:" + env2.temp + " HUMI:" + env2.humi);
-                value2.humi = env2.humi;
-                value2.ppb = env2.concentration_ppb;
-                value2.ugpmm3 = env2.concentration_ugpmm3;
-                value2.range = env2.range;
-                value2.temperature = env2.temp;
-            }
-
-            boolean fan, red, green, lock;
-            byte s = mManager.getSwitches().Query();
-            byte[] switchStates = Util.getBooleanArray(s);
-            fan = switchStates[7] == 1;
-            red = switchStates[6] == 1;
-            green = switchStates[5] == 1;
-            lock = switchStates[4] == 1;
-
-            TVOCsValue value = new TVOCsValue();
-            value.TVOC1 = value1;
-            value.TVOC2 = value2;
-
             HardwareValue hValue = new HardwareValue();
-            hValue.createTime = System.currentTimeMillis();
-            hValue.tvoCsValue = value;
-            hValue.fan = fan;
-            hValue.lock = lock;
-            hValue.redLight = red;
-            hValue.greenLight = green;
-
-            Log.d(TAG, "Fan value :" + fan + " Locker value::" + lock);
+            EnvironmentStatus environmentStatus = ModbusService.readEnvironmentStatus();
+            if (environmentStatus.e != null) {
+                hValue.environmentStatus = environmentStatus;
+            }
             HardwareValue._Cache = hValue;
+            Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));
             return hValue;
         } catch (Exception e) {
             e.printStackTrace();
@@ -351,7 +266,6 @@ public class HardwareService extends Service {
             return;
         }
         mManager.getSwitches().SwitchControl(0, true);
-        mMainFanWorkStartTime = System.currentTimeMillis();
     }
 
     private void turnOffFan() {
@@ -359,7 +273,6 @@ public class HardwareService extends Service {
             return;
         }
         mManager.getSwitches().SwitchControl(0, false);
-        mMainFanWorkEndTime = System.currentTimeMillis();
     }
 
     private void lightGreen() {

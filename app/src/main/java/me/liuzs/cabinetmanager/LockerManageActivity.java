@@ -95,7 +95,7 @@ public class LockerManageActivity extends BaseActivity {
             Log.d(TAG, "OnReceiver");
             String json = intent.getStringExtra(Config.KEY_HARDWARE_VALUE);
             HardwareValue value = mGson.fromJson(json, HardwareValue.class);
-            List<SubBoard.StatusData> dataList = value.subBoardStatusData;
+            List<SubBoard.StatusData> dataList = new LinkedList<>();
             if (dataList.size() == mLockerStatus.size()) {
                 for (int index = 0; index < dataList.size(); index++) {
                     SubBoard.StatusData data = dataList.get(index);

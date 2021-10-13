@@ -71,7 +71,7 @@ public class SubBoardInfoActivity extends BaseActivity {
         }
 
         if (HardwareValue._Cache != null) {
-            List<SubBoard.StatusData> datas = new LinkedList<>(HardwareValue._Cache.subBoardStatusData);
+            List<SubBoard.StatusData> datas = new LinkedList<>();
             for (int i = 0; i < mSubBoardStatusInfo.size(); i++) {
                 SubBoard.StatusData data = datas.get(i);
                 SubBoardStatusInfo info = mSubBoardStatusInfo.get(i);
@@ -114,7 +114,7 @@ public class SubBoardInfoActivity extends BaseActivity {
             Log.d(TAG, "OnReceiver");
             String json = intent.getStringExtra(Config.KEY_HARDWARE_VALUE);
             HardwareValue value = mGson.fromJson(json, HardwareValue.class);
-            List<SubBoard.StatusData> datas = new LinkedList<>(value.subBoardStatusData);
+            List<SubBoard.StatusData> datas = new LinkedList<>();
             for (int i = 0; i < mSubBoardStatusInfo.size(); i++) {
                 SubBoard.StatusData data = datas.get(i);
                 SubBoardStatusInfo info = mSubBoardStatusInfo.get(i);
