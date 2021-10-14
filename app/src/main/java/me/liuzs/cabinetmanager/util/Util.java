@@ -6,6 +6,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.io.DataOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -191,6 +193,19 @@ public class Util {
         double dpi_mm = dpi / 25.4;
         return dpi_mm * width_mm;
     }
+
+    public static boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isConnected();
+            }
+        }
+        return false;
+    }
+
 
     public static void main(String[] args) {
         System.out.print(md5("00000000"));

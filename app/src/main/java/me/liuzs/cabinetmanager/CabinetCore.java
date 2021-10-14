@@ -288,22 +288,6 @@ public class CabinetCore {
         editor.apply();
     }
 
-    public static int getMainTVOCModelCount(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        return sp.getInt(Config.MAIN_TVOC_COUNT, 1);
-    }
-
-    public static int[] getSubBoardPeriod(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String periodStr = sp.getString(Config.SUB_BOARD_PERIOD, "50,10,2000");
-        String[] period = periodStr.split(",");
-        int[] result = new int[3];
-        result[0] = Integer.parseInt(period[0]);
-        result[1] = Integer.parseInt(period[1]);
-        result[2] = Integer.parseInt(period[2]);
-        return result;
-    }
-
     public static int getCurrentScalesDevice() {
         SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
         return sp.getInt(Config.SCALES_DEVICE, 0);

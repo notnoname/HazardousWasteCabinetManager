@@ -59,7 +59,7 @@ public class LockerItemViewHolder extends RecyclerView.ViewHolder implements Vie
     public LockerItemViewHolder(@NonNull View itemView) {
         super(itemView);
         deviceName = itemView.findViewById(R.id.tvDeviceName);
-        status = itemView.findViewById(R.id.ivACCtrlOption);
+        status = itemView.findViewById(R.id.ivACCtrlModelValue);
         lock = itemView.findViewById(R.id.btnLock);
         unlock = itemView.findViewById(R.id.btnUnlock);
         lock.setOnClickListener(this);

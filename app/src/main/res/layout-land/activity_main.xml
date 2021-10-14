@@ -74,7 +74,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnIn" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnStockQuery"
+                android:id="@+id/btnQuery"
                 android:layout_width="230px"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24px"
@@ -88,7 +88,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnOut" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnInOutQuery"
+                android:id="@+id/btnLedger"
                 android:layout_width="230px"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24px"
@@ -97,9 +97,9 @@
                 android:text="@string/in_out_query"
                 android:textColor="@color/white"
                 android:textSize="32px"
-                app:layout_constraintEnd_toEndOf="@+id/btnStockQuery"
-                app:layout_constraintStart_toStartOf="@+id/btnStockQuery"
-                app:layout_constraintTop_toBottomOf="@+id/btnStockQuery" />
+                app:layout_constraintEnd_toEndOf="@+id/btnQuery"
+                app:layout_constraintStart_toStartOf="@+id/btnQuery"
+                app:layout_constraintTop_toBottomOf="@+id/btnQuery" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCamera"
@@ -111,9 +111,9 @@
                 android:text="@string/watch_camera"
                 android:textColor="@color/white"
                 android:textSize="32px"
-                app:layout_constraintEnd_toEndOf="@+id/btnInOutQuery"
-                app:layout_constraintStart_toStartOf="@+id/btnInOutQuery"
-                app:layout_constraintTop_toBottomOf="@+id/btnInOutQuery" />
+                app:layout_constraintEnd_toEndOf="@+id/btnLedger"
+                app:layout_constraintStart_toStartOf="@+id/btnLedger"
+                app:layout_constraintTop_toBottomOf="@+id/btnLedger" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCtrl"
@@ -134,9 +134,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
-            android:layout_width="1000px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="160px"
+            android:layout_marginStart="200px"
+            android:layout_marginEnd="460px"
             android:background="@drawable/background_input_area"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -144,46 +145,29 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:id="@+id/llSubBoardStatus"
+                android:id="@+id/llAlertStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#40000000"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
-                android:padding="16px"
+                android:padding="8px"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/llFanStatus">
 
                 <TextView
-                    android:id="@+id/tvAlertStatusLabel"
-                    android:layout_width="130px"
+                    android:id="@+id/tvAlertTempValue"
+                    android:layout_width="180px"
                     android:layout_height="wrap_content"
-                    android:text="@string/alert_status"
-                    android:textColor="@color/white"
-                    android:textSize="32px" />
-
-                <ImageView
-                    android:id="@+id/ivAlertStatusValue"
-                    android:layout_width="48px"
-                    android:layout_height="48px"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20px"
-                    android:layout_marginEnd="10px"
-                    android:src="@drawable/ic_normal"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/tvAlertStatus"
-                    android:layout_width="345px"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10px"
-                    android:layout_marginEnd="99px"
-                    android:background="@drawable/background_edit_normal"
+                    android:layout_margin="10px"
+                    android:background="@drawable/background_state_green"
                     android:gravity="center"
-                    android:padding="5px"
-                    android:textColor="@color/black"
-                    android:textSize="32px" />
+                    android:padding="10px"
+                    android:text="无异常"
+                    android:textColor="@color/white"
+                    android:textSize="24px" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -216,7 +200,7 @@
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:id="@+id/ivACCtrlOption2"
+                    android:id="@+id/ivFanCtrlOption"
                     android:layout_width="48px"
                     android:layout_height="48px"
                     android:layout_gravity="center_vertical"
@@ -226,7 +210,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/tvACTempValue2"
+                    android:id="@+id/tvFanSpeedValue"
                     android:layout_width="120px"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="150px"
@@ -272,7 +256,7 @@
                     android:textSize="32px" />
 
                 <ImageView
-                    android:id="@+id/ivACStatus"
+                    android:id="@+id/ivACStatusValue"
                     android:layout_width="48px"
                     android:layout_height="48px"
                     android:layout_gravity="center_vertical"
@@ -282,7 +266,7 @@
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:id="@+id/ivACCtrlOption"
+                    android:id="@+id/ivACCtrlModelValue"
                     android:layout_width="48px"
                     android:layout_height="48px"
                     android:layout_gravity="center_vertical"
@@ -292,13 +276,13 @@
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:id="@+id/ivACWorkOption"
+                    android:id="@+id/ivACWorkModelValue"
                     android:layout_width="48px"
                     android:layout_height="48px"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="86px"
                     android:layout_marginEnd="10px"
-                    android:src="@drawable/ic_refrigeration"
+                    android:src="@drawable/ic_ac_work_model_auto"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -346,7 +330,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:id="@+id/tvFGValueA"
+                    android:id="@+id/tvFGValueAValue"
                     android:layout_width="200px"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
@@ -358,7 +342,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:id="@+id/tvFGValueB"
+                    android:id="@+id/tvFGValueBValue"
                     android:layout_width="200px"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
@@ -562,7 +546,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/ivNetworkStatus"
+                    android:id="@+id/ivNetworkStatusValue"
                     android:layout_width="36px"
                     android:layout_height="36px"
                     android:layout_gravity="center_vertical"
@@ -570,7 +554,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/tvCabinetName"
+                    android:id="@+id/tvCabinetNameValue"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

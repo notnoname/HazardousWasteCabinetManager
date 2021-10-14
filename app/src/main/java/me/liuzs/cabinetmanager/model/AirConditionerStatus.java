@@ -16,13 +16,15 @@ public class AirConditionerStatus {
         Auto, Low, Middle, High
     }
     public boolean powerOn;
-    public boolean autoControl;
+    public boolean autoCtrl;
     public WorkModel workModel;
-    public int targetTemperature;
+    public int targetTemp;
     public FanSpeedModel fanSpeedModel;
     /**
      * 自动扫叶是否开启？
      */
-    public boolean fanDirModel;
+    public boolean fanSweep;
+
+    public Exception e;
 
 }

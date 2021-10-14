@@ -7,6 +7,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.serotonin.modbus4j.Modbus;
+
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -18,6 +20,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -29,9 +32,11 @@ import me.liuzs.cabinetmanager.BuildConfig;
 import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
+import me.liuzs.cabinetmanager.model.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.HardwareValue;
+import me.liuzs.cabinetmanager.model.SetupValue;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 
 public class HardwareService extends Service {
@@ -46,7 +51,7 @@ public class HardwareService extends Service {
     private final IMqttActionListener mPublishActionListener = new IMqttActionListener() {
         @Override
         public void onSuccess(IMqttToken asyncActionToken) {
-            Log.d(TAG, "MQTT Publish  success");
+            Log.d(TAG, "MQTT Publish success");
         }
 
         @Override
@@ -57,11 +62,10 @@ public class HardwareService extends Service {
         }
     };
     private final AtomicBoolean isDoHardwareValueQuery = new AtomicBoolean(false);
-    private int[] mPeriods;
     private Timer mHardwareValueQueryTimer;
     private MqttAndroidClient mPublishClient;
     private Timer mAutoLockTimer;
-    private long mHardwareValueQueryInterval;
+    private static final long mHardwareValueQueryInterval = 5000;
 
     public synchronized static void weight(Steelyard.SteelyardCallback callback) {
         if (mManager == null) {
@@ -145,8 +149,6 @@ public class HardwareService extends Service {
         settings.TVOCsDeviceName[1] = "/dev/ttysWK3";
         settings.SHT3xDeviceName = "/dev/i2c-7";
         mManager = new CabinetManager(settings);
-        lightGreen();
-        turnOffFan();
     }
 
     @Override
@@ -156,10 +158,9 @@ public class HardwareService extends Service {
         if (mPublishClient == null) {
             mPublishClient = new MqttAndroidClient(this, RemoteAPI.MQTT.MQTT_ROOT, PublisherID);
         }
-        mPeriods = CabinetCore.getSubBoardPeriod(this);
 //        initMQTTPublishClient();
         initCabinetManager();
-        initHardwareValueQueryTimer(mPeriods[2]);
+        initHardwareValueQueryTimer();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -174,33 +175,28 @@ public class HardwareService extends Service {
         }
     }
 
-    private void initHardwareValueQueryTimer(int interval) {
+    private void initHardwareValueQueryTimer() {
         if (mHardwareValueQueryTimer != null) {
-            if (mHardwareValueQueryInterval != interval) {
-                isDoHardwareValueQuery.set(false);
-                mHardwareValueQueryTimer.cancel();
-                mHardwareValueQueryTimer = null;
-            } else {
-                return;
-            }
+            isDoHardwareValueQuery.set(false);
+            mHardwareValueQueryTimer.cancel();
+            mHardwareValueQueryTimer = null;
         }
-        mHardwareValueQueryInterval = interval;
         Log.d(TAG, "Init Hardware Value QueryTimer");
-//        mHardwareValueQueryTimer = new Timer("HardwareValueQueryTime Thread");
-//        mHardwareValueQueryTimer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (isDoHardwareValueQuery.getAndSet(true)) {
-//                    return;
-//                }
-//                Log.d(TAG, "Do hardware value query");
-//                initMQTTPublishClient();
-//                HardwareValue value = getHardwareValue();
-//                notifyValue(value);
-//                publishValue(value);
-//                isDoHardwareValueQuery.set(false);
-//            }
-//        }, 0, mHardwareValueQueryInterval);
+        mHardwareValueQueryTimer = new Timer("HardwareValueQueryTime Thread");
+        mHardwareValueQueryTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (isDoHardwareValueQuery.getAndSet(true)) {
+                    return;
+                }
+                Log.d(TAG, "Do hardware value query");
+                initMQTTPublishClient();
+                HardwareValue value = getHardwareValue();
+                notifyValue(value);
+                publishValue(value);
+                isDoHardwareValueQuery.set(false);
+            }
+        }, 0, mHardwareValueQueryInterval);
     }
 
     private void notifyValue(HardwareValue value) {
@@ -231,7 +227,6 @@ public class HardwareService extends Service {
         if (mPublishClient.isConnected() && value != null) {
             try {
                 String payload = CabinetCore.GSON.toJson(value);
-
                 Log.d(TAG, "MQTT JSON:" + payload);
                 MqttMessage message = new MqttMessage();
                 message.setPayload(payload.getBytes());
@@ -248,9 +243,17 @@ public class HardwareService extends Service {
         Log.d(TAG, "Get HardwareValue: " + mLogTimeFormat.format(new Date(createTime)));
         try {
             HardwareValue hValue = new HardwareValue();
+            SetupValue setupValue = ModbusService.readSetupValue();
+            if (setupValue.e == null) {
+                hValue.setupValue = setupValue;
+            }
             EnvironmentStatus environmentStatus = ModbusService.readEnvironmentStatus();
-            if (environmentStatus.e != null) {
+            if (environmentStatus.e == null) {
                 hValue.environmentStatus = environmentStatus;
+            }
+            AirConditionerStatus airConditionerStatus = ModbusService.readAirConditionerStatus();
+            if (airConditionerStatus.e == null) {
+                hValue.airConditionerStatus = airConditionerStatus;
             }
             HardwareValue._Cache = hValue;
             Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));

@@ -25,8 +25,6 @@ public class Config {
     public static final String UN_SUBMIT_USAGE_INFO = "UN_SUBMIT_USAGE_INFO";
     public static final String UN_SUBMIT_TAKE_OUT_INFO = "UN_SUBMIT_TAKE_OUT_INFO";
     public static final String PRINTER_BLUETOOTH_INFO = "PRINTER_BLUETOOTH_INFO";
-    public static final String MAIN_TVOC_COUNT = "MAIN_TVOC_COUNT";
-    public static final String SUB_BOARD_PERIOD = "SUB_BOARD_PERIOD";
     public static final String SYSPRE_CAMERA_VERIFY_CODE = "SYSPRE_CAMERA_VERIFY_CODE";
 
     public static final String ARC_APP_ID = "5UQUZXBwq4RknCfrk4zs7nBew3BQrNh7ZQH1ALQybdNR";
