@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +22,11 @@ import androidx.core.app.ActivityCompat;
 
 import java.text.DecimalFormat;
 import java.util.Objects;
-import java.util.Set;
 
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
+import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.SetupValue;
 import me.liuzs.cabinetmanager.util.Util;
@@ -42,10 +43,11 @@ public class MainActivity extends BaseActivity {
     private final DecimalFormat mDecimalFormat = new DecimalFormat("0.00");
     private final DecimalFormat mHumiDecimalFormat = new DecimalFormat("0");
     private final DecimalFormat mTempDecimalFormat = new DecimalFormat("0.0");
-    private TextView mVOCLowPart, mVOCUpperPart, mFGLowPart, mFGUpperPart, mHumidityA, mHumidityB, mTemperatureA, mTemperatureB, mCabinetName, mACTargetTemp;
-    private ImageView mNetworkStatus, mACStatus, mACCtrlModel, mACWorkModel, mFanStatus;
+    private TextView mVOCLowPart, mVOCUpperPart, mFGLowPart, mFGUpperPart, mHumidityA, mHumidityB, mTemperatureA, mTemperatureB, mCabinetName, mACTargetTemp, mFanSpeed;
+    private ImageView mNetworkStatus, mACStatus, mACCtrlModel, mACWorkModel, mFanStatus, mFanStatusDetail;
     private HardwareValueBroadcastReceiver mHardwareValueBroadcastReceiver;
     private HardwareValue mHardwareValue = null;
+    private LinearLayout mAlertStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,10 @@ public class MainActivity extends BaseActivity {
         mACTargetTemp = findViewById(R.id.tvACTempValue);
 
         mFanStatus = findViewById(R.id.ivFanStatusValue);
+        mFanStatusDetail = findViewById(R.id.ivFanStatusDetailValue);
+        mFanSpeed = findViewById(R.id.tvFanSpeedValue);
+
+        mAlertStatus = findViewById(R.id.llAlertStatus);
     }
 
     private void showHardwareValue(HardwareValue value) {
@@ -134,7 +140,37 @@ public class MainActivity extends BaseActivity {
                     mACWorkModel.setImageResource(R.drawable.ic_ac_work_model_air_supply);
                     break;
             }
+            mACTargetTemp.setText(String.valueOf(airConditionerStatus.targetTemp));
         }
+
+        FrequencyConverterStatus frequencyConverterStatus = mHardwareValue.frequencyConverterStatus;
+        if (frequencyConverterStatus != null) {
+            if (frequencyConverterStatus.status == FrequencyConverterStatus.Status.Clockwise || frequencyConverterStatus.status == FrequencyConverterStatus.Status.Counterclockwise) {
+                mFanStatus.setImageResource(R.drawable.ic_run);
+            } else {
+                mFanStatus.setImageResource(R.drawable.ic_stop);
+            }
+            switch (frequencyConverterStatus.status) {
+                case Clockwise:
+                    mFanStatusDetail.setImageResource(R.drawable.ic_clock_wise);
+                    break;
+                case Counterclockwise:
+                    mFanStatusDetail.setImageResource(R.drawable.ic_counter_colock_wise);
+                    break;
+                case Stop:
+                    mFanStatusDetail.setImageResource(R.drawable.ic_fc_stop);
+                    break;
+                case PowerOff:
+                    mFanStatusDetail.setImageResource(R.drawable.ic_power_off);
+                    break;
+                case Fault:
+                    mFanStatusDetail.setImageResource(R.drawable.ic_fault);
+                    break;
+            }
+            mFanSpeed.setText(String.valueOf(frequencyConverterStatus.rotatingSpeed));
+        }
+
+
     }
 
     @Override

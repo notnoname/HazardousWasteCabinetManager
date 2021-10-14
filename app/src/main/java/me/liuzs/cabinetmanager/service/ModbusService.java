@@ -16,6 +16,7 @@ import com.serotonin.modbus4j.locator.BaseLocator;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
+import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.SetupValue;
 
 public class ModbusService {
@@ -120,6 +121,40 @@ public class ModbusService {
         BaseLocator<Number> loc = BaseLocator.inputRegister(ModbusSlaveId, offset, dataType);
         Number value = getMaster().getValue(loc);
         return value;
+    }
+
+    /**
+     * 读取变频器状态
+     *
+     * @return
+     */
+    public synchronized static FrequencyConverterStatus readFrequencyConverterStatus() {
+        FrequencyConverterStatus frequencyConverterStatus = new FrequencyConverterStatus();
+
+        try {
+            BatchRead<Integer> batch = new BatchRead<Integer>();
+            batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, FC.FCStatusAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, FC.FCRotatingSpeedAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, FC.FCFrequencyAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(3, BaseLocator.holdingRegister(ModbusSlaveId, FC.FCFrequencyTargetAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+
+            ModbusMaster master = getMaster();
+
+            batch.setContiguousRequests(false);
+            BatchResults<Integer> results = master.send(batch);
+
+            frequencyConverterStatus.status = FrequencyConverterStatus.Status.values()[getIntValue(results, 0)];
+            frequencyConverterStatus.rotatingSpeed = getIntValue(results, 1);
+            frequencyConverterStatus.frequency = getIntValue(results, 2) / 100f;
+            frequencyConverterStatus.targetFrequency = getIntValue(results, 3) / 100f;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            frequencyConverterStatus.e = e;
+        }
+
+        Log.d(TAG, CabinetCore.GSON.toJson(frequencyConverterStatus));
+        return frequencyConverterStatus;
     }
 
     /**
@@ -286,6 +321,16 @@ public class ModbusService {
         private static final int ACTargetTempAddress = 40582;
         private static final int ACFanSpeedModelAddress = 40583;
         private static final int ACFanSweepAddress = 40584;
+    }
+
+    /**
+     * 变频器
+     */
+    public class FC {
+        private static final int FCStatusAddress = 40553;
+        private static final int FCRotatingSpeedAddress = 40562;
+        private static final int FCFrequencyAddress = 40557;
+        private static final int FCFrequencyTargetAddress = 40558;
     }
 
     /**

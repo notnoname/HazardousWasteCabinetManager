@@ -230,7 +230,7 @@
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:id="@+id/ivFanCtrlOption"
+                    android:id="@+id/ivFanStatusDetailValue"
                     android:layout_width="48px"
                     android:layout_height="48px"
                     android:layout_gravity="center_vertical"

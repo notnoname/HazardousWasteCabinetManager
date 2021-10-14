@@ -1,11 +1,11 @@
 package me.liuzs.cabinetmanager.model;
 
 public class FrequencyConverterStatus {
-    public enum StatusType {
+    public enum Status {
         Clockwise(1), Counterclockwise(2), Stop(3), Fault(4), PowerOff(5);
         private final int id;
 
-        StatusType(int id) {
+        Status(int id) {
             this.id = id;
         }
 
@@ -14,8 +14,14 @@ public class FrequencyConverterStatus {
         }
     }
 
-    public StatusType statusType = StatusType.PowerOff;
+    public Status status = Status.PowerOff;
 
-    public float RotatingSpeed;
+    public float rotatingSpeed;
+
+    public float frequency;
+
+    public float targetFrequency;
+
+    public Exception e;
 
 }

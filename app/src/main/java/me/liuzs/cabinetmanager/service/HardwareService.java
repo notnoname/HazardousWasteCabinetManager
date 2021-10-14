@@ -35,6 +35,7 @@ import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
+import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.SetupValue;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
@@ -254,6 +255,10 @@ public class HardwareService extends Service {
             AirConditionerStatus airConditionerStatus = ModbusService.readAirConditionerStatus();
             if (airConditionerStatus.e == null) {
                 hValue.airConditionerStatus = airConditionerStatus;
+            }
+            FrequencyConverterStatus frequencyConverterStatus = ModbusService.readFrequencyConverterStatus();
+            if (frequencyConverterStatus.e == null) {
+                hValue.frequencyConverterStatus = frequencyConverterStatus;
             }
             HardwareValue._Cache = hValue;
             Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));
