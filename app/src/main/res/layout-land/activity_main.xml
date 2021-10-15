@@ -158,7 +158,7 @@
                 app:layout_constraintTop_toBottomOf="@id/llFanStatus">
 
                 <TextView
-                    android:id="@+id/tvAlertTempValue"
+                    android:id="@+id/tvAlertValue"
                     android:layout_width="180px"
                     android:layout_height="wrap_content"
                     android:layout_margin="10px"

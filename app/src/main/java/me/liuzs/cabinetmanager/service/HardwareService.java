@@ -33,6 +33,7 @@ import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
+import me.liuzs.cabinetmanager.model.AlertStatus;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
@@ -259,6 +260,10 @@ public class HardwareService extends Service {
             FrequencyConverterStatus frequencyConverterStatus = ModbusService.readFrequencyConverterStatus();
             if (frequencyConverterStatus.e == null) {
                 hValue.frequencyConverterStatus = frequencyConverterStatus;
+            }
+            AlertStatus alertStatus = ModbusService.readAlertStatus();
+            if (alertStatus.e == null) {
+                hValue.alertStatus = alertStatus;
             }
             HardwareValue._Cache = hValue;
             Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));

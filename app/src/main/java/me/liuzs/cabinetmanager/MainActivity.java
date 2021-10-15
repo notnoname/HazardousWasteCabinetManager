@@ -6,9 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,10 +22,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import org.w3c.dom.Text;
+
 import java.text.DecimalFormat;
 import java.util.Objects;
 
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
+import me.liuzs.cabinetmanager.model.AlertStatus;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
@@ -170,7 +175,50 @@ public class MainActivity extends BaseActivity {
             mFanSpeed.setText(String.valueOf(frequencyConverterStatus.rotatingSpeed));
         }
 
+        AlertStatus alertStatus = mHardwareValue.alertStatus;
+        if (alertStatus != null) {
+            mAlertStatus.removeAllViews();
+            boolean safe = !alertStatus.vocAlert && !alertStatus.fgAlert && !alertStatus.tempHighAlert && !alertStatus.tempLowAlert && !alertStatus.humidityHighAlert && !alertStatus.humidityLowAlert && !alertStatus.fireAlert;
+            if (safe) {
+                addAlertStatusTextViewToContainer("无异常", R.drawable.background_state_green);
+            } else {
+                if (alertStatus.vocAlert) {
+                    addAlertStatusTextViewToContainer("VOC浓度高", R.drawable.background_state_red);
+                }
+                if (alertStatus.fgAlert) {
+                    addAlertStatusTextViewToContainer("可燃气体浓度高", R.drawable.background_state_red);
+                }
+                if (alertStatus.tempHighAlert) {
+                    addAlertStatusTextViewToContainer("温度过高", R.drawable.background_state_red);
+                }
+                if (alertStatus.tempLowAlert) {
+                    addAlertStatusTextViewToContainer("温度过低", R.drawable.background_state_red);
+                }
+                if (alertStatus.humidityHighAlert) {
+                    addAlertStatusTextViewToContainer("湿度高", R.drawable.background_state_red);
+                }
+                if (alertStatus.humidityLowAlert) {
+                    addAlertStatusTextViewToContainer("湿度低", R.drawable.background_state_red);
+                }
+                if (alertStatus.fireAlert) {
+                    addAlertStatusTextViewToContainer("火警", R.drawable.background_state_red);
+                }
+            }
 
+        }
+    }
+
+    public void addAlertStatusTextViewToContainer(String text, int bgRes) {
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setTextColor(Color.WHITE);
+        textView.setTextSize(24);
+        textView.setPadding(10, 10, 10, 10);
+        textView.setGravity(Gravity.CENTER);
+        textView.setBackgroundResource(bgRes);
+        LinearLayout.LayoutParams lps = new LinearLayout.LayoutParams(180, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lps.setMargins(10, 10, 10, 10);
+        mAlertStatus.addView(textView, lps);
     }
 
     @Override

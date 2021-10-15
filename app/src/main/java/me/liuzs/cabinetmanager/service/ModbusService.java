@@ -368,13 +368,13 @@ public class ModbusService {
      * 空调数据
      */
     public class Alert {
-        private static final int AlertVOCAddress = 0x002017;
-        private static final int AlertFGAddress = 0x002018;
-        private static final int AlertTempHighAddress = 0x002019;
-        private static final int AlertHumidityHighAddress = 0x002020;
-        private static final int AlertTempLowAddress = 0x002021;
-        private static final int AlertHumidityLowAddress = 0x002022;
-        private static final int AlertFireAddress = 0x002023;
+        private static final int AlertVOCAddress = 2017;
+        private static final int AlertFGAddress = 2018;
+        private static final int AlertTempHighAddress = 2019;
+        private static final int AlertHumidityHighAddress = 2020;
+        private static final int AlertTempLowAddress = 2021;
+        private static final int AlertHumidityLowAddress = 2022;
+        private static final int AlertFireAddress = 2023;
     }
 
     /**
