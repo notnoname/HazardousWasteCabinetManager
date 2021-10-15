@@ -15,6 +15,7 @@ import com.serotonin.modbus4j.locator.BaseLocator;
 
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
+import me.liuzs.cabinetmanager.model.AlertStatus;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.SetupValue;
@@ -155,6 +156,46 @@ public class ModbusService {
 
         Log.d(TAG, CabinetCore.GSON.toJson(frequencyConverterStatus));
         return frequencyConverterStatus;
+    }
+
+    /**
+     * 读取告警状态
+     *
+     * @return
+     */
+    public synchronized static AlertStatus readAlertStatus() {
+        AlertStatus alertStatus = new AlertStatus();
+
+        try {
+            BatchRead<Integer> batch = new BatchRead<Integer>();
+            batch.addLocator(0, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertVOCAddress - 1));
+            batch.addLocator(1, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertFGAddress - 1));
+            batch.addLocator(2, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertTempHighAddress - 1));
+            batch.addLocator(3, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertHumidityHighAddress - 1));
+            batch.addLocator(4, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertTempLowAddress - 1));
+            batch.addLocator(5, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertHumidityLowAddress - 1));
+            batch.addLocator(6, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertFireAddress - 1));
+
+            ModbusMaster master = getMaster();
+
+            batch.setContiguousRequests(false);
+            BatchResults<Integer> results = master.send(batch);
+
+            alertStatus.vocAlert = (Boolean) results.getValue(0);
+            alertStatus.fgAlert = (Boolean) results.getValue(1);
+            alertStatus.tempHighAlert = (Boolean) results.getValue(2);
+            alertStatus.humidityHighAlert = (Boolean) results.getValue(3);
+            alertStatus.tempLowAlert = (Boolean) results.getValue(4);
+            alertStatus.humidityLowAlert = (Boolean) results.getValue(5);
+            alertStatus.fireAlert = (Boolean) results.getValue(6);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            alertStatus.e = e;
+        }
+
+        Log.d(TAG, CabinetCore.GSON.toJson(alertStatus));
+        return alertStatus;
     }
 
     /**
@@ -321,6 +362,19 @@ public class ModbusService {
         private static final int ACTargetTempAddress = 40582;
         private static final int ACFanSpeedModelAddress = 40583;
         private static final int ACFanSweepAddress = 40584;
+    }
+
+    /**
+     * 空调数据
+     */
+    public class Alert {
+        private static final int AlertVOCAddress = 0x002017;
+        private static final int AlertFGAddress = 0x002018;
+        private static final int AlertTempHighAddress = 0x002019;
+        private static final int AlertHumidityHighAddress = 0x002020;
+        private static final int AlertTempLowAddress = 0x002021;
+        private static final int AlertHumidityLowAddress = 0x002022;
+        private static final int AlertFireAddress = 0x002023;
     }
 
     /**
