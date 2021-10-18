@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24px"
                 android:background="@drawable/background_button"
-                android:onClick="onSubBoardButtonClick"
+                android:onClick="onControlPanelButtonClick"
                 android:text="@string/sub_board_info"
                 android:textColor="@color/white"
                 android:textSize="32px"

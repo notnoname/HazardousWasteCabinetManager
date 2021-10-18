@@ -1,4 +1,4 @@
-package me.liuzs.cabinetmanager.ui.subboardinfo;
+package me.liuzs.cabinetmanager.ui.singlenumbermanagement;
 
 import android.view.View;
 import android.widget.ImageView;

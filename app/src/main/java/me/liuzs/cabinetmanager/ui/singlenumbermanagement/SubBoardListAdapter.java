@@ -1,9 +1,5 @@
-package me.liuzs.cabinetmanager.ui.subboardinfo;
+package me.liuzs.cabinetmanager.ui.singlenumbermanagement;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +12,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import me.liuxy.cabinet.SubBoard;
-import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.R;
-import me.liuzs.cabinetmanager.SubBoardInfoActivity;
-import me.liuzs.cabinetmanager.model.HardwareValue;
+import me.liuzs.cabinetmanager.SingleNumberManagementActivity;
 import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;
 
 public class SubBoardListAdapter extends RecyclerView.Adapter<SubBoardStatusItemViewHolder> {
 
     private final List<SubBoardStatusInfo> mResultList = new LinkedList<>();
-    private SubBoardInfoActivity mActivity;
+    private SingleNumberManagementActivity mActivity;
 
-    public SubBoardListAdapter(SubBoardInfoActivity activity) {
+    public SubBoardListAdapter(SingleNumberManagementActivity activity) {
         super();
         mActivity = activity;
     }

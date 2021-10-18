@@ -22,8 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 import java.util.Objects;
 
@@ -189,10 +187,10 @@ public class MainActivity extends BaseActivity {
                     addAlertStatusTextViewToContainer("可燃气体浓度高", R.drawable.background_state_red);
                 }
                 if (alertStatus.tempHighAlert) {
-                    addAlertStatusTextViewToContainer("温度过高", R.drawable.background_state_red);
+                    addAlertStatusTextViewToContainer("温度高", R.drawable.background_state_red);
                 }
                 if (alertStatus.tempLowAlert) {
-                    addAlertStatusTextViewToContainer("温度过低", R.drawable.background_state_red);
+                    addAlertStatusTextViewToContainer("温度低", R.drawable.background_state_red);
                 }
                 if (alertStatus.humidityHighAlert) {
                     addAlertStatusTextViewToContainer("湿度高", R.drawable.background_state_red);
@@ -281,16 +279,31 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onAuthSuccess(CabinetCore.RoleType type) {
-                Intent intent = new Intent(MainActivity.this, LockerManageActivity.class);
+                Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
                 startActivity(intent);
             }
         });
     }
 
 
-    public void onSubBoardButtonClick(View view) {
-        Intent intent = new Intent(MainActivity.this, SubBoardInfoActivity.class);
-        startActivity(intent);
+    public void onControlPanelButtonClick(View view) {
+
+        if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
+            Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
+            startActivity(intent);
+        } else {
+            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
+                @Override
+                public void onAuthCancel() {
+                }
+
+                @Override
+                public void onAuthSuccess(CabinetCore.RoleType type) {
+                    Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     public void onSettingButtonClick(View view) {

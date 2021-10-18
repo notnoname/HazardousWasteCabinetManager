@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ControlPanelActivity">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/background" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30px"
+        android:layout_marginRight="30px"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertSoundLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="80px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clAlertHumidity">
+
+            <TextView
+                android:id="@+id/tvAlertSoundLightLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/sound_light_alert"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertSoundLight"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertSoundLightLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertHumidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="80px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clAlertTemp">
+
+            <TextView
+                android:id="@+id/tvAlertHumidityHighLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/humidity_high_alert"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertHumidityHigh"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertHumidityHighLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <EditText
+                android:id="@+id/etAlertHumidityHighValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertHumidityHigh"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvAlertHumidityHighUnit"
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/icon_percent_sign"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertHumidityHighValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAlertHumidityLowLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64px"
+                android:gravity="center"
+                android:text="@string/humidity_low_alert"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertHumidityHighUnit"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertHumidityLow"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertHumidityLowLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertHumidityLowValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertHumidityLow"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/icon_percent_sign"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertHumidityLowValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertTemp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="80px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clAlertFG">
+
+            <TextView
+                android:id="@+id/tvAlertTempLowLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64px"
+                android:gravity="center"
+                android:text="@string/temp_low_alert"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertTempHighUnit"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertTempLowValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertTempLow"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/icon_celsius"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertTempLowValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertTempLow"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertTempLowLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAlertTempHighLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/temp_high_alert"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertTemHigh"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertTempHighLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertTempHighValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertTemHigh"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvAlertTempHighUnit"
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/icon_celsius"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertTempHighValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertFG"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="80px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clAlertVOC">
+
+            <TextView
+                android:id="@+id/tvAlertFGLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/fg_alert"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertFG"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:checked="true"
+                android:enabled="false"
+                android:gravity="center"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertFGLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertFGValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertFG"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertFGValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAlertVOC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="64px"
+            android:layout_marginEnd="80px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clFanUnion">
+
+            <TextView
+                android:id="@+id/tvAlertVOCLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/voc_alert"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swAlertVOC"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:gravity="center"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvAlertVOCLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etAlertVOCValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swAlertVOC"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etAlertVOCValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFanUnion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="80px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clFanTimer">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm_upper"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etFanHighVOCValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFanUnionLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/fan_ppm_union"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etFanLowVOCValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanUnionLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <EditText
+                android:id="@+id/etFanHighVOCValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="24px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal|numberSigned"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvLowVOCUnit"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvLowVOCUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/ppm_low"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etFanLowVOCValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFanTimer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="32px"
+            android:layout_marginEnd="80px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clFanModel">
+
+            <EditText
+                android:id="@+id/etFanFrequencyValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanFrequencyLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:layout_width="40px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:gravity="center"
+                android:text="@string/Hz"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etFanFrequencyValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFanFrequencyLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64px"
+                android:gravity="center"
+                android:text="@string/init_frequency"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanStop"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFanStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:text="@string/close"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etFanStopTimeValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etFanStopTimeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="24px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanStart"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvFanStart"
+                android:layout_width="30px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8px"
+                android:gravity="center"
+                android:text="@string/open"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etFanRunTimeValue"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etFanRunTimeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="40px"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_edit"
+                android:ems="3"
+                android:gravity="center"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanTimer1Label"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/tvFanTimer1Label"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/fan_run_stop_time"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFanTimerUnitLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/minute"
+                android:textColor="@color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvFanTimer1Label"
+                app:layout_constraintVertical_bias="0.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clFanModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80px"
+            android:layout_marginTop="64px"
+            android:layout_marginEnd="80px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvFanModelLabel"
+                android:layout_width="170px"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/work_model"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFanModelValue"
+                android:layout_width="120px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32px"
+                android:background="@drawable/background_state_red"
+                android:gravity="center"
+                android:padding="5px"
+                android:text="@string/manual"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanModelLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/swFanModel"
+                android:layout_width="130px"
+                android:layout_height="40px"
+                android:layout_marginStart="24px"
+                android:gravity="center"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanModelValue"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24px"
+            android:background="@drawable/background_button"
+            android:padding="10dp"
+            android:text="@string/saveSetup"
+            android:textColor="@android:color/white"
+            android:textSize="40px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:theme="@style/Theme.CabinetManager.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tool_bar_height"
+            android:background="@android:color/transparent"
+            android:padding="16px"
+            app:popupTheme="@style/Theme.CabinetManager.PopupOverlay">
+
+            <ImageButton
+                android:id="@+id/toolbar_back"
+                android:layout_width="90px"
+                android:layout_height="40px"
+                android:layout_gravity="start|center_vertical"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/app_name"
+                android:onClick="onBackButtonClick"
+                android:scaleType="fitCenter"
+                android:src="@drawable/back_button"
+                tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="@dimen/tool_bar_title_height"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/toolbar_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="24px" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

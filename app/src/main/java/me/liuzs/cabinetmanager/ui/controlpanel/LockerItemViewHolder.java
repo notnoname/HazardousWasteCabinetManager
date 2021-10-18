@@ -1,4 +1,4 @@
-package me.liuzs.cabinetmanager.ui.lockermanage;
+package me.liuzs.cabinetmanager.ui.controlpanel;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import me.liuzs.cabinetmanager.CabinetCore;
-import me.liuzs.cabinetmanager.LockerManageActivity;
+import me.liuzs.cabinetmanager.ControlPanelActivity;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.LockerStatus;
@@ -28,7 +28,7 @@ public class LockerItemViewHolder extends RecyclerView.ViewHolder implements Vie
     ImageView status;
     Button lock, unlock;
     LockerStatus lockerStatus;
-    LockerManageActivity activity;
+    ControlPanelActivity activity;
     private boolean isWantUnlock = true;
     private final ServiceConnection mlockServiceConnection = new ServiceConnection() {
         @Override

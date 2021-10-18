@@ -1,4 +1,4 @@
-package me.liuzs.cabinetmanager.ui.lockermanage;
+package me.liuzs.cabinetmanager.ui.controlpanel;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +11,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import me.liuzs.cabinetmanager.LockerManageActivity;
+import me.liuzs.cabinetmanager.ControlPanelActivity;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.model.LockerStatus;
 
 public class LockerListAdapter extends RecyclerView.Adapter<LockerItemViewHolder> {
 
     private List<LockerStatus> mResultList;
-    private LockerManageActivity mActivity;
+    private ControlPanelActivity mActivity;
 
-    public LockerListAdapter(LockerManageActivity activity) {
+    public LockerListAdapter(ControlPanelActivity activity) {
         super();
         mActivity = activity;
     }

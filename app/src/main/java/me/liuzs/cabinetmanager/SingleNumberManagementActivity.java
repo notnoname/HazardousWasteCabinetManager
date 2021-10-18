@@ -22,16 +22,16 @@ import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;
 import me.liuzs.cabinetmanager.service.ModbusService;
-import me.liuzs.cabinetmanager.ui.subboardinfo.SubBoardListAdapter;
-import me.liuzs.cabinetmanager.ui.subboardinfo.SubBoardStatusItemViewHolder;
+import me.liuzs.cabinetmanager.ui.singlenumbermanagement.SubBoardListAdapter;
+import me.liuzs.cabinetmanager.ui.singlenumbermanagement.SubBoardStatusItemViewHolder;
 import me.liuzs.cabinetmanager.util.Util;
 
 /**
- * 子板环境信息
+ * 单号管理
  */
-public class SubBoardInfoActivity extends BaseActivity {
+public class SingleNumberManagementActivity extends BaseActivity {
 
-    public static final String TAG = "SubBoardInfoActivity";
+    public static final String TAG = "SingleNumberManagementActivity";
     private final SubBoardListAdapter mAdapter = new SubBoardListAdapter(this);
     private final Gson mGson = new Gson();
     private final List<SubBoardStatusInfo> mSubBoardStatusInfo = new LinkedList<>();
@@ -45,7 +45,7 @@ public class SubBoardInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub_board_info);
+        setContentView(R.layout.activity_single_number_management);
         Util.fullScreen(this);
 
         mRecyclerView = findViewById(R.id.rvRecord);

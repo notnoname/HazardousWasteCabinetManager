@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 @SuppressWarnings("unused")
 public class StorageUtility {
 
-    private static final String CABINET_DIR = "CabinetManager";
     private static String BaseDir = null;
     private static StorageUtility INSTANCE = new StorageUtility();
     private Context mContext;
@@ -22,8 +21,7 @@ public class StorageUtility {
     public static synchronized void init(Context context) {
         INSTANCE.mContext = context;
         BaseDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + File.separator;
-        String path = BaseDir + CABINET_DIR;
-        File file = new File(path);
+        File file = new File(BaseDir);
         if (file.exists() && !file.isDirectory()) {
             file.delete();
         }
@@ -38,7 +36,7 @@ public class StorageUtility {
      * @return 外部存储空间路径。
      */
     public static String getApplicationExternalWorkDirPath() {
-        return BaseDir + CABINET_DIR + File.separator;
+        return BaseDir;
     }
 
     /**

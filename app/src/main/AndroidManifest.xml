@@ -110,11 +110,11 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
-            android:name=".LockerManageActivity"
+            android:name=".ControlPanelActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
-            android:name=".SubBoardInfoActivity"
+            android:name=".SingleNumberManagementActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
