@@ -236,7 +236,7 @@
             app:layout_constraintTop_toBottomOf="@+id/clFanRunModel">
 
             <TextView
-                android:id="@+id/tvSoungLighCtrlLabel"
+                android:id="@+id/tvOxygenCtrlLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="48px"
@@ -249,18 +249,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/swSoundLightCtrl"
+                android:id="@+id/swOxygenCtrl"
                 android:layout_width="130px"
                 android:layout_height="40px"
                 android:layout_marginStart="24px"
                 android:gravity="center"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvSoundLightCtrlValue"
+                app:layout_constraintStart_toEndOf="@+id/tvOxygenCtrlValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvSoundLightCtrlValue"
+                android:id="@+id/tvOxygenCtrlValue"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24px"
@@ -271,11 +271,11 @@
                 android:textColor="@color/white"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvSoungLighCtrlLabel"
+                app:layout_constraintStart_toEndOf="@+id/tvOxygenCtrlLabel"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvSoundLightModelLabel"
+                android:id="@+id/tvSoundLightAlertLabel"
                 android:layout_width="170px"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -287,7 +287,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvSoundLightModelValue"
+                android:id="@+id/tvSoundLightAlertValue"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24px"
@@ -298,18 +298,18 @@
                 android:textColor="@color/white"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvSoundLightModelLabel"
+                app:layout_constraintStart_toEndOf="@+id/tvSoundLightAlertLabel"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/swSoundLightModel"
+                android:id="@+id/swSoundLightAlert"
                 android:layout_width="130px"
                 android:layout_height="40px"
                 android:layout_marginStart="24px"
                 android:gravity="center"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvSoundLightModelValue"
+                app:layout_constraintStart_toEndOf="@+id/tvSoundLightAlertValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -322,7 +322,7 @@
                 android:textColor="@color/white"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/swSoundLightModel"
+                app:layout_constraintStart_toEndOf="@+id/swSoundLightAlert"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.kyleduo.switchbutton.SwitchButton

@@ -20,6 +20,7 @@ import java.util.List;
 public class SpinnerActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String KEY_SELECT_VALUE = "KEY_SELECT_VALUE";
+    public static final String KEY_SELECT_INDEX = "KEY_SELECT_INDEX";
     public static final String KEY_OPTIONS = "KEY_OPTIONS";
     public static final String KEY_TIP_INFO = "KEY_TIP_INFO";
     public static final String TAG = "SpinnerActivity";
@@ -46,8 +47,10 @@ public class SpinnerActivity extends AppCompatActivity implements View.OnClickLi
 
     private void showOptions() {
         mLLOptions.removeAllViews();
+        int index = 0;
         for (String option : mOptions) {
             TextView textView = new TextView(this);
+            textView.setTag(index);
             textView.setBackgroundResource(R.drawable.background_info_area);
             textView.setOnClickListener(this);
             textView.setText(option);
@@ -66,6 +69,7 @@ public class SpinnerActivity extends AppCompatActivity implements View.OnClickLi
         TextView tv = (TextView) v;
         Intent data = new Intent();
         data.putExtra(KEY_SELECT_VALUE, tv.getText());
+        data.putExtra(KEY_SELECT_INDEX, tv.getTag().toString());
         setResult(RESULT_OK, data);
         finish();
     }

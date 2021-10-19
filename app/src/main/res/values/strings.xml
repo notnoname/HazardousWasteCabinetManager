@@ -118,6 +118,11 @@
     <string name="fc_reset">变频器复位</string>
     <string name="ac_control_model">空调控制模式</string>
     <string name="ac_work_model">空调工作模式</string>
+    <string name="ac_work_model_auto">自动</string>
+    <string name="ac_work_model_refrigeration">制冷</string>
+    <string name="ac_work_model_heating">制热</string>
+    <string name="ac_work_model_dehumidification">除湿</string>
+    <string name="ac_work_model_fan">送风</string>
     <string name="ac_remote_ctrl_model">遥控器模式</string>
     <string name="voc_threshold">VOC阈值</string>
     <string name="voc_alert">VOC告警</string>
