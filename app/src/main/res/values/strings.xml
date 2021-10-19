@@ -41,6 +41,7 @@
     <string name="control_panel">控制面板</string>
     <string name="fan_stop">关闭风机</string>
     <string name="no_manage">单号管理</string>
+    <string name="reset">复位</string>
     <string name="user_management">使用人员管理</string>
     <string name="set_value_management">参数设置</string>
     <string name="hardware_log">设备日志</string>
@@ -113,6 +114,11 @@
     <string name="init_frequency">初始频率</string>
     <string name="minute">(分钟)</string>
     <string name="fan_ppm_union">风机联动</string>
+    <string name="ac_power_switch">空调开关</string>
+    <string name="fc_reset">变频器复位</string>
+    <string name="ac_control_model">空调控制模式</string>
+    <string name="ac_work_model">空调工作模式</string>
+    <string name="ac_remote_ctrl_model">遥控器模式</string>
     <string name="voc_threshold">VOC阈值</string>
     <string name="voc_alert">VOC告警</string>
     <string name="fg_alert">可燃气体告警</string>

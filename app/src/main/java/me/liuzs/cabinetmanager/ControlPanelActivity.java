@@ -1,25 +1,16 @@
 package me.liuzs.cabinetmanager;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
-import com.google.gson.Gson;
+import com.kyleduo.switchbutton.SwitchButton;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Objects;
 
-import me.liuxy.cabinet.SubBoard;
-import me.liuzs.cabinetmanager.model.Cabinet;
-import me.liuzs.cabinetmanager.model.HardwareValue;
-import me.liuzs.cabinetmanager.model.LockerStatus;
 import me.liuzs.cabinetmanager.util.Util;
 
 /**
@@ -33,11 +24,21 @@ public class ControlPanelActivity extends BaseActivity {
     void afterRequestPermission(int requestCode, boolean isAllGranted) {
     }
 
+    private TextView mFanWorkModelValue, mSoundLightAlertValue, mFanPowerValue, mOxygenValue, mACCtrlModelValue, mACWorkModelValue, mACPowerValue, mRemoteCtrlModelValue;
+    private Button mFCReset;
+    private SwitchButton mFanWorkModel, mSoundLightAlert, mFanPower, mOxygen, mACCtrlModel, mACPower;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control_panel);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
         Util.fullScreen(this);
+        ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.control_panel);
+        mFanWorkModelValue = findViewById(R.id.tvFanWorkModelValue);
+
     }
 
     @Override
@@ -51,6 +52,18 @@ public class ControlPanelActivity extends BaseActivity {
     }
 
     public void onBackButtonClick(View view) {
+        finish();
+    }
+
+    public void onFCResetButtonClick(View view) {
+        finish();
+    }
+
+    public void onACWorkModelButtonClick(View view) {
+        finish();
+    }
+
+    public void onRemoteCtrlWorkModelButtonClick(View view) {
         finish();
     }
 }
