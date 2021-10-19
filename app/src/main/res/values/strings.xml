@@ -32,6 +32,8 @@
     <string name="mqtt">MQTT</string>
     <string name="setting">设置</string>
     <string name="fan_status">风机状态</string>
+    <string name="fan_control">风机控制</string>
+    <string name="sound_light_control">光氧控制</string>
     <string name="alert_status">告警状态</string>
     <string name="fan_start">启动风机</string>
     <string name="sub_board_info">副柜环境信息</string>
@@ -111,6 +113,7 @@
     <string name="init_frequency">初始频率</string>
     <string name="minute">(分钟)</string>
     <string name="fan_ppm_union">风机联动</string>
+    <string name="voc_threshold">VOC阈值</string>
     <string name="voc_alert">VOC告警</string>
     <string name="fg_alert">可燃气体告警</string>
     <string name="temp_high_alert">温度过高告警</string>

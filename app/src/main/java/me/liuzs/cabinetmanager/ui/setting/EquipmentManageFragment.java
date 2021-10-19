@@ -29,9 +29,8 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     private final DecimalFormat mDecimalFormat = new DecimalFormat("0.00");
     private SystemSettingActivity mActivity;
     private SetupValue mValue;
-    private SwitchButton mFanWorkModel, mAlertVOC, mAlertFG, mAlertTempHigh, mAlertTempLow, mAlertHumidityHigh, mAlertHumidityLow, mAlertSoundLight;
+    private SwitchButton mAlertVOC, mAlertFG, mAlertTempHigh, mAlertTempLow, mAlertHumidityHigh, mAlertHumidityLow, mAlertSoundLight;
     private EditText mFanRunTimeValue, mFanStopTimeValue, mFanFrequencyValue, mUnionVOCHigh, mUnionVOCLow, mAlertVOCValue, mAlertFGValue, mAlertTempHighValue, mAlertTempLowValue, mAlertHumidityHighValue, mAlertHumidityLowValue;
-    private TextView mFanWorkModelValue;
     private Button mSave;
 
     public EquipmentManageFragment() {
@@ -47,8 +46,6 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_equipment_manage, container, false);
-        mFanWorkModel = view.findViewById(R.id.swFanModel);
-        mFanWorkModelValue = view.findViewById(R.id.tvFanModelValue);
 
         mFanRunTimeValue = view.findViewById(R.id.etFanRunTimeValue);
         mFanStopTimeValue = view.findViewById(R.id.etFanStopTimeValue);
@@ -78,7 +75,6 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
 
         mSave = view.findViewById(R.id.btnSave);
         mSave.setOnClickListener(this);
-        mFanWorkModel.setOnCheckedChangeListener(this);
         mAlertVOC.setOnCheckedChangeListener(this);
         mAlertTempHigh.setOnCheckedChangeListener(this);
         mAlertTempLow.setOnCheckedChangeListener(this);
@@ -99,33 +95,9 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     }
 
     private void showValue() {
-        if(mValue.e != null) {
+        if (mValue.e != null) {
             mActivity.showToast(mValue.e.toString());
             return;
-        }
-        mFanWorkModel.setChecked(mValue.workModel == SetupValue.WorkModel.Auto);
-        switch (mValue.workModel) {
-            case Auto:
-                mFanRunTimeValue.setEnabled(true);
-                mFanStopTimeValue.setEnabled(true);
-                mFanFrequencyValue.setEnabled(true);
-                mUnionVOCHigh.setEnabled(true);
-                mUnionVOCLow.setEnabled(true);
-                mFanWorkModelValue.setText(R.string.auto);
-                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
-                break;
-            case Manual:
-                mFanRunTimeValue.setEnabled(false);
-                mFanStopTimeValue.setEnabled(false);
-                mFanFrequencyValue.setEnabled(false);
-                mUnionVOCHigh.setEnabled(false);
-                mUnionVOCLow.setEnabled(false);
-                mFanWorkModelValue.setText(R.string.manual);
-                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
-                break;
-            case None:
-
-                break;
         }
 
         mFanRunTimeValue.setText(String.valueOf(mValue.fanUnionWorkTime));
@@ -201,9 +173,7 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (buttonView == mFanWorkModel) {
-            mValue.workModel = isChecked ? SetupValue.WorkModel.Auto : SetupValue.WorkModel.Manual;
-        } else if (buttonView == mAlertVOC) {
+        if (buttonView == mAlertVOC) {
             mValue.vocAlertAuto = isChecked;
         } else if (buttonView == mAlertTempHigh) {
             mValue.tempHighAlertAuto = isChecked;
