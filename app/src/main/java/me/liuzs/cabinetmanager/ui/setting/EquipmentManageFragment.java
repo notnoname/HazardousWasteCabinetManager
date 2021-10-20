@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -17,7 +16,7 @@ import java.text.DecimalFormat;
 
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SystemSettingActivity;
-import me.liuzs.cabinetmanager.model.SetupValue;
+import me.liuzs.cabinetmanager.model.modbus.SetupValue;
 import me.liuzs.cabinetmanager.service.ModbusService;
 
 /**

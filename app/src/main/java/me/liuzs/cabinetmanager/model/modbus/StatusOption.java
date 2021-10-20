@@ -1,4 +1,4 @@
-package me.liuzs.cabinetmanager.model;
+package me.liuzs.cabinetmanager.model.modbus;
 
 public class StatusOption {
     public enum FanWorkModel {None, Auto, Manual}

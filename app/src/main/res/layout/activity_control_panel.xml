@@ -212,7 +212,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/swACModel"
+                android:id="@+id/swACCtrlModel"
                 android:layout_width="130px"
                 android:layout_height="40px"
                 android:layout_marginStart="24px"

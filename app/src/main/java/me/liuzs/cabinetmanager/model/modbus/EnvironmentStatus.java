@@ -1,4 +1,4 @@
-package me.liuzs.cabinetmanager.model;
+package me.liuzs.cabinetmanager.model.modbus;
 
 /**
  * 危废管环境监控数据

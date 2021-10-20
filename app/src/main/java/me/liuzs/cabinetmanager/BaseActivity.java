@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,8 +82,10 @@ abstract class BaseActivity extends AppCompatActivity {
         if (mToast == null) {
             mToast = Toast.makeText(this, info, Toast.LENGTH_SHORT);
             TextView v = mToast.getView().findViewById(android.R.id.message);
-            v.setTextColor(Color.GRAY);
+            v.setPadding(10, 10, 10, 10);
+            v.setTextColor(Color.BLACK);
             v.setTextSize(40);
+            v.setGravity(Gravity.CENTER);
             mToast.setGravity(Gravity.CENTER, 0, 0);
         }
         mToast.setText(info);

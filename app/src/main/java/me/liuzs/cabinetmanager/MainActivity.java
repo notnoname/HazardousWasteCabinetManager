@@ -25,13 +25,13 @@ import androidx.core.app.ActivityCompat;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-import me.liuzs.cabinetmanager.model.AirConditionerStatus;
-import me.liuzs.cabinetmanager.model.StatusOption;
+import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
+import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 import me.liuzs.cabinetmanager.model.Cabinet;
-import me.liuzs.cabinetmanager.model.EnvironmentStatus;
-import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
+import me.liuzs.cabinetmanager.model.modbus.EnvironmentStatus;
+import me.liuzs.cabinetmanager.model.modbus.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.HardwareValue;
-import me.liuzs.cabinetmanager.model.SetupValue;
+import me.liuzs.cabinetmanager.model.modbus.SetupValue;
 import me.liuzs.cabinetmanager.util.Util;
 
 public class MainActivity extends BaseActivity {

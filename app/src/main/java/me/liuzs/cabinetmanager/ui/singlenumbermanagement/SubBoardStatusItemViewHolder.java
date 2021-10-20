@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import me.liuzs.cabinetmanager.R;
-import me.liuzs.cabinetmanager.model.SetupValue;
+import me.liuzs.cabinetmanager.model.modbus.SetupValue;
 import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;
 
 public class SubBoardStatusItemViewHolder extends RecyclerView.ViewHolder {

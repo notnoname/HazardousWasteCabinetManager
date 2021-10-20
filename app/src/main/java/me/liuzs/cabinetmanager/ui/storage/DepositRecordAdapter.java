@@ -17,7 +17,6 @@ import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.StorageActivity;
 import me.liuzs.cabinetmanager.model.DepositItem;
-import me.liuzs.cabinetmanager.model.DeviceInfo;
 
 public class DepositRecordAdapter extends RecyclerView.Adapter<DepositRecordViewHolder> {
 
