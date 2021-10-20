@@ -15,10 +15,10 @@ import com.serotonin.modbus4j.locator.BaseLocator;
 
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
-import me.liuzs.cabinetmanager.model.AlertStatus;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.SetupValue;
+import me.liuzs.cabinetmanager.model.StatusOption;
 
 public class ModbusService {
     private static final String TAG = "ModbusService";
@@ -163,39 +163,39 @@ public class ModbusService {
      *
      * @return
      */
-    public synchronized static AlertStatus readAlertStatus() {
-        AlertStatus alertStatus = new AlertStatus();
+    public synchronized static StatusOption readStatusOption() {
+        StatusOption statusOption = new StatusOption();
 
         try {
             BatchRead<Integer> batch = new BatchRead<Integer>();
-            batch.addLocator(0, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertVOCAddress - 1));
-            batch.addLocator(1, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertFGAddress - 1));
-            batch.addLocator(2, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertTempHighAddress - 1));
-            batch.addLocator(3, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertHumidityHighAddress - 1));
-            batch.addLocator(4, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertTempLowAddress - 1));
-            batch.addLocator(5, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertHumidityLowAddress - 1));
-            batch.addLocator(6, BaseLocator.coilStatus(ModbusSlaveId, Alert.AlertFireAddress - 1));
+            batch.addLocator(0, BaseLocator.coilStatus(ModbusSlaveId, Status.AlertVOCAddress - 1));
+            batch.addLocator(1, BaseLocator.coilStatus(ModbusSlaveId, Status.AlertFGAddress - 1));
+            batch.addLocator(2, BaseLocator.coilStatus(ModbusSlaveId, Status.AlertTempHighAddress - 1));
+            batch.addLocator(3, BaseLocator.coilStatus(ModbusSlaveId, Status.AlertHumidityHighAddress - 1));
+            batch.addLocator(4, BaseLocator.coilStatus(ModbusSlaveId, Status.AlertTempLowAddress - 1));
+            batch.addLocator(5, BaseLocator.coilStatus(ModbusSlaveId, Status.AlertHumidityLowAddress - 1));
+            batch.addLocator(6, BaseLocator.coilStatus(ModbusSlaveId, Status.AlertFireAddress - 1));
 
             ModbusMaster master = getMaster();
 
             batch.setContiguousRequests(false);
             BatchResults<Integer> results = master.send(batch);
-
-            alertStatus.vocAlert = (Boolean) results.getValue(0);
-            alertStatus.fgAlert = (Boolean) results.getValue(1);
-            alertStatus.tempHighAlert = (Boolean) results.getValue(2);
-            alertStatus.humidityHighAlert = (Boolean) results.getValue(3);
-            alertStatus.tempLowAlert = (Boolean) results.getValue(4);
-            alertStatus.humidityLowAlert = (Boolean) results.getValue(5);
-            alertStatus.fireAlert = (Boolean) results.getValue(6);
+            statusOption.vocAlert = (Boolean) results.getValue(0);
+            statusOption.fgAlert = (Boolean) results.getValue(1);
+            statusOption.tempHighAlert = (Boolean) results.getValue(2);
+            statusOption.humidityHighAlert = (Boolean) results.getValue(3);
+            statusOption.tempLowAlert = (Boolean) results.getValue(4);
+            statusOption.humidityLowAlert = (Boolean) results.getValue(5);
+            statusOption.fireAlert = (Boolean) results.getValue(67);
+            statusOption.fanWorkModel = me.liuzs.cabinetmanager.model.StatusOption.FanWorkModel.values()[readHoldingRegister(Status.UnionWorkModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED).intValue()];
 
         } catch (Exception e) {
             e.printStackTrace();
-            alertStatus.e = e;
+            statusOption.e = e;
         }
 
-        Log.d(TAG, CabinetCore.GSON.toJson(alertStatus));
-        return alertStatus;
+        Log.d(TAG, CabinetCore.GSON.toJson(statusOption));
+        return statusOption;
     }
 
     /**
@@ -276,47 +276,44 @@ public class ModbusService {
         SetupValue setupValue = new SetupValue();
         try {
             BatchRead<Integer> batch = new BatchRead<Integer>();
-            batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, Setup.UnionWorkModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, Setup.VOCUnionMaxAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, Setup.VOCUnionMinAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(3, BaseLocator.holdingRegister(ModbusSlaveId, Setup.FanUnionWorkTimeAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(4, BaseLocator.holdingRegister(ModbusSlaveId, Setup.FanUnionStopTimeAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(5, BaseLocator.holdingRegister(ModbusSlaveId, Setup.FanUnionFrequencyAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(6, BaseLocator.holdingRegister(ModbusSlaveId, Setup.VOCAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(7, BaseLocator.holdingRegister(ModbusSlaveId, Setup.TempHighAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(8, BaseLocator.holdingRegister(ModbusSlaveId, Setup.TempLowAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(9, BaseLocator.holdingRegister(ModbusSlaveId, Setup.HumidityHighAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(10, BaseLocator.holdingRegister(ModbusSlaveId, Setup.HumidityLowAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(11, BaseLocator.holdingRegister(ModbusSlaveId, Setup.VOCAlertAutoThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(12, BaseLocator.holdingRegister(ModbusSlaveId, Setup.FGAlertAutoThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(13, BaseLocator.holdingRegister(ModbusSlaveId, Setup.TempHighAlertThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(14, BaseLocator.holdingRegister(ModbusSlaveId, Setup.TempLowAlertThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(15, BaseLocator.holdingRegister(ModbusSlaveId, Setup.HumidityHighAlertThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(16, BaseLocator.holdingRegister(ModbusSlaveId, Setup.HumidityLowAlertThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(17, BaseLocator.holdingRegister(ModbusSlaveId, Setup.AlertSoundLightAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, Setup.VOCUnionMinAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, Setup.FanUnionWorkTimeAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(3, BaseLocator.holdingRegister(ModbusSlaveId, Setup.FanUnionStopTimeAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(4, BaseLocator.holdingRegister(ModbusSlaveId, Setup.FanUnionFrequencyAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(5, BaseLocator.holdingRegister(ModbusSlaveId, Setup.VOCAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(6, BaseLocator.holdingRegister(ModbusSlaveId, Setup.TempHighAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(7, BaseLocator.holdingRegister(ModbusSlaveId, Setup.TempLowAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(8, BaseLocator.holdingRegister(ModbusSlaveId, Setup.HumidityHighAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(9, BaseLocator.holdingRegister(ModbusSlaveId, Setup.HumidityLowAlertAutoAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(10, BaseLocator.holdingRegister(ModbusSlaveId, Setup.VOCAlertAutoThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(11, BaseLocator.holdingRegister(ModbusSlaveId, Setup.FGAlertAutoThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(12, BaseLocator.holdingRegister(ModbusSlaveId, Setup.TempHighAlertThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(13, BaseLocator.holdingRegister(ModbusSlaveId, Setup.TempLowAlertThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(14, BaseLocator.holdingRegister(ModbusSlaveId, Setup.HumidityHighAlertThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(15, BaseLocator.holdingRegister(ModbusSlaveId, Setup.HumidityLowAlertThresholdAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(16, BaseLocator.holdingRegister(ModbusSlaveId, Setup.AlertSoundLightAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
 
             ModbusMaster master = getMaster();
 
             batch.setContiguousRequests(false);
             BatchResults<Integer> results = master.send(batch);
-            setupValue.workModel = SetupValue.WorkModel.values()[getIntValue(results, 0)];
-            setupValue.vocUnionMax = getIntValue(results, 1) / 100f;
-            setupValue.vocUnionMin = getIntValue(results, 2) / 100f;
-            setupValue.fanUnionWorkTime = getIntValue(results, 3);
-            setupValue.fanUnionStopTime = getIntValue(results, 4);
-            setupValue.fanUnionFrequency = getIntValue(results, 5) / 100f;
-            setupValue.vocAlertAuto = getIntValue(results, 6) == 1;
-            setupValue.tempHighAlertAuto = getIntValue(results, 7) == 1;
-            setupValue.tempLowAlertAuto = getIntValue(results, 8) == 1;
-            setupValue.humidityHighAlertAuto = getIntValue(results, 9) == 1;
-            setupValue.humidityLowAlertAuto = getIntValue(results, 10) == 1;
-            setupValue.vocAlertAutoThreshold = getIntValue(results, 11) / 100f;
-            setupValue.fgAlertThreshold = getIntValue(results, 12) / 100f;
-            setupValue.tempHighAlertThreshold = getIntValue(results, 13) / 100f;
-            setupValue.tempLowAlertThreshold = getIntValue(results, 14) / 100f;
-            setupValue.humidityHighAlertThreshold = getIntValue(results, 15) / 100f;
-            setupValue.humidityLowAlertThreshold = getIntValue(results, 16) / 100f;
-            setupValue.alertSoundLight = getIntValue(results, 17) == 1;
+            setupValue.vocUnionMax = getIntValue(results, 0) / 100f;
+            setupValue.vocUnionMin = getIntValue(results, 1) / 100f;
+            setupValue.fanUnionWorkTime = getIntValue(results, 2);
+            setupValue.fanUnionStopTime = getIntValue(results, 3);
+            setupValue.fanUnionFrequency = getIntValue(results, 4) / 100f;
+            setupValue.vocAlertAuto = getIntValue(results, 5) == 1;
+            setupValue.tempHighAlertAuto = getIntValue(results, 6) == 1;
+            setupValue.tempLowAlertAuto = getIntValue(results, 7) == 1;
+            setupValue.humidityHighAlertAuto = getIntValue(results, 8) == 1;
+            setupValue.humidityLowAlertAuto = getIntValue(results, 9) == 1;
+            setupValue.vocAlertAutoThreshold = getIntValue(results, 10) / 100f;
+            setupValue.fgAlertThreshold = getIntValue(results, 11) / 100f;
+            setupValue.tempHighAlertThreshold = getIntValue(results, 12) / 100f;
+            setupValue.tempLowAlertThreshold = getIntValue(results, 13) / 100f;
+            setupValue.humidityHighAlertThreshold = getIntValue(results, 14) / 100f;
+            setupValue.humidityLowAlertThreshold = getIntValue(results, 15) / 100f;
+            setupValue.alertSoundLight = getIntValue(results, 16) == 1;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -353,7 +350,7 @@ public class ModbusService {
     }
 
     /**
-     * 空调数据
+     * 空调控制器
      */
     public class AC {
         private static final int ACStatusAddress = 40573;
@@ -365,9 +362,10 @@ public class ModbusService {
     }
 
     /**
-     * 空调数据
+     * 状态参数
      */
-    public class Alert {
+    public class Status {
+        private static final int UnionWorkModelAddress = 40703;
         private static final int AlertVOCAddress = 2017;
         private static final int AlertFGAddress = 2018;
         private static final int AlertTempHighAddress = 2019;
@@ -391,7 +389,6 @@ public class ModbusService {
      * 参数设置
      */
     public class Setup {
-        private static final int UnionWorkModelAddress = 40703;
         private static final int VOCUnionMaxAddress = 40211;
         private static final int VOCUnionMinAddress = 40212;
         private static final int FanUnionWorkTimeAddress = 40214;

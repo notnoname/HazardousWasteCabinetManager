@@ -1,6 +1,8 @@
 package me.liuzs.cabinetmanager.model;
 
-public class AlertStatus {
+public class StatusOption {
+    public enum FanWorkModel {None, Auto, Manual}
+    public FanWorkModel fanWorkModel = FanWorkModel.None;
     public boolean vocAlert;
     public boolean fgAlert;
     public boolean tempHighAlert;

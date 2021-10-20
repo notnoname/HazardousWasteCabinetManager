@@ -1,9 +1,6 @@
 package me.liuzs.cabinetmanager.model;
 
 public class SetupValue {
-    public enum WorkModel {None, Auto, Manual}
-
-    public WorkModel workModel = WorkModel.None;
 
     /**
      * VOC联动，最大值

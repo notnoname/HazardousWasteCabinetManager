@@ -26,7 +26,7 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
-import me.liuzs.cabinetmanager.model.AlertStatus;
+import me.liuzs.cabinetmanager.model.StatusOption;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
@@ -173,32 +173,32 @@ public class MainActivity extends BaseActivity {
             mFanSpeed.setText(String.valueOf(frequencyConverterStatus.rotatingSpeed));
         }
 
-        AlertStatus alertStatus = mHardwareValue.alertStatus;
-        if (alertStatus != null) {
+        StatusOption statusOption = mHardwareValue.statusOption;
+        if (statusOption != null) {
             mAlertStatus.removeAllViews();
-            boolean safe = !alertStatus.vocAlert && !alertStatus.fgAlert && !alertStatus.tempHighAlert && !alertStatus.tempLowAlert && !alertStatus.humidityHighAlert && !alertStatus.humidityLowAlert && !alertStatus.fireAlert;
+            boolean safe = !statusOption.vocAlert && !statusOption.fgAlert && !statusOption.tempHighAlert && !statusOption.tempLowAlert && !statusOption.humidityHighAlert && !statusOption.humidityLowAlert && !statusOption.fireAlert;
             if (safe) {
                 addAlertStatusTextViewToContainer("无异常", R.drawable.background_state_green);
             } else {
-                if (alertStatus.vocAlert) {
+                if (statusOption.vocAlert) {
                     addAlertStatusTextViewToContainer("VOC浓度高", R.drawable.background_state_red);
                 }
-                if (alertStatus.fgAlert) {
+                if (statusOption.fgAlert) {
                     addAlertStatusTextViewToContainer("可燃气体浓度高", R.drawable.background_state_red);
                 }
-                if (alertStatus.tempHighAlert) {
+                if (statusOption.tempHighAlert) {
                     addAlertStatusTextViewToContainer("温度高", R.drawable.background_state_red);
                 }
-                if (alertStatus.tempLowAlert) {
+                if (statusOption.tempLowAlert) {
                     addAlertStatusTextViewToContainer("温度低", R.drawable.background_state_red);
                 }
-                if (alertStatus.humidityHighAlert) {
+                if (statusOption.humidityHighAlert) {
                     addAlertStatusTextViewToContainer("湿度高", R.drawable.background_state_red);
                 }
-                if (alertStatus.humidityLowAlert) {
+                if (statusOption.humidityLowAlert) {
                     addAlertStatusTextViewToContainer("湿度低", R.drawable.background_state_red);
                 }
-                if (alertStatus.fireAlert) {
+                if (statusOption.fireAlert) {
                     addAlertStatusTextViewToContainer("火警", R.drawable.background_state_red);
                 }
             }

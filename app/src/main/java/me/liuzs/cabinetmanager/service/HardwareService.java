@@ -7,8 +7,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.serotonin.modbus4j.Modbus;
-
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -20,7 +18,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,7 +30,7 @@ import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.model.AirConditionerStatus;
-import me.liuzs.cabinetmanager.model.AlertStatus;
+import me.liuzs.cabinetmanager.model.StatusOption;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.FrequencyConverterStatus;
@@ -261,9 +258,9 @@ public class HardwareService extends Service {
             if (frequencyConverterStatus.e == null) {
                 hValue.frequencyConverterStatus = frequencyConverterStatus;
             }
-            AlertStatus alertStatus = ModbusService.readAlertStatus();
-            if (alertStatus.e == null) {
-                hValue.alertStatus = alertStatus;
+            StatusOption statusOption = ModbusService.readStatusOption();
+            if (statusOption.e == null) {
+                hValue.statusOption = statusOption;
             }
             HardwareValue._Cache = hValue;
             Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));

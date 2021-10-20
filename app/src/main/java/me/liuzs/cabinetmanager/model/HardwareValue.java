@@ -6,6 +6,6 @@ public class HardwareValue {
     public EnvironmentStatus environmentStatus;
     public AirConditionerStatus airConditionerStatus;
     public FrequencyConverterStatus frequencyConverterStatus;
-    public AlertStatus alertStatus;
+    public StatusOption statusOption;
     public long createTime;
 }
