@@ -73,23 +73,29 @@ abstract class BaseActivity extends AppCompatActivity {
 
     public synchronized void dismissProgressDialog() {
         if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
+            mHandler.post(() -> mProgressDialog.dismiss());
         }
     }
 
     public synchronized void showToast(CharSequence info) {
-        if (info == null) info = "";
-        if (mToast == null) {
-            mToast = Toast.makeText(this, info, Toast.LENGTH_SHORT);
-            TextView v = mToast.getView().findViewById(android.R.id.message);
-            v.setPadding(10, 10, 10, 10);
-            v.setTextColor(Color.BLACK);
-            v.setTextSize(40);
-            v.setGravity(Gravity.CENTER);
-            mToast.setGravity(Gravity.CENTER, 0, 0);
-        }
-        mToast.setText(info);
-        mToast.show();
+        final CharSequence showInfo = info == null ? "" : info;
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mToast == null) {
+                    mToast = Toast.makeText(BaseActivity.this, showInfo, Toast.LENGTH_SHORT);
+                    TextView v = mToast.getView().findViewById(android.R.id.message);
+                    v.setPadding(10, 10, 10, 10);
+                    v.setTextColor(Color.BLACK);
+                    v.setTextSize(40);
+                    v.setGravity(Gravity.CENTER);
+                    mToast.setGravity(Gravity.CENTER, 0, 0);
+                }
+                mToast.setText(info);
+                mToast.show();
+            }
+        });
+
     }
 
     public void showToast(int infoId) {

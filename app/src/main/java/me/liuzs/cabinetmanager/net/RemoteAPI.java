@@ -1458,10 +1458,7 @@ public class RemoteAPI {
          * 台账-入柜
          */
         public static final String API_STANDING_BOOK_DEPOSIT = API_ROOT + "/drug/v1/statistic/getLabPutDevStatisticByTankId";
-        /**
-         * 台账-使用
-         */
-        public static final String API_STANDING_BOOK_USAGE = API_ROOT + "/drug/v1/statistic/getLabUseStatisticById";
+
         /**
          * 台账-出柜
          */
@@ -1486,53 +1483,6 @@ public class RemoteAPI {
 //                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_STANDING_BOOK_DEPOSIT + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<StandingBookItem>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<StandingBookItem>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<StandingBookItem>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 使用台账查询
-         *
-         * @return 返回入柜台账
-         */
-        public static APIJSON<List<StandingBookItem>> queryStandingBookUsage(String currentPage) {
-            try {
-                Cabinet cabinet = CabinetCore.getCabinetInfo();
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("pageSize", "20"));
-                valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-//                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_STANDING_BOOK_USAGE + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
                 generalBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);

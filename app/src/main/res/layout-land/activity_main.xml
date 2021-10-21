@@ -165,7 +165,7 @@
                     android:background="@drawable/background_state_green"
                     android:gravity="center"
                     android:padding="10px"
-                    android:text="无异常"
+                    android:text="@string/no_alert"
                     android:textColor="@color/white"
                     android:textSize="24px" />
 
@@ -607,9 +607,10 @@
 
             <TextView
                 android:id="@+id/toolbar_date"
-                android:layout_width="wrap_content"
+                android:layout_width="200px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
+                android:gravity="center"
                 android:text=""
                 android:textColor="@color/white"
                 android:textSize="24px" />
@@ -626,9 +627,10 @@
 
             <TextView
                 android:id="@+id/toolbar_time"
-                android:layout_width="wrap_content"
+                android:layout_width="200px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
+                android:gravity="center"
                 android:text=""
                 android:textColor="@color/white"
                 android:textSize="24px" />

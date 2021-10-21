@@ -107,10 +107,10 @@
                 android:layout_height="40px"
                 android:layout_marginStart="24px"
                 android:gravity="center"
-                android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvACPowerValue"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <TextView
                 android:id="@+id/tvACWorkModelLabel"
@@ -129,18 +129,19 @@
                 android:id="@+id/tvACWorkModelValue"
                 android:layout_width="220px"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24px"
+                android:layout_marginStart="22px"
                 android:background="@drawable/background_info_area_white"
                 android:gravity="center"
                 android:onClick="onACWorkModelButtonClick"
                 android:padding="5px"
-                android:text="@string/close"
+                android:singleLine="true"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvACWorkModelLabel"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/tvACRemoteCtrlLabel"
@@ -157,19 +158,21 @@
 
             <TextView
                 android:id="@+id/tvACRemoteCtrlValue"
-                android:layout_width="220px"
+                android:layout_width="250px"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24px"
+                android:layout_marginStart="22px"
                 android:background="@drawable/background_info_area_white"
                 android:gravity="center"
                 android:onClick="onRemoteCtrlWorkModelButtonClick"
                 android:padding="5px"
-                android:text="@string/close"
+                android:singleLine="true"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvACRemoteCtrlLabel"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -197,7 +200,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvACModelValue"
+                android:id="@+id/tvACCtrlModelValue"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24px"
@@ -216,10 +219,8 @@
                 android:layout_width="130px"
                 android:layout_height="40px"
                 android:layout_marginStart="24px"
-                android:gravity="center"
-                android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvACModelValue"
+                app:layout_constraintStart_toEndOf="@+id/tvACCtrlModelValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -234,45 +235,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/clFanRunModel">
-
-            <TextView
-                android:id="@+id/tvOxygenCtrlLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="48px"
-                android:gravity="center"
-                android:text="@string/sound_light_control"
-                android:textColor="@color/white"
-                android:textSize="28px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/swFanCtrl"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/swOxygenCtrl"
-                android:layout_width="130px"
-                android:layout_height="40px"
-                android:layout_marginStart="24px"
-                android:gravity="center"
-                android:textSize="28px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvOxygenCtrlValue"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvOxygenCtrlValue"
-                android:layout_width="120px"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24px"
-                android:background="@drawable/background_state_green"
-                android:gravity="center"
-                android:padding="5px"
-                android:text="@string/close"
-                android:textColor="@color/white"
-                android:textSize="28px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvOxygenCtrlLabel"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvSoundLightAlertLabel"
@@ -301,54 +263,92 @@
                 app:layout_constraintStart_toEndOf="@+id/tvSoundLightAlertLabel"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/swSoundLightAlert"
-                android:layout_width="130px"
-                android:layout_height="40px"
-                android:layout_marginStart="24px"
-                android:gravity="center"
-                android:textSize="28px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvSoundLightAlertValue"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/tvFanCtrlLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="48px"
+                android:layout_marginStart="203px"
                 android:gravity="center"
                 android:text="@string/fan_control"
                 android:textColor="@color/white"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/swSoundLightAlert"
+                app:layout_constraintStart_toEndOf="@+id/tvSoundLightAlertValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.kyleduo.switchbutton.SwitchButton
-                android:id="@+id/swFanCtrl"
-                android:layout_width="130px"
-                android:layout_height="40px"
-                android:layout_marginStart="24px"
-                android:gravity="center"
-                android:textSize="28px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvFanCtrlValue"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvFanCtrlValue"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnFanOpen"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24px"
-                android:background="@drawable/background_state_green"
+                android:background="@drawable/background_button"
+                android:gravity="center"
+                android:padding="5px"
+                android:text="@string/open"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvFanCtrlLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnFanClose"
+                android:layout_width="130px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24px"
+                android:background="@drawable/background_button"
                 android:gravity="center"
                 android:padding="5px"
                 android:text="@string/close"
                 android:textColor="@color/white"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvFanCtrlLabel"
+                app:layout_constraintStart_toEndOf="@+id/btnFanOpen"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <TextView
+                android:id="@+id/tvOxygenCtrlLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="48px"
+                android:gravity="center"
+                android:text="@string/sound_light_control"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnFanClose"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOxygenOpen"
+                android:layout_width="120px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24px"
+                android:background="@drawable/background_button"
+                android:gravity="center"
+                android:padding="5px"
+                android:text="@string/open"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvOxygenCtrlLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOxygenClose"
+                android:layout_width="130px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24px"
+                android:background="@drawable/background_button"
+                android:gravity="center"
+                android:padding="5px"
+                android:text="@string/close"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnOxygenOpen"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -397,7 +397,6 @@
                 android:layout_height="40px"
                 android:layout_marginStart="24px"
                 android:gravity="center"
-                android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanWorkModelValue"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -443,9 +442,10 @@
 
             <TextView
                 android:id="@+id/toolbar_time"
-                android:layout_width="wrap_content"
+                android:layout_width="200px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
+                android:gravity="center"
                 android:text=""
                 android:textColor="@color/white"
                 android:textSize="24px" />

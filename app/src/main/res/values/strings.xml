@@ -124,6 +124,10 @@
     <string name="ac_work_model_dehumidification">除湿</string>
     <string name="ac_work_model_fan">送风</string>
     <string name="ac_remote_ctrl_model">遥控器模式</string>
+    <string name="ac_remote_ctrl_model_infrared_receive">红外学习遥控器接收模式</string>
+    <string name="ac_remote_ctrl_model_infrared_launch">红外学习遥控器发射模式</string>
+    <string name="ac_remote_ctrl_model_universal_pair">万能遥控器配对</string>
+    <string name="ac_remote_ctrl_model_universal">万能遥控器模式</string>
     <string name="voc_threshold">VOC阈值</string>
     <string name="voc_alert">VOC告警</string>
     <string name="fg_alert">可燃气体告警</string>
@@ -209,4 +213,5 @@
     <string name="fanopen">打开</string>
     <string name="TVOC">TVOC</string>
     <string name="modbus_test">Modbus测试</string>
+    <string name="no_alert">无告警</string>
 </resources>

@@ -11,13 +11,9 @@ import android.view.ViewGroup;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
-import com.google.gson.Gson;
-
-import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetBindActivity;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.HardwareSetupActiveActivity;
-import me.liuzs.cabinetmanager.LauncherActivity;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SystemSettingActivity;
 import me.liuzs.cabinetmanager.faceid.FaceServer;
@@ -46,7 +42,7 @@ public class SettingMainFragment extends Fragment implements View.OnClickListene
         mEquipmentManage = rootView.findViewById(R.id.btnHardwareManage);
         mEquipmentLog = rootView.findViewById(R.id.btnLog);
         mHardwareSetup = rootView.findViewById(R.id.btnHardwareSetup);
-        mReset = rootView.findViewById(R.id.btnReset);
+        mReset = rootView.findViewById(R.id.btnFCReset);
         mCabinetSetup.setOnClickListener(this);
         mEquipmentManage.setOnClickListener(this);
         mEquipmentLog.setOnClickListener(this);

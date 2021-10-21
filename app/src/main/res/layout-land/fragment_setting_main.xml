@@ -70,7 +70,7 @@
             android:textSize="40px" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnReset"
+            android:id="@+id/btnFCReset"
             android:layout_width="400px"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
