@@ -18,6 +18,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.modbus.SetupValue;
@@ -42,21 +44,29 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         if (resultCode == RESULT_OK) {
             try {
                 Intent data = result.getData();
+                assert data != null;
                 String selectIndex = data.getStringExtra(SpinnerActivity.KEY_SELECT_INDEX);
                 Integer index = Integer.parseInt(selectIndex);
-                boolean success = ModbusService.setACWorkModel(AirConditionerStatus.WorkModel.values()[index]);
-                if (success) {
-                    showToast("空调模式设置成功!");
-                    mAirConditionerStatus = ModbusService.readAirConditionerStatus();
-                } else {
-                    showToast("空调模式设置失败!");
-                }
-            } catch (Exception e) {
+                setOptionValue(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean success = ModbusService.setACWorkModel(AirConditionerStatus.WorkModel.values()[index]);
+                        if (success) {
+                            showToast("空调模式设置成功!");
+                            mAirConditionerStatus = ModbusService.readAirConditionerStatus();
+                        } else {
+                            showToast("空调模式设置失败!");
+                        }
+                    }
+                });
 
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         }
     });
+    private ExecutorService executorService;
     private SetupValue mSetupValue;
     private StatusOption mStatusOption;
 
@@ -104,12 +114,40 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         mSoundLightAlert.setOnCheckedChangeListener(this);
         mFanCtrl.setOnCheckedChangeListener(this);
         mOxygenCtrl.setOnCheckedChangeListener(this);
+
+        executorService = Executors.newFixedThreadPool(1);
+    }
+
+    private void setOptionValue(Runnable runnable) {
+        showProgressDialog();
+        executorService.submit(() -> {
+            runnable.run();
+            mStatusOption = ModbusService.readStatusOption();
+            mAirConditionerStatus = ModbusService.readAirConditionerStatus();
+            dismissProgressDialog();
+            showStatusOption();
+        });
+    }
+
+    private void getModbusInfo() {
+        executorService.submit(() -> {
+            showProgressDialog();
+            mSetupValue = ModbusService.readSetupValue();
+            mStatusOption = ModbusService.readStatusOption();
+            mAirConditionerStatus = ModbusService.readAirConditionerStatus();
+            if (mAirConditionerStatus.e != null || mSetupValue.e != null || mStatusOption.e != null) {
+                showToast("设备信息读取失败，请立即检查设备！");
+                mHandler.postDelayed(this::finish, 1000);
+            }
+            dismissProgressDialog();
+            showStatusOption();
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        new GetModbusInfo(this).execute();
+        getModbusInfo();
     }
 
     private void showStatusOption() {
@@ -134,6 +172,9 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
 
     @Override
     protected void onStop() {
+        if (!executorService.isShutdown()) {
+            executorService.shutdownNow();
+        }
         super.onStop();
     }
 
@@ -159,40 +200,5 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
 
     public void onRemoteCtrlWorkModelButtonClick(View view) {
         finish();
-    }
-
-    static class GetModbusInfo extends AsyncTask<Void, Void, Boolean> {
-
-        private final WeakReference<ControlPanelActivity> mActivity;
-
-        public GetModbusInfo(ControlPanelActivity activity) {
-            this.mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            mActivity.get().mSetupValue = ModbusService.readSetupValue();
-            mActivity.get().mStatusOption = ModbusService.readStatusOption();
-            mActivity.get().mAirConditionerStatus = ModbusService.readAirConditionerStatus();
-            return true;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mActivity.get().showProgressDialog();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-            mActivity.get().dismissProgressDialog();
-            if (mActivity.get().mAirConditionerStatus.e != null || mActivity.get().mSetupValue.e != null || mActivity.get().mStatusOption.e != null) {
-                mActivity.get().showToast("设备信息读取失败，请立即检查设备！");
-                mActivity.get().mHandler.postDelayed(() -> mActivity.get().finish(), 1000);
-            }
-            mActivity.get().showStatusOption();
-
-        }
     }
 }

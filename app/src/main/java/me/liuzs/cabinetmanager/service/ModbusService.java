@@ -351,6 +351,7 @@ public class ModbusService {
         try {
             writeHoldingRegister(AC.ACWorkModelAddress - 1, workModel.ordinal());
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -361,6 +362,7 @@ public class ModbusService {
             writeHoldingRegister(AC.ACPowerSetAddress - 1, powerOn ? 1 : 0);
             writeCoilStatus(AC.ACPowerSetCommitAddress - 1, true);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
