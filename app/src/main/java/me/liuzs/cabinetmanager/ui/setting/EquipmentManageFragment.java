@@ -22,14 +22,14 @@ import me.liuzs.cabinetmanager.service.ModbusService;
 /**
  * 参数设置
  */
-public class EquipmentManageFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class EquipmentManageFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     public static final String TAG = "EquipmentManageFragment";
     private final DecimalFormat mDecimalFormat = new DecimalFormat("0.00");
     private SystemSettingActivity mActivity;
     private SetupValue mValue;
     private SwitchButton mAlertVOC, mAlertFG, mAlertTempHigh, mAlertTempLow, mAlertHumidityHigh, mAlertHumidityLow, mAlertSoundLight;
-    private EditText mFanRunTimeValue, mFanStopTimeValue, mFanFrequencyValue, mUnionVOCHigh, mUnionVOCLow, mAlertVOCValue, mAlertFGValue, mAlertTempHighValue, mAlertTempLowValue, mAlertHumidityHighValue, mAlertHumidityLowValue;
+    private EditText mUnionFanRunTimeValue, mUnionFanStopTimeValue, mUnionFanFrequencyValue, mUnionVOCHigh, mUnionVOCLow, mAlertVOCValue, mAlertFGValue, mAlertTempHighValue, mAlertTempLowValue, mAlertHumidityHighValue, mAlertHumidityLowValue;
     private Button mSave;
 
     public EquipmentManageFragment() {
@@ -46,12 +46,12 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_equipment_manage, container, false);
 
-        mFanRunTimeValue = view.findViewById(R.id.etFanRunTimeValue);
-        mFanStopTimeValue = view.findViewById(R.id.etFanStopTimeValue);
-        mFanFrequencyValue = view.findViewById(R.id.etFanFrequencyValue);
+        mUnionFanRunTimeValue = view.findViewById(R.id.etFanRunTimeValue);
+        mUnionFanStopTimeValue = view.findViewById(R.id.etFanStopTimeValue);
+        mUnionFanFrequencyValue = view.findViewById(R.id.etFanFrequencyValue);
 
-        mUnionVOCHigh = view.findViewById(R.id.etFanHighVOCValue);
-        mUnionVOCLow = view.findViewById(R.id.etFanLowVOCValue);
+        mUnionVOCHigh = view.findViewById(R.id.etFanVOCMaxValue);
+        mUnionVOCLow = view.findViewById(R.id.etFanVOCMinValue);
 
         mAlertVOC = view.findViewById(R.id.swAlertVOC);
         mAlertVOCValue = view.findViewById(R.id.etAlertVOCValue);
@@ -71,7 +71,6 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
 
         mAlertSoundLight = view.findViewById(R.id.swAlertSoundLight);
 
-
         mSave = view.findViewById(R.id.btnSave);
         mSave.setOnClickListener(this);
         mAlertVOC.setOnCheckedChangeListener(this);
@@ -86,11 +85,10 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
     @Override
     public void onStart() {
         super.onStart();
-        new Thread(() -> {
+        mActivity.getExecutorService().submit(() -> {
             mValue = ModbusService.readSetupValue();
-            mActivity.runOnUiThread(() -> showValue());
-        }).start();
-
+            mActivity.runOnUiThread(this::showValue);
+        });
     }
 
     private void showValue() {
@@ -99,69 +97,77 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
             return;
         }
 
-        mFanRunTimeValue.setText(String.valueOf(mValue.fanUnionWorkTime));
-        mFanStopTimeValue.setText(String.valueOf(mValue.fanUnionStopTime));
-        mFanFrequencyValue.setText(String.valueOf(mValue.fanUnionFrequency));
+        mUnionFanRunTimeValue.setText(String.valueOf(mValue.fanUnionWorkTime));
+        mUnionFanStopTimeValue.setText(String.valueOf(mValue.fanUnionStopTime));
+        mUnionFanFrequencyValue.setText(String.valueOf(mValue.fanUnionFrequency));
         mUnionVOCHigh.setText(String.valueOf(mValue.vocUnionMax));
         mUnionVOCLow.setText(String.valueOf(mValue.vocUnionMin));
 
 
         mAlertVOC.setChecked(mValue.vocAlertAuto);
-        mAlertVOCValue.setEnabled(mValue.vocAlertAuto);
         mAlertVOCValue.setText(String.valueOf(mValue.vocAlertAutoThreshold));
 
         mAlertFGValue.setText(String.valueOf(mValue.fgAlertThreshold));
 
         mAlertTempHigh.setChecked(mValue.tempHighAlertAuto);
-        mAlertTempHighValue.setEnabled(mValue.tempHighAlertAuto);
         mAlertTempHighValue.setText(String.valueOf(mValue.tempHighAlertThreshold));
 
 
         mAlertTempLow.setChecked(mValue.tempLowAlertAuto);
-        mAlertTempLowValue.setEnabled(mValue.tempLowAlertAuto);
         mAlertTempLowValue.setText(String.valueOf(mValue.tempLowAlertThreshold));
 
         mAlertHumidityHigh.setChecked(mValue.humidityHighAlertAuto);
-        mAlertHumidityHighValue.setEnabled(mValue.humidityHighAlertAuto);
         mAlertHumidityHighValue.setText(String.valueOf(mValue.tempHighAlertThreshold));
 
 
         mAlertHumidityLow.setChecked(mValue.humidityLowAlertAuto);
-        mAlertHumidityLowValue.setEnabled(mValue.humidityLowAlertAuto);
         mAlertHumidityLowValue.setText(String.valueOf(mValue.tempLowAlertThreshold));
 
         mAlertSoundLight.setChecked(mValue.alertSoundLight);
 
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v == mSave) {
-            SetupValue newValue = checkValue();
-            if (newValue != null) {
-                mSave.setEnabled(false);
-                mValue = newValue;
-                showValue();
-                mActivity.showToast("设置保存成功!");
-                mSave.setEnabled(true);
-            }
-        }
-    }
-
     private SetupValue checkValue() {
         SetupValue result = null;
         try {
-            String work = mFanRunTimeValue.getEditableText().toString();
-            String stop = mFanStopTimeValue.getEditableText().toString();
-            String temp = mAlertTempHighValue.getEditableText().toString();
-            String ppm = mUnionVOCHigh.getEditableText().toString();
-            int workTime = Integer.parseInt(work);
-            int stopTime = Integer.parseInt(stop);
-            int tempValue = Integer.parseInt(temp);
-            float ppmValue = Float.parseFloat(ppm);
+            float unionFanRunTime = Float.parseFloat(mUnionFanRunTimeValue.getEditableText().toString());
+            float unionFanStopTime = Float.parseFloat(mUnionFanStopTimeValue.getEditableText().toString());
+            float unionFC = Float.parseFloat(mUnionFanFrequencyValue.getEditableText().toString());
+            float unionVOCMax = Float.parseFloat(mUnionVOCHigh.getEditableText().toString());
+            float unionVOCMin = Float.parseFloat(mUnionVOCLow.getEditableText().toString());
+
+            float vocAlertValue = Float.parseFloat(mAlertVOCValue.getEditableText().toString());
+            boolean vocAlert = mAlertVOC.isChecked();
+            float tempHighAlertValue = Float.parseFloat(mAlertTempHighValue.getEditableText().toString());
+            boolean tempHighAlert = mAlertTempHigh.isChecked();
+            float tempLowAlertValue = Float.parseFloat(mAlertTempLowValue.getEditableText().toString());
+            boolean tempLowAlert = mAlertTempLow.isChecked();
+            float humidityHighAlertValue = Float.parseFloat(mAlertHumidityHighValue.getEditableText().toString());
+            boolean humidityHighAlert = mAlertHumidityHigh.isChecked();
+            float humidityLowAlertValue = Float.parseFloat(mAlertHumidityLowValue.getEditableText().toString());
+            boolean humidityLowAlert = mAlertHumidityLow.isChecked();
+            float fgAlertValue = Float.parseFloat(mAlertFGValue.getEditableText().toString());
+
             result = new SetupValue();
-            result.fanUnionWorkTime = workTime;
-            result.fanUnionStopTime = stopTime;
+            result.fanUnionWorkTime = (int) unionFanRunTime;
+            result.fanUnionStopTime = (int) unionFanStopTime;
+            result.fanUnionFrequency = (int) unionFC;
+            result.vocUnionMax = unionVOCMax;
+            result.vocUnionMin = unionVOCMin;
+
+            result.vocAlertAutoThreshold = vocAlertValue;
+            result.vocAlertAuto = vocAlert;
+            //result.fgAlertAuto = true;
+            result.fgAlertThreshold = fgAlertValue;
+            result.tempHighAlertThreshold = tempHighAlertValue;
+            result.tempHighAlertAuto = tempHighAlert;
+            result.tempLowAlertThreshold = tempLowAlertValue;
+            result.tempLowAlertAuto = tempLowAlert;
+            result.humidityHighAlertThreshold = humidityHighAlertValue;
+            result.humidityHighAlertAuto = humidityHighAlert;
+            result.humidityLowAlertThreshold = humidityLowAlertValue;
+            result.humidityLowAlertAuto = humidityLowAlert;
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,5 +190,33 @@ public class EquipmentManageFragment extends Fragment implements View.OnClickLis
             mValue.humidityLowAlertAuto = isChecked;
         }
         showValue();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == mSave) {
+            SetupValue newValue = checkValue();
+            if (newValue != null) {
+                mSave.setEnabled(false);
+                mValue = newValue;
+                showValue();
+                mActivity.getExecutorService().submit(() -> {
+                    final boolean result = ModbusService.saveSetupValue(mValue);
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showValue();
+                            if(result) {
+                                mActivity.showToast("设置保存成功!");
+                            } else {
+                                mActivity.showToast("设置保存失败!");
+                            }
+                            mSave.setEnabled(true);
+                        }
+                    });
+                });
+
+            }
+        }
     }
 }

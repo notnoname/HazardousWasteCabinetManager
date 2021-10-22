@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <ImageView
@@ -137,8 +137,8 @@
             android:id="@+id/constraintLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="200px"
-            android:layout_marginEnd="460px"
+            android:layout_marginStart="120px"
+            android:layout_marginEnd="370px"
             android:background="@drawable/background_input_area"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -532,7 +532,6 @@
                 android:id="@+id/split"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="8dp"
                 android:background="#0c729d"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -543,7 +542,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32px"
-                android:layout_marginTop="8px"
                 android:layout_marginEnd="32px"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="horizontal"

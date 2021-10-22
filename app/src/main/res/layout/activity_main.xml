@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
@@ -37,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_button"
                 android:onClick="onFirstTakeInButtonClick"
+                android:singleLine="true"
                 android:text="@string/no_manage"
                 android:textColor="@color/white"
                 android:textSize="32px"
@@ -122,35 +124,22 @@
                 android:layout_marginTop="24px"
                 android:background="@drawable/background_button"
                 android:onClick="onControlPanelButtonClick"
-                android:text="@string/sub_board_info"
+                android:text="@string/control_panel"
                 android:textColor="@color/white"
                 android:textSize="32px"
                 app:layout_constraintEnd_toEndOf="@+id/btnCamera"
                 app:layout_constraintStart_toStartOf="@+id/btnCamera"
                 app:layout_constraintTop_toBottomOf="@+id/btnCamera" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnLockManage"
-                android:layout_width="230px"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24px"
-                android:background="@drawable/background_button"
-                android:onClick="onSubCabinetLockerButtonClick"
-                android:text="@string/sub_board_lock"
-                android:textColor="@color/white"
-                android:textSize="28px"
-                app:layout_constraintEnd_toEndOf="@+id/btnCtrl"
-                app:layout_constraintStart_toStartOf="@+id/btnCtrl"
-                app:layout_constraintTop_toBottomOf="@+id/btnCtrl" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
-            android:layout_width="1000px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="160px"
+            android:layout_marginStart="120px"
+            android:layout_marginEnd="370px"
             android:background="@drawable/background_input_area"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -164,40 +153,23 @@
                 android:background="#40000000"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
-                android:padding="16px"
+                android:padding="8px"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/llFanStatus">
 
                 <TextView
-                    android:id="@+id/tvAlertVOCValue"
-                    android:layout_width="130px"
+                    android:id="@+id/tvAlertValue"
+                    android:layout_width="180px"
                     android:layout_height="wrap_content"
-                    android:text="@string/alert_status"
-                    android:textColor="@color/white"
-                    android:textSize="32px" />
-
-                <ImageView
-                    android:id="@+id/ivAlertVOCStatus"
-                    android:layout_width="48px"
-                    android:layout_height="48px"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20px"
-                    android:layout_marginEnd="10px"
-                    android:src="@drawable/ic_normal"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/tvAlertStatus"
-                    android:layout_width="345px"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10px"
-                    android:layout_marginEnd="99px"
-                    android:background="@drawable/background_edit_normal"
+                    android:layout_margin="10px"
+                    android:background="@drawable/background_state_green"
                     android:gravity="center"
-                    android:padding="5px"
-                    android:textColor="@color/black"
-                    android:textSize="32px" />
+                    android:padding="10px"
+                    android:text="@string/no_alert"
+                    android:textColor="@color/white"
+                    android:textSize="24px" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -248,6 +220,7 @@
                     android:background="@drawable/background_edit_normal"
                     android:gravity="center"
                     android:padding="5px"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="32px" />
 
@@ -422,6 +395,7 @@
                     android:background="@drawable/background_edit_normal"
                     android:gravity="center"
                     android:padding="5px"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="32px" />
 
@@ -434,6 +408,7 @@
                     android:background="@drawable/background_edit_normal"
                     android:gravity="center"
                     android:padding="5px"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="32px" />
 
@@ -474,6 +449,7 @@
                     android:background="@drawable/background_edit_normal"
                     android:gravity="center"
                     android:padding="5px"
+                    android:singleLine="true"
                     android:textColor="#ff8400"
                     android:textSize="32px" />
 
@@ -527,6 +503,7 @@
                     android:background="@drawable/background_edit_normal"
                     android:gravity="center"
                     android:padding="5px"
+                    android:singleLine="true"
                     android:textColor="#ff4200"
                     android:textSize="32px" />
 
@@ -539,6 +516,7 @@
                     android:background="@drawable/background_edit_normal"
                     android:gravity="center"
                     android:padding="5px"
+                    android:singleLine="true"
                     android:textColor="#ff4200"
                     android:textSize="32px" />
 
@@ -555,7 +533,6 @@
                 android:id="@+id/split"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="8dp"
                 android:background="#0c729d"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -566,7 +543,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32px"
-                android:layout_marginTop="8px"
                 android:layout_marginEnd="32px"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="horizontal"
@@ -630,9 +606,10 @@
 
             <TextView
                 android:id="@+id/toolbar_date"
-                android:layout_width="wrap_content"
+                android:layout_width="200px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
+                android:gravity="center"
                 android:text=""
                 android:textColor="@color/white"
                 android:textSize="24px" />
@@ -649,9 +626,10 @@
 
             <TextView
                 android:id="@+id/toolbar_time"
-                android:layout_width="wrap_content"
+                android:layout_width="200px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
+                android:gravity="center"
                 android:text=""
                 android:textColor="@color/white"
                 android:textSize="24px" />

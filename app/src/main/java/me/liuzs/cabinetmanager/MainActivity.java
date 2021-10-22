@@ -19,19 +19,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import java.text.DecimalFormat;
-import java.util.Objects;
 
-import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
-import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 import me.liuzs.cabinetmanager.model.Cabinet;
+import me.liuzs.cabinetmanager.model.HardwareValue;
+import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.modbus.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.modbus.FrequencyConverterStatus;
-import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.modbus.SetupValue;
+import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 import me.liuzs.cabinetmanager.util.Util;
 
 public class MainActivity extends BaseActivity {
@@ -56,10 +54,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
-        Util.fullScreen(this);
         mNetworkStatus = findViewById(R.id.ivNetworkStatusValue);
         mCabinetName = findViewById(R.id.tvCabinetNameValue);
 

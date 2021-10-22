@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tool_bar_height">120px</dimen>
-    <dimen name="tool_bar_title_height">40px</dimen>
+    <dimen name="tool_bar_height">70px</dimen>
+    <dimen name="tool_bar_title_height">30px</dimen>
     <dimen name="fab_margin">16px</dimen>
     <dimen name="app_bar_height">200px</dimen>
     <dimen name="item_width">200px</dimen>

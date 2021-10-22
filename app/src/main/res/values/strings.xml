@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">危废暂存柜管理终端</string>
+    <string name="app_name">危废暂存柜终端</string>
     <string name="cancel">取消</string>
     <string name="ok">确认</string>
     <string name="tip">提示</string>

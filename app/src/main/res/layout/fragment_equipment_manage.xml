@@ -313,10 +313,10 @@
                 android:layout_width="130px"
                 android:layout_height="40px"
                 android:layout_marginStart="32px"
-                android:gravity="center"
-                android:textSize="28px"
                 android:checked="true"
                 android:enabled="false"
+                android:gravity="center"
+                android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvAlertFGLabel"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -435,7 +435,7 @@
                 android:textColor="@color/white"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/etFanHighVOCValue"
+                app:layout_constraintStart_toEndOf="@+id/etFanVOCMaxValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -451,7 +451,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/etFanLowVOCValue"
+                android:id="@+id/etFanVOCMinValue"
                 android:layout_width="wrap_content"
                 android:layout_height="40px"
                 android:layout_marginStart="32px"
@@ -460,6 +460,7 @@
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="numberSigned"
+                android:maxLength="3"
                 android:textColor="@color/black"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -468,7 +469,7 @@
                 tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
             <EditText
-                android:id="@+id/etFanHighVOCValue"
+                android:id="@+id/etFanVOCMaxValue"
                 android:layout_width="wrap_content"
                 android:layout_height="40px"
                 android:layout_marginStart="24px"
@@ -477,6 +478,7 @@
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="numberDecimal|numberSigned"
+                android:maxLength="3"
                 android:textColor="@color/black"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -493,7 +495,7 @@
                 android:textColor="@color/white"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/etFanLowVOCValue"
+                app:layout_constraintStart_toEndOf="@+id/etFanVOCMinValue"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -573,6 +575,7 @@
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="number"
+                android:maxLength="3"
                 android:textColor="@color/black"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -603,6 +606,7 @@
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:inputType="number"
+                android:maxLength="3"
                 android:textColor="@color/black"
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -641,7 +645,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24px"
             android:background="@drawable/background_button"
-            android:padding="10dp"
+            android:padding="20dp"
             android:text="@string/saveSetup"
             android:textColor="@android:color/white"
             android:textSize="40px"

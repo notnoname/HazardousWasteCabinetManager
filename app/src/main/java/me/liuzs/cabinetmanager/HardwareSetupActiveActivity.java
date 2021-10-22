@@ -41,14 +41,13 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
     });
 
     private TextView mARCState, mARCInfo, mPrinterName, mTitle, mScalesName;
-    private Button mARCActive, mWeight, mCalibration, mModbusTest;
-    private EditText mBarcode;
+    private Button mARCActive, mWeight, mCalibration;
+    private EditText mBarcode,mModbusAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hardware_setup);
-        Util.fullScreen(this);
         mARCState = findViewById(R.id.tvARCStateValue);
         mARCInfo = findViewById(R.id.tvActiveInfo);
         mARCActive = findViewById(R.id.btnARCActive);
@@ -56,7 +55,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
         mCalibration = findViewById(R.id.btnCalibration);
         mPrinterName = findViewById(R.id.tvPrinterNameValue);
         mScalesName = findViewById(R.id.tvScalesName);
-        mModbusTest = findViewById(R.id.btnModbusTest);
+        mModbusAddress = findViewById(R.id.etModbusAddress);
 
         mBarcode = findViewById(R.id.etBarcode);
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);

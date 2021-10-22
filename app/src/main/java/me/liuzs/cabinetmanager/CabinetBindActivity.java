@@ -71,11 +71,6 @@ public class CabinetBindActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cabinet_name);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
-        Util.fullScreen(this);
-        ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.title_activity_cabinet_name);
 
         mUserName = findViewById(R.id.tvSafetyPersonValue);
         mUserMobile = findViewById(R.id.tvMobileValue);

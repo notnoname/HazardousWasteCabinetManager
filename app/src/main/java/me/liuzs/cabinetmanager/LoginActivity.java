@@ -59,10 +59,6 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_setting);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Util.fullScreen(this);
-
         mAccountID = findViewById(R.id.etAccountIDValue);
         mAdminPassword = findViewById(R.id.etAccountPasswordValue);
         mFaceId = findViewById(R.id.btnFaceId);

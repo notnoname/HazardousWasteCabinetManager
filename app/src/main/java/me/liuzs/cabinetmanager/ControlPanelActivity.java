@@ -40,7 +40,6 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     private Button mFanOpen, mFanClose, mOxygenOpen, mOxygenClose;
     private SwitchButton mFanWorkModel, mACCtrlModel, mACPower;
     private AirConditionerStatus mAirConditionerStatus;
-    private ExecutorService executorService;
     private StatusOption mStatusOption;
     private final ActivityResultLauncher<Intent> mACWorkModelSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
@@ -92,11 +91,6 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control_panel);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
-        Util.fullScreen(this);
-        ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.control_panel);
         mFanWorkModelValue = findViewById(R.id.tvFanWorkModelValue);
         mSoundLightAlertValue = findViewById(R.id.tvSoundLightAlertValue);
         mACPowerValue = findViewById(R.id.tvACPowerValue);
@@ -121,11 +115,10 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         mACPower.setOnCheckedChangeListener(this);
         mACCtrlModel.setOnCheckedChangeListener(this);
 
-        executorService = Executors.newFixedThreadPool(1);
     }
 
     private void setACWorkModelOption(AirConditionerStatus.WorkModel workModel) {
-        executorService.submit(() -> {
+        getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACSetCommitAddress, true);
             if (success) {
                 showToast("空调模式设置成功!");
@@ -139,7 +132,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     }
 
     private void setACRemoteWorkModelOption(AirConditionerStatus.RemoteWorkModel workModel) {
-        executorService.submit(() -> {
+        getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACRemoteWorkModelSetCommitAddress, true);
             if (success) {
                 showToast("遥控器工作模式设置成功!");
@@ -153,7 +146,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     }
 
     private void getHardwareStatusInfo() {
-        executorService.submit(() -> {
+        getExecutorService().submit(() -> {
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
             if (mAirConditionerStatus.e != null || mStatusOption.e != null) {
@@ -215,14 +208,6 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         }
         mACWorkModelValue.setText(getString(ACWorkModelNameResId[mAirConditionerStatus.workModel.ordinal()]));
         mRemoteCtrlModelValue.setText(getString(ACRemoteWorkModelNameResId[mAirConditionerStatus.remoteWorkModel.ordinal()]));
-    }
-
-    @Override
-    protected void onStop() {
-        if (!executorService.isShutdown()) {
-            executorService.shutdownNow();
-        }
-        super.onStop();
     }
 
     public void onBackButtonClick(View view) {
@@ -288,7 +273,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     }
 
     private void setHardware(int valueAddress, int commitAddress, int value) {
-        executorService.submit(() -> {
+        getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareHoldingRegisterOption(valueAddress, value) && (commitAddress == 0 || ModbusService.setHardwareCoilStatusOption(commitAddress, true));
             if (!success) {
                 showToast("操作失败!");
@@ -307,7 +292,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     }
 
     private void controlHardware(int address) {
-        executorService.submit(() -> {
+        getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareCoilStatusOption(address, true);
             if (!success) {
                 showToast("操作失败!");
@@ -317,7 +302,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     }
 
     private void controlResetHardware(int address) {
-        executorService.submit(() -> {
+        getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareCoilStatusOption(address, false);
             if (!success) {
                 showToast("复位失败!");

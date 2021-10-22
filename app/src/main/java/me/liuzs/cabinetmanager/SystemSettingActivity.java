@@ -26,11 +26,7 @@ public class SystemSettingActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_setting);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
         ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.setting);
-        Util.fullScreen(this);
         if (savedInstanceState == null) {
             transToMainFragment();
         }

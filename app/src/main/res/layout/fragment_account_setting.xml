@@ -30,7 +30,7 @@
         android:background="@drawable/background_edit_normal"
         android:ems="10"
         android:importantForAutofill="no"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:maxLength="32"
         android:padding="10px"
         android:text=""

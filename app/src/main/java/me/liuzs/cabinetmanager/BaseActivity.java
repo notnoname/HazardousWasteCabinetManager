@@ -10,12 +10,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +30,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import me.liuxy.cabinet.SubBoard;
 import me.liuzs.cabinetmanager.ui.NewProgressDialog;
@@ -46,6 +47,7 @@ abstract class BaseActivity extends AppCompatActivity {
 
     protected final Handler mHandler = new Handler();
     protected NewProgressDialog mProgressDialog;
+    private ExecutorService executorService;
     private Toast mToast;
     private TextView mTime, mDate;
     private Timer mTimer;
@@ -79,21 +81,18 @@ abstract class BaseActivity extends AppCompatActivity {
 
     public synchronized void showToast(CharSequence info) {
         final CharSequence showInfo = info == null ? "" : info;
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mToast == null) {
-                    mToast = Toast.makeText(BaseActivity.this, showInfo, Toast.LENGTH_SHORT);
-                    TextView v = mToast.getView().findViewById(android.R.id.message);
-                    v.setPadding(10, 10, 10, 10);
-                    v.setTextColor(Color.BLACK);
-                    v.setTextSize(40);
-                    v.setGravity(Gravity.CENTER);
-                    mToast.setGravity(Gravity.CENTER, 0, 0);
-                }
-                mToast.setText(info);
-                mToast.show();
+        mHandler.post(() -> {
+            if (mToast == null) {
+                mToast = Toast.makeText(BaseActivity.this, showInfo, Toast.LENGTH_SHORT);
+                TextView v = mToast.getView().findViewById(android.R.id.message);
+                v.setPadding(10, 10, 10, 10);
+                v.setTextColor(Color.BLACK);
+                v.setTextSize(40);
+                v.setGravity(Gravity.CENTER);
+                mToast.setGravity(Gravity.CENTER, 0, 0);
             }
+            mToast.setText(info);
+            mToast.show();
         });
 
     }
@@ -135,8 +134,9 @@ abstract class BaseActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             return false;
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
-        return false;
     }
 
     @Override
@@ -165,6 +165,7 @@ abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        executorService = Executors.newFixedThreadPool(1);
     }
 
     @Override
@@ -240,9 +241,58 @@ abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        if (!executorService.isShutdown()) {
+            executorService.shutdownNow();
+        }
+        super.onDestroy();
+    }
+
     public interface AuthListener {
         void onAuthCancel();
 
         void onAuthSuccess(CabinetCore.RoleType roleType);
+    }
+
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        } else {
+            //showSystemUI();
+        }
+    }
+
+    protected void hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    // Shows the system bars by removing all the flags
+    // except for the ones that make the content appear under the system bars.
+    protected void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 }

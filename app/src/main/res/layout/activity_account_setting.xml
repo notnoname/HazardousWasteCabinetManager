@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".LoginActivity">
 
     <ImageView
@@ -22,17 +23,18 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:padding="16px"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tool_bar_height"
             android:background="@android:color/transparent"
+            android:padding="16px"
             app:popupTheme="@style/Theme.CabinetManager.PopupOverlay">
 
             <TextView
                 android:id="@+id/toolbar_date"
-                android:layout_width="wrap_content"
+                android:layout_width="200px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
+                android:gravity="center"
                 android:text=""
                 android:textSize="24px" />
 
@@ -47,9 +49,10 @@
 
             <TextView
                 android:id="@+id/toolbar_time"
-                android:layout_width="wrap_content"
+                android:layout_width="200px"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
+                android:gravity="center"
                 android:text=""
                 android:textSize="24px" />
         </androidx.appcompat.widget.Toolbar>
