@@ -141,6 +141,7 @@
     <string name="none">无</string>
     <string name="close">关</string>
     <string name="saveSetup">保存设置</string>
+    <string name="save">保存</string>
     <string name="open">开</string>
     <string name="Hz">Hz</string>
     <string name="engine_state">引擎状态</string>
@@ -210,8 +211,8 @@
     <string name="inventory_detail">库存详情</string>
     <string name="tvoc">主TVOC模块数量</string>
     <string name="stop">停止</string>
-    <string name="fanopen">打开</string>
+    <string name="fan_open">打开</string>
     <string name="TVOC">TVOC</string>
-    <string name="modbus_test">Modbus测试</string>
+    <string name="modbus_address">Modbus地址</string>
     <string name="no_alert">无告警</string>
 </resources>

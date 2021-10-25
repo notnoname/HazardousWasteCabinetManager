@@ -368,7 +368,7 @@
                 android:id="@+id/tvModBusLabel"
                 android:layout_width="220px"
                 android:layout_height="wrap_content"
-                android:text="@string/modbus_test"
+                android:text="@string/modbus_address"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="28px"

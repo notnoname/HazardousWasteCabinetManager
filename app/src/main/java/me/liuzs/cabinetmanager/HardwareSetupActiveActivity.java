@@ -14,13 +14,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.gson.Gson;
+import com.videogo.util.IPAddressUtil;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import me.liuzs.cabinetmanager.service.HardwareService;
-import me.liuzs.cabinetmanager.util.Util;
+import me.liuzs.cabinetmanager.service.ModbusService;
 
 public class HardwareSetupActiveActivity extends BaseActivity implements CabinetCore.CheckARCActiveListener {
 
@@ -40,7 +40,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
         }
     });
 
-    private TextView mARCState, mARCInfo, mPrinterName, mTitle, mScalesName;
+    private TextView mARCState, mARCInfo, mPrinterName, mScalesName;
     private Button mARCActive, mWeight, mCalibration;
     private EditText mBarcode,mModbusAddress;
 
@@ -72,11 +72,17 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
             mPrinterName.setText("");
         }
         showScalesDeviceName();
+        showModbusAddress();
     }
 
     private void showScalesDeviceName() {
         String name = Config.ScalesDeviceName[CabinetCore.getCurrentScalesDevice()];
         mScalesName.setText(name);
+    }
+
+    private void showModbusAddress() {
+        String address = CabinetCore.getModbusAddress();
+        mModbusAddress.setText(address);
     }
 
     @Override
@@ -110,6 +116,19 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
         mARCActive.setEnabled(true);
     }
 
+    public void onModbusAddressSaveButtonClick(View view) {
+        String address = mModbusAddress.getEditableText().toString();
+        if(IPAddressUtil.isIPv4LiteralAddress(address)){
+            CabinetCore.saveModbusAddress(address);
+            ModbusService.setModbusAddress(address);
+            showToast("保存成功！");
+            hideInputMethod();
+            showModbusAddress();
+        } else {
+            showToast("地址不正确！");
+        }
+    }
+
     @Override
     public void onCheckARCActiveSuccess() {
         mARCState.setText(R.string.activated);
@@ -124,23 +143,13 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
     }
 
     public void onPrinterButtonClick(View view) {
-        PrintActivity.ContainerLabel pc = new PrintActivity.ContainerLabel();
-        pc.chemicalCASNO = "60-57-1";
-        pc.chemicalName = "(1R,4S,4aS,5R,6R,7S,8S,8aR)-1,2,3,4,10,10-六氯-1,4,4a,5,6,7,8,8a-八氢-6,7-环氧-1,4,5,8-二亚甲基萘[含量2%～90%]";
-        pc.controlType = "易制爆危险化学品";
-        pc.containerNo = "101120201218001";
-        PrintActivity.startPrintContainerLabel(this, pc);
-    }
-
-    public void onModbusTestButtonClick(View view) {
-        List<String> options = new ArrayList<>();
-        options.add(String.valueOf(1));
-        options.add(String.valueOf(2));
-
-        Intent intent = new Intent(this, SpinnerActivity.class);
-        intent.putExtra(SpinnerActivity.KEY_OPTIONS, CabinetCore.GSON.toJson(options));
-        intent.putExtra(SpinnerActivity.KEY_TIP_INFO, "请选主TVOC模块数量：");
-
+        PrintActivity.ContainerLabel cl = new PrintActivity.ContainerLabel();
+        cl.batchNo = "PC00100";
+        cl.org = "清华大学";
+        cl.operator = "刘道衡";
+        cl.containerNo = "CN101120201218001";
+        List<PrintActivity.ContainerLabel> cls = new LinkedList<>();
+        PrintActivity.startPrintContainerLabel(this, cls);
     }
 
     public void onCalibrationButtonClick(View view) {

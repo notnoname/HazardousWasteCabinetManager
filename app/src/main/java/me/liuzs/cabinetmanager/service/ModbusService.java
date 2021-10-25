@@ -20,11 +20,17 @@ import me.liuzs.cabinetmanager.model.modbus.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.modbus.SetupValue;
 import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 
+@SuppressWarnings("unused")
 public class ModbusService {
     private static final String TAG = "ModbusService";
-    private static final String ModbusIP = "10.0.2.2";
+    private static String ModbusIP = CabinetCore.getModbusAddress();
     private static final int ModbusPort = 502;
     private static final int ModbusSlaveId = 1;
+
+    public static void setModbusAddress(String address) {
+        ModbusIP = address;
+    }
+
     /**
      * 工厂。
      */
@@ -61,8 +67,7 @@ public class ModbusService {
             throws ModbusTransportException, ErrorResponseException, ModbusInitException {
         // 01 Coil Status
         BaseLocator<Boolean> loc = BaseLocator.coilStatus(ModbusSlaveId, offset);
-        Boolean value = getMaster().getValue(loc);
-        return value;
+        return getMaster().getValue(loc);
     }
 
     private static void writeCoilStatus(int offset, boolean value) throws ModbusInitException, ErrorResponseException, ModbusTransportException {
@@ -88,8 +93,7 @@ public class ModbusService {
             throws ModbusTransportException, ErrorResponseException, ModbusInitException {
         // 02 Input Status
         BaseLocator<Boolean> loc = BaseLocator.inputStatus(ModbusSlaveId, offset);
-        Boolean value = getMaster().getValue(loc);
-        return value;
+        return getMaster().getValue(loc);
     }
 
     /**
@@ -97,7 +101,6 @@ public class ModbusService {
      *
      * @param offset   位置
      * @param dataType 数据类型,来自com.serotonin.modbus4j.code.DataType
-     * @return
      * @throws ModbusTransportException 异常
      * @throws ErrorResponseException   异常
      * @throws ModbusInitException      异常
@@ -124,20 +127,17 @@ public class ModbusService {
             throws ModbusTransportException, ErrorResponseException, ModbusInitException {
         // 04 Input Registers类型数据读取
         BaseLocator<Number> loc = BaseLocator.inputRegister(ModbusSlaveId, offset, dataType);
-        Number value = getMaster().getValue(loc);
-        return value;
+        return getMaster().getValue(loc);
     }
 
     /**
      * 读取变频器状态
-     *
-     * @return
      */
     public synchronized static FrequencyConverterStatus readFrequencyConverterStatus() {
         FrequencyConverterStatus frequencyConverterStatus = new FrequencyConverterStatus();
 
         try {
-            BatchRead<Integer> batch = new BatchRead<Integer>();
+            BatchRead<Integer> batch = new BatchRead<>();
             batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, FrequencyConverterStatus.FCStatusAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
             batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, FrequencyConverterStatus.FCRotatingSpeedAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
             batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, FrequencyConverterStatus.FCFrequencyAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
@@ -207,7 +207,7 @@ public class ModbusService {
         EnvironmentStatus environmentStatus = new EnvironmentStatus();
 
         try {
-            BatchRead<Integer> batch = new BatchRead<Integer>();
+            BatchRead<Integer> batch = new BatchRead<>();
             batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.VOCLowerAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
             batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.VOCUpperAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
             batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.FGLowerAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
@@ -246,7 +246,7 @@ public class ModbusService {
         AirConditionerStatus airConditionerStatus = new AirConditionerStatus();
 
         try {
-            BatchRead<Integer> batch = new BatchRead<Integer>();
+            BatchRead<Integer> batch = new BatchRead<>();
             batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACStatusAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
             batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACCtrlModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
             batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACWorkModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
@@ -390,11 +390,5 @@ public class ModbusService {
         } else {
             return (Integer) o;
         }
-    }
-
-    /**
-     * 变频器
-     */
-    public class FC {
     }
 }

@@ -26,6 +26,7 @@ public class Config {
     public static final String UN_SUBMIT_TAKE_OUT_INFO = "UN_SUBMIT_TAKE_OUT_INFO";
     public static final String PRINTER_BLUETOOTH_INFO = "PRINTER_BLUETOOTH_INFO";
     public static final String SYSPRE_CAMERA_VERIFY_CODE = "SYSPRE_CAMERA_VERIFY_CODE";
+    public static final String MODBUS_ADDRESS = "MODBUS_ADDRESS";
 
     public static final String ARC_APP_ID = "5UQUZXBwq4RknCfrk4zs7nBew3BQrNh7ZQH1ALQybdNR";
     public static final String ARC_SDK_KEY = "AzFyDx3GmvuvVWDSGZW9ZCe8uerNp1zoVcYfj45eXcNd";

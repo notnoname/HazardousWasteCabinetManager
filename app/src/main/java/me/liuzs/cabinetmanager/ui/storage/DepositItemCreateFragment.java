@@ -381,12 +381,12 @@ public class DepositItemCreateFragment extends Fragment implements View.OnClickL
             mActivity.bindService(intent, mLockerServiceConnection, Context.BIND_AUTO_CREATE);
         } else if (v == mPrintLabel) {
             if (checkItemInfo()) {
-                PrintActivity.ContainerLabel label = new PrintActivity.ContainerLabel();
-                label.containerNo = mNewItem.conNo;
-                label.controlType = mNewItem.controlType;
-                label.chemicalCASNO = mNewItem.casNo;
-                label.chemicalName = mNewItem.chemicalName;
-                PrintActivity.startPrintContainerLabel(mActivity, label);
+//                PrintActivity.ContainerLabel label = new PrintActivity.ContainerLabel();
+//                label.containerNo = mNewItem.conNo;
+//                label.controlType = mNewItem.controlType;
+//                label.chemicalCASNO = mNewItem.casNo;
+//                label.chemicalName = mNewItem.chemicalName;
+//                PrintActivity.startPrintContainerLabel(mActivity, label);
             } else {
                 mActivity.showToast("信息不完整！");
             }

@@ -6,13 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.feasycom.bean.BluetoothDeviceWrapper;
-import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -33,6 +28,7 @@ import com.puty.sdk.callback.PrinterInstanceApi;
 
 import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 import me.liuzs.cabinetmanager.printer.PrinterBluetoothInfo;
@@ -40,12 +36,10 @@ import me.liuzs.cabinetmanager.util.Util;
 
 public class PrintActivity extends BaseActivity {
 
-
     public static final String TAG = "PrintActivity";
-    private static final String KEY_VALUE = "KEY_VALUE";
-    private static final Gson _Gson = new Gson();
+    private static final String KEY_VALUE_LIST = "KEY_VALUE_LIST";
     public static PrinterBluetoothInfo CurrentPrinterInfo;
-    private static Class<? extends PrintContent> mClass;
+    private static Class<? extends List> mClass;
     private final Handler mHandler = new Handler();
     private TextView mPrinterName;
     private PrinterInstanceApi mPrinterInstance;
@@ -53,10 +47,10 @@ public class PrintActivity extends BaseActivity {
     private boolean isFoundSavedPrinter = false;
     private Bitmap mBitmap;
 
-    public static void startPrintContainerLabel(Context context, PrintContent content) {
-        mClass = content.getClass();
+    public static void startPrintContainerLabel(Context context, List<ContainerLabel> contentList) {
+        mClass = contentList.getClass();
         Intent intent = new Intent(context, PrintActivity.class);
-        intent.putExtra(KEY_VALUE, _Gson.toJson(content));
+        intent.putExtra(KEY_VALUE_LIST, CabinetCore.GSON.toJson(contentList));
         context.startActivity(intent);
     }
 
@@ -71,14 +65,24 @@ public class PrintActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         setContentView(R.layout.activity_print);
-        ImageView mPrintContent = findViewById(R.id.ivPrintValue);
         mPrinterState = findViewById(R.id.ivPrinterState);
         mPrinterName = findViewById(R.id.tvPrinterName);
-        String value = getIntent().getStringExtra(KEY_VALUE);
+        String value = getIntent().getStringExtra(KEY_VALUE_LIST);
         if (value != null && mClass != null) {
-            PrintContent mContent = _Gson.fromJson(value, mClass);
-            mBitmap = mContent.createBitmap();
-            mPrintContent.setImageBitmap(mBitmap);
+            List<ContainerLabel> labels = CabinetCore.GSON.fromJson(value, mClass);
+            for (ContainerLabel label : labels) {
+                mBitmap = label.createBarcodeImage();
+                ImageView barcodeImage = findViewById(R.id.ivBarCode);
+                barcodeImage.setImageBitmap(mBitmap);
+                TextView batchNo = findViewById(R.id.tvBatcbNoValue);
+                batchNo.setText("批次:" + label.containerNo);
+                TextView operator = findViewById(R.id.tvOperatorValue);
+                operator.setText("创建人:" + label.operator);
+                TextView org = findViewById(R.id.tvOrgValue);
+                org.setText("机构:" + org);
+                TextView barCode = findViewById(R.id.tvBarcodeValue);
+                barCode.setText(label.containerNo);
+            }
         }
         initPrinter();
     }
@@ -292,25 +296,16 @@ public class PrintActivity extends BaseActivity {
     }
 
 
-    public interface PrintContent {
-        Bitmap createBitmap();
-    }
-
-    public static class ContainerLabel implements PrintContent {
-        public final static int ImageWidth = 560;
-        public final static int ImageHeight = 400;
-        public final static int Margin = 5;
-        public final static int Margin_2 = 40;
-        public final static float Gene_QRCODE = 0.35f;
-        public final static float Gene_BARCODE = 0.14f;
+    public static class ContainerLabel {
+        public final static int ImageWidth = 600;
+        public final static int ImageHeight = 200;
 
         public String containerNo;
-        public String chemicalName;
-        public String chemicalCASNO;
-        public String controlType;
+        public String batchNo;
+        public String operator;
+        public String org;
 
-        @Override
-        public Bitmap createBitmap() {
+        public Bitmap createBarcodeImage() {
             Bitmap bitmap = Bitmap.createBitmap(ImageWidth, ImageHeight, Bitmap.Config.RGB_565);
             Canvas canvas = new Canvas(bitmap);
             Paint paint = new Paint();
@@ -319,13 +314,15 @@ public class PrintActivity extends BaseActivity {
             canvas.drawRect(0, 0, bitmap.getWidth(), bitmap.getHeight(), paint);
 
             try {
-                int qrCodeWidth = (int) (ImageWidth * Gene_QRCODE);
-                BarcodeFormat format = BarcodeFormat.QR_CODE;
-                //编码转换
-                String code = new String(containerNo.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+
+                int barCodeHeight = ImageHeight - 20;
+                int barCodeWidth = ImageWidth - 20;
+                int x = 10, y = 10;
                 Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
                 hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
-                BitMatrix matrix = new MultiFormatWriter().encode(code, format, qrCodeWidth, qrCodeWidth, hints);
+                BarcodeFormat format = BarcodeFormat.CODE_128;
+                String code = new String(containerNo.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+                BitMatrix matrix = new MultiFormatWriter().encode(code, format, barCodeWidth, barCodeHeight, hints);
                 int width = matrix.getWidth();
                 int height = matrix.getHeight();
                 int[] pixel = new int[width * height];
@@ -337,48 +334,8 @@ public class PrintActivity extends BaseActivity {
                             pixel[i * width + j] = 0xffFFFFFF;
                     }
                 }
-                bitmap.setPixels(pixel, 0, width, Margin, Margin, width, height);
-
-                String textContent = chemicalName + "\n" + (chemicalCASNO == null ? "" : chemicalCASNO) + "\n" + (controlType == null ? "" : controlType);
-                int textWidth = ImageWidth - qrCodeWidth - Margin - Margin - Margin;
-                int textX = qrCodeWidth + Margin + 10;
-                TextPaint textPaint = new TextPaint();
-                textPaint.setColor(Color.GRAY);
-                textPaint.setStyle(Paint.Style.FILL);
-                textPaint.setTextSize(32);
-                textPaint.setAntiAlias(true);
+                bitmap.setPixels(pixel, 0, width, x, y, width, height);
                 canvas.save();
-                StaticLayout staticLayout = StaticLayout.Builder.obtain(textContent, 0, textContent.length(), textPaint, textWidth).build();
-                canvas.translate(textX, -2);
-                staticLayout.draw(canvas);
-                canvas.restore();
-
-                int barCodeHeight = (int) (ImageWidth * Gene_BARCODE);
-                format = BarcodeFormat.CODE_128;
-                matrix = new MultiFormatWriter().encode(code, format, ImageWidth - Margin - Margin, barCodeHeight, hints);
-                width = matrix.getWidth();
-                height = matrix.getHeight();
-                pixel = new int[width * height];
-                for (int i = 0; i < height; i++) {
-                    for (int j = 0; j < width; j++) {
-                        if (matrix.get(j, i))
-                            pixel[i * width + j] = 0xff000000;
-                        else
-                            pixel[i * width + j] = 0xffFFFFFF;
-                    }
-                }
-                int barCodeY = qrCodeWidth >= staticLayout.getHeight() ? qrCodeWidth + Margin_2 + Margin : staticLayout.getHeight() + Margin;
-                bitmap.setPixels(pixel, 0, width, Margin, barCodeY, width, height);
-
-                int containerNoY = barCodeY + barCodeHeight;
-                canvas.save();
-                staticLayout = StaticLayout.Builder.obtain(containerNo, 0, containerNo.length(), textPaint, ImageWidth - Margin - Margin).setAlignment(Layout.Alignment.ALIGN_CENTER).build();
-                canvas.translate(Margin, containerNoY);
-                staticLayout.draw(canvas);
-                int containerNoHeight = staticLayout.getHeight();
-                int totalHeight = containerNoY + containerNoHeight;
-                Log.d(TAG, "TotalHeight:" + totalHeight);
-                canvas.restore();
 
             } catch (WriterException e) {
                 e.printStackTrace();

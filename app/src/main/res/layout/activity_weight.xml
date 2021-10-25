@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_dialog"
-    android:minWidth="480dp"
+    android:minWidth="680px"
     tools:context=".WeightActivity">
 
     <TextView
         android:id="@+id/tvTip"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24px"
+        android:layout_marginTop="16px"
+        android:layout_marginEnd="24px"
         android:text="@string/weight_colon"
         android:textColor="@android:color/darker_gray"
-        android:textSize="14sp"
+        android:textSize="20px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,15 +26,15 @@
         android:id="@+id/tvWeightValue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="24px"
+        android:layout_marginTop="16px"
+        android:layout_marginEnd="24px"
+        android:layout_marginBottom="8px"
         android:gravity="center"
         android:hint="@string/weight_tip_info"
         android:textColor="#ff4200"
         android:textColorHint="@android:color/darker_gray"
-        android:textSize="24sp"
+        android:textSize="28px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
@@ -45,10 +45,10 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="24px"
+        android:layout_marginTop="16px"
+        android:layout_marginEnd="24px"
+        android:layout_marginBottom="24px"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +57,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCancel"
-            android:layout_width="120dp"
+            android:layout_width="120px"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:background="@drawable/background_button"
@@ -65,11 +65,11 @@
             android:onClick="onCancelButtonClick"
             android:text="@string/cancel"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="24px" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnOK"
-            android:layout_width="120dp"
+            android:layout_width="120px"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:background="@drawable/background_button"
@@ -77,6 +77,6 @@
             android:onClick="onOKButtonClick"
             android:text="@string/ok"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="24px" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

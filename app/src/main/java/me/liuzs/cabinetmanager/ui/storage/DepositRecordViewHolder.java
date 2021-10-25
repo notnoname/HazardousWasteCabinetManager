@@ -52,12 +52,12 @@ public class DepositRecordViewHolder extends RecyclerView.ViewHolder implements 
         } else if (v == delete) {
             fragment.deleteItem(item);
         } else if (v == print) {
-            PrintActivity.ContainerLabel label = new PrintActivity.ContainerLabel();
-            label.containerNo = item.conNo;
-            label.controlType = item.controlType;
-            label.chemicalCASNO = item.casNo;
-            label.chemicalName = item.chemicalName;
-            PrintActivity.startPrintContainerLabel(activity, label);
+//            PrintActivity.ContainerLabel label = new PrintActivity.ContainerLabel();
+//            label.containerNo = item.conNo;
+//            label.controlType = item.controlType;
+//            label.chemicalCASNO = item.casNo;
+//            label.chemicalName = item.chemicalName;
+//            PrintActivity.startPrintContainerLabel(activity, label);
         }
     }
 }

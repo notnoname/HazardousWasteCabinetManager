@@ -262,24 +262,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public void onSubCabinetLockerButtonClick(View view) {
-        if (mHardwareValue == null) {
-            return;
-        }
-        showAuthActivity(CabinetCore.RoleType.Admin, new AuthListener() {
-            @Override
-            public void onAuthCancel() {
-            }
-
-            @Override
-            public void onAuthSuccess(CabinetCore.RoleType type) {
-                Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-
     public void onControlPanelButtonClick(View view) {
 
         if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {

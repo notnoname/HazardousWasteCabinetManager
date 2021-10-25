@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_dialog"
-    android:minWidth="480dp"
+    android:minWidth="800px"
     tools:context=".PrintActivity">
 
     <TextView
         android:id="@+id/tvTip"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="24px"
         android:text="@string/print_label"
         android:textColor="@android:color/darker_gray"
-        android:textSize="16sp"
+        android:textSize="24px"
         app:layout_constraintBottom_toBottomOf="@+id/tvPrinterName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvPrinterName" />
@@ -24,61 +24,100 @@
         android:id="@+id/tvPrinterName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="16px"
         android:hint="@string/set_printer_tip"
         android:text=""
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/darker_gray"
-        android:textSize="16sp"
+        android:textSize="24px"
         app:layout_constraintBottom_toBottomOf="@+id/ivPrinterState"
         app:layout_constraintEnd_toStartOf="@+id/ivPrinterState"
         app:layout_constraintTop_toTopOf="@+id/ivPrinterState" />
 
     <ImageView
         android:id="@+id/ivPrinterState"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
+        android:layout_width="45px"
+        android:layout_height="45px"
+        android:layout_marginTop="16px"
+        android:layout_marginEnd="24px"
         android:contentDescription="@string/app_name"
         android:onClick="onBluetoothListButtonClick"
-        android:padding="5dp"
+        android:padding="5px"
         android:src="@drawable/ic_connect_devices_false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-    <ImageView
-        android:id="@+id/ivPrintValue"
-        android:layout_width="430dp"
+    <LinearLayout
+        android:lines="4"
+        android:id="@+id/llBarcodeInfo"
+        android:layout_width="430px"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:adjustViewBounds="true"
+        android:layout_marginTop="8px"
         android:background="@drawable/background_info_area_white"
         android:contentDescription="@string/app_name"
-        android:padding="15dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/lab_test"
+        android:padding="15px"
+        android:textSize="20px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPrinterState" />
+        app:layout_constraintTop_toBottomOf="@+id/ivPrinterState"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvBatcbNoValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="批次:"
+            android:textColor="@color/black"
+            android:textSize="20px" />
+
+        <TextView
+            android:id="@+id/tvOperatorValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="创建人:"
+            android:textColor="@color/black"
+            android:textSize="20px" />
+
+        <TextView
+            android:id="@+id/tvOrgValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="机构:"
+            android:textColor="@color/black"
+            android:textSize="20px" />
+
+        <ImageView
+            android:id="@+id/ivBarCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/barcode" />
+
+        <TextView
+            android:id="@+id/tvBarcodeValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20px" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="24px"
+        android:layout_marginTop="16px"
+        android:layout_marginEnd="24px"
+        android:layout_marginBottom="24px"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPrintValue">
+        app:layout_constraintTop_toBottomOf="@+id/llBarcodeInfo">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCancel"
-            android:layout_width="120dp"
+            android:layout_width="120px"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:background="@drawable/background_button"
@@ -86,18 +125,18 @@
             android:onClick="onCancelButtonClick"
             android:text="@string/cancel"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="24px" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnOK"
-            android:layout_width="120dp"
+            android:layout_width="120px"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="16px"
             android:background="@drawable/background_button"
             android:gravity="center"
             android:onClick="onPrintButtonClick"
             android:text="@string/print_label"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="24px" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

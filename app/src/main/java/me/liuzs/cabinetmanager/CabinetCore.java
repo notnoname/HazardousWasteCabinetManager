@@ -130,6 +130,22 @@ public class CabinetCore {
         }
     }
 
+    public static String getModbusAddress() {
+        try {
+            SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            return sp.getString(Config.MODBUS_ADDRESS, "127.0.0.1");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static void saveModbusAddress(String address) {
+        SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(Config.MODBUS_ADDRESS, address);
+        editor.apply();
+    }
+
     public static Cabinet getCabinetInfo() {
         SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
         String cabinetInfo = sp.getString(Config.SYSPRE_CABINET_INFO, null);
