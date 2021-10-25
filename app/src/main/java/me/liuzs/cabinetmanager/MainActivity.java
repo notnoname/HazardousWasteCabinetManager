@@ -325,9 +325,9 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void onFirstTakeInButtonClick(View view) {
+    public void onContainerNoManagerButtonClick(View view) {
         if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
-            Intent intent = new Intent(MainActivity.this, StorageActivity.class);
+            Intent intent = new Intent(MainActivity.this, ContainerNoManagementActivity.class);
             startActivity(intent);
         } else {
             showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
@@ -337,7 +337,7 @@ public class MainActivity extends BaseActivity {
 
                 @Override
                 public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, StorageActivity.class);
+                    Intent intent = new Intent(MainActivity.this, ContainerNoManagementActivity.class);
                     startActivity(intent);
                 }
             });

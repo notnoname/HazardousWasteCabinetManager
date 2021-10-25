@@ -13,15 +13,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import me.liuzs.cabinetmanager.R;
-import me.liuzs.cabinetmanager.SingleNumberManagementActivity;
+import me.liuzs.cabinetmanager.ContainerNoManagementActivity;
 import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;
 
-public class SubBoardListAdapter extends RecyclerView.Adapter<SubBoardStatusItemViewHolder> {
+public class ContainerNoListAdapter extends RecyclerView.Adapter<SubBoardStatusItemViewHolder> {
 
     private final List<SubBoardStatusInfo> mResultList = new LinkedList<>();
-    private SingleNumberManagementActivity mActivity;
+    private ContainerNoManagementActivity mActivity;
 
-    public SubBoardListAdapter(SingleNumberManagementActivity activity) {
+    public ContainerNoListAdapter(ContainerNoManagementActivity activity) {
         super();
         mActivity = activity;
     }

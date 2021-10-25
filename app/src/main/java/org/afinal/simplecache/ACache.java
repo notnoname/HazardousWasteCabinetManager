@@ -15,6 +15,17 @@
  */
 package org.afinal.simplecache;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -40,17 +51,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-
 /**
  * @author Michael Yang（www.yangfuhai.com） update at 2013.08.07
  */
@@ -59,8 +59,8 @@ public class ACache {
 	public static final int TIME_DAY = TIME_HOUR * 24;
 	private static final int MAX_SIZE = 1000 * 1000 * 50; // 50 mb
 	private static final int MAX_COUNT = Integer.MAX_VALUE; // 不限制存放数据的数量
-	private static Map<String, ACache> mInstanceMap = new HashMap<String, ACache>();
-	private ACacheManager mCache;
+	private static final Map<String, ACache> mInstanceMap = new HashMap<>();
+	private final ACacheManager mCache;
 
 	public static ACache get(Context ctx) {
 		return get(ctx, "ACache");
@@ -75,9 +75,9 @@ public class ACache {
 		return get(cacheDir, MAX_SIZE, MAX_COUNT);
 	}
 
-	public static ACache get(Context ctx, long max_zise, int max_count) {
+	public static ACache get(Context ctx, long max_size, int max_count) {
 		File f = new File(ctx.getCacheDir(), "ACache");
-		return get(f, max_zise, max_count);
+		return get(f, max_size, max_count);
 	}
 
 	public static ACache get(File cacheDir, long max_zise, int max_count) {
@@ -173,7 +173,7 @@ public class ACache {
 	/**
 	 * 读取 String数据
 	 * 
-	 * @param key
+	 * @param key 键
 	 * @return String 数据
 	 */
 	public String getAsString(String key) {
@@ -184,13 +184,13 @@ public class ACache {
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new FileReader(file));
-			String readString = "";
+			StringBuilder readString = new StringBuilder();
 			String currentLine;
 			while ((currentLine = in.readLine()) != null) {
-				readString += currentLine;
+				readString.append(currentLine);
 			}
-			if (!Utils.isDue(readString)) {
-				return Utils.clearDateInfo(readString);
+			if (!Utils.isDue(readString.toString())) {
+				return Utils.clearDateInfo(readString.toString());
 			} else {
 				removeFile = true;
 				return null;
@@ -243,7 +243,7 @@ public class ACache {
 	/**
 	 * 读取JSONObject数据
 	 * 
-	 * @param key
+	 * @param key 键
 	 * @return JSONObject数据
 	 */
 	public JSONObject getAsJSONObject(String key) {

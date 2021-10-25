@@ -5,27 +5,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".SingleNumberManagementActivity">
+    tools:context=".ContainerNoManagementActivity">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/background" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/tool_bar_height">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/csToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24px"
+            android:layout_marginTop="16px"
+            android:layout_marginEnd="24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnNoManage2"
+                android:layout_width="230px"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_button"
+                android:singleLine="true"
+                android:text="@string/add_no_batch"
+                android:textColor="@color/white"
+                android:textSize="32px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecord"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="24px"
+            android:layout_marginTop="16px"
+            android:layout_marginEnd="24px"
+            android:layout_marginBottom="24px"
             android:background="@drawable/background_info_area"
-            android:padding="10dp"
+            android:padding="10px"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/csToolBar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -44,8 +77,8 @@
 
             <ImageButton
                 android:id="@+id/toolbar_back"
-                android:layout_width="45dp"
-                android:layout_height="35dp"
+                android:layout_width="90px"
+                android:layout_height="40px"
                 android:layout_gravity="start|center_vertical"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/app_name"
@@ -59,8 +92,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="副柜信息"
-                android:textSize="30sp"
+                android:text="@string/no_manage"
+                android:textSize="@dimen/tool_bar_title_height"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
