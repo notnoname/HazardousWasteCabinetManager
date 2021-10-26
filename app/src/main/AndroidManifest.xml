@@ -85,6 +85,10 @@
             android:label="@string/title_weight"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
+            android:name=".ContainerNoCreateActivity"
+            android:label="@string/title_container_no_create"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
             android:name=".PrintActivity"
             android:label="@string/print_label"
             android:theme="@style/Theme.AppCompat.Dialog" />

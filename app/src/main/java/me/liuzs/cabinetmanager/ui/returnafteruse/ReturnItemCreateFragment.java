@@ -325,7 +325,8 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
 
         @Override
         protected APIJSON<String> doInBackground(UsageItemInfo... item) {
-            return RemoteAPI.ReturnAfterUse.saveUsageItemDetail(item[0]);
+           // return RemoteAPI.ContainerNoManager.saveUsageItemDetail(item[0]);
+            return null;
         }
 
         @Override
@@ -356,7 +357,7 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
 
         @Override
         protected UsageItemInfo doInBackground(String... v) {
-            APIJSON<List<UsageItemInfo>> infoListJson = RemoteAPI.ReturnAfterUse.getContainerDetail(v[0]);
+            APIJSON<List<UsageItemInfo>> infoListJson = null; //RemoteAPI.ContainerNoManager.getContainerDetail(v[0]);
 //            if (infoListJson.code == 200 && infoListJson.data.size() > 0) {
 //                UsageItemInfo result = infoListJson.data.get(0);
 //                if (CabinetCore.isInThisTank(CabinetApplication.getInstance().getCabinetInfo(), result.devId)) {
@@ -411,7 +412,7 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
 
         @Override
         protected Boolean doInBackground(Void... v) {
-            APIJSON<List<UsageItemInfo>> listJSON = RemoteAPI.ReturnAfterUse.getContainerNoList();
+            APIJSON<List<UsageItemInfo>> listJSON = null; // RemoteAPI.ContainerNoManager.getContainerNoList();
             if (listJSON.status == APIJSON.Status.ok) {
                 mContainerNoList.clear();
                 for (UsageItemInfo info : listJSON.data) {

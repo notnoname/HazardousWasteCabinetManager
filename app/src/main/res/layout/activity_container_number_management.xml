@@ -36,6 +36,7 @@
                 android:layout_width="230px"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_button"
+                android:onClick="onAddBatchButtonClick"
                 android:singleLine="true"
                 android:text="@string/add_no_batch"
                 android:textColor="@color/white"

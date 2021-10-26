@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,7 +38,14 @@ import me.liuzs.cabinetmanager.printer.PrinterBluetoothInfo;
 import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.util.Util;
 
+@SuppressLint("SimpleDateFormat")
 public class CabinetCore {
+    private final static SimpleDateFormat _MilliSecondFormatter = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss.SSS");
+    private final static SimpleDateFormat _SecondFormatter = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss");
+    private final static SimpleDateFormat _DayFormatter = new SimpleDateFormat(
+            "yyyyMMdd");
     public final static Gson GSON = new Gson();
     private static final String TAG = "CabinetCore";
     private static Timer mAuthTimer;

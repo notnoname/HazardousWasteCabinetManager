@@ -97,7 +97,7 @@ public class ReturnListFragment extends Fragment {
 
         @Override
         protected List<UsageItemInfo> doInBackground(String... strings) {
-            APIJSON<List<UsageItemInfo>> listJson = RemoteAPI.ReturnAfterUse.getUsageItemList(mActivity.get().getUsageInfo().putId);
+            APIJSON<List<UsageItemInfo>> listJson = null; //  RemoteAPI.ContainerNoManager.getUsageItemList(mActivity.get().getUsageInfo().putId);
             if (listJson.status == APIJSON.Status.ok) {
                 return listJson.data;
             } else {

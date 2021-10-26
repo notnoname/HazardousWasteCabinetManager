@@ -1,22 +1,25 @@
 package me.liuzs.cabinetmanager;
 
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import me.liuxy.cabinet.SubBoard;
 import me.liuzs.cabinetmanager.model.Cabinet;
-import me.liuzs.cabinetmanager.model.HardwareValue;
-import me.liuzs.cabinetmanager.model.SubBoardStatusInfo;
+import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
+import me.liuzs.cabinetmanager.net.APIJSON;
+import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.service.ModbusService;
-import me.liuzs.cabinetmanager.ui.singlenumbermanagement.ContainerNoListAdapter;
-import me.liuzs.cabinetmanager.ui.singlenumbermanagement.SubBoardStatusItemViewHolder;
+import me.liuzs.cabinetmanager.ui.singlenumbermanagement.ContainerBatchListAdapter;
+import me.liuzs.cabinetmanager.ui.singlenumbermanagement.ContainerBatchItemViewHolder;
 
 /**
  * 单号管理
@@ -24,9 +27,23 @@ import me.liuzs.cabinetmanager.ui.singlenumbermanagement.SubBoardStatusItemViewH
 public class ContainerNoManagementActivity extends BaseActivity {
 
     public static final String TAG = "ContainerNoManagementActivity";
-    private final ContainerNoListAdapter mAdapter = new ContainerNoListAdapter(this);
-    private final List<SubBoardStatusInfo> mSubBoardStatusInfo = new LinkedList<>();
+    private final ContainerBatchListAdapter mAdapter = new ContainerBatchListAdapter(this);
+    private final List<ContainerNoBatchInfo> mContainerNoBatchInfo = new LinkedList<>();
     private RecyclerView mRecyclerView;
+
+    private final ActivityResultLauncher<Intent> mNoCreateLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            int resultCode = result.getResultCode();
+            if (resultCode == RESULT_OK) {
+                Intent data = result.getData();
+                assert data != null;
+                String selectValue = data.getStringExtra(ContainerNoCreateActivity.KEY_RESULT_VALUE);
+                assert selectValue != null;
+                showToast("单号创建:" + selectValue);
+            }
+        }
+    });
 
     @Override
     void afterRequestPermission(int requestCode, boolean isAllGranted) {
@@ -49,17 +66,7 @@ public class ContainerNoManagementActivity extends BaseActivity {
 //            }
         }
 
-        if (HardwareValue._Cache != null) {
-            List<SubBoard.StatusData> datas = new LinkedList<>();
-            for (int i = 0; i < mSubBoardStatusInfo.size(); i++) {
-                SubBoard.StatusData data = datas.get(i);
-                SubBoardStatusInfo info = mSubBoardStatusInfo.get(i);
-                info.statusData = data;
-            }
-        }
-
-        SubBoardStatusItemViewHolder.setup = ModbusService.readSetupValue();
-        mAdapter.setResult(mSubBoardStatusInfo);
+        mAdapter.setResult(mContainerNoBatchInfo);
 
     }
 
@@ -68,9 +75,23 @@ public class ContainerNoManagementActivity extends BaseActivity {
         super.onStart();
     }
 
+    private void getContainerNoList(String name, String count) {
+        getExecutorService().submit(() -> {
+            APIJSON<ContainerNoBatchInfo> json = RemoteAPI.ContainerNoManager.createContainerNoBatch(name, count);
+            if(json.status == APIJSON.Status.ok) {
+
+            }
+        });
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    public void onAddBatchButtonClick(View view) {
+        Intent intent = new Intent(this, ContainerNoCreateActivity.class);
+        mNoCreateLauncher.launch(intent);
     }
 
     public void onBackButtonClick(View view) {

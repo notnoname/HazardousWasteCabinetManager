@@ -192,7 +192,7 @@ public class ReturnAfterUseActivity extends BaseActivity {
         protected UsageInfo doInBackground(Void... voids) {
             Cabinet cabinet = CabinetCore.getCabinetInfo();
             UsageInfo result = new UsageInfo();
-            APIJSON<StorageLaboratoryDetail> storageLaboratoryDetailJSON = RemoteAPI.ReturnAfterUse.getStorageLaboratoryDetail();
+            APIJSON<StorageLaboratoryDetail> storageLaboratoryDetailJSON = null;
             if (storageLaboratoryDetailJSON.status != APIJSON.Status.ok) {
                 return null;
             } else {
@@ -204,22 +204,17 @@ public class ReturnAfterUseActivity extends BaseActivity {
                 result.building = detail.building;
             }
 
-            APIJSON<String> usageNoJSON = RemoteAPI.ReturnAfterUse.createUsageTask();
+            APIJSON<String> usageNoJSON = null;
             if (usageNoJSON.status != APIJSON.Status.ok) {
                 return null;
             }
 
             UsageInfo usageInfo = null;
-            APIJSON<List<UsageInfo>> usageInfoListJson = RemoteAPI.ReturnAfterUse.getLastUsageTaskList();
+            APIJSON<List<UsageInfo>> usageInfoListJson = null; //RemoteAPI.ContainerNoManager.getLastUsageTaskList();
             if (usageInfoListJson.status != APIJSON.Status.ok || usageInfoListJson.data == null || usageInfoListJson.data.size() == 0) {
                 return null;
             } else {
-//                for (UsageInfo info : usageInfoListJson.data) {
-//                    if (TextUtils.equals(info.putLabId, cabinet.labId)) {
-//                        usageInfo = info;
-//                        break;
-//                    }
-//                }
+
             }
 
             if (usageInfo == null) {

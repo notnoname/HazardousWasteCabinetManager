@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog"
+    android:minWidth="800px"
+    tools:context=".WeightActivity">
+
+    <EditText
+        android:id="@+id/etBatchName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16px"
+        android:background="@drawable/background_edit"
+        android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:ems="8"
+        android:inputType="textEmailAddress"
+        android:padding="5px"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvBatchName"
+        app:layout_constraintStart_toEndOf="@+id/tvBatchName"
+        app:layout_constraintTop_toTopOf="@+id/tvBatchName"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <EditText
+        android:id="@+id/etBatchNoCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16px"
+        android:background="@drawable/background_edit"
+        android:digits="0123456789"
+        android:ems="8"
+        android:inputType="numberDecimal"
+        android:padding="5px"
+        android:text="20"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNoCount"
+        app:layout_constraintStart_toEndOf="@+id/tvNoCount"
+        app:layout_constraintTop_toTopOf="@+id/tvNoCount"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16px"
+        android:layout_marginEnd="48px"
+        android:singleLine="true"
+        android:text="@string/batch_no_count_tip"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="28px"
+        app:layout_constraintBottom_toBottomOf="@+id/etBatchNoCount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etBatchNoCount"
+        app:layout_constraintTop_toTopOf="@+id/etBatchNoCount" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16px"
+        android:layout_marginEnd="48px"
+        android:singleLine="true"
+        android:text="@string/container_no_batch_name_tip"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="28px"
+        app:layout_constraintBottom_toBottomOf="@+id/etBatchName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etBatchName"
+        app:layout_constraintTop_toTopOf="@+id/etBatchName" />
+
+    <TextView
+        android:id="@+id/tvBatchName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48px"
+        android:layout_marginTop="24px"
+        android:text="@string/container_no_batch_name"
+        android:textColor="@android:color/white"
+        android:textSize="28px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvNoCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48px"
+        android:layout_marginTop="48px"
+        android:layout_marginBottom="8px"
+        android:gravity="center"
+        android:text="@string/batch_no_count"
+        android:textColor="@color/white"
+        android:textColorHint="@android:color/darker_gray"
+        android:textSize="28px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBatchName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48px"
+        android:layout_marginTop="24px"
+        android:layout_marginEnd="48px"
+        android:layout_marginBottom="24px"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNoCount">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancel"
+            android:layout_width="120px"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/background_button"
+            android:gravity="center"
+            android:onClick="onCancelButtonClick"
+            android:text="@string/cancel"
+            android:textColor="@color/white"
+            android:textSize="24px" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOK"
+            android:layout_width="120px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/background_button"
+            android:gravity="center"
+            android:onClick="onOKButtonClick"
+            android:text="@string/ok"
+            android:textColor="@color/white"
+            android:textSize="24px" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

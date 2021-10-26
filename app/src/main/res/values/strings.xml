@@ -42,6 +42,8 @@
     <string name="fan_stop">关闭风机</string>
     <string name="no_manage">单号管理</string>
     <string name="add_no_batch">新增批次</string>
+    <string name="batch_no_count">单号数量：</string>
+    <string name="batch_no_count_tip">只可输入数字，最大50</string>
     <string name="reset">复位</string>
     <string name="user_management">使用人员管理</string>
     <string name="set_value_management">参数设置</string>
@@ -104,6 +106,7 @@
     <string name="title_auth">用户验证</string>
     <string name="title_spinner">选项</string>
     <string name="title_weight">称重</string>
+    <string name="title_container_no_create">创建单号</string>
     <string name="back">返回</string>
     <string name="face_id_tip">请正对摄像头</string>
     <string name="equipment_manage_fragment">设备管理</string>
@@ -177,6 +180,8 @@
     <string name="purity_colon">纯度：</string>
     <string name="chem_container_no_colon">试剂容器编号：</string>
     <string name="weight_colon">重量：</string>
+    <string name="container_no_batch_name">批次名称：</string>
+    <string name="container_no_batch_name_tip">支持中英文字符和数字</string>
     <string name="control_category_colon">管制类别：</string>
     <string name="submit">提交</string>
     <string name="search_chemical">搜索化学药品</string>
