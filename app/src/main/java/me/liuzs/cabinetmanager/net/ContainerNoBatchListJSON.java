@@ -9,13 +9,13 @@ public class ContainerNoBatchListJSON {
     /**
      * 每页记录数
      */
-    public int pageSize;
+    public int page_size;
     /**
      * 页数
      */
-    public int pageCount;
+    public int page_count;
     /**
      * 第几页
      */
-    public int pageIndex;
+    public int page_index;
 }

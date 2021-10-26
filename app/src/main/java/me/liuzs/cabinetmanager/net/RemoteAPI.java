@@ -1,14 +1,11 @@
 package me.liuzs.cabinetmanager.net;
 
-import static me.liuzs.cabinetmanager.net.APIJSON.buildServerErrorJSON;
-
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +21,6 @@ import cz.msebera.android.httpclient.client.methods.HttpRequestBase;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
-import cz.msebera.android.httpclient.protocol.HTTP;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.model.Cabinet;
@@ -39,8 +35,6 @@ import me.liuzs.cabinetmanager.model.StorageLaboratoryDetail;
 import me.liuzs.cabinetmanager.model.SurveillanceCamera;
 import me.liuzs.cabinetmanager.model.TakeOutInfo;
 import me.liuzs.cabinetmanager.model.TakeOutItemInfo;
-import me.liuzs.cabinetmanager.model.UsageInfo;
-import me.liuzs.cabinetmanager.model.UsageItemInfo;
 import me.liuzs.cabinetmanager.model.User;
 
 public class RemoteAPI {
@@ -698,7 +692,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("token", user.token));
                 valuePairs.add(new BasicNameValuePair("name", name));
                 valuePairs.add(new BasicNameValuePair("count", count));
-                valuePairs.add(new BasicNameValuePair("agencyId", cabinet.agencyId));
+                valuePairs.add(new BasicNameValuePair("agencyId", cabinet.agency_id));
                 method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
@@ -739,7 +733,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("token", user.token));
                 valuePairs.add(new BasicNameValuePair("name", name));
                 valuePairs.add(new BasicNameValuePair("count", count));
-                valuePairs.add(new BasicNameValuePair("agencyId", cabinet.agencyId));
+                valuePairs.add(new BasicNameValuePair("agencyId", cabinet.agency_id));
                 method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());

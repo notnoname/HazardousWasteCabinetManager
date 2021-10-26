@@ -1,8 +1,5 @@
 package me.liuzs.cabinetmanager.model;
 
-/**
- * TankInfo， TankInfo和CabinetInfo合并
- */
 public class Cabinet {
     public String id;
     public String name;
@@ -12,7 +9,7 @@ public class Cabinet {
     public String[] operator;
     public String ownerId;
     public String ownerName;
-    public String agencyId;
+    public String agency_id;
     public String agencyNo;
     public String agencyName;
 }
