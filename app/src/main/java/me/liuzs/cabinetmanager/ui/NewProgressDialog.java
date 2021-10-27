@@ -1,5 +1,6 @@
 package me.liuzs.cabinetmanager.ui;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -61,6 +62,8 @@ public class NewProgressDialog extends AlertDialog {
                 break;
         }
         message = findViewById(R.id.message);
+        message.setTextSize(28);
+        message.setSingleLine(true);
         tvCancel = findViewById(R.id.tv_cancel);
         progressBar = findViewById(R.id.progress);
         if (message != null && !TextUtils.isEmpty(messageText)) {

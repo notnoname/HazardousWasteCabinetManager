@@ -1,5 +1,7 @@
-package me.liuzs.cabinetmanager.ui.singlenumbermanagement;
+package me.liuzs.cabinetmanager.ui.containernobatch;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,20 +33,32 @@ public class ContainerBatchListAdapter extends RecyclerView.Adapter<ContainerBat
     @Override
     public ContainerBatchItemViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_container_batch_info, parent, false);
-        return new ContainerBatchItemViewHolder(itemView);
+        return new ContainerBatchItemViewHolder(itemView, mActivity);
     }
 
-    public void setResult(List<ContainerNoBatchInfo> items) {
-        mResultList.clear();
+    @SuppressLint("NotifyDataSetChanged")
+    public void add(List<ContainerNoBatchInfo> items) {
         mResultList.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void clear() {
+        mResultList.clear();
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ContainerBatchItemViewHolder holder, int position) {
         if (position != 0) {
-            ContainerNoBatchInfo item = mResultList.get(position - 1);
-            holder.containerNoBatchInfo = item;
+            holder.containerNoBatchInfo = mResultList.get(position - 1);
+        } else {
+            holder.containerNoBatchInfo = null;
+        }
+        if(position % 2 ==0) {
+            holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor("#40000000"));
         }
         holder.show();
     }

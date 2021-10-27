@@ -2,6 +2,7 @@ package me.liuzs.cabinetmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -9,7 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ContainerNoCreateActivity extends AppCompatActivity {
 
-    public static final String KEY_RESULT_VALUE = "KEY_RESULT_VALUE";
+    public static final String KEY_RESULT_BATCH_NAME = "KEY_RESULT_BATCH_NAME";
+    public static final String KEY_RESULT_COUNT = "KEY_RESULT_COUNT";
     public static final String TAG = "ContainerNoCreateActivity";
     private EditText mBatchName, mNoCount;
 
@@ -28,7 +30,18 @@ public class ContainerNoCreateActivity extends AppCompatActivity {
     public void onOKButtonClick(View v) {
         Intent data = new Intent();
         try {
-            data.putExtra(KEY_RESULT_VALUE, "创建成功!");
+            String name = mBatchName.getText().toString();
+            String countStr = mNoCount.getText().toString();
+            int count = Integer.parseInt(countStr);
+            if(TextUtils.isEmpty(name)) {
+                return;
+            }
+            if(count > 50) {
+                mNoCount.setText("");
+                return;
+            }
+            data.putExtra(KEY_RESULT_BATCH_NAME, name);
+            data.putExtra(KEY_RESULT_COUNT, String.valueOf(count));
             setResult(RESULT_OK, data);
             finish();
         } catch (Exception ignored) {
@@ -45,4 +58,5 @@ public class ContainerNoCreateActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED);
         finish();
     }
+
 }

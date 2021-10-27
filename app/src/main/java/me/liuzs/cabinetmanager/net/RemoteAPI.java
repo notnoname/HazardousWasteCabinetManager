@@ -26,6 +26,7 @@ import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
+import me.liuzs.cabinetmanager.model.ContainerNoInfo;
 import me.liuzs.cabinetmanager.model.DepositItem;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.InventoryDetail;
@@ -721,19 +722,20 @@ public class RemoteAPI {
          *
          * @return 创建是否成功
          */
-        public static APIJSON<ContainerNoBatchInfo> getContainerNoBatchList(String name, String count, int pageSize, int pageIndex) {
+        public static APIJSON<ContainerNoBatchListJSON> getContainerNoBatchList(String batchName, String operator, int page_size, int page_index) {
 
             try {
                 User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
                 Cabinet cabinet = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpPost method = new HttpPost(API_CREATE_CONTAINER_NO_BATCH);
+                HttpPost method = new HttpPost(API_GET_CONTAINER_NO_BATCH_LIST);
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("userId", user.id));
                 valuePairs.add(new BasicNameValuePair("token", user.token));
-                valuePairs.add(new BasicNameValuePair("name", name));
-                valuePairs.add(new BasicNameValuePair("count", count));
-                valuePairs.add(new BasicNameValuePair("agencyId", cabinet.agency_id));
+                valuePairs.add(new BasicNameValuePair("batch_name", batchName));
+                valuePairs.add(new BasicNameValuePair("operator", operator));
+                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(page_size)));
+                valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(page_index)));
                 method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
@@ -744,7 +746,41 @@ public class RemoteAPI {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<ContainerNoBatchInfo>>() {
+                    Type jsonType = new TypeToken<APIJSON<ContainerNoBatchListJSON>>() {
+                    }.getType();
+                    return CabinetCore.GSON.fromJson(content, jsonType);
+                } else {
+                    //noinspection unchecked
+                    return APIJSON.buildServerErrorJSON(code);
+                }
+            } catch (Exception e) {
+                //noinspection unchecked
+                return APIJSON.buildOtherErrorJSON(e);
+            }
+        }
+
+        public static APIJSON<List<ContainerNoInfo>> getContainerNoList(String batchId) {
+
+            try {
+                User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
+                Cabinet cabinet = CabinetCore.getCabinetInfo();
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                HttpPost method = new HttpPost(API_GET_CONTAINER_NO_BATCH_NO_LIST);
+                List<NameValuePair> valuePairs = new ArrayList<>();
+                valuePairs.add(new BasicNameValuePair("userId", user.id));
+                valuePairs.add(new BasicNameValuePair("token", user.token));
+                valuePairs.add(new BasicNameValuePair("batch_id", batchId));
+                method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
+                Log.d(TAG, method.getURI().toString());
+                Log.d(TAG, valuePairs.toString());
+                generalBaseHeader(method);
+                HttpResponse httpResponse = httpClient.execute(method);
+                int code = httpResponse.getStatusLine().getStatusCode();
+                if (code == HTTP_OK) {
+                    HttpEntity entity = httpResponse.getEntity();
+                    String content = EntityUtils.toString(entity, UTF_8);
+                    Log.d(TAG, content);
+                    Type jsonType = new TypeToken<APIJSON<List<ContainerNoInfo>>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {

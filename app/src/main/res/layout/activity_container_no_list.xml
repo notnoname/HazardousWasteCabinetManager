@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".ContainerNoManagementActivity">
+    tools:context=".ContainerNoListActivity">
 
     <ImageView
         android:id="@+id/background"
@@ -33,69 +33,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/etBatchName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16px"
-                android:background="@drawable/background_edit"
-                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                android:ems="8"
-                android:hint="按批次名搜索"
-                android:inputType="textEmailAddress"
-                android:padding="10px"
-                android:text=""
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-            <EditText
-                android:id="@+id/etOperator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16px"
-                android:background="@drawable/background_edit"
-                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                android:ems="8"
-                android:hint="按批创建人搜索"
-                android:inputType="textEmailAddress"
-                android:padding="10px"
-                android:text=""
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="@+id/etBatchName"
-                app:layout_constraintStart_toEndOf="@+id/etBatchName"
-                app:layout_constraintTop_toTopOf="@+id/etBatchName"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSearch"
-                android:layout_width="230px"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16px"
-                android:background="@drawable/background_button"
-                android:onClick="onSearchButtonClick"
-                android:singleLine="true"
-                android:text="@string/search"
-                android:textColor="@color/white"
-                android:textSize="32px"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/etOperator"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnNoCreate"
+                android:id="@+id/btnPrint"
                 android:layout_width="230px"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_button"
-                android:onClick="onAddBatchButtonClick"
+                android:onClick="onPrintButtonClick"
                 android:singleLine="true"
-                android:text="@string/add_no_batch"
+                android:text="@string/print_label"
                 android:textColor="@color/white"
                 android:textSize="32px"
                 app:layout_constraintBottom_toBottomOf="parent"

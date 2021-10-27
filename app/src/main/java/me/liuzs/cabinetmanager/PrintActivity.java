@@ -31,6 +31,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import me.liuzs.cabinetmanager.model.ContainerNoInfo;
 import me.liuzs.cabinetmanager.printer.PrinterBluetoothInfo;
 import me.liuzs.cabinetmanager.util.Util;
 
@@ -75,13 +76,13 @@ public class PrintActivity extends BaseActivity {
                 ImageView barcodeImage = findViewById(R.id.ivBarCode);
                 barcodeImage.setImageBitmap(mBitmap);
                 TextView batchNo = findViewById(R.id.tvBatcbNoValue);
-                batchNo.setText("批次:" + label.containerNo);
+                batchNo.setText("批次:" + label.batch_name);
                 TextView operator = findViewById(R.id.tvOperatorValue);
                 operator.setText("创建人:" + label.operator);
                 TextView org = findViewById(R.id.tvOrgValue);
-                org.setText("机构:" + org);
+                org.setText("机构:" + label.agency_name);
                 TextView barCode = findViewById(R.id.tvBarcodeValue);
-                barCode.setText(label.containerNo);
+                barCode.setText(label.no);
             }
         }
         initPrinter();
@@ -296,14 +297,9 @@ public class PrintActivity extends BaseActivity {
     }
 
 
-    public static class ContainerLabel {
+    public static class ContainerLabel extends ContainerNoInfo {
         public final static int ImageWidth = 600;
         public final static int ImageHeight = 200;
-
-        public String containerNo;
-        public String batchNo;
-        public String operator;
-        public String org;
 
         public Bitmap createBarcodeImage() {
             Bitmap bitmap = Bitmap.createBitmap(ImageWidth, ImageHeight, Bitmap.Config.RGB_565);
@@ -321,7 +317,7 @@ public class PrintActivity extends BaseActivity {
                 Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
                 hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
                 BarcodeFormat format = BarcodeFormat.CODE_128;
-                String code = new String(containerNo.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+                String code = new String(no.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
                 BitMatrix matrix = new MultiFormatWriter().encode(code, format, barCodeWidth, barCodeHeight, hints);
                 int width = matrix.getWidth();
                 int height = matrix.getHeight();
