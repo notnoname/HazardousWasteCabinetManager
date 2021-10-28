@@ -351,6 +351,7 @@
                 android:layout_width="0dp"
                 android:layout_height="70px"
                 android:layout_marginStart="16px"
+                android:layout_marginEnd="16px"
                 android:background="@drawable/background_edit"
                 android:digits="0123456789."
                 android:importantForAutofill="no"
@@ -359,10 +360,25 @@
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnAddressSave"
                 app:layout_constraintStart_toEndOf="@+id/tvModBusLabel"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnAddressSave"
+                android:layout_width="160px"
+                android:layout_height="60px"
+                android:background="@drawable/background_button"
+                android:onClick="onModbusAddressSaveButtonClick"
+                android:text="@string/save"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="24px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
             <TextView
                 android:id="@+id/tvModBusLabel"

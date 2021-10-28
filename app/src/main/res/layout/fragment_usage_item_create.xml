@@ -9,12 +9,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/csBottom"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginStart="110dp"
-        android:layout_marginEnd="110dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -35,12 +34,13 @@
             android:id="@+id/btnUnlock"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
             android:background="@drawable/background_button_orange"
             android:text="@string/unlock"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnWight"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -48,7 +48,6 @@
         android:id="@+id/tvUsedWeightLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/used_weight_colon"
         android:textColor="@color/white"
@@ -59,10 +58,10 @@
 
     <TextView
         android:id="@+id/tvUsedWeightValue"
-        android:layout_width="320dp"
+        android:layout_width="280dp"
         android:layout_height="37dp"
+        android:layout_marginStart="148dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:background="@drawable/background_edit"
         android:ems="10"
         android:gravity="center_vertical"
@@ -73,14 +72,13 @@
         android:textColor="@color/black"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etRemainWeightValue" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPackingSpecValue" />
 
     <TextView
         android:id="@+id/tvWeightLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="取出重量(g)："
         android:textColor="@color/white"
@@ -91,10 +89,9 @@
 
     <TextView
         android:id="@+id/tvWeightValue"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:background="@drawable/background_edit"
         android:ems="10"
         android:paddingStart="10dp"
@@ -104,14 +101,14 @@
         android:textColor="@color/black"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPackingSpecValue" />
+        app:layout_constraintEnd_toEndOf="@+id/etRemainWeightValue"
+        app:layout_constraintStart_toEndOf="@+id/tvRemainWeightLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvUnitValue" />
 
     <TextView
         android:id="@+id/tvRemainWeightLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/remain_weight_colon"
         android:textColor="@color/white"
@@ -122,10 +119,10 @@
 
     <EditText
         android:id="@+id/etRemainWeightValue"
-        android:layout_width="320dp"
+        android:layout_width="280dp"
         android:layout_height="37dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/background_edit"
         android:ems="10"
         android:gravity="center_vertical"
@@ -145,7 +142,6 @@
         android:id="@+id/tvPackingSpecLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/packing_spec_colon"
         android:textColor="@color/white"
@@ -156,10 +152,9 @@
 
     <TextView
         android:id="@+id/tvPackingSpecValue"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:background="@drawable/background_edit"
         android:paddingStart="10dp"
         android:paddingTop="8dp"
@@ -169,14 +164,14 @@
         android:textColor="@color/black"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUnitValue" />
+        app:layout_constraintEnd_toEndOf="@+id/tvUsedWeightValue"
+        app:layout_constraintStart_toEndOf="@+id/tvUsedWeightLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvPurityValue" />
 
     <TextView
         android:id="@+id/tvUnitLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/unit_colon"
         android:textColor="@color/white"
@@ -187,10 +182,9 @@
 
     <TextView
         android:id="@+id/tvUnitValue"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:background="@drawable/background_edit"
         android:paddingStart="10dp"
         android:paddingTop="8dp"
@@ -200,14 +194,14 @@
         android:textColor="@color/black"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPurityValue" />
+        app:layout_constraintEnd_toEndOf="@+id/etRemainWeightValue"
+        app:layout_constraintStart_toEndOf="@+id/tvRemainWeightLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvControlCategoryValue" />
 
     <TextView
         android:id="@+id/tvPurityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/purity_colon"
         android:textColor="@color/white"
@@ -218,10 +212,9 @@
 
     <TextView
         android:id="@+id/tvPurityValue"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:background="@drawable/background_edit"
         android:paddingStart="10dp"
         android:paddingTop="8dp"
@@ -231,14 +224,14 @@
         android:textColor="@color/black"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvControlCategoryValue" />
+        app:layout_constraintEnd_toEndOf="@+id/tvPackingSpecValue"
+        app:layout_constraintStart_toStartOf="@+id/tvPackingSpecValue"
+        app:layout_constraintTop_toBottomOf="@+id/tvChemicalNameValue" />
 
     <TextView
         android:id="@+id/tvControlCategoryLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/control_category_colon"
         android:textColor="@color/white"
@@ -249,10 +242,9 @@
 
     <TextView
         android:id="@+id/tvControlCategoryValue"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:background="@drawable/background_edit"
         android:paddingStart="10dp"
         android:paddingTop="8dp"
@@ -262,14 +254,14 @@
         android:textColor="@color/black"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvChemicalNameValue" />
+        app:layout_constraintEnd_toEndOf="@+id/tvUnitValue"
+        app:layout_constraintStart_toStartOf="@+id/tvUnitValue"
+        app:layout_constraintTop_toBottomOf="@+id/tvDeviceValue" />
 
     <TextView
         android:id="@+id/tvChemicalNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/chem_name"
         android:textColor="@color/white"
@@ -280,10 +272,9 @@
 
     <TextView
         android:id="@+id/tvChemicalNameValue"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
         android:background="@drawable/background_edit"
         android:paddingStart="10dp"
         android:paddingTop="8dp"
@@ -293,15 +284,15 @@
         android:textColor="@color/black"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDeviceValue" />
+        app:layout_constraintEnd_toEndOf="@+id/tvPurityValue"
+        app:layout_constraintStart_toStartOf="@+id/tvPurityValue"
+        app:layout_constraintTop_toBottomOf="@+id/tvReagentContainerIdValue" />
 
     <TextView
         android:id="@+id/tvDeviceValue"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background_edit"
         android:paddingStart="10dp"
         android:paddingTop="8dp"
@@ -311,14 +302,14 @@
         android:textColor="@color/black"
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvReagentContainerIdValue" />
+        app:layout_constraintEnd_toEndOf="@+id/tvControlCategoryValue"
+        app:layout_constraintStart_toStartOf="@+id/tvControlCategoryValue"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvDeviceLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/select_device"
         android:textColor="@color/white"
@@ -331,7 +322,6 @@
         android:id="@+id/tvReagenContainerIdLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="@string/chem_container_no_colon"
         android:textColor="@color/white"
@@ -358,7 +348,7 @@
         android:textColorHint="@android:color/darker_gray"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/btnContainerSelect"
-        app:layout_constraintStart_toStartOf="@+id/tvChemicalNameValue"
+        app:layout_constraintStart_toEndOf="@+id/tvChemicalNameLabel"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck" />
 
@@ -366,13 +356,12 @@
         android:id="@+id/btnContainerSelect"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="32dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_double_arrow_down"
         app:layout_constraintBottom_toBottomOf="@+id/tvReagentContainerIdValue"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvChemicalNameValue"
         app:layout_constraintTop_toTopOf="@+id/tvReagentContainerIdValue"
         tools:ignore="TouchTargetSizeCheck" />
 

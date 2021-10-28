@@ -5,16 +5,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    tools:context=".ui.storage.DepositItemCreateFragment">
+    tools:context=".ui.deposit.DepositItemCreateFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout7"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="@+id/vMask"
+        android:layout_marginStart="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
         <!--    <TextView-->
@@ -87,6 +85,38 @@
         <!--        tools:visibility="gone" />-->
 
         <TextView
+            android:id="@+id/tvDeviceName"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/background_edit"
+            android:hint="@string/select"
+            android:paddingStart="10dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvReagentContainerIdValue" />
+
+        <TextView
+            android:id="@+id/tvDeviceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/select_device"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDeviceName"
+            app:layout_constraintEnd_toStartOf="@+id/tvDeviceName"
+            app:layout_constraintTop_toTopOf="@+id/tvDeviceName" />
+
+        <TextView
             android:id="@+id/tvWeightLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,7 +133,7 @@
             android:id="@+id/etWeightValue"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/background_edit"
@@ -139,7 +169,7 @@
             android:id="@+id/tvMeasureSpecValue"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/background_edit"
             android:hint="@string/select"
@@ -170,7 +200,7 @@
             android:id="@+id/etPackingSpecValue"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/background_edit"
             android:hint="@string/select_input"
@@ -204,7 +234,7 @@
             android:id="@+id/tvUnitValue"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/background_edit"
             android:hint="@string/select"
@@ -236,7 +266,7 @@
             android:id="@+id/tvPurityValue"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/background_edit"
             android:hint="@string/select"
@@ -268,7 +298,7 @@
             android:id="@+id/tvControlCategoryValue"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/background_edit"
             android:hint="@string/click_for_search"
@@ -300,7 +330,7 @@
             android:id="@+id/tvChemicalNameValue"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/background_edit"
             android:hint="@string/click_for_search"
@@ -344,52 +374,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvDeviceName"
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/background_edit"
-            android:hint="@string/select"
-            android:paddingStart="10dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="6dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@android:color/darker_gray"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvReagentContainerIdValue" />
-
-        <TextView
-            android:id="@+id/tvDeviceLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:gravity="center"
-            android:text="@string/select_device"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tvDeviceName"
-            app:layout_constraintEnd_toStartOf="@+id/tvChemicalNameValue"
-            app:layout_constraintTop_toTopOf="@+id/tvDeviceName" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/csBottom"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout7"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnWight"
@@ -406,24 +402,26 @@
             android:id="@+id/btnPrint"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:background="@drawable/background_button_orange"
             android:text="@string/print_label"
             android:textColor="@color/white"
             android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/btnUnlock"
-            app:layout_constraintStart_toEndOf="@+id/btnWight"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnWight" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnUnlock"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:background="@drawable/background_button_orange"
             android:text="@string/unlock"
             android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/btnPrint"
+            app:layout_constraintTop_toBottomOf="@+id/btnPrint" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

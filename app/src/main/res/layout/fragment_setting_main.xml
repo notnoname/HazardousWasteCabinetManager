@@ -6,65 +6,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="24dp"
     android:textIsSelectable="true"
     tools:context=".ui.setting.SettingMainFragment">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnCabinetSet"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_button"
-        android:padding="16dp"
-        android:text="@string/title_activity_cabinet_name"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:visibility="visible" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnHardwareManage"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/background_button"
-        android:padding="16dp"
-        android:text="@string/set_value_management"
-        android:textColor="@color/white"
-        android:textSize="24sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnHardwareManage"
+            android:layout_width="400px"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_button"
+            android:padding="24px"
+            android:text="@string/set_value_management"
+            android:textColor="@color/white"
+            android:textSize="40px" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnLog"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/background_button"
-        android:padding="16dp"
-        android:text="@string/hardware_log"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:visibility="gone" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCabinetSet"
+            android:layout_width="400px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:background="@drawable/background_button"
+            android:padding="24px"
+            android:text="@string/title_activity_cabinet_name"
+            android:textColor="@color/white"
+            android:textSize="40px"
+            android:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnHardwareSetup"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/background_button"
-        android:padding="16dp"
-        android:text="@string/hardware_setup"
-        android:textColor="@color/white"
-        android:textSize="24sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLog"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:background="@drawable/background_button"
+            android:padding="16dp"
+            android:text="@string/hardware_log"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:visibility="gone" />
+    </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnFCReset"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/background_button"
-        android:padding="16dp"
-        android:text="@string/init"
-        android:textColor="@color/white"
-        android:textSize="24sp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="64dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnHardwareSetup"
+            android:layout_width="400px"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_button"
+            android:padding="24px"
+            android:text="@string/hardware_setup"
+            android:textColor="@color/white"
+            android:textSize="40px" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnFCReset"
+            android:layout_width="400px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:background="@drawable/background_button"
+            android:padding="24px"
+            android:text="@string/init"
+            android:textColor="@color/white"
+            android:textSize="40px" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -19,12 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/tool_bar_height"
         android:background="@android:color/transparent"
+        android:padding="16px"
         android:theme="@style/Theme.CabinetManager.AppBarOverlay">
 
         <ImageButton
             android:id="@+id/toolbar_back"
             android:layout_width="90px"
-            android:layout_height="70px"
+            android:layout_height="40px"
             android:layout_gravity="start|center_vertical"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
@@ -38,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/title_activity_account_setting"
+            android:text="@string/title_activity_cabinet_name"
             android:textSize="@dimen/tool_bar_title_height"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
@@ -94,7 +95,7 @@
                     android:id="@+id/tvOrgInfoLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="所属机构"
+                    android:text="所属机构/机构编号"
                     android:textColor="@color/white"
                     android:textSize="34px" />
 

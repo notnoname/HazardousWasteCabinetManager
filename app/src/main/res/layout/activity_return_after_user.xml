@@ -49,7 +49,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ctBaseInfo"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
@@ -58,118 +58,94 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <View
-            android:id="@+id/split"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
+        <TextView
+            android:id="@+id/tvUsageUnitLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/use_unit_colon"
+            android:textColor="#f18a34"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ctLeft"
+        <TextView
+            android:id="@+id/tvUsageUnitValue"
+            android:maxWidth="160dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUsageUnitLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvUsageUnitLabel"
+            app:layout_constraintTop_toTopOf="@+id/tvUsageUnitLabel" />
+
+        <TextView
+            android:id="@+id/tvUserLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/user_colon"
+            android:textColor="#f18a34"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/tvUsageUnitValue"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUserValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUserLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvUserLabel"
+            app:layout_constraintTop_toTopOf="@+id/tvUserLabel" />
+
+        <TextView
+            android:id="@+id/tvUsageNoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/usage_no_colon"
+            android:textColor="#f18a34"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/tvUserValue"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUsageNoValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_blank"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUsageNoLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvUsageNoLabel"
+            app:layout_constraintTop_toTopOf="@+id/tvUsageNoLabel" />
+
+        <TextView
+            android:id="@+id/tvUsageCountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/usage_count_colon"
+            android:textColor="#f18a34"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/tvUsageNoValue"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUsageCountValue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/split"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/tvUsageUnitLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/use_unit_colon"
-                android:textColor="#f18a34"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvUsageUnitValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvUsageUnitLabel"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvUserLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/user_colon"
-                android:textColor="#f18a34"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvUsageUnitLabel" />
-
-            <TextView
-                android:id="@+id/tvUserValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvUserLabel"
-                app:layout_constraintTop_toBottomOf="@+id/tvUsageUnitValue" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ctRight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUsageCountLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ctLeft"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toEndOf="@+id/tvUsageCountLabel"
+            app:layout_constraintTop_toTopOf="@+id/tvUsageCountLabel" />
 
-            <TextView
-                android:id="@+id/tvUsageNoLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/usage_no_colon"
-                android:textColor="#f18a34"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvUsageCountLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/usage_count_colon"
-                android:textColor="#f18a34"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/tvUsageNoLabel"
-                app:layout_constraintTop_toBottomOf="@+id/tvUsageNoLabel" />
-
-            <TextView
-                android:id="@+id/tvUsageNoValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/empty_blank"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvUsageNoLabel"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvUsageCountValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvUsageCountLabel"
-                app:layout_constraintTop_toBottomOf="@+id/tvUsageNoValue" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout

@@ -47,7 +47,7 @@
             android:label=""
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
-            android:name=".StorageActivity"
+            android:name=".DepositActivity"
             android:label="@string/title_activity_storage"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity

@@ -6,11 +6,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Lifecycle;
 
 import java.lang.ref.WeakReference;
-import java.util.Objects;
 
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.DepositItem;
@@ -18,18 +16,13 @@ import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.model.User;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
-import me.liuzs.cabinetmanager.ui.storage.DepositItemCreateFragment;
-import me.liuzs.cabinetmanager.ui.storage.FirstDepositFragment;
-import me.liuzs.cabinetmanager.util.Util;
 
 /**
  * 初次存入模块
  */
-public class StorageActivity extends BaseActivity {
+public class DepositActivity extends BaseActivity {
 
-    public final static String TAG = "StorageActivity";
-    private final FirstDepositFragment mFirstDepositFragment = new FirstDepositFragment(this);
-    private final DepositItemCreateFragment mDepositItemCreateFragment = new DepositItemCreateFragment(this);
+    public final static String TAG = "DepositActivity";
     private DepositRecord mDepositRecord;
     private TextView mLaboratoryName, mDepositUser, mDepositRecorderId, mDepositItemCount;
     private ImageButton mToolBack;
@@ -46,12 +39,7 @@ public class StorageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_storage);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
-        Util.fullScreen(this);
-
+        setContentView(R.layout.activity_deposit);
         mLaboratoryName = findViewById(R.id.tvDepositUnitValue);
         mDepositUser = findViewById(R.id.tvDepositUserValue);
         mDepositRecorderId = findViewById(R.id.tvDepositNoValue);
@@ -135,9 +123,9 @@ public class StorageActivity extends BaseActivity {
 
     static class CreateDepositTask extends AsyncTask<String, Void, String[]> {
 
-        private final WeakReference<StorageActivity> mActivity;
+        private final WeakReference<DepositActivity> mActivity;
 
-        public CreateDepositTask(StorageActivity activity) {
+        public CreateDepositTask(DepositActivity activity) {
             this.mActivity = new WeakReference<>(activity);
         }
 
