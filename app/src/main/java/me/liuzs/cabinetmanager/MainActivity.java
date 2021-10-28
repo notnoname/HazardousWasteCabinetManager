@@ -368,9 +368,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public void onReturnAfterUseButtonClick(View view) {
+    public void onDepositButtonClick(View view) {
         if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
-            Intent intent = new Intent(MainActivity.this, ReturnAfterUseActivity.class);
+            Intent intent = new Intent(MainActivity.this, DepositActivity.class);
             startActivity(intent);
         } else {
             showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
@@ -380,7 +380,7 @@ public class MainActivity extends BaseActivity {
 
                 @Override
                 public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, ReturnAfterUseActivity.class);
+                    Intent intent = new Intent(MainActivity.this, DepositActivity.class);
                     startActivity(intent);
                 }
             });
