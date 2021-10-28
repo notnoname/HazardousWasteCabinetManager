@@ -19,6 +19,7 @@ import com.videogo.util.IPAddressUtil;
 import java.util.LinkedList;
 import java.util.List;
 
+import me.liuzs.cabinetmanager.model.ContainerNoInfo;
 import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.service.ModbusService;
 
@@ -143,12 +144,13 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
     }
 
     public void onPrinterButtonClick(View view) {
-        PrintActivity.ContainerLabel cl = new PrintActivity.ContainerLabel();
+        ContainerNoInfo cl = new ContainerNoInfo();
         cl.batch_name = "PC00100";
         cl.agency_name = "清华大学";
         cl.operator = "刘道衡";
         cl.no = "CN101120201218001";
-        List<PrintActivity.ContainerLabel> cls = new LinkedList<>();
+        List<ContainerNoInfo> cls = new LinkedList<>();
+        cls.add(cl);
         PrintActivity.startPrintContainerLabel(this, cls);
     }
 

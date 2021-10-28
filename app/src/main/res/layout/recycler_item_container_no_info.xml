@@ -91,6 +91,22 @@
         android:textColor="@color/cardview_light_background"
         android:textSize="28px"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvUsed"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvUsed"
+        android:layout_width="130px"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:gravity="center"
+        android:maxLines="2"
+        android:padding="5px"
+        android:singleLine="true"
+        android:text="是否使用"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="28px"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

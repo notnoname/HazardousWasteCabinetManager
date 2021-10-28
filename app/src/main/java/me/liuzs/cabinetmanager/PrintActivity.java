@@ -1,5 +1,6 @@
 package me.liuzs.cabinetmanager;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.feasycom.bean.BluetoothDeviceWrapper;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -26,8 +28,10 @@ import com.puty.sdk.PrinterInstance;
 import com.puty.sdk.callback.DeviceFoundImp;
 import com.puty.sdk.callback.PrinterInstanceApi;
 
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,16 +44,18 @@ public class PrintActivity extends BaseActivity {
     public static final String TAG = "PrintActivity";
     private static final String KEY_VALUE_LIST = "KEY_VALUE_LIST";
     public static PrinterBluetoothInfo CurrentPrinterInfo;
-    private static Class<? extends List> mClass;
+    private static final Type JSON_TYPE = new TypeToken<List<ContainerNoInfo>>() {
+    }.getType();
+    ;
     private final Handler mHandler = new Handler();
-    private TextView mPrinterName;
+    private TextView mPrinterName, mTip, mBatchName, mOperator, mAgency, mBarcode;
     private PrinterInstanceApi mPrinterInstance;
-    private ImageView mPrinterState;
+    private ImageView mPrinterState, mBarcodeImage;
     private boolean isFoundSavedPrinter = false;
-    private Bitmap mBitmap;
+    private int mCurrentInfo = 0;
+    private final List<ContainerNoInfo> mContainerNoInfoList = new LinkedList<>();
 
-    public static void startPrintContainerLabel(Context context, List<ContainerLabel> contentList) {
-        mClass = contentList.getClass();
+    public static void startPrintContainerLabel(Context context, List<ContainerNoInfo> contentList) {
         Intent intent = new Intent(context, PrintActivity.class);
         intent.putExtra(KEY_VALUE_LIST, CabinetCore.GSON.toJson(contentList));
         context.startActivity(intent);
@@ -67,25 +73,33 @@ public class PrintActivity extends BaseActivity {
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         setContentView(R.layout.activity_print);
         mPrinterState = findViewById(R.id.ivPrinterState);
+        mBarcodeImage = findViewById(R.id.ivBarCode);
         mPrinterName = findViewById(R.id.tvPrinterName);
+        mTip = findViewById(R.id.tvTip);
+        mBatchName = findViewById(R.id.tvBatcbNoValue);
+        mOperator = findViewById(R.id.tvOperatorValue);
+        mAgency = findViewById(R.id.tvOrgValue);
+        mBarcode = findViewById(R.id.tvBarcodeValue);
+
         String value = getIntent().getStringExtra(KEY_VALUE_LIST);
-        if (value != null && mClass != null) {
-            List<ContainerLabel> labels = CabinetCore.GSON.fromJson(value, mClass);
-            for (ContainerLabel label : labels) {
-                mBitmap = label.createBarcodeImage();
-                ImageView barcodeImage = findViewById(R.id.ivBarCode);
-                barcodeImage.setImageBitmap(mBitmap);
-                TextView batchNo = findViewById(R.id.tvBatcbNoValue);
-                batchNo.setText("批次:" + label.batch_name);
-                TextView operator = findViewById(R.id.tvOperatorValue);
-                operator.setText("创建人:" + label.operator);
-                TextView org = findViewById(R.id.tvOrgValue);
-                org.setText("机构:" + label.agency_name);
-                TextView barCode = findViewById(R.id.tvBarcodeValue);
-                barCode.setText(label.no);
-            }
-        }
+        List<ContainerNoInfo> labels = CabinetCore.GSON.fromJson(value, JSON_TYPE);
+        mContainerNoInfoList.addAll(labels);
+        showContainerNoInfo();
         initPrinter();
+    }
+
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    private void showContainerNoInfo() {
+        if (mContainerNoInfoList.size() > 0) {
+            mTip.setText(String.format("%s (%d/%d)", getString(R.string.print_label), (mCurrentInfo + 1), mContainerNoInfoList.size()));
+            ContainerNoInfo containerNoInfo = mContainerNoInfoList.get(mCurrentInfo);
+            Bitmap bitmap = CreateBarcodeImage(containerNoInfo.no);
+            mBarcodeImage.setImageBitmap(bitmap);
+            mBatchName.setText("批次:" + containerNoInfo.batch_name);
+            mOperator.setText("创建人:" + containerNoInfo.operator);
+            mAgency.setText("机构:" + containerNoInfo.agency_name);
+            mBarcode.setText(containerNoInfo.no);
+        }
     }
 
     private void showInfo() {
@@ -108,33 +122,26 @@ public class PrintActivity extends BaseActivity {
         int pageWidth = (int) Math.round(Util.dpiToPix(203, 50));
         int pageHeight = (int) Math.round(Util.dpiToPix(203, 70));
         Log.d(TAG, "Page Size:" + pageWidth + "-" + pageHeight);
-        if (mBitmap != null && !mBitmap.isRecycled()) {
-            final Bitmap temp = Util.zoomImg(mBitmap, 350, 250);
-            final Bitmap printBitmap = Util.rotateBitmap(temp, 90);
-            temp.recycle();
-            Log.d(TAG, "New Size:" + printBitmap.getWidth() + "-" + printBitmap.getHeight());
-            int x = (pageWidth - printBitmap.getWidth()) >> 1;
-            int y = (pageHeight - printBitmap.getHeight()) >> 1;
-            //int x = 0;
-            //int y = 0;
-            showProgressDialog();
-            new Thread(() -> {
-                printImage(0, 1, x, y, printBitmap);
-                dismissProgressDialog();
-                mHandler.post(() -> showToast("打印结束"));
-                Util.sleep(2000);
-                mHandler.post(this::finish);
-            }).start();
-        }
+        showProgressDialog();
+        new Thread(() -> {
+            for(mCurrentInfo = 0; mCurrentInfo < mContainerNoInfoList.size(); mCurrentInfo++) {
+                mHandler.post(()->showContainerNoInfo());
+                printInfo(mContainerNoInfoList.get(mCurrentInfo));
+            }
+            dismissProgressDialog();
+            mHandler.post(() -> showToast("打印结束"));
+            Util.sleep(2000);
+            mHandler.post(this::finish);
+        }).start();
+    }
+
+    private void printInfo(ContainerNoInfo info) {
+        Util.sleep(2000);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mBitmap != null && !mBitmap.isRecycled()) {
-            mBitmap.recycle();
-            mBitmap = null;
-        }
     }
 
     public void onCancelButtonClick(View v) {
@@ -296,48 +303,44 @@ public class PrintActivity extends BaseActivity {
         PrinterInstance.getInstance().printCpcl();
     }
 
+    public final static int ImageWidth = 600;
+    public final static int ImageHeight = 200;
 
-    public static class ContainerLabel extends ContainerNoInfo {
-        public final static int ImageWidth = 600;
-        public final static int ImageHeight = 200;
+    public static Bitmap CreateBarcodeImage(String no) {
+        Bitmap bitmap = Bitmap.createBitmap(ImageWidth, ImageHeight, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setColor(0xffffffff);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(0, 0, bitmap.getWidth(), bitmap.getHeight(), paint);
 
-        public Bitmap createBarcodeImage() {
-            Bitmap bitmap = Bitmap.createBitmap(ImageWidth, ImageHeight, Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(bitmap);
-            Paint paint = new Paint();
-            paint.setColor(0xffffffff);
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawRect(0, 0, bitmap.getWidth(), bitmap.getHeight(), paint);
-
-            try {
-
-                int barCodeHeight = ImageHeight - 20;
-                int barCodeWidth = ImageWidth - 20;
-                int x = 10, y = 10;
-                Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
-                hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
-                BarcodeFormat format = BarcodeFormat.CODE_128;
-                String code = new String(no.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
-                BitMatrix matrix = new MultiFormatWriter().encode(code, format, barCodeWidth, barCodeHeight, hints);
-                int width = matrix.getWidth();
-                int height = matrix.getHeight();
-                int[] pixel = new int[width * height];
-                for (int i = 0; i < height; i++) {
-                    for (int j = 0; j < width; j++) {
-                        if (matrix.get(j, i))
-                            pixel[i * width + j] = 0xff000000;
-                        else
-                            pixel[i * width + j] = 0xffFFFFFF;
-                    }
+        try {
+            int barCodeHeight = ImageHeight - 20;
+            int barCodeWidth = ImageWidth - 20;
+            int x = 10, y = 10;
+            Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+            hints.put(EncodeHintType.MARGIN, 0); /* default = 4 */
+            BarcodeFormat format = BarcodeFormat.CODE_128;
+            String code = new String(no.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+            BitMatrix matrix = new MultiFormatWriter().encode(code, format, barCodeWidth, barCodeHeight, hints);
+            int width = matrix.getWidth();
+            int height = matrix.getHeight();
+            int[] pixel = new int[width * height];
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    if (matrix.get(j, i))
+                        pixel[i * width + j] = 0xff000000;
+                    else
+                        pixel[i * width + j] = 0xffFFFFFF;
                 }
-                bitmap.setPixels(pixel, 0, width, x, y, width, height);
-                canvas.save();
-
-            } catch (WriterException e) {
-                e.printStackTrace();
             }
+            bitmap.setPixels(pixel, 0, width, x, y, width, height);
+            canvas.save();
 
-            return bitmap;
+        } catch (WriterException e) {
+            e.printStackTrace();
         }
+
+        return bitmap;
     }
 }

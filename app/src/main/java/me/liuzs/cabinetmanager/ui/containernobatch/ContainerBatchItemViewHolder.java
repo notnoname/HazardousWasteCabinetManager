@@ -63,7 +63,7 @@ public class ContainerBatchItemViewHolder extends RecyclerView.ViewHolder implem
     @Override
     public void onClick(View view) {
         if(containerNoBatchInfo != null) {
-            ContainerNoListActivity.start(activity, containerNoBatchInfo.id);
+            ContainerNoListActivity.start(activity, containerNoBatchInfo.id, containerNoBatchInfo.name);
         }
     }
 }
