@@ -173,12 +173,13 @@
     <string name="select">请选择</string>
     <string name="select_input">请输入</string>
     <string name="select_device">存储区域：</string>
+    <string name="container_spec_colon">容器规格：</string>
     <string name="chem_name">化学品名：</string>
     <string name="unit_colon">单位：</string>
     <string name="packing_spec_colon">包装规格(g)：</string>
     <string name="click_for_search">点击搜索</string>
     <string name="purity_colon">纯度：</string>
-    <string name="chem_container_no_colon">试剂容器编号：</string>
+    <string name="container_no_colon">暂存单号：</string>
     <string name="weight_colon">重量：</string>
     <string name="container_no_batch_name">批次名称：</string>
     <string name="container_no_batch_name_tip">支持中英文字符和数字</string>

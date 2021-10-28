@@ -8,7 +8,7 @@
     tools:context=".ReturnAfterUseActivity">
 
     <TextView
-        android:id="@+id/tvDeviceLabel"
+        android:id="@+id/tvContainerSpecLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -292,7 +292,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/chem_container_no_colon"
+        android:text="@string/container_no_colon"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/tvReagentContainerIdValue"

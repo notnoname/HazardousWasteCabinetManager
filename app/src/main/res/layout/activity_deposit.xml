@@ -30,12 +30,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32px"
             android:background="@drawable/background_edit"
+            android:minHeight="48dp"
             android:padding="10px"
             android:textColor="@color/black"
             android:textSize="30px"
+            android:hint="请扫描或者输入暂存单号"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/tvContainerNoLabel"
@@ -43,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16px"
                 android:gravity="center"
-                android:text="@string/chem_container_no_colon"
+                android:text="@string/container_no_colon"
                 android:textColor="@color/white"
                 android:textSize="30px"
                 app:layout_constraintBottom_toBottomOf="@+id/etContainerNoValue"
@@ -51,7 +54,7 @@
                 app:layout_constraintTop_toTopOf="@+id/etContainerNoValue" />
 
             <TextView
-                android:id="@+id/tvDeviceNameValue"
+                android:id="@+id/tvContainerSpecValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20px"
@@ -67,17 +70,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/etContainerNoValue" />
 
             <TextView
-                android:id="@+id/tvDeviceLabel"
+                android:id="@+id/tvContainerSpecLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16px"
                 android:gravity="center"
-                android:text="@string/select_device"
+                android:text="@string/container_spec_colon"
                 android:textColor="@color/white"
                 android:textSize="30px"
-                app:layout_constraintBottom_toBottomOf="@+id/tvDeviceNameValue"
-                app:layout_constraintEnd_toStartOf="@+id/tvDeviceNameValue"
-                app:layout_constraintTop_toTopOf="@+id/tvDeviceNameValue" />
+                app:layout_constraintBottom_toBottomOf="@+id/tvContainerSpecValue"
+                app:layout_constraintEnd_toStartOf="@+id/tvContainerSpecValue"
+                app:layout_constraintTop_toTopOf="@+id/tvContainerSpecValue" />
 
             <TextView
                 android:id="@+id/tvChemicalNameValue"
@@ -91,9 +94,9 @@
                 android:textColor="@color/black"
                 android:textColorHint="@android:color/darker_gray"
                 android:textSize="30px"
-                app:layout_constraintEnd_toEndOf="@+id/tvDeviceNameValue"
-                app:layout_constraintStart_toStartOf="@+id/tvDeviceNameValue"
-                app:layout_constraintTop_toBottomOf="@+id/tvDeviceNameValue" />
+                app:layout_constraintEnd_toEndOf="@+id/tvContainerSpecValue"
+                app:layout_constraintStart_toStartOf="@+id/tvContainerSpecValue"
+                app:layout_constraintTop_toBottomOf="@+id/tvContainerSpecValue" />
 
             <TextView
                 android:id="@+id/tvChemicalNameLabel"

@@ -182,7 +182,7 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:id="@+id/tvDeviceLabel"
+                android:id="@+id/tvContainerSpecLabel"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:contentDescription="@string/app_name"

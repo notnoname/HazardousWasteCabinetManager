@@ -79,11 +79,11 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/tvConNoValue"
             app:layout_constraintEnd_toStartOf="@+id/tvWeightLabel"
-            app:layout_constraintStart_toEndOf="@+id/tvDeviceLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvContainerSpecLabel"
             app:layout_constraintTop_toTopOf="@+id/tvConNoValue" />
 
         <ImageView
-            android:id="@+id/tvDeviceLabel"
+            android:id="@+id/tvContainerSpecLabel"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="16dp"
