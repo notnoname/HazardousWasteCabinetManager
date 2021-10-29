@@ -1,15 +1,13 @@
 package me.liuzs.cabinetmanager.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DepositRecord {
-    public final List<DepositItem> items = new ArrayList<DepositItem>();
-    public String labId;
-    public String labNo;
-    public String labName;
-    public int putId;
-    public String putNo;
-    public String userName;
-    public String userId;
+    public ContainerNoInfo containerNoInfo;
+    public Cabinet cabinet;
+    public User operator;
+    public String container_spec;
+    public Laboratory source;
+    public String harmful_ingredients;
+    public String other_info;
+    public String weight;
+    public String shelf_no;
 }

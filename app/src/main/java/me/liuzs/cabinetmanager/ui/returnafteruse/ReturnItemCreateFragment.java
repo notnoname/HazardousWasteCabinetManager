@@ -45,7 +45,6 @@ import me.liuzs.cabinetmanager.WeightActivity;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.UsageItemInfo;
 import me.liuzs.cabinetmanager.net.APIJSON;
-import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.service.HardwareService;
 
 public class ReturnItemCreateFragment extends Fragment implements View.OnClickListener {
@@ -133,10 +132,10 @@ public class ReturnItemCreateFragment extends Fragment implements View.OnClickLi
         });
         mDeviceName = view.findViewById(R.id.tvDeviceValue);
         mChemicalName = view.findViewById(R.id.tvChemicalNameValue);
-        mControlCategory = view.findViewById(R.id.tvControlCategoryValue);
-        mPurity = view.findViewById(R.id.tvPurityValue);
+        mControlCategory = view.findViewById(R.id.tvHarmfulIngredientsValue);
+        mPurity = view.findViewById(R.id.etWeightValue);
         mPurity.setOnClickListener(this);
-        mUnit = view.findViewById(R.id.tvUnitValue);
+        mUnit = view.findViewById(R.id.etShelfNoValue);
 
         mPackingSpec = view.findViewById(R.id.tvPackingSpecValue);
         mOutWeightValue = view.findViewById(R.id.tvWeightValue);

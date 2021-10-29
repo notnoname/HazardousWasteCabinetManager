@@ -1,5 +1,7 @@
 package me.liuzs.cabinetmanager.model;
 
+import java.util.List;
+
 public class ContainerNoBatchInfo {
    public String name;
    public String id;

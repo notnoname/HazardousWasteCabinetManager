@@ -37,7 +37,7 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:id="@+id/tvChemicalNameLabel"
+                    android:id="@+id/tvSourceLabel"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="@string/app_name"

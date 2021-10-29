@@ -15,14 +15,24 @@
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/background" />
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="30px"
-        android:layout_marginRight="30px"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_button_orange"
+            android:gravity="center"
+            android:onClick="onWeightButtonClick"
+            android:text="@string/weight"
+            android:textColor="@color/white"
+            android:textSize="22px"
+            app:layout_constraintBottom_toBottomOf="@+id/etWeightValue"
+            app:layout_constraintEnd_toEndOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintTop_toTopOf="@+id/etWeightValue" />
 
         <EditText
             android:id="@+id/etContainerNoValue"
@@ -30,204 +40,207 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32px"
             android:background="@drawable/background_edit"
-            android:minHeight="48dp"
+            android:digits="NO0123456789"
+            android:hint="@string/input_container_no_please"
+            android:inputType="textPassword"
+            android:minHeight="48px"
             android:padding="10px"
             android:textColor="@color/black"
-            android:textSize="30px"
-            android:hint="请扫描或者输入暂存单号"
+            android:textSize="28px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/tvContainerNoLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16px"
-                android:gravity="center"
-                android:text="@string/container_no_colon"
-                android:textColor="@color/white"
-                android:textSize="30px"
-                app:layout_constraintBottom_toBottomOf="@+id/etContainerNoValue"
-                app:layout_constraintEnd_toStartOf="@+id/etContainerNoValue"
-                app:layout_constraintTop_toTopOf="@+id/etContainerNoValue" />
-
-            <TextView
-                android:id="@+id/tvContainerSpecValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20px"
-                android:background="@drawable/background_edit"
-                android:hint="@string/select"
-                android:padding="10px"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@android:color/darker_gray"
-                android:textSize="30px"
-                app:layout_constraintEnd_toEndOf="@+id/etContainerNoValue"
-                app:layout_constraintStart_toStartOf="@+id/etContainerNoValue"
-                app:layout_constraintTop_toBottomOf="@+id/etContainerNoValue" />
-
-            <TextView
-                android:id="@+id/tvContainerSpecLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16px"
-                android:gravity="center"
-                android:text="@string/container_spec_colon"
-                android:textColor="@color/white"
-                android:textSize="30px"
-                app:layout_constraintBottom_toBottomOf="@+id/tvContainerSpecValue"
-                app:layout_constraintEnd_toStartOf="@+id/tvContainerSpecValue"
-                app:layout_constraintTop_toTopOf="@+id/tvContainerSpecValue" />
-
-            <TextView
-                android:id="@+id/tvChemicalNameValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20px"
-                android:background="@drawable/background_edit"
-                android:hint="@string/click_for_search"
-                android:padding="10px"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@android:color/darker_gray"
-                android:textSize="30px"
-                app:layout_constraintEnd_toEndOf="@+id/tvContainerSpecValue"
-                app:layout_constraintStart_toStartOf="@+id/tvContainerSpecValue"
-                app:layout_constraintTop_toBottomOf="@+id/tvContainerSpecValue" />
-
-            <TextView
-                android:id="@+id/tvChemicalNameLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16px"
-                android:gravity="center"
-                android:text="@string/chem_name"
-                android:textColor="@color/white"
-                android:textSize="30px"
-                app:layout_constraintBottom_toBottomOf="@+id/tvChemicalNameValue"
-                app:layout_constraintEnd_toStartOf="@+id/tvChemicalNameValue"
-                app:layout_constraintTop_toTopOf="@+id/tvChemicalNameValue" />
-
-            <TextView
-                android:id="@+id/tvControlCategoryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16px"
-                android:gravity="center"
-                android:text="@string/control_category_colon"
-                android:textColor="@color/white"
-                android:textSize="30px"
-                app:layout_constraintBottom_toBottomOf="@+id/tvControlCategoryValue"
-                app:layout_constraintEnd_toStartOf="@+id/tvControlCategoryValue"
-                app:layout_constraintTop_toTopOf="@+id/tvControlCategoryValue" />
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         <TextView
-            android:id="@+id/tvControlCategoryValue"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20px"
-            android:background="@drawable/background_edit"
-            android:hint="@string/click_for_search"
-            android:padding="10px"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@android:color/darker_gray"
-            android:textSize="30px"
-            app:layout_constraintEnd_toEndOf="@+id/tvChemicalNameValue"
-            app:layout_constraintStart_toStartOf="@+id/tvChemicalNameValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvChemicalNameValue" />
-
-        <TextView
-            android:id="@+id/tvUnitLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16px"
             android:gravity="center"
-            android:text="@string/unit_colon"
+            android:text="@string/container_no_colon"
             android:textColor="@color/white"
             android:textSize="30px"
-            app:layout_constraintBottom_toBottomOf="@+id/tvUnitValue"
-            app:layout_constraintEnd_toStartOf="@+id/tvUnitValue"
-            app:layout_constraintTop_toTopOf="@+id/tvUnitValue" />
+            app:layout_constraintBottom_toBottomOf="@+id/etContainerNoValue"
+            app:layout_constraintEnd_toStartOf="@+id/etContainerNoValue"
+            app:layout_constraintTop_toTopOf="@+id/etContainerNoValue" />
 
         <TextView
-            android:id="@+id/tvUnitValue"
+            android:id="@+id/tvContainerSpecValue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
             android:background="@drawable/background_edit"
-            android:hint="@string/select"
+            android:hint="@string/select_please"
             android:padding="10px"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/etContainerNoValue"
+            app:layout_constraintStart_toStartOf="@+id/etContainerNoValue"
+            app:layout_constraintTop_toBottomOf="@+id/etContainerNoValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/container_spec_colon"
+            android:textColor="@color/white"
             android:textSize="30px"
-            app:layout_constraintEnd_toEndOf="@+id/tvPurityValue"
-            app:layout_constraintStart_toStartOf="@+id/tvPurityValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvPurityValue" />
+            app:layout_constraintBottom_toBottomOf="@+id/tvContainerSpecValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvContainerSpecValue"
+            app:layout_constraintTop_toTopOf="@+id/tvContainerSpecValue" />
 
         <TextView
-                android:id="@+id/tvPackingSpecLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16px"
-                android:gravity="center"
-                android:text="@string/packing_spec_colon"
-                android:textColor="@color/white"
-                android:textSize="30px"
-                app:layout_constraintBottom_toBottomOf="@+id/etPackingSpecValue"
-                app:layout_constraintEnd_toStartOf="@+id/etPackingSpecValue"
-                app:layout_constraintTop_toTopOf="@+id/etPackingSpecValue" />
-
-            <EditText
-                android:id="@+id/etPackingSpecValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20px"
-                android:background="@drawable/background_edit"
-                android:hint="@string/select_input"
-                android:inputType="number"
-                android:padding="10px"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@android:color/darker_gray"
-                android:textSize="30px"
-                app:layout_constraintEnd_toEndOf="@+id/tvUnitValue"
-                app:layout_constraintStart_toStartOf="@+id/tvUnitValue"
-                app:layout_constraintTop_toBottomOf="@+id/tvUnitValue"
-                tools:ignore="TouchTargetSizeCheck" />
-
-        <TextView
-                android:id="@+id/tvPurityLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16px"
-                android:gravity="center"
-                android:text="@string/purity_colon"
-                android:textColor="@color/white"
-                android:textSize="30px"
-                app:layout_constraintBottom_toBottomOf="@+id/tvPurityValue"
-                app:layout_constraintEnd_toStartOf="@+id/tvPurityValue"
-                app:layout_constraintTop_toTopOf="@+id/tvPurityValue" />
-
-        <TextView
-            android:id="@+id/tvPurityValue"
+            android:id="@+id/tvSourceValue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
             android:background="@drawable/background_edit"
-            android:hint="@string/select"
+            android:hint="@string/select_please"
             android:padding="10px"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/tvContainerSpecValue"
+            app:layout_constraintStart_toStartOf="@+id/tvContainerSpecValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvContainerSpecValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/hazardous_source_colon"
+            android:textColor="@color/white"
             android:textSize="30px"
-            app:layout_constraintEnd_toEndOf="@+id/tvControlCategoryValue"
-            app:layout_constraintStart_toStartOf="@+id/tvControlCategoryValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvControlCategoryValue" />
+            app:layout_constraintBottom_toBottomOf="@+id/tvSourceValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvSourceValue"
+            app:layout_constraintTop_toTopOf="@+id/tvSourceValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/harmful_ingredients_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintTop_toTopOf="@+id/tvHarmfulIngredientsValue" />
+
+        <TextView
+            android:id="@+id/tvHarmfulIngredientsValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:hint="@string/select_please"
+            android:padding="10px"
+            android:singleLine="true"
+            android:onClick="onHarmfulIngredientsValueClick"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/tvSourceValue"
+            app:layout_constraintStart_toStartOf="@+id/tvSourceValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvSourceValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/shelf_no_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/etShelfNoValue"
+            app:layout_constraintEnd_toStartOf="@+id/etShelfNoValue"
+            app:layout_constraintTop_toTopOf="@+id/etShelfNoValue" />
+
+        <EditText
+            android:id="@+id/etShelfNoValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:digits="0123456789"
+            android:hint="@string/input_number_please"
+            android:inputType="number"
+            android:padding="10px"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/btnWeight"
+            app:layout_constraintStart_toStartOf="@+id/etWeightValue"
+            app:layout_constraintTop_toBottomOf="@+id/etWeightValue"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/other_info_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/etPackingSpecValue"
+            app:layout_constraintEnd_toStartOf="@+id/etPackingSpecValue"
+            app:layout_constraintTop_toTopOf="@+id/etPackingSpecValue" />
+
+        <EditText
+            android:id="@+id/etPackingSpecValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:hint="@string/select_input"
+            android:inputType="number"
+            android:padding="10px"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/etShelfNoValue"
+            app:layout_constraintStart_toStartOf="@+id/etShelfNoValue"
+            app:layout_constraintTop_toBottomOf="@+id/etShelfNoValue"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/weight_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/etWeightValue"
+            app:layout_constraintEnd_toStartOf="@+id/etWeightValue"
+            app:layout_constraintTop_toTopOf="@+id/etWeightValue" />
+
+        <EditText
+            android:id="@+id/etWeightValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:layout_marginEnd="16px"
+            android:background="@drawable/background_edit"
+            android:digits="0123456789."
+            android:hint="@string/weight_tip"
+            android:inputType="number"
+            android:padding="10px"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toStartOf="@+id/btnWeight"
+            app:layout_constraintStart_toStartOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvHarmfulIngredientsValue"
+            tools:ignore="TouchTargetSizeCheck" />
 
 
         <LinearLayout

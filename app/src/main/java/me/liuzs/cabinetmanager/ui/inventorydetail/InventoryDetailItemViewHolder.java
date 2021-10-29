@@ -26,7 +26,7 @@ public class InventoryDetailItemViewHolder extends RecyclerView.ViewHolder imple
         itemInfo = itemView.findViewById(R.id.csDetailInfo);
         containerNo = itemView.findViewById(R.id.tvConNoValue);
         supplier = itemView.findViewById(R.id.tvSupplierValue);
-        purity = itemView.findViewById(R.id.tvPurityValue);
+        purity = itemView.findViewById(R.id.etWeightValue);
         packingSpec = itemView.findViewById(R.id.tvPackSpecValue);
         weight = itemView.findViewById(R.id.tvWeightValue);
         deviceName = itemView.findViewById(R.id.tvDeviceValue);

@@ -27,7 +27,6 @@ import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
 import me.liuzs.cabinetmanager.model.ContainerNoInfo;
-import me.liuzs.cabinetmanager.model.DepositItem;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.InventoryDetail;
 import me.liuzs.cabinetmanager.model.InventoryItem;
@@ -939,42 +938,6 @@ public class RemoteAPI {
          */
         public static final String API_REMOVE_PUT_LAB_DETAIL = API_ROOT + "/drug/v1/putLabDetail/removePutLabDetail/";
 
-        /**
-         * 获取入柜药品列表
-         *
-         * @return 当前入库单下药品列表
-         */
-        public static APIJSON<List<DepositItem>> getDepositItemList(String putId) {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("putId", putId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_DEPOSIT_ITEM_LIST + "?" + params);
-                generalBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<DepositItem>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    APIJSON<List<DepositItem>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<DepositItem>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
 
         /**
          * 获取入柜编号
@@ -1102,60 +1065,6 @@ public class RemoteAPI {
             }
         }
 
-        /**
-         * 保存入柜条目详情
-         *
-         * @return 条目详情id
-         */
-        public static APIJSON<String> saveDepositItemDetail(DepositItem item) {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("putId", String.valueOf(item.putId)));
-                valuePairs.add(new BasicNameValuePair("conNo", item.conNo));
-                valuePairs.add(new BasicNameValuePair("chemicalId", item.chemicalId));
-                valuePairs.add(new BasicNameValuePair("dateProduction", item.dateProduction));
-                valuePairs.add(new BasicNameValuePair("specification", item.specification));
-                valuePairs.add(new BasicNameValuePair("purity", item.purity));
-                valuePairs.add(new BasicNameValuePair("cisNo", item.casNo));
-                valuePairs.add(new BasicNameValuePair("supplier", item.supplier));
-                valuePairs.add(new BasicNameValuePair("periodValidity", item.periodValidity));
-                valuePairs.add(new BasicNameValuePair("weight", item.weight));
-                valuePairs.add(new BasicNameValuePair("unit", item.unit));
-                valuePairs.add(new BasicNameValuePair("devId", item.devId));
-                HttpPost httpPost = new HttpPost(API_SAVE_DEPOSIT_ITEM_DETAIL);
-                generalBaseHeader(httpPost);
-                httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<String> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<String> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
 
         /**
          * 获取化学品容器编号

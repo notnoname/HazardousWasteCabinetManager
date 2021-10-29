@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">危废暂存柜终端</string>
     <string name="cancel">取消</string>
     <string name="ok">确认</string>
@@ -105,6 +105,7 @@
     <string name="title_login_operator">操作员登录</string>
     <string name="title_auth">用户验证</string>
     <string name="title_spinner">选项</string>
+    <string name="title_multi_spinner">多项</string>
     <string name="title_weight">称重</string>
     <string name="title_container_no_create">创建单号</string>
     <string name="back">返回</string>
@@ -153,12 +154,12 @@
     <string name="arc_active_tip">激活需要联网，请确保网络正常！</string>
     <string name="weight_test">称重测试</string>
     <string name="weight">称重</string>
-    <string name="weight_tip">启动称重后，这里会显示重量</string>
+    <string name="weight_tip">称重或手动输入(公斤)</string>
     <string name="finish">完成</string>
 
-    <string name="loading">正在加载中...</string><!-- 正在加载中... -->
-    <string name="connection">连接中...</string><!-- 连接中 -->
-    <string name="sending">发送中...</string><!-- 发送中 -->
+    <string name="loading" tools:ignore="TypographyEllipsis">正在加载中...</string><!-- 正在加载中... -->
+    <string name="connection" tools:ignore="TypographyEllipsis">连接中...</string><!-- 连接中 -->
+    <string name="sending" tools:ignore="TypographyEllipsis">发送中...</string><!-- 发送中 -->
     <string name="connect_the_printer_machine">连接打印机</string><!-- 连接机器 -->
     <string name="get_targeting_permissions" translatable="false">搜索蓝牙需要定位权限</string>
     <string name="title_activity_storage">StorageActivity</string>
@@ -170,20 +171,26 @@
     <string name="empty_blank" />
     <string name="select_storage_area">选择存储区域：</string>
     <string name="measure_spec">计量规格：</string>
-    <string name="select">请选择</string>
+    <string name="select_please">请选择</string>
     <string name="select_input">请输入</string>
+    <string name="input_number_please">请输入数字</string>
     <string name="select_device">存储区域：</string>
     <string name="container_spec_colon">容器规格：</string>
+    <string name="hazardous_source_colon">危废来源：</string>
     <string name="chem_name">化学品名：</string>
     <string name="unit_colon">单位：</string>
+    <string name="shelf_no_colon">货架号：</string>
     <string name="packing_spec_colon">包装规格(g)：</string>
+    <string name="other_info_colon">其他信息：</string>
     <string name="click_for_search">点击搜索</string>
+    <string name="click_for_select">点击选择</string>
     <string name="purity_colon">纯度：</string>
     <string name="container_no_colon">暂存单号：</string>
     <string name="weight_colon">重量：</string>
     <string name="container_no_batch_name">批次名称：</string>
     <string name="container_no_batch_name_tip">支持中英文字符和数字</string>
     <string name="control_category_colon">管制类别：</string>
+    <string name="harmful_ingredients_colon">有害成分：</string>
     <string name="submit">提交</string>
     <string name="search_chemical">搜索化学药品</string>
     <string name="print_label">打印标签</string>
@@ -222,4 +229,5 @@
     <string name="TVOC">TVOC</string>
     <string name="modbus_address">Modbus地址</string>
     <string name="no_alert">无告警</string>
+    <string name="input_container_no_please">请扫描或者输入暂存单号</string>
 </resources>

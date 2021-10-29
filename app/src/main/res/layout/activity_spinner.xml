@@ -6,28 +6,43 @@
     android:layout_height="480px"
     android:background="@drawable/background_dialog"
     android:minWidth="800px"
-    tools:context=".SpinnerActivity">
+    tools:context=".MultiSpinnerActivity">
 
     <TextView
         android:id="@+id/tvTip"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24px"
-        android:layout_marginTop="16px"
-        android:layout_marginEnd="24px"
-        android:text="@string/select"
+        android:layout_marginTop="24px"
+        android:layout_marginEnd="16px"
+        android:text="@string/select_please"
         android:textColor="@android:color/darker_gray"
-        android:textSize="24px"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="28px"
+        app:layout_constraintEnd_toStartOf="@+id/btnOK"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btnOK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24px"
+        android:background="@drawable/background_corner"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        android:onClick="onOKButtonClick"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTip" />
+
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="24px"
-        android:layout_marginTop="16px"
+        android:layout_marginTop="32px"
         android:layout_marginEnd="24px"
         android:layout_marginBottom="24px"
         app:layout_constraintBottom_toBottomOf="parent"

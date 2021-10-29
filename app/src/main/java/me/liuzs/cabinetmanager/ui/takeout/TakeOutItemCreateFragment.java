@@ -124,10 +124,10 @@ public class TakeOutItemCreateFragment extends Fragment implements View.OnClickL
         });
         mDeviceName = view.findViewById(R.id.tvDeviceName);
         mChemicalName = view.findViewById(R.id.tvChemicalNameValue);
-        mControlCategory = view.findViewById(R.id.tvControlCategoryValue);
-        mPurity = view.findViewById(R.id.tvPurityValue);
+        mControlCategory = view.findViewById(R.id.tvHarmfulIngredientsValue);
+        mPurity = view.findViewById(R.id.etWeightValue);
         mPurity.setOnClickListener(this);
-        mUnit = view.findViewById(R.id.tvUnitValue);
+        mUnit = view.findViewById(R.id.etShelfNoValue);
 
         mPackingSpec = view.findViewById(R.id.tvPackingSpecValue);
         mInvWeightValue = view.findViewById(R.id.tvWeightValue);

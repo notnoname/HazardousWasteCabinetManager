@@ -81,6 +81,10 @@
             android:label="@string/title_spinner"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
+            android:name=".MultiSpinnerActivity"
+            android:label="@string/title_multi_spinner"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
             android:name=".WeightActivity"
             android:label="@string/title_weight"
             android:theme="@style/Theme.AppCompat.Dialog" />
