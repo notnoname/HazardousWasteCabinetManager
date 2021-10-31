@@ -72,6 +72,7 @@
             android:background="@drawable/background_edit"
             android:hint="@string/select_please"
             android:padding="10px"
+            android:onClick="onContainerSpecButtonClick"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
@@ -188,12 +189,12 @@
             android:text="@string/other_info_colon"
             android:textColor="@color/white"
             android:textSize="30px"
-            app:layout_constraintBottom_toBottomOf="@+id/etPackingSpecValue"
-            app:layout_constraintEnd_toStartOf="@+id/etPackingSpecValue"
-            app:layout_constraintTop_toTopOf="@+id/etPackingSpecValue" />
+            app:layout_constraintBottom_toBottomOf="@+id/etOtherInfoValue"
+            app:layout_constraintEnd_toStartOf="@+id/etOtherInfoValue"
+            app:layout_constraintTop_toTopOf="@+id/etOtherInfoValue" />
 
         <EditText
-            android:id="@+id/etPackingSpecValue"
+            android:id="@+id/etOtherInfoValue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
@@ -250,7 +251,7 @@
             android:layout_marginTop="32px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etPackingSpecValue">
+            app:layout_constraintTop_toBottomOf="@+id/etOtherInfoValue">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCancel"

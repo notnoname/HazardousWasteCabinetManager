@@ -8,6 +8,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Date;
+
 public class ContainerNoCreateActivity extends AppCompatActivity {
 
     public static final String KEY_RESULT_BATCH_NAME = "KEY_RESULT_BATCH_NAME";
@@ -22,8 +24,7 @@ public class ContainerNoCreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_container_no_create);
         mBatchName = findViewById(R.id.etBatchName);
         mNoCount = findViewById(R.id.etBatchNoCount);
-        String name = "BN" + System.currentTimeMillis();
-        name = name.substring(0, name.length() - 3);
+        String name = "NB" + CabinetCore._NoSplitYearFormatter.format(new Date(System.currentTimeMillis()));
         mBatchName.setText(name);
     }
 

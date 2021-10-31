@@ -105,9 +105,9 @@ public class LogViewActivity extends BaseActivity {
         CharSequence info = mLog.getText();
         String newInfo = info +
                 "\n" +
-                mYearFormat.format(new Date()) +
+                CabinetCore._YearFormatter.format(new Date()) +
                 "\t" +
-                mTimeFormat.format(new Date()) +
+                CabinetCore._HourFormatter.format(new Date()) +
                 "\n" +
                 mGson.toJson(value);
         mLog.setText(newInfo);

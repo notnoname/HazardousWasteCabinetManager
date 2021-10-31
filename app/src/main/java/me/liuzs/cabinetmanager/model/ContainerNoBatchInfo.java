@@ -3,11 +3,12 @@ package me.liuzs.cabinetmanager.model;
 import java.util.List;
 
 public class ContainerNoBatchInfo {
-   public String name;
+   public List<ContainerNoInfo> storage_nos;
+   public String batch_name;
    public String id;
-   public String count;
-   public String createTime;
-   public String userName;
-   public String agencyName;
+   public String amount;
+   public String create_time;
+   public String creator;
+   public String org;
 
 }

@@ -32,11 +32,11 @@ public class ContainerBatchItemViewHolder extends RecyclerView.ViewHolder implem
     public void show() {
         if (containerNoBatchInfo != null) {
             batchId.setText(containerNoBatchInfo.id);
-            batchName.setText(containerNoBatchInfo.name);
-            noCount.setText(containerNoBatchInfo.count);
-            org.setText(containerNoBatchInfo.agencyName);
-            createTime.setText(containerNoBatchInfo.createTime);
-            operator.setText(containerNoBatchInfo.userName);
+            batchName.setText(containerNoBatchInfo.batch_name);
+            noCount.setText(containerNoBatchInfo.amount);
+            org.setText(containerNoBatchInfo.org);
+            createTime.setText(containerNoBatchInfo.create_time);
+            operator.setText(containerNoBatchInfo.creator);
             batchId.setBackgroundResource(R.drawable.background_grid_content);
             batchName.setBackgroundResource(R.drawable.background_grid_content);
             noCount.setBackgroundResource(R.drawable.background_grid_content);
@@ -63,7 +63,7 @@ public class ContainerBatchItemViewHolder extends RecyclerView.ViewHolder implem
     @Override
     public void onClick(View view) {
         if(containerNoBatchInfo != null) {
-            ContainerNoListActivity.start(activity, containerNoBatchInfo.id, containerNoBatchInfo.name);
+            ContainerNoListActivity.start(activity, containerNoBatchInfo.id, containerNoBatchInfo.batch_name);
         }
     }
 }

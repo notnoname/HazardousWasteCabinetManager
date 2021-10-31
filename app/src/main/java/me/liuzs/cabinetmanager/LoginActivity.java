@@ -3,7 +3,6 @@ package me.liuzs.cabinetmanager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,20 +12,16 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.widget.Toolbar;
-
-import java.lang.ref.WeakReference;
 
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.User;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
-import me.liuzs.cabinetmanager.util.Util;
 
 public class LoginActivity extends BaseActivity {
 
     public static final String KEY_AUTH_TYPE = "KEY_AUTH_TYPE";
-    private static final String TAG = "LoginActivity";
+    public static final String TAG = "LoginActivity";
     private EditText mAccountID, mAdminPassword;
     private User mUser;
     private CabinetCore.RoleType mType = CabinetCore.RoleType.Admin;
@@ -50,7 +45,7 @@ public class LoginActivity extends BaseActivity {
 
     private void onFaceIDRegisterSuccess() {
         showToast(getResources().getString(R.string.login_success));
-        mUser.faceId = mUser.account;
+        mUser.faceId = mUser.username;
         CabinetCore.saveCabinetUser(mUser, mType);
         CabinetCore.restart();
     }
@@ -99,7 +94,7 @@ public class LoginActivity extends BaseActivity {
         if (!isAccountValidate(id, password)) {
             return;
         }
-        new LoginTask(this).execute(id, password);
+        login(id, password);
     }
 
     @Override
@@ -107,57 +102,40 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    static class LoginTask extends AsyncTask<String, Void, APIJSON<User>> {
-
-        private final WeakReference<LoginActivity> mActivity;
-
-        public LoginTask(LoginActivity activity) {
-            this.mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        protected APIJSON<User> doInBackground(String... strings) {
-            return RemoteAPI.System.login(strings[0], Util.md5(strings[1]));
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mActivity.get().mFaceId.setClickable(true);
-        }
-
-        private boolean isHaveOptRight(User user, Cabinet cabinet) {
-            if (user == null || user.opt == null || user.opt.length == 0 || cabinet == null) {
-                return false;
-            }
-            for (String id : user.opt) {
-                if (cabinet.id.equals(id)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(APIJSON<User> json) {
-            super.onPostExecute(json);
-            if (json.status == APIJSON.Status.ok) {
-                User user = json.data;
-                if (mActivity.get().mType == CabinetCore.RoleType.Operator && !isHaveOptRight(user, CabinetCore.getCabinetInfo())) {
-                    mActivity.get().showToast("此用户无此暂存柜操作权限，请重新登录");
+    private void login(String username, String password) {
+        showProgressDialog();
+        getExecutorService().submit(() -> {
+            APIJSON<User> userJSON = RemoteAPI.System.login(username, password);
+            if (userJSON.status == APIJSON.Status.ok) {
+                User user = userJSON.data;
+                if (mType == CabinetCore.RoleType.Operator && !isHaveOptRight(user, CabinetCore.getCabinetInfo())) {
+                    showToast("此用户无此暂存柜操作权限，请重新登录");
                 } else {
-                    mActivity.get().showToast("用户鉴权成功，将进行人像识别");
-                    mActivity.get().mUser = user;
+                    showToast("用户鉴权成功，将进行人像识别");
+                    mUser = user;
                     if (BuildConfig.DEBUG) {
-                        mActivity.get().onFaceIDRegisterSuccess();
+                        onFaceIDRegisterSuccess();
                     } else {
-                        mActivity.get().startFaceIdRegister(user.account);
+                        startFaceIdRegister(user.username);
                     }
                 }
             } else {
-                mActivity.get().showToast(json.errors);
+                showToast(userJSON.errors);
             }
-            mActivity.get().mFaceId.setClickable(true);
+            mFaceId.setClickable(true);
+            dismissProgressDialog();
+        });
+    }
+
+    private boolean isHaveOptRight(User user, Cabinet cabinet) {
+        if (user == null || user.opt_storages == null || user.opt_storages.length == 0 || cabinet == null) {
+            return false;
         }
+        for (String id : user.opt_storages) {
+            if (cabinet.id.equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

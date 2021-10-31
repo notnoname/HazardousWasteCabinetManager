@@ -59,8 +59,108 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
-        android:id="@+id/container"
-        layout="@layout/fragment_account_setting" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/tvAccountIDLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28px"
+            android:text="@string/id"
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etAccountIDValue"
+            android:layout_width="0dp"
+            android:layout_height="70px"
+            android:layout_marginStart="64px"
+            android:layout_marginTop="16px"
+            android:layout_marginEnd="64px"
+            android:background="@drawable/background_edit_normal"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:maxLength="32"
+            android:padding="10px"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAccountIDLabel"
+            tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/tvAccountPasswordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/password"
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etAccountIDValue"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/etAccountPasswordValue"
+            android:layout_width="0dp"
+            android:layout_height="70px"
+            android:layout_marginStart="64px"
+            android:layout_marginTop="16px"
+            android:layout_marginEnd="64px"
+            android:background="@drawable/background_edit_normal"
+            android:ems="10"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:maxLength="32"
+            android:padding="10px"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAccountPasswordLabel"
+            tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnFaceId"
+            android:layout_width="220px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32px"
+            android:background="@drawable/background_button"
+            android:onClick="onFaceIdInputClick"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:textSize="40px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etAccountPasswordValue" />
+
+        <TextView
+            android:id="@+id/tvFaceIdTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16px"
+            android:text="@string/input_face_id"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnFaceId" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

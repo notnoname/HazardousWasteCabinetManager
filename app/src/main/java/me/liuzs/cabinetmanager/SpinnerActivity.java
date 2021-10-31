@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -24,6 +23,8 @@ public class SpinnerActivity extends AppCompatActivity implements View.OnClickLi
     public static final String KEY_OPTIONS = "KEY_OPTIONS";
     public static final String KEY_TIP_INFO = "KEY_TIP_INFO";
     public static final String TAG = "SpinnerActivity";
+    public static final Type JSON_TYPE = new TypeToken<List<String>>() {
+    }.getType();
     private LinearLayout mLLOptions;
     private TextView mTip;
     private List<String> mOptions;
@@ -38,9 +39,8 @@ public class SpinnerActivity extends AppCompatActivity implements View.OnClickLi
         mTip.setText(getIntent().getStringExtra(KEY_TIP_INFO));
         mLLOptions = findViewById(R.id.llOptions);
         String json = getIntent().getStringExtra(KEY_OPTIONS);
-        Type jsonType = new TypeToken<List<String>>() {
-        }.getType();
-        mOptions = CabinetCore.GSON.fromJson(json, jsonType);
+
+        mOptions = CabinetCore.GSON.fromJson(json, JSON_TYPE);
 
         showOptions();
     }

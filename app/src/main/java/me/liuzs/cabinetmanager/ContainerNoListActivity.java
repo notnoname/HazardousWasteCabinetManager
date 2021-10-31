@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.LinkedList;
 import java.util.List;
 
+import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
 import me.liuzs.cabinetmanager.model.ContainerNoInfo;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
@@ -69,23 +70,16 @@ public class ContainerNoListActivity extends BaseActivity {
     private void getContainerNoList(String batchId) {
         showProgressDialog();
         getExecutorService().submit(() -> {
-            APIJSON<List<ContainerNoInfo>> json = RemoteAPI.ContainerNoManager.getContainerNoList(batchId);
+            APIJSON<ContainerNoBatchInfo> json = RemoteAPI.ContainerNoManager.getContainerNoList(batchId);
             if (json.status == APIJSON.Status.ok) {
-
-            }
-            for (int i = 0; i < 20; i++) {
-                ContainerNoInfo info = new ContainerNoInfo();
-                info.id = String.valueOf(i);
-                info.no = "NO:" + i;
-                info.agency_name = "清华大学";
-                info.operator = "刘座宿";
-                info.create_time = "2020-07-16 21:19:45";
-                info.batch_id = "CNDDSADASFASFDASFDAS";
-                info.batch_name = "CNDASFADFASDS";
-                mContainerNoList.add(info);
+                mContainerNoList.clear();
+                mContainerNoList.addAll(json.data.storage_nos);
+                mHandler.post(() -> mAdapter.add(mContainerNoList));
+            } else {
+                showToast(json.errors);
             }
             dismissProgressDialog();
-            mHandler.post(() -> mAdapter.add(mContainerNoList));
+
         });
     }
 

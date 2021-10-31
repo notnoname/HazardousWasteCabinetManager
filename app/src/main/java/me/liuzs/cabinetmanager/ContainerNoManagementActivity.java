@@ -14,9 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.ContainerNoBatchListJSON;
@@ -44,7 +41,7 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
         }
     });
     private RecyclerView mRecyclerView;
-    private int mPageSize = 20, mPageIndex = 0, mPageCount = 0;
+    private int mPageSize = 20, mPageIndex = 1, mPageCount = 0;
     private EditText mBatchName, mOperator;
     private String mBatchNameValue = "", mOperatorValue = "";
 
@@ -83,29 +80,21 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
         getContainerNoBatchList();
     }
 
-    private void createContainerNoBatch(String name, String count) {
+    private void createContainerNoBatch(String name, String amount) {
         showProgressDialog();
         getExecutorService().submit(() -> {
-            APIJSON<ContainerNoBatchInfo> json = RemoteAPI.ContainerNoManager.createContainerNoBatch(name, count);
+            APIJSON<ContainerNoBatchInfo> json = RemoteAPI.ContainerNoManager.createContainerNoBatch(name, amount);
             if (json.status == APIJSON.Status.ok) {
-
+                showToast("批次创建成功！");
+            } else {
+                showToast(json.errors);
             }
-            ContainerNoBatchInfo info = new ContainerNoBatchInfo();
-            info.id = "100";
-            info.name = "批次名:100";
-            info.agencyName = "清华大学";
-            info.userName = "刘座宿";
-            info.count = String.valueOf(50);
-            info.createTime = "2020-07-16 21:19:45";
-            mPageCount = 20;
-            dismissProgressDialog();
 
             mHandler.post(() -> {
                 mBatchName.setText("");
                 mOperator.setText("");
                 hideInputMethod();
-                mPageCount = 0;
-                mPageIndex = 0;
+                mPageIndex = 1;
                 getContainerNoBatchList();
             });
         });
@@ -116,22 +105,21 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
         getExecutorService().submit(() -> {
             APIJSON<ContainerNoBatchListJSON> json = RemoteAPI.ContainerNoManager.getContainerNoBatchList(mBatchNameValue, mOperatorValue, mPageSize, mPageIndex);
             if (json.status == APIJSON.Status.ok) {
-
+                if(json.data.batches != null) {
+                    mPageIndex = json.data.current_page;
+                    mPageCount = json.data.total_pages;
+                    mHandler.post(() -> {
+                        if(mPageIndex == 1) {
+                            mAdapter.clear();
+                        }
+                        mAdapter.add(json.data.batches);
+                    });
+                }
+            } else {
+                showToast(json.errors);
             }
-            List<ContainerNoBatchInfo> resultList = new LinkedList<>();
-            for (int i = 0; i < 20; i++) {
-                ContainerNoBatchInfo info = new ContainerNoBatchInfo();
-                info.id = String.valueOf(i);
-                info.name = "批次名:" + i;
-                info.agencyName = "清华大学";
-                info.userName = "刘座宿";
-                info.count = String.valueOf(50);
-                info.createTime = "2020-07-16 21:19:45";
-                resultList.add(info);
-            }
-            mPageCount = 20;
             dismissProgressDialog();
-            mHandler.post(() -> mAdapter.add(resultList));
+
         });
     }
 
@@ -169,9 +157,9 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
 
     @Override
     public void afterTextChanged(Editable editable) {
-        if (editable == mBatchName) {
+        if (editable == mBatchName.getEditableText()) {
             mBatchNameValue = editable.toString();
-        } else if (editable == mOperator) {
+        } else if (editable == mOperator.getEditableText()) {
             mOperatorValue = editable.toString();
         }
     }

@@ -303,8 +303,7 @@ public class MainActivity extends BaseActivity {
 
     public void onTakeOutButtonClick(View view) {
         if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
-            Intent intent = new Intent(MainActivity.this, TakeOutActivity.class);
-            startActivity(intent);
+            TakeOutActivity.start(MainActivity.this, null);
         } else {
             showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
                 @Override
@@ -313,8 +312,7 @@ public class MainActivity extends BaseActivity {
 
                 @Override
                 public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, TakeOutActivity.class);
-                    startActivity(intent);
+                    TakeOutActivity.start(MainActivity.this, null);
                 }
             });
         }
@@ -370,8 +368,7 @@ public class MainActivity extends BaseActivity {
 
     public void onDepositButtonClick(View view) {
         if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
-            Intent intent = new Intent(MainActivity.this, DepositActivity.class);
-            startActivity(intent);
+            DepositActivity.start(MainActivity.this, null);
         } else {
             showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
                 @Override
@@ -380,8 +377,7 @@ public class MainActivity extends BaseActivity {
 
                 @Override
                 public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, DepositActivity.class);
-                    startActivity(intent);
+                    DepositActivity.start(MainActivity.this, null);
                 }
             });
         }

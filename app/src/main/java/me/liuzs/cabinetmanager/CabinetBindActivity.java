@@ -3,7 +3,6 @@ package me.liuzs.cabinetmanager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,19 +13,15 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.User;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.CabinetListJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
-import me.liuzs.cabinetmanager.util.Util;
 
 public class CabinetBindActivity extends BaseActivity {
 
@@ -89,7 +84,7 @@ public class CabinetBindActivity extends BaseActivity {
         showInfo();
         User info = CabinetCore.getCabinetUser(CabinetCore.RoleType.Admin);
         assert info != null;
-        new GetCabinetListTask(this).execute(info.id, info.token);
+        getCabinetList(info.id);
     }
 
     @SuppressLint("SetTextI18n")
@@ -104,8 +99,8 @@ public class CabinetBindActivity extends BaseActivity {
             mTankOrgInfo.setText("");
         } else {
             mTankSelect.setText(mCabinetInfo.name);
-            mTankBaseInfo.setText(mCabinetInfo.name + "/" + mCabinetInfo.no + "/" + mCabinetInfo.type);
-            mTankOrgInfo.setText(mCabinetInfo.agencyName + "/" + mCabinetInfo.agencyNo);
+            mTankBaseInfo.setText(mCabinetInfo.name + "/" + mCabinetInfo.code + "/" + mCabinetInfo.type);
+            mTankOrgInfo.setText(mCabinetInfo.org.full_name + "/" + mCabinetInfo.org.code);
         }
     }
 
@@ -162,34 +157,16 @@ public class CabinetBindActivity extends BaseActivity {
         }
     }
 
-    private static class GetCabinetListTask extends AsyncTask<String, Void, APIJSON<CabinetListJSON>> {
-
-        private final WeakReference<CabinetBindActivity> mActivity;
-
-        private GetCabinetListTask(CabinetBindActivity activity) {
-            mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        protected APIJSON<CabinetListJSON> doInBackground(String... strings) {
-            return RemoteAPI.System.getCabinetList(strings[0], strings[1]);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mActivity.get().showProgressDialog();
-        }
-
-        @Override
-        protected void onPostExecute(APIJSON<CabinetListJSON> json) {
-            super.onPostExecute(json);
-            mActivity.get().dismissProgressDialog();
-            if (json.status == APIJSON.Status.ok) {
-                mActivity.get().mCabinetInfoList = json.data.cabinetList;
+    private void getCabinetList(String userId) {
+        showProgressDialog();
+        getExecutorService().submit(() -> {
+            APIJSON<CabinetListJSON> listJSON = RemoteAPI.System.getCabinetList(userId);
+            if (listJSON.status == APIJSON.Status.ok) {
+                mCabinetInfoList = listJSON.data.storages;
             } else {
-                mActivity.get().showToast(json.errors);
+                showToast(listJSON.errors);
             }
-        }
+            dismissProgressDialog();
+        });
     }
 }

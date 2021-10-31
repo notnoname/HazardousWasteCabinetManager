@@ -16,7 +16,7 @@ import me.liuzs.cabinetmanager.model.ContainerNoInfo;
 
 public class ContainerNoItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView no, batchId, batchName, org, createTime, operator, isUsed;
+    public TextView no, batchName, org, createTime, operator, isUsed;
     public ContainerNoInfo containerNoInfo;
     public ContainerNoListActivity activity;
 
@@ -24,7 +24,6 @@ public class ContainerNoItemViewHolder extends RecyclerView.ViewHolder implement
         super(itemView);
         itemView.setOnClickListener(this);
         no = itemView.findViewById(R.id.tvNO);
-        batchId = itemView.findViewById(R.id.tvBatchId);
         batchName = itemView.findViewById(R.id.tvBatchName);
         org = itemView.findViewById(R.id.tvOrg);
         createTime = itemView.findViewById(R.id.tvCreateTime);
@@ -36,14 +35,12 @@ public class ContainerNoItemViewHolder extends RecyclerView.ViewHolder implement
     public void show() {
         if (containerNoInfo != null) {
             no.setText(containerNoInfo.no);
-            batchId.setText(containerNoInfo.batch_id);
             batchName.setText(containerNoInfo.batch_name);
-            org.setText(containerNoInfo.agency_name);
+            org.setText(containerNoInfo.org);
             createTime.setText(containerNoInfo.create_time);
-            operator.setText(containerNoInfo.operator);
-            isUsed.setText(containerNoInfo.is_use ? "是" : "否");
+            operator.setText(containerNoInfo.creator);
+            isUsed.setText(containerNoInfo.state == 1 ? "是" : "否");
             no.setBackgroundResource(R.drawable.background_grid_content);
-            batchId.setBackgroundResource(R.drawable.background_grid_content);
             batchName.setBackgroundResource(R.drawable.background_grid_content);
             org.setBackgroundResource(R.drawable.background_grid_content);
             createTime.setBackgroundResource(R.drawable.background_grid_content);
@@ -51,14 +48,12 @@ public class ContainerNoItemViewHolder extends RecyclerView.ViewHolder implement
             isUsed.setBackgroundResource(R.drawable.background_grid_content);
         } else {
             no.setText("单号");
-            batchId.setText("批次ID");
             batchName.setText("批次名");
             org.setText("所属机构");
             createTime.setText("创建时间");
             operator.setText("创建人员");
             isUsed.setText("是否使用");
             no.setBackgroundResource(R.drawable.background_grid_title);
-            batchId.setBackgroundResource(R.drawable.background_grid_title);
             batchName.setBackgroundResource(R.drawable.background_grid_title);
             org.setBackgroundResource(R.drawable.background_grid_title);
             createTime.setBackgroundResource(R.drawable.background_grid_title);

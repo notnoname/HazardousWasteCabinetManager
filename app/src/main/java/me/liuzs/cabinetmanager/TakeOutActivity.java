@@ -1,62 +1,129 @@
 package me.liuzs.cabinetmanager;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Lifecycle;
+import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
-
-import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
-import me.liuzs.cabinetmanager.model.Cabinet;
-import me.liuzs.cabinetmanager.model.DictType;
-import me.liuzs.cabinetmanager.model.StorageLaboratoryDetail;
-import me.liuzs.cabinetmanager.model.TakeOutInfo;
-import me.liuzs.cabinetmanager.model.TakeOutItemInfo;
-import me.liuzs.cabinetmanager.net.APIJSON;
-import me.liuzs.cabinetmanager.net.RemoteAPI;
-import me.liuzs.cabinetmanager.ui.takeout.TakeOutItemCreateFragment;
-import me.liuzs.cabinetmanager.ui.takeout.TakeOutListFragment;
-import me.liuzs.cabinetmanager.util.Util;
+import me.liuzs.cabinetmanager.model.DefaultDict;
+import me.liuzs.cabinetmanager.model.DepositRecord;
 
+/**
+ * 存入模块
+ */
 public class TakeOutActivity extends BaseActivity {
 
-    public final static String TAG = "TakeOutActivity";
-    private final TakeOutListFragment mTakeOutListFragment = new TakeOutListFragment(this);
-    private final TakeOutItemCreateFragment mTakeOutItemCreateFragment = new TakeOutItemCreateFragment(this);
-    private final Gson mGson = new Gson();
-    private final ActivityResultLauncher<Intent> mDeviceSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    public final static String TAG = "DepositActivity";
+    public final static String KEY_ORG_VALUE = "KEY_ORG_VALUE";
+    private DepositRecord mDepositRecord;
+    private boolean isNewCreate;
+    private TextView mContainerSpecValue, mSourceValue, mHarmfulIngredientsValue, mInWeightValue, mShelfNoValue, mOtherInfoValue;
+    private EditText mContainerNoValue, mOutWeightValue;
+    private final ActivityResultLauncher<Intent> mHarmfulIngredientSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
         if (resultCode == RESULT_OK) {
             Intent data = result.getData();
             assert data != null;
             String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_VALUE);
-            String devId = selectValue.split(" - ")[0];
-            new CreateTakeOutInfoTask(this).execute(devId);
-        } else {
-            finish();
+            assert selectValue != null;
+            Map<String, Boolean> select = CabinetCore.GSON.fromJson(selectValue, MultiSpinnerActivity.JSON_TYPE);
+            TakeOutActivity.this.mDepositRecord.harmful_ingredients = createHarmfulIngredientString(select);
+            showDepositRecord();
         }
     });
-    private TakeOutInfo mTakeOutInfo;
-    private TextView mUser, mTakeOutNo, mTakeOutCount, mCreateTime, mDeviceName;
-    private LinearLayout mBottomMenu;
-    private ImageButton mToolBack;
-    private List<DictType> mUnitTypes, mPurityTypes, mPurposeTypes;
 
-    public TakeOutInfo getTakeOutInfo() {
-        return mTakeOutInfo;
+    private final ActivityResultLauncher<Intent> mContainerSpecSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        int resultCode = result.getResultCode();
+        if (resultCode == RESULT_OK) {
+            Intent data = result.getData();
+            assert data != null;
+            String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_VALUE);
+            assert selectValue != null;
+            TakeOutActivity.this.mDepositRecord.container_spec = selectValue;
+            showDepositRecord();
+        }
+    });
+
+    private final ActivityResultLauncher<Intent> mWeightLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            int resultCode = result.getResultCode();
+            if (resultCode == RESULT_OK) {
+                Intent data = result.getData();
+                assert data != null;
+                String selectValue = data.getStringExtra(WeightActivity.KEY_SELECT_VALUE);
+                assert selectValue != null;
+                float weight = 0;
+                try {
+                    weight = Float.parseFloat(selectValue);
+                } catch (Exception ignored) {
+                }
+                if (weight > 0 && weight < 1000) {
+                    mDepositRecord.in_weight = String.valueOf(weight);
+                } else {
+                    showToast("称重结果异常!");
+                }
+                showDepositRecord();
+            }
+        }
+    });
+
+    public static void start(Context content, @Nullable String depositRecordJSON) {
+        Intent intent = new Intent(content, TakeOutActivity.class);
+        if (depositRecordJSON != null) {
+            intent.putExtra(KEY_ORG_VALUE, depositRecordJSON);
+        }
+        if (!(content instanceof Activity)) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        content.startActivity(intent);
+    }
+
+    public static String createHarmfulIngredientString(Map<String, Boolean> harmfulIngredientMap) {
+        if (harmfulIngredientMap != null) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Map.Entry<String, Boolean> entry : harmfulIngredientMap.entrySet()) {
+                if (entry.getValue()) {
+                    if (stringBuilder.length() > 0) {
+                        stringBuilder.append(",");
+                    }
+                    stringBuilder.append(entry.getKey());
+                }
+            }
+            return stringBuilder.toString();
+        } else {
+            return null;
+        }
+    }
+
+    public static Map<String, Boolean> createHarmfulIngredientMap(String harmfulIngredient) {
+        List<String> harmfulIngredientList = new LinkedList<>();
+        if (!TextUtils.isEmpty(harmfulIngredient)) {
+            String[] his = harmfulIngredient.split(",");
+            Collections.addAll(harmfulIngredientList, his);
+        }
+        Map<String, Boolean> result = new LinkedHashMap<>();
+        for (String hi : DefaultDict.HarmfulIngredient) {
+            boolean has = harmfulIngredientList.contains(hi);
+            result.put(hi, has);
+        }
+        return result;
     }
 
     @Override
@@ -68,297 +135,74 @@ public class TakeOutActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_out);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
-        Util.fullScreen(this);
 
-        mUser = findViewById(R.id.tvUserValue);
-        mDeviceName = findViewById(R.id.tvDeviceName);
-        mTakeOutNo = findViewById(R.id.tvNoValue);
-        mTakeOutCount = findViewById(R.id.tvTakeOutCountValue);
-        mCreateTime = findViewById(R.id.tvCreateTimeValue);
-        mBottomMenu = findViewById(R.id.llBottom);
-        mToolBack = findViewById(R.id.toolbar_back);
-        new GetBaseInfoTask(this).execute();
-    }
+        mContainerSpecValue = findViewById(R.id.tvContainerSpecValue);
+        mSourceValue = findViewById(R.id.tvSourceValue);
+        mHarmfulIngredientsValue = findViewById(R.id.tvHarmfulIngredientsValue);
+        mShelfNoValue = findViewById(R.id.tvShelfNoValue);
+        mOtherInfoValue = findViewById(R.id.tvOtherInfoValue);
+        mInWeightValue = findViewById(R.id.tvInWeightValue);
 
-    public void showTakeOutInfo() {
-        mDeviceName.setText(mTakeOutInfo.devName);
-        mUser.setText(mTakeOutInfo.userName);
-        mTakeOutNo.setText(mTakeOutInfo.outNo);
-        mTakeOutCount.setText(String.valueOf(mTakeOutInfo.items.size()));
-        mCreateTime.setText(mTakeOutInfo.createTime);
+        mContainerNoValue = findViewById(R.id.etContainerNoValue);
+        mOutWeightValue = findViewById(R.id.etOutWeightValue);
 
-        if (!mTakeOutListFragment.isHidden()) {
-            mBottomMenu.setVisibility(View.VISIBLE);
-            mToolBack.setVisibility(View.VISIBLE);
-        } else if (!mTakeOutItemCreateFragment.isHidden()) {
-            mBottomMenu.setVisibility(View.VISIBLE);
-            mToolBack.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void hideAllFragment() {
-        if (mTakeOutItemCreateFragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().hide(mTakeOutItemCreateFragment).commit();
-        }
-        if (mTakeOutListFragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().hide(mTakeOutListFragment).commit();
-        }
-    }
-
-    public void transToTakeOutItemCreateFragment() {
-        hideAllFragment();
-        if (mTakeOutItemCreateFragment.isAdded()) {
-            mTakeOutItemCreateFragment.reset();
-            getSupportFragmentManager().beginTransaction().show(mTakeOutItemCreateFragment).setMaxLifecycle(mTakeOutItemCreateFragment, Lifecycle.State.RESUMED).commit();
+        String depositRecordJSON = getIntent().getStringExtra(KEY_ORG_VALUE);
+        if (depositRecordJSON != null) {
+            isNewCreate = false;
+            mDepositRecord = CabinetCore.GSON.fromJson(depositRecordJSON, DepositRecord.class);
         } else {
-            getSupportFragmentManager().beginTransaction().add(R.id.container, mTakeOutItemCreateFragment).commit();
+            isNewCreate = true;
+            mDepositRecord = new DepositRecord();
+            mDepositRecord.operator = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
+            mDepositRecord.cabinet = CabinetCore.getCabinetInfo();
         }
     }
 
-    public void transToTakeOutListFragment() {
-        hideAllFragment();
-        if (mTakeOutListFragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().show(mTakeOutListFragment).setMaxLifecycle(mTakeOutListFragment, Lifecycle.State.RESUMED).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction().add(R.id.container, mTakeOutListFragment).commit();
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showDepositRecord();
+    }
+
+    private void showDepositRecord() {
+        mContainerSpecValue.setText(mDepositRecord.container_spec);
+        mSourceValue.setText(mDepositRecord.source.name);
+        mHarmfulIngredientsValue.setText(mDepositRecord.harmful_ingredients);
+
+        mContainerNoValue.setText(mDepositRecord.container_no_info.no);
+        mOutWeightValue.setText(mDepositRecord.in_weight);
+        mShelfNoValue.setText(mDepositRecord.shelf_no);
+        mOtherInfoValue.setText(mDepositRecord.other_info);
     }
 
     public void onBackButtonClick(View view) {
-        if (mTakeOutListFragment.isHidden()) {
-            transToTakeOutListFragment();
-        } else {
-            finish();
-        }
-    }
-
-    public void onMenuBackButtonClick(View view) {
         finish();
     }
 
+    public void onWeightButtonClick(View view) {
+        Intent intent = new Intent(this, WeightActivity.class);
+        mWeightLauncher.launch(intent);
+    }
+
     public void onSubmitButtonClick(View view) {
-        if (mTakeOutListFragment.isHidden()) {
-            mTakeOutItemCreateFragment.submitItem();
-        } else {
-            mTakeOutListFragment.submit();
-        }
     }
 
-    public DictType getDictTypeByValue(List<DictType> dictTypes, String value) {
-        for (DictType dt : dictTypes) {
-            if (value.equals(dt.value)) {
-                return dt;
-            }
-        }
-        return null;
+    public void onContainerSpecButtonClick(View view) {
+        Intent intent = new Intent(this, SpinnerActivity.class);
+        List<String> options = new LinkedList<>();
+        Collections.addAll(options, DefaultDict.ContainerSpecName);
+        intent.putExtra(SpinnerActivity.KEY_OPTIONS, CabinetCore.GSON.toJson(options));
+        intent.putExtra(SpinnerActivity.KEY_TIP_INFO, "请选择容器规格：");
+        mContainerSpecSelectLauncher.launch(intent);
     }
 
-    public DictType getDicTypeByLabel(List<DictType> dictTypes, String label) {
-        for (DictType dt : dictTypes) {
-            if (label.equals(dt.label)) {
-                return dt;
-            }
-        }
-        return null;
+    public void onHarmfulIngredientsValueClick(View view) {
+        Intent intent = new Intent(this, MultiSpinnerActivity.class);
+        Map<String, Boolean> options = createHarmfulIngredientMap(mDepositRecord.harmful_ingredients);
+        intent.putExtra(MultiSpinnerActivity.KEY_OPTIONS, CabinetCore.GSON.toJson(options));
+        intent.putExtra(MultiSpinnerActivity.KEY_TIP_INFO, "请选择有害成分：");
+        mHarmfulIngredientSelectLauncher.launch(intent);
     }
 
-    public DictType getUnitLabelByValue(String value) {
-        return getDictTypeByValue(mUnitTypes, value);
-    }
-
-    public DictType getPurityLabelByValue(String value) {
-        return getDictTypeByValue(mPurityTypes, value);
-    }
-
-    public DictType getPurposeLabelByValue(String value) {
-        return getDictTypeByValue(mPurposeTypes, value);
-    }
-
-    public void setDicTypeLabel(TakeOutItemInfo info) {
-        if (TextUtils.isEmpty(info.purity)) {
-            info.purity = null;
-            info.purityLabel = null;
-        } else if (!TextUtils.isEmpty(info.purity)) {
-            DictType purityType = getPurityLabelByValue(info.purity);
-            if (purityType != null) {
-                info.purityLabel = purityType.label;
-            }
-        }
-
-        if (TextUtils.isEmpty(info.unit)) {
-            info.unit = null;
-            info.unitLabel = null;
-        } else if (!TextUtils.isEmpty(info.unit)) {
-            DictType unitType = getUnitLabelByValue(info.unit);
-            if (unitType != null) {
-                info.unitLabel = unitType.label;
-            }
-        }
-
-        if (TextUtils.isEmpty(info.purpose)) {
-            info.purpose = null;
-            info.purposeLabel = null;
-        } else if (!TextUtils.isEmpty(info.purpose)) {
-            DictType purposeType = getPurposeLabelByValue(info.purpose);
-            if (purposeType != null) {
-                info.purposeLabel = purposeType.label;
-            }
-        }
-    }
-
-    public List<DictType> getPurposeTypes() {
-        return mPurposeTypes;
-    }
-
-    static class CreateTakeOutInfoTask extends AsyncTask<String, Void, TakeOutInfo> {
-
-        private final WeakReference<TakeOutActivity> mActivity;
-
-        public CreateTakeOutInfoTask(TakeOutActivity activity) {
-            this.mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        protected TakeOutInfo doInBackground(String... args) {
-            Cabinet cabinet = CabinetCore.getCabinetInfo();
-            TakeOutInfo result = new TakeOutInfo();
-
-            APIJSON<StorageLaboratoryDetail> storageLaboratoryDetailJSON = RemoteAPI.TakeOut.getStorageLaboratoryDetail();
-            if (storageLaboratoryDetailJSON.status != APIJSON.Status.ok) {
-                return null;
-            } else {
-                StorageLaboratoryDetail detail = storageLaboratoryDetailJSON.data;
-                result.userName = detail.safetyPerson;
-                result.outLabId = detail.labId;
-                result.address = detail.address;
-                result.labName = detail.labName;
-            }
-
-            APIJSON<String> takeOutNoJson = RemoteAPI.TakeOut.createTakeOutTask(result.address, args[0], 0);
-            if (takeOutNoJson.status != APIJSON.Status.ok) {
-                return null;
-            }
-
-            TakeOutInfo takeOutInfo = null;
-            APIJSON<List<TakeOutInfo>> takeOutInfoListJson = RemoteAPI.TakeOut.getLastTakeOutTaskList();
-            if (takeOutInfoListJson.status != APIJSON.Status.ok || takeOutInfoListJson.data == null || takeOutInfoListJson.data.size() == 0) {
-                return null;
-            } else {
-//                for (TakeOutInfo info : takeOutInfoListJson.data) {
-//                    if (TextUtils.equals(info.devId, args[0]) && TextUtils.equals(info.tankId, cabinet.tankId)) {
-//                        takeOutInfo = info;
-//                        break;
-//                    }
-//                }
-            }
-
-            if (takeOutInfo == null) {
-                return null;
-            }
-            result.createTime = takeOutInfo.createTime;
-            result.devId = takeOutInfo.devId;
-            result.devName = takeOutInfo.devName;
-            result.outId = takeOutInfo.outId;
-            result.outLabId = takeOutInfo.outLabId;
-            result.outNo = takeOutInfo.outNo;
-            result.tankId = takeOutInfo.tankId;
-            result.tankName = takeOutInfo.tankName;
-            result.userName = takeOutInfo.userName;
-            return result;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mActivity.get().showProgressDialog();
-        }
-
-        @Override
-        protected void onPostExecute(TakeOutInfo result) {
-            super.onPostExecute(result);
-            mActivity.get().dismissProgressDialog();
-            if (result != null) {
-                mActivity.get().mTakeOutInfo = result;
-                CabinetCore.saveUnSubmitTakeOutInfo(mActivity.get(), mActivity.get().mTakeOutInfo);
-                mActivity.get().transToTakeOutListFragment();
-                mActivity.get().showTakeOutInfo();
-            } else {
-                mActivity.get().showToast("服务器错误!");
-                mActivity.get().finish();
-            }
-        }
-    }
-
-    static class GetBaseInfoTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final WeakReference<TakeOutActivity> mActivity;
-
-        public GetBaseInfoTask(TakeOutActivity activity) {
-            this.mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... v) {
-            APIJSON<List<DictType>> unitTypes = RemoteAPI.BaseInfo.getUnitDictCode();
-            if (unitTypes.status != APIJSON.Status.ok) {
-                return false;
-            } else {
-                mActivity.get().mUnitTypes = unitTypes.data;
-            }
-            APIJSON<List<DictType>> purityTypes = RemoteAPI.BaseInfo.getPurityDictCode();
-            if (purityTypes.status != APIJSON.Status.ok) {
-                return false;
-            } else {
-                mActivity.get().mPurityTypes = purityTypes.data;
-            }
-
-            APIJSON<List<DictType>> purposeTypes = RemoteAPI.BaseInfo.getPurposeDictCode();
-            if (purposeTypes.status != APIJSON.Status.ok) {
-                return false;
-            } else {
-                mActivity.get().mPurposeTypes = purposeTypes.data;
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mActivity.get().showProgressDialog();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean info) {
-            super.onPostExecute(info);
-            mActivity.get().dismissProgressDialog();
-            if (info) {
-                mActivity.get().mTakeOutInfo = CabinetCore.getUnSubmitTakeOutInfo(mActivity.get());
-                if (mActivity.get().mTakeOutInfo == null) {
-//                    DeviceInfo deviceInfo = CabinetApplication.getSingleDevice();
-//                    if (deviceInfo != null) {
-//                        new CreateTakeOutInfoTask(mActivity.get()).execute(deviceInfo.devId);
-//                    } else {
-//                        List<String> options = new ArrayList<>();
-//                        for (DeviceInfo dev : CabinetApplication.getInstance().getCabinetInfo().devices) {
-//                            options.add(dev.devId + " - " + dev.devName);
-//                        }
-//                        Intent intent = new Intent(mActivity.get(), SpinnerActivity.class);
-//                        intent.putExtra(SpinnerActivity.KEY_OPTIONS, mActivity.get().mGson.toJson(options));
-//                        intent.putExtra(SpinnerActivity.KEY_TIP_INFO, "请先选择存储区域：");
-//                        mActivity.get().mDeviceSelectLauncher.launch(intent);
-//                    }
-                } else {
-                    mActivity.get().transToTakeOutListFragment();
-                    mActivity.get().showTakeOutInfo();
-                }
-            } else {
-                mActivity.get().showToast("服务器错误!");
-                mActivity.get().finish();
-            }
-        }
-    }
 
 }

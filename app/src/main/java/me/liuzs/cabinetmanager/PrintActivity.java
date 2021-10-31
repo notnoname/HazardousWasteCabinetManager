@@ -96,8 +96,8 @@ public class PrintActivity extends BaseActivity {
             Bitmap bitmap = CreateBarcodeImage(containerNoInfo.no);
             mBarcodeImage.setImageBitmap(bitmap);
             mBatchName.setText("批次:" + containerNoInfo.batch_name);
-            mOperator.setText("创建人:" + containerNoInfo.operator);
-            mAgency.setText("机构:" + containerNoInfo.agency_name);
+            mOperator.setText("创建人:" + containerNoInfo.creator);
+            mAgency.setText("机构:" + containerNoInfo.org);
             mBarcode.setText(containerNoInfo.no);
         }
     }

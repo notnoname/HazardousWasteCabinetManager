@@ -97,7 +97,7 @@ public class AuthActivity extends AppCompatActivity {
     public void onFaceIDButtonClick(View view) {
         Intent intent = new Intent(this, RegisterAndRecognizeActivity.class);
         intent.putExtra(RegisterAndRecognizeActivity.PARAM_IS_FOR_REG, false);
-        String account = CabinetCore.getCabinetUser(mType).account;
+        String account = CabinetCore.getCabinetUser(mType).username;
         intent.putExtra(RegisterAndRecognizeActivity.PARAM_AUTH_ACCOUNT, account);
         mLauncher.launch(intent);
     }

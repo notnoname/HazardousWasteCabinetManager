@@ -1,15 +1,14 @@
 package me.liuzs.cabinetmanager.model;
 
+import java.util.List;
+
 public class Cabinet {
     public String id;
     public String name;
-    public String no;
+    public String code;
     public String type;
     public int capacity;
-    public String[] operator;
-    public String ownerId;
-    public String ownerName;
-    public String agency_id;
-    public String agencyNo;
-    public String agencyName;
+    public List<User> operators;
+    public User owner;
+    public Agency org;
 }

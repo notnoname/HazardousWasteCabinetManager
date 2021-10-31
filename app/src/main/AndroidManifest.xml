@@ -52,11 +52,7 @@
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
             android:name=".TakeOutActivity"
-            android:label="@string/take_out"
-            android:theme="@style/Theme.CabinetManager.NoActionBar" />
-        <activity
-            android:name=".ReturnAfterUseActivity"
-            android:label="@string/take_in"
+            android:label="@string/title_activity_storage"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
             android:name=".LogViewActivity"

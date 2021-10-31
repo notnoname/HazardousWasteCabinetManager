@@ -187,6 +187,8 @@
     <string name="purity_colon">纯度：</string>
     <string name="container_no_colon">暂存单号：</string>
     <string name="weight_colon">重量：</string>
+    <string name="in_weight_colon">入柜重量：</string>
+    <string name="out_weight_colon">出柜重量：</string>
     <string name="container_no_batch_name">批次名称：</string>
     <string name="container_no_batch_name_tip">支持中英文字符和数字</string>
     <string name="control_category_colon">管制类别：</string>

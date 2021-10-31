@@ -40,12 +40,17 @@ import me.liuzs.cabinetmanager.util.Util;
 
 @SuppressLint("SimpleDateFormat")
 public class CabinetCore {
-    private final static SimpleDateFormat _MilliSecondFormatter = new SimpleDateFormat(
+
+    public final static SimpleDateFormat _YearFormatter = new SimpleDateFormat("yyyy-MM-dd");
+    public final static SimpleDateFormat _HourFormatter = new SimpleDateFormat("HH:mm a");
+    public final static SimpleDateFormat _MilliSecondFormatter = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss.SSS");
-    private final static SimpleDateFormat _SecondFormatter = new SimpleDateFormat(
+    public final static SimpleDateFormat _SecondFormatter = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
-    private final static SimpleDateFormat _DayFormatter = new SimpleDateFormat(
+    public final static SimpleDateFormat _DayFormatter = new SimpleDateFormat(
             "yyyyMMdd");
+    public final static SimpleDateFormat _NoSplitYearFormatter = new SimpleDateFormat(
+            "yyyyMMddHHmmss");
     public final static Gson GSON = new Gson();
     private static final String TAG = "CabinetCore";
     private static Timer mAuthTimer;

@@ -2,7 +2,6 @@ package me.liuzs.cabinetmanager;
 
 import static me.liuzs.cabinetmanager.ui.NewProgressDialog.THEME_CIRCLE_PROGRESS;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -25,7 +24,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Timer;
@@ -37,13 +35,6 @@ import me.liuxy.cabinet.SubBoard;
 import me.liuzs.cabinetmanager.ui.NewProgressDialog;
 
 abstract class BaseActivity extends AppCompatActivity {
-
-    public static final String DATE_TO_STRING_TIME_PATTERN = "HH:mm a";
-    public static final String DATE_TO_STRING_YEAR_PATTERN = "yyyy-MM-dd";
-    @SuppressLint("SimpleDateFormat")
-    public static final SimpleDateFormat mYearFormat = new SimpleDateFormat(DATE_TO_STRING_YEAR_PATTERN);
-    @SuppressLint("SimpleDateFormat")
-    public static final SimpleDateFormat mTimeFormat = new SimpleDateFormat(DATE_TO_STRING_TIME_PATTERN);
 
     protected final Handler mHandler = new Handler();
     protected NewProgressDialog mProgressDialog;
@@ -154,10 +145,10 @@ abstract class BaseActivity extends AppCompatActivity {
     protected void updateDateAndTime() {
         Date date = new Date(System.currentTimeMillis());
         if (mDate != null) {
-            mDate.setText(mYearFormat.format(date));
+            mDate.setText(CabinetCore._YearFormatter.format(date));
         }
         if (mTime != null) {
-            mTime.setText(mTimeFormat.format(date));
+            mTime.setText(CabinetCore._HourFormatter.format(date));
         }
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,8 +7,309 @@
     android:background="@drawable/background"
     tools:context=".TakeOutActivity">
 
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/background" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_button_orange"
+            android:gravity="center"
+            android:onClick="onWeightButtonClick"
+            android:text="@string/weight"
+            android:textColor="@color/white"
+            android:textSize="22px"
+            app:layout_constraintBottom_toBottomOf="@+id/etOutWeightValue"
+            app:layout_constraintEnd_toEndOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintTop_toTopOf="@+id/etOutWeightValue" />
+
+        <EditText
+            android:id="@+id/etContainerNoValue"
+            android:layout_width="480px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32px"
+            android:background="@drawable/background_edit"
+            android:digits="NO0123456789"
+            android:hint="@string/input_container_no_please"
+            android:inputType="textPassword"
+            android:minHeight="48px"
+            android:padding="10px"
+            android:textColor="@color/black"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/container_no_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/etContainerNoValue"
+            app:layout_constraintEnd_toStartOf="@+id/etContainerNoValue"
+            app:layout_constraintTop_toTopOf="@+id/etContainerNoValue" />
+
+        <TextView
+            android:id="@+id/tvContainerSpecValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:hint="@string/select_please"
+            android:padding="10px"
+            android:onClick="onContainerSpecButtonClick"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/etContainerNoValue"
+            app:layout_constraintStart_toStartOf="@+id/etContainerNoValue"
+            app:layout_constraintTop_toBottomOf="@+id/etContainerNoValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/container_spec_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/tvContainerSpecValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvContainerSpecValue"
+            app:layout_constraintTop_toTopOf="@+id/tvContainerSpecValue" />
+
+        <TextView
+            android:id="@+id/tvSourceValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:hint="@string/select_please"
+            android:padding="10px"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/tvContainerSpecValue"
+            app:layout_constraintStart_toStartOf="@+id/tvContainerSpecValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvContainerSpecValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/hazardous_source_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSourceValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvSourceValue"
+            app:layout_constraintTop_toTopOf="@+id/tvSourceValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/harmful_ingredients_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintTop_toTopOf="@+id/tvHarmfulIngredientsValue" />
+
+        <TextView
+            android:id="@+id/tvHarmfulIngredientsValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:hint="@string/select_please"
+            android:padding="10px"
+            android:singleLine="true"
+            android:onClick="onHarmfulIngredientsValueClick"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/tvSourceValue"
+            app:layout_constraintStart_toStartOf="@+id/tvSourceValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvSourceValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/in_weight_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInWeightValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvInWeightValue"
+            app:layout_constraintTop_toTopOf="@+id/tvInWeightValue" />
+
+        <TextView
+            android:id="@+id/tvInWeightValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:hint="@string/select_please"
+            android:padding="10px"
+            android:singleLine="true"
+            android:onClick="onHarmfulIngredientsValueClick"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintStart_toStartOf="@+id/tvHarmfulIngredientsValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvHarmfulIngredientsValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/shelf_no_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/tvShelfNoValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvShelfNoValue"
+            app:layout_constraintTop_toTopOf="@+id/tvShelfNoValue" />
+
+        <TextView
+            android:id="@+id/tvShelfNoValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:digits="0123456789"
+            android:hint="@string/input_number_please"
+            android:inputType="number"
+            android:padding="10px"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/btnWeight"
+            app:layout_constraintStart_toStartOf="@+id/etOutWeightValue"
+            app:layout_constraintTop_toBottomOf="@+id/etOutWeightValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/other_info_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/tvOtherInfoValue"
+            app:layout_constraintEnd_toStartOf="@+id/tvOtherInfoValue"
+            app:layout_constraintTop_toTopOf="@+id/tvOtherInfoValue" />
+
+        <TextView
+            android:id="@+id/tvOtherInfoValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:background="@drawable/background_edit"
+            android:hint="@string/select_input"
+            android:inputType="number"
+            android:padding="10px"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toEndOf="@+id/tvShelfNoValue"
+            app:layout_constraintStart_toStartOf="@+id/tvShelfNoValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvShelfNoValue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16px"
+            android:gravity="center"
+            android:text="@string/out_weight_colon"
+            android:textColor="@color/white"
+            android:textSize="30px"
+            app:layout_constraintBottom_toBottomOf="@+id/etOutWeightValue"
+            app:layout_constraintEnd_toStartOf="@+id/etOutWeightValue"
+            app:layout_constraintTop_toTopOf="@+id/etOutWeightValue" />
+
+        <EditText
+            android:id="@+id/etOutWeightValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:layout_marginEnd="16px"
+            android:background="@drawable/background_edit"
+            android:digits="0123456789."
+            android:hint="@string/weight_tip"
+            android:inputType="number"
+            android:padding="10px"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="28px"
+            app:layout_constraintEnd_toStartOf="@+id/btnWeight"
+            app:layout_constraintStart_toStartOf="@+id/tvInWeightValue"
+            app:layout_constraintTop_toBottomOf="@+id/tvInWeightValue"
+            tools:ignore="TouchTargetSizeCheck" />
+
+
+        <LinearLayout
+            android:id="@+id/llBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvOtherInfoValue">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCancel"
+                android:layout_width="120px"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/background_button"
+                android:gravity="center"
+                android:onClick="onBackButtonClick"
+                android:text="@string/cancel"
+                android:textColor="@color/white"
+                android:textSize="24px" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnOK"
+                android:layout_width="120px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16px"
+                android:background="@drawable/background_button"
+                android:gravity="center"
+                android:onClick="onSubmitButtonClick"
+                android:text="@string/ok"
+                android:textColor="@color/white"
+                android:textSize="24px" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+        android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -26,12 +327,12 @@
 
             <ImageButton
                 android:id="@+id/toolbar_back"
-                android:layout_width="45dp"
-                android:layout_height="35dp"
+                android:layout_width="90px"
+                android:layout_height="40px"
                 android:layout_gravity="start|center_vertical"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/app_name"
-                android:onClick="onMenuBackButtonClick"
+                android:onClick="onBackButtonClick"
                 android:scaleType="fitCenter"
                 android:src="@drawable/back_button"
                 android:visibility="invisible" />
@@ -41,194 +342,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/take_out"
-                android:textSize="30sp"
+                android:text="@string/take_in"
+                android:textSize="@dimen/tool_bar_title_height"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ctBaseInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
-
-        <TextView
-            android:id="@+id/tvCreateTimeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/time_colon"
-            android:textColor="#f18a34"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvUserValue"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvCreateTimeValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="50dp"
-            android:singleLine="true"
-            android:text="@string/empty_blank"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvCreateTimeLabel"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvTakeOutCountLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/count_colon"
-            android:textColor="#f18a34"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvCreateTimeValue"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvTakeOutCountValue"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvTakeOutCountLabel"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvUserLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/operator_colon"
-            android:textColor="#f18a34"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvNoValue"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvUserValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="50dp"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvUserLabel"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvNoLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/serial_number_colon"
-            android:textColor="#f18a34"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvDeviceName"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/tvNoValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="50dp"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvNoLabel"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvContainerSpecLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_device"
-            android:textColor="#f18a34"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvDeviceName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="160dp"
-            android:minWidth="50dp"
-            android:singleLine="true"
-            android:text="@string/empty_blank"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvContainerSpecLabel"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/background_input_area"
-        app:layout_constraintBottom_toTopOf="@+id/llBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ctBaseInfo" />
-
-    <LinearLayout
-        android:id="@+id/llBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCancel"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:background="@drawable/background_button"
-            android:onClick="onBackButtonClick"
-            android:text="@string/cancel"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSubmit"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:background="@drawable/background_button"
-            android:onClick="onSubmitButtonClick"
-            android:text="@string/submit"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

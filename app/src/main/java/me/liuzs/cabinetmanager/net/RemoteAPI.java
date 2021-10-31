@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpHeaders;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
@@ -20,6 +22,7 @@ import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.client.methods.HttpRequestBase;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
+import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import me.liuzs.cabinetmanager.CabinetCore;
@@ -48,16 +51,29 @@ public class RemoteAPI {
     /**
      * HTTP接口Root地址
      */
-    public static final String API_ROOT = "http://mockapi.eolinker.com/RvgW5arf86a8060ba89c248670915e44a97647837a7dade";
+    public static final String API_ROOT = "http://47.104.235.225:8090";
     //http://47.104.235.225:1080/collage
     //http://idburgsafe.com:1080/collage_pro
     private static final Random _Random = new Random();
 
-    private static void generalBaseHeader(HttpRequestBase httpRequest) {
-//        Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
-//        Header authorization = new BasicHeader("Token", CabinetApplication.getInstance().getAdminUser().token);
-//        httpRequest.addHeader(contentType);
-//        httpRequest.addHeader(authorization);
+    private static void generalOptBaseHeader(HttpRequestBase httpRequest) {
+        Header accept = new BasicHeader(HttpHeaders.ACCEPT, "application/json");
+        httpRequest.addHeader(accept);
+        User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
+        if (user != null) {
+            Header authorization = new BasicHeader("token", user.token);
+            httpRequest.addHeader(authorization);
+        }
+    }
+
+    private static void generalAdminBaseHeader(HttpRequestBase httpRequest) {
+        Header accept = new BasicHeader(HttpHeaders.ACCEPT, "application/json");
+        httpRequest.addHeader(accept);
+        User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Admin);
+        if (user != null) {
+            Header authorization = new BasicHeader("Token", user.token);
+            httpRequest.addHeader(authorization);
+        }
     }
 
     /**
@@ -116,7 +132,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_SEARCH_CHEMICAL + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == HTTP_OK) {
@@ -158,7 +174,7 @@ public class RemoteAPI {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 HttpGet httpGet = new HttpGet(API_GET_UNIT_DICT_CODE);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -200,7 +216,7 @@ public class RemoteAPI {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 HttpGet httpGet = new HttpGet(API_GET_PURITY_DICT_CODE);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -242,7 +258,7 @@ public class RemoteAPI {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 HttpGet httpGet = new HttpGet(API_GET_MEASURE_SPEC_DICT_CODE);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -284,7 +300,7 @@ public class RemoteAPI {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 HttpGet httpGet = new HttpGet(API_GET_PURPOSE_Types_DICT_CODE);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -365,7 +381,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_GET_CONTAINER_DETAIL + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -411,7 +427,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_GET_CONTAINER_LIST + devId + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -462,7 +478,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("isControl", String.valueOf(isControl)));
                 valuePairs.add(new BasicNameValuePair("user1Id", user.id));
                 HttpPost httpPost = new HttpPost(API_CREATE_TAKE_OUT_TASK);
-                generalBaseHeader(httpPost);
+                generalOptBaseHeader(httpPost);
                 httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
                 HttpResponse httpResponse = httpClient.execute(httpPost);
                 int code = httpResponse.getStatusLine().getStatusCode();
@@ -508,7 +524,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("currentPage", "1"));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_GET_TAKE_OUT_TASK_LIST + "?" + params);
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -547,7 +563,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("currentPage", "1"));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_GET_TAKE_OUT_ITEM_LIST + "?" + params);
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -584,7 +600,7 @@ public class RemoteAPI {
 
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_GET_STORAGE_LABORATORY_DETAIL + "?" + params);
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -623,7 +639,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("outWeight", item.outWeight));
                 valuePairs.add(new BasicNameValuePair("purpose", item.purpose));
                 HttpPost httpPost = new HttpPost(API_SAVE_TAKE_OUT_ITEM_DETAIL);
-                generalBaseHeader(httpPost);
+                generalOptBaseHeader(httpPost);
                 httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
                 HttpResponse httpResponse = httpClient.execute(httpPost);
                 int code = httpResponse.getStatusLine().getStatusCode();
@@ -664,15 +680,15 @@ public class RemoteAPI {
         /**
          * 创建单号批次
          */
-        public static final String API_CREATE_CONTAINER_NO_BATCH = API_ROOT + "/createContainerNoBatch";
+        public static final String API_CREATE_CONTAINER_NO_BATCH = API_ROOT + "/admin/storage_no_batches";
         /**
          * 获取单号批次列表
          */
-        public static final String API_GET_CONTAINER_NO_BATCH_LIST = API_ROOT + "/drug/v1/usePutDetails/pageList";
+        public static final String API_GET_CONTAINER_NO_BATCH_LIST = API_ROOT + "/admin/storage_no_batches";
         /**
          * 获取单号批次下单号列表
          */
-        public static final String API_GET_CONTAINER_NO_BATCH_NO_LIST = API_ROOT + "/drug/v1/storageLaboratory/storageLaboratoryDetail/";
+        public static final String API_GET_CONTAINER_NO_BATCH_NO_LIST = API_ROOT + "/admin/storage_no_batches/";
 
 
         /**
@@ -680,23 +696,18 @@ public class RemoteAPI {
          *
          * @return 创建是否成功
          */
-        public static APIJSON<ContainerNoBatchInfo> createContainerNoBatch(String name, String count) {
+        public static APIJSON<ContainerNoBatchInfo> createContainerNoBatch(String name, String amount) {
 
             try {
-                User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
-                Cabinet cabinet = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 HttpPost method = new HttpPost(API_CREATE_CONTAINER_NO_BATCH);
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("userId", user.id));
-                valuePairs.add(new BasicNameValuePair("token", user.token));
-                valuePairs.add(new BasicNameValuePair("name", name));
-                valuePairs.add(new BasicNameValuePair("count", count));
-                valuePairs.add(new BasicNameValuePair("agencyId", cabinet.agency_id));
+                valuePairs.add(new BasicNameValuePair("storage_no_batch[batch_name]", name));
+                valuePairs.add(new BasicNameValuePair("storage_no_batch[amount]", amount));
                 method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
-                generalBaseHeader(method);
+                generalOptBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == HTTP_OK) {
@@ -724,21 +735,18 @@ public class RemoteAPI {
         public static APIJSON<ContainerNoBatchListJSON> getContainerNoBatchList(String batchName, String operator, int page_size, int page_index) {
 
             try {
-                User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
-                Cabinet cabinet = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpPost method = new HttpPost(API_GET_CONTAINER_NO_BATCH_LIST);
+
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("userId", user.id));
-                valuePairs.add(new BasicNameValuePair("token", user.token));
                 valuePairs.add(new BasicNameValuePair("batch_name", batchName));
-                valuePairs.add(new BasicNameValuePair("operator", operator));
+                valuePairs.add(new BasicNameValuePair("creator", operator));
                 valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(page_size)));
                 valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(page_index)));
-                method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
+                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
+                HttpGet method = new HttpGet(API_GET_CONTAINER_NO_BATCH_LIST + "?" + params);
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
-                generalBaseHeader(method);
+                generalOptBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == HTTP_OK) {
@@ -758,28 +766,28 @@ public class RemoteAPI {
             }
         }
 
-        public static APIJSON<List<ContainerNoInfo>> getContainerNoList(String batchId) {
+        public static APIJSON<ContainerNoBatchInfo> getContainerNoList(String batchId) {
 
             try {
                 User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
-                Cabinet cabinet = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpPost method = new HttpPost(API_GET_CONTAINER_NO_BATCH_NO_LIST);
+
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("userId", user.id));
                 valuePairs.add(new BasicNameValuePair("token", user.token));
                 valuePairs.add(new BasicNameValuePair("batch_id", batchId));
-                method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
+                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, UTF_8));
+                HttpGet method = new HttpGet(API_GET_CONTAINER_NO_BATCH_NO_LIST + batchId + "?" + params);
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
-                generalBaseHeader(method);
+                generalOptBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == HTTP_OK) {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<ContainerNoInfo>>>() {
+                    Type jsonType = new TypeToken<APIJSON<ContainerNoBatchInfo>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
@@ -825,7 +833,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_INVENTORY_QUERY_LIST + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -873,7 +881,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_INVENTORY_QUERY_DETAIL + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -951,7 +959,7 @@ public class RemoteAPI {
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_GET_DEPOSIT_NO + "?" + params);
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -989,7 +997,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("putNum", putNum));
                 valuePairs.add(new BasicNameValuePair("totalAmount", totalAmount));
                 HttpPost httpPost = new HttpPost(API_SAVE_DEPOSIT);
-                generalBaseHeader(httpPost);
+                generalOptBaseHeader(httpPost);
                 httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
                 HttpResponse httpResponse = httpClient.execute(httpPost);
                 int code = httpResponse.getStatusLine().getStatusCode();
@@ -1034,7 +1042,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("putId", putId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_COMMIT_DEPOSIT + putId + "?" + params);
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -1081,7 +1089,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_GET_CONTAINER_NO + putId + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -1127,7 +1135,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpDelete httpDelete = new HttpDelete(API_REMOVE_PUT_LAB_DETAIL + detailId + "?" + params);
                 Log.d(TAG, httpDelete.getURI().toString());
-                generalBaseHeader(httpDelete);
+                generalOptBaseHeader(httpDelete);
                 HttpResponse httpResponse = httpClient.execute(httpDelete);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -1194,7 +1202,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_STANDING_BOOK_DEPOSIT + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -1241,7 +1249,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_STANDING_BOOK_TAKE_OUT + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -1288,7 +1296,7 @@ public class RemoteAPI {
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_STANDING_BOOK_TAKE_IN + "?" + params);
                 Log.d(TAG, httpGet.getURI().toString());
-                generalBaseHeader(httpGet);
+                generalOptBaseHeader(httpGet);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == 200) {
@@ -1325,11 +1333,11 @@ public class RemoteAPI {
         /**
          * 登录
          */
-        public static final String API_LOGIN = API_ROOT + "/login";
+        public static final String API_LOGIN = API_ROOT + "/admin/sessions";
         /**
          * 用户名下一体机设备搜索
          */
-        public static final String API_CABINET_LIST = API_ROOT + "/findCabinetByAdmin";
+        public static final String API_CABINET_LIST = API_ROOT + "/admin/admins/%s/storages";
 
         /**
          * 获取柜子绑定摄像头列表
@@ -1340,20 +1348,15 @@ public class RemoteAPI {
          * 查询管理员名下所有暂存柜列表
          *
          * @param userId 管理员Id
-         * @param token  token
          * @return 暂存柜列表
          */
-        public static APIJSON<CabinetListJSON> getCabinetList(String userId, String token) {
+        public static APIJSON<CabinetListJSON> getCabinetList(String userId) {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpPost method = new HttpPost(API_CABINET_LIST);
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("userId", userId));
-                valuePairs.add(new BasicNameValuePair("token", token));
-                method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
+                String api_url = String.format(API_CABINET_LIST, userId);
+                HttpGet method = new HttpGet(api_url);
                 Log.d(TAG, method.getURI().toString());
-                Log.d(TAG, valuePairs.toString());
-                generalBaseHeader(method);
+                generalAdminBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == HTTP_OK) {
@@ -1388,7 +1391,7 @@ public class RemoteAPI {
                 HttpGet method = new HttpGet(API_GET_CAMERA_LIST + tankId + "?" + params);
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
-                generalBaseHeader(method);
+                generalOptBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == HTTP_OK) {
@@ -1420,12 +1423,12 @@ public class RemoteAPI {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 HttpPost method = new HttpPost(API_LOGIN);
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("account", account));
-                valuePairs.add(new BasicNameValuePair("password", password));
+                valuePairs.add(new BasicNameValuePair("session[username]", account));
+                valuePairs.add(new BasicNameValuePair("session[password]", password));
                 method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
-                generalBaseHeader(method);
+                generalAdminBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
                 if (code == HTTP_OK) {
