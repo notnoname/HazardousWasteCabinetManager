@@ -6,7 +6,7 @@ import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
 import me.liuzs.cabinetmanager.model.DepositRecord;
 
 public class DepositRecordListJSON {
-    public List<DepositRecord> storages;
+    public List<DepositRecord> storage_records;
     /**
      * 每页记录数
      */

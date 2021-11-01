@@ -25,6 +25,7 @@ import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
+import cz.msebera.android.httpclient.util.TextUtils;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.model.Agency;
 import me.liuzs.cabinetmanager.model.Cabinet;
@@ -647,7 +648,7 @@ public class RemoteAPI {
          *
          * @return 提交结果
          */
-        public static APIJSON<String> submitDeposit(DepositRecord depositRecord) {
+        public static APIJSON<DepositRecord> submitDeposit(DepositRecord depositRecord) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -657,8 +658,13 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("storage_record[storage_id]", depositRecord.storage_id));
                 valuePairs.add(new BasicNameValuePair("storage_record[container_size]", depositRecord.container_size));
                 valuePairs.add(new BasicNameValuePair("storage_record[storage_rack]", depositRecord.storage_rack));
-                valuePairs.add(new BasicNameValuePair("storage_record[input_weight]", depositRecord.in_weight));
-                valuePairs.add(new BasicNameValuePair("storage_record[harmful_info][]", depositRecord.harmful_info));
+                valuePairs.add(new BasicNameValuePair("storage_record[input_weight]", depositRecord.input_weight));
+                if (!TextUtils.isEmpty(depositRecord.harmful_info)) {
+                    String[] hi = depositRecord.harmful_info.split(",");
+                    for (int i = 0; i < hi.length; i++) {
+                        valuePairs.add(new BasicNameValuePair("storage_record[harmful_info][]", hi[i]));
+                    }
+                }
                 valuePairs.add(new BasicNameValuePair("storage_record[remark]", depositRecord.remark));
                 valuePairs.add(new BasicNameValuePair("storage_record[laboratory_id]", depositRecord.laboratory_id));
                 method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
@@ -671,7 +677,7 @@ public class RemoteAPI {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
+                    Type jsonType = new TypeToken<APIJSON<DepositRecord>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {

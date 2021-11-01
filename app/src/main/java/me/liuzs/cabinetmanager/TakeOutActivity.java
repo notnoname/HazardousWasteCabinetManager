@@ -75,7 +75,7 @@ public class TakeOutActivity extends BaseActivity {
                 } catch (Exception ignored) {
                 }
                 if (weight > 0 && weight < 1000) {
-                    mDepositRecord.in_weight = String.valueOf(weight);
+                    mDepositRecord.input_weight = String.valueOf(weight);
                 } else {
                     showToast("称重结果异常!");
                 }
@@ -168,7 +168,7 @@ public class TakeOutActivity extends BaseActivity {
         mHarmfulIngredientsValue.setText(mDepositRecord.harmful_info);
 
         mContainerNoValue.setText(mDepositRecord.storage_no);
-        mOutWeightValue.setText(mDepositRecord.in_weight);
+        mOutWeightValue.setText(mDepositRecord.input_weight);
         mShelfNoValue.setText(mDepositRecord.storage_rack);
         mOtherInfoValue.setText(mDepositRecord.remark);
     }

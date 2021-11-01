@@ -1,6 +1,7 @@
 package me.liuzs.cabinetmanager.model;
 
 public class Laboratory {
+    public String id;
     public String code;
     public String name;
     public int subtype;

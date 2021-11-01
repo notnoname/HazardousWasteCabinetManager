@@ -85,7 +85,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
             assert data != null;
             String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_INDEX);
             assert selectValue != null;
-            DepositActivity.this.mDepositRecord.laboratory_id = mLaboratoryList.get(Integer.parseInt(selectValue)).code;
+            DepositActivity.this.mDepositRecord.laboratory_id = mLaboratoryList.get(Integer.parseInt(selectValue)).id;
             showDepositRecord();
         }
     });
@@ -105,7 +105,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 } catch (Exception ignored) {
                 }
                 if (weight > 0 && weight < 1000) {
-                    mDepositRecord.in_weight = String.valueOf(weight);
+                    mDepositRecord.input_weight = String.valueOf(weight);
                 } else {
                     showToast("称重结果异常!");
                 }
@@ -221,12 +221,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 new AlertDialog.Builder(DepositActivity.this).setMessage("获取实验列表失败，是否切换为离线模式？").setNegativeButton("确认", (dialog, which) -> {
                     mOfflineModel.setChecked(true);
                     showDepositRecord();
-                }).setNeutralButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                }).show();
+                }).setNeutralButton("取消", (dialogInterface, i) -> finish()).show();
             }
         });
     }
@@ -238,20 +233,26 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
             dismissProgressDialog();
             if (depositJSON.status == APIJSON.Status.ok) {
                 if (depositJSON.data != null) {
-                    if (depositJSON.data.storages == null || depositJSON.data.storages.size() == 0) {
+                    if (depositJSON.data.storage_records == null || depositJSON.data.storage_records.size() == 0) {
                         if (isRestore) {
 
                         } else {
                             mDepositRecord.storage_no = no;
                         }
                     } else {
-                        DepositRecord record = depositJSON.data.storages.get(0);
-                        mDepositRecord.in_weight = record.in_weight;
+                        DepositRecord record = depositJSON.data.storage_records.get(0);
+                        mDepositRecord.input_weight = record.input_weight;
                         mDepositRecord.remark = record.remark;
                         mDepositRecord.laboratory_id = record.laboratory_id;
+                        mDepositRecord.laboratory = record.laboratory;
                         mDepositRecord.harmful_info = record.harmful_info;
                         mDepositRecord.storage_rack = record.storage_rack;
                         mDepositRecord.container_size = record.container_size;
+                        mDepositRecord.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
+                        mDepositRecord.has_input_weight = !TextUtils.isEmpty(record.input_weight);
+                        if (mDepositRecord.has_storage_rack) {
+                            showToast("此单号已经入柜，无法再次提交!");
+                        }
                     }
                 } else {
                     mContainerNoValue.setText(null);
@@ -297,20 +298,24 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 mContainerNoValue.setEnabled(false);
                 mContainerSpecValue.setEnabled(true);
                 mSourceValue.setEnabled(true);
-                mHarmfulIngredientsValue.setEnabled(true);
-                mWeight.setEnabled(true);
-                mWeightValue.setEnabled(true);
-                mShelfNoValue.setEnabled(true);
-                mOtherInfoValue.setEnabled(true);
+                mHarmfulIngredientsValue.setEnabled(!mDepositRecord.has_storage_rack);
+                mWeight.setEnabled(!mDepositRecord.has_input_weight);
+                mWeightValue.setEnabled(!mDepositRecord.has_input_weight);
+                mShelfNoValue.setEnabled(!mDepositRecord.has_storage_rack);
+                mOtherInfoValue.setEnabled(!mDepositRecord.has_storage_rack);
             }
 
             mContainerSpecValue.setText(mDepositRecord.container_size != null ? mDepositRecord.container_size + "升" : null);
-            mSourceValue.setText(getLaboratoryName(mDepositRecord.laboratory_id));
+            if(TextUtils.isEmpty(mDepositRecord.laboratory)) {
+                mSourceValue.setText(getLaboratoryName(mDepositRecord.laboratory_id));
+            } else {
+                mSourceValue.setText(mDepositRecord.laboratory);
+            }
 
             mHarmfulIngredientsValue.setText(mDepositRecord.harmful_info);
 
             mContainerNoValue.setText(mDepositRecord.storage_no);
-            mWeightValue.setText(mDepositRecord.in_weight);
+            mWeightValue.setText(mDepositRecord.input_weight);
             mShelfNoValue.setText(mDepositRecord.storage_rack);
             mOtherInfoValue.setText(mDepositRecord.remark);
         });
@@ -319,7 +324,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
 
     private String getLaboratoryName(String laboratory_id) {
         for (Laboratory laboratory : mLaboratoryList) {
-            if (TextUtils.equals(laboratory_id, laboratory.code)) {
+            if (TextUtils.equals(laboratory_id, laboratory.id)) {
                 return laboratory.name;
             }
         }
@@ -331,7 +336,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
     }
 
     public void onResetButtonClick(View view) {
-
+        reset();
     }
 
     public void onWeightButtonClick(View view) {
@@ -354,7 +359,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         if (mContainerNoValue.isEnabled()) {
             return false;
         }
-        if (TextUtils.isEmpty(mDepositRecord.in_weight)) {
+        if (TextUtils.isEmpty(mDepositRecord.input_weight)) {
             return false;
         }
         if (TextUtils.isEmpty(mDepositRecord.laboratory_id)) {
@@ -373,13 +378,18 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
     }
 
     public void onSubmitButtonClick(View view) {
+        if(mDepositRecord.has_storage_rack) {
+            showToast("此单号已经入柜，无法再次提交!");
+            return;
+        }
         if (validateDeposit()) {
             showProgressDialog();
             getExecutorService().submit(() -> {
-                APIJSON<String> apijson = RemoteAPI.Deposit.submitDeposit(mDepositRecord);
+                APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.submitDeposit(mDepositRecord);
                 dismissProgressDialog();
                 if (apijson.status == APIJSON.Status.ok) {
                     showToast("提交成功");
+                    reset();
                 } else {
                     showToast(apijson.error);
                 }
@@ -387,6 +397,14 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         } else {
             showToast("请完善信息再提交！");
         }
+    }
+
+    private void reset() {
+        mDepositRecord = new DepositRecord();
+        mDepositRecord.storage_id = Objects.requireNonNull(CabinetCore.getCabinetInfo()).id;
+        isRestore = false;
+        mOfflineModel.setChecked(false);
+        showDepositRecord();
     }
 
     public void onContainerSpecButtonClick(View view) {
@@ -436,7 +454,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
             if (!TextUtils.isEmpty(weightStr)) {
                 try {
                     float weight = Float.parseFloat(weightStr);
-                    mDepositRecord.in_weight = String.valueOf(weight);
+                    mDepositRecord.input_weight = String.valueOf(weight);
                 } catch (Exception e) {
                     mWeightValue.setText(null);
                     showToast("请输入正确的入柜重量！");

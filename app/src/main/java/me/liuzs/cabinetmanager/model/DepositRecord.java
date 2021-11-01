@@ -2,12 +2,21 @@ package me.liuzs.cabinetmanager.model;
 
 public class DepositRecord {
     public String storage_no;
+    public String storage_name;
     public String container_size;
     public String laboratory_id;
+    public String laboratory;
+    public String input_operator;
+    public String output_operator;
+    public String output_time;
+    public String input_time;
     public String harmful_info;
     public String remark;
-    public String in_weight;
-    public String out_weight;
+    public boolean has_input_weight = false;
+    public String input_weight;
+    public String output_weight;
+    public boolean has_storage_rack = false;
     public String storage_rack;
     public String storage_id;
+
 }
