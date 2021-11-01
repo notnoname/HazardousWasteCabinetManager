@@ -19,6 +19,7 @@ import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpDelete;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.client.methods.HttpPut;
 import cz.msebera.android.httpclient.client.methods.HttpRequestBase;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
@@ -594,57 +595,47 @@ public class RemoteAPI {
         /**
          * 移除试剂入库记录
          */
-        public static final String API_REMOVE_PUT_LAB_DETAIL = API_ROOT + "/drug/v1/putLabDetail/removePutLabDetail/";
+        public static final String API_TAKE_OUT = API_ROOT + "/admin/storage_records/%s?update_action=output";
 
 
         /**
-         * 创建入柜单号后，立刻保存入柜单号，获取入柜ID
+         * 提交出柜
          *
-         * @return 入柜ID
+         * @return 提交结果
          */
-        public static APIJSON<String> saveDeposit(String putNo, String putNum, String totalAmount) {
+        public static APIJSON<DepositRecord> takeOutDeposit(DepositRecord depositRecord) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
+                String api_url = String.format(API_TAKE_OUT, depositRecord.storage_no);
+                HttpPut method = new HttpPut(api_url);
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("putNo", putNo));
-                valuePairs.add(new BasicNameValuePair("putNum", putNum));
-                valuePairs.add(new BasicNameValuePair("totalAmount", totalAmount));
-                HttpPost httpPost = new HttpPost(API_SAVE_DEPOSIT);
-                generalOptBaseHeader(httpPost);
-                httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
-                HttpResponse httpResponse = httpClient.execute(httpPost);
+                valuePairs.add(new BasicNameValuePair("storage_record[output_weight]", depositRecord.output_weight));
+                method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
+                Log.d(TAG, method.getURI().toString());
+                Log.d(TAG, valuePairs.toString());
+                generalOptBaseHeader(method);
+                HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
+                if (code == HTTP_OK) {
                     HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
+                    String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
+                    Type jsonType = new TypeToken<APIJSON<DepositRecord>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<String> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
+                    //noinspection unchecked
+                    return APIJSON.buildServerErrorJSON(code);
                 }
-            } catch (IOException e) {
-                APIJSON<String> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
+            } catch (Exception e) {
+                //noinspection unchecked
+                return APIJSON.buildOtherErrorJSON(e);
             }
         }
 
         /**
-         * 提交初次入柜
+         * 提交入柜
          *
          * @return 提交结果
          */
@@ -659,8 +650,8 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("storage_record[container_size]", depositRecord.container_size));
                 valuePairs.add(new BasicNameValuePair("storage_record[storage_rack]", depositRecord.storage_rack));
                 valuePairs.add(new BasicNameValuePair("storage_record[input_weight]", depositRecord.input_weight));
-                if (!TextUtils.isEmpty(depositRecord.harmful_info)) {
-                    String[] hi = depositRecord.harmful_info.split(",");
+                if (!TextUtils.isEmpty(depositRecord.harmful_infos)) {
+                    String[] hi = depositRecord.harmful_infos.split(",");
                     for (int i = 0; i < hi.length; i++) {
                         valuePairs.add(new BasicNameValuePair("storage_record[harmful_info][]", hi[i]));
                     }
@@ -697,14 +688,14 @@ public class RemoteAPI {
          * @param no 暂存编号
          * @return 暂存记录
          */
-        public static APIJSON<DepositRecordListJSON> getDeposit(String no) {
+        public static APIJSON<DepositRecordListJSON> getDeposit(String no, int page_size, int page_index) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("storage_no", no));
-//                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(page_size)));
-//                valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(page_index)));
+                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(page_size)));
+                valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(page_index)));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
 
                 HttpGet method = new HttpGet(API_DEPOSIT_LIST + "?" + params);
@@ -726,52 +717,6 @@ public class RemoteAPI {
             } catch (Exception e) {
                 //noinspection unchecked
                 return APIJSON.buildOtherErrorJSON(e);
-            }
-        }
-
-        /**
-         * 删除一条入柜详情
-         *
-         * @param detailId 详情编号
-         * @return 返回结果
-         */
-        public static APIJSON<String> removeDepositItem(String detailId) {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("detailId", detailId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpDelete httpDelete = new HttpDelete(API_REMOVE_PUT_LAB_DETAIL + detailId + "?" + params);
-                Log.d(TAG, httpDelete.getURI().toString());
-                generalOptBaseHeader(httpDelete);
-                HttpResponse httpResponse = httpClient.execute(httpDelete);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<String> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<String> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
             }
         }
     }

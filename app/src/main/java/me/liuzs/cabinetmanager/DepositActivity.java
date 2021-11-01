@@ -60,7 +60,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
             String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_VALUE);
             assert selectValue != null;
             Map<String, Boolean> select = CabinetCore.GSON.fromJson(selectValue, MultiSpinnerActivity.JSON_TYPE);
-            DepositActivity.this.mDepositRecord.harmful_info = createHarmfulIngredientString(select);
+            DepositActivity.this.mDepositRecord.harmful_infos = createHarmfulIngredientString(select);
             showDepositRecord();
         }
     });
@@ -229,7 +229,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
     private void getDeposit(String no) {
         showProgressDialog();
         getExecutorService().submit(() -> {
-            APIJSON<DepositRecordListJSON> depositJSON = RemoteAPI.Deposit.getDeposit(no);
+            APIJSON<DepositRecordListJSON> depositJSON = RemoteAPI.Deposit.getDeposit(no, 20, 1);
             dismissProgressDialog();
             if (depositJSON.status == APIJSON.Status.ok) {
                 if (depositJSON.data != null) {
@@ -241,11 +241,12 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                         }
                     } else {
                         DepositRecord record = depositJSON.data.storage_records.get(0);
+                        mDepositRecord.storage_no = record.storage_no;
                         mDepositRecord.input_weight = record.input_weight;
                         mDepositRecord.remark = record.remark;
                         mDepositRecord.laboratory_id = record.laboratory_id;
                         mDepositRecord.laboratory = record.laboratory;
-                        mDepositRecord.harmful_info = record.harmful_info;
+                        mDepositRecord.harmful_infos = record.harmful_infos;
                         mDepositRecord.storage_rack = record.storage_rack;
                         mDepositRecord.container_size = record.container_size;
                         mDepositRecord.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
@@ -296,8 +297,8 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 mOtherInfoValue.setEnabled(false);
             } else {
                 mContainerNoValue.setEnabled(false);
-                mContainerSpecValue.setEnabled(true);
-                mSourceValue.setEnabled(true);
+                mContainerSpecValue.setEnabled(!mDepositRecord.has_storage_rack);
+                mSourceValue.setEnabled(!mDepositRecord.has_storage_rack);
                 mHarmfulIngredientsValue.setEnabled(!mDepositRecord.has_storage_rack);
                 mWeight.setEnabled(!mDepositRecord.has_input_weight);
                 mWeightValue.setEnabled(!mDepositRecord.has_input_weight);
@@ -306,13 +307,13 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
             }
 
             mContainerSpecValue.setText(mDepositRecord.container_size != null ? mDepositRecord.container_size + "升" : null);
-            if(TextUtils.isEmpty(mDepositRecord.laboratory)) {
+            if (TextUtils.isEmpty(mDepositRecord.laboratory)) {
                 mSourceValue.setText(getLaboratoryName(mDepositRecord.laboratory_id));
             } else {
                 mSourceValue.setText(mDepositRecord.laboratory);
             }
 
-            mHarmfulIngredientsValue.setText(mDepositRecord.harmful_info);
+            mHarmfulIngredientsValue.setText(mDepositRecord.harmful_infos);
 
             mContainerNoValue.setText(mDepositRecord.storage_no);
             mWeightValue.setText(mDepositRecord.input_weight);
@@ -365,7 +366,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         if (TextUtils.isEmpty(mDepositRecord.laboratory_id)) {
             return false;
         }
-        if (TextUtils.isEmpty(mDepositRecord.harmful_info)) {
+        if (TextUtils.isEmpty(mDepositRecord.harmful_infos)) {
             return false;
         }
         if (TextUtils.isEmpty(mDepositRecord.container_size)) {
@@ -378,7 +379,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
     }
 
     public void onSubmitButtonClick(View view) {
-        if(mDepositRecord.has_storage_rack) {
+        if (mDepositRecord.has_storage_rack) {
             showToast("此单号已经入柜，无法再次提交!");
             return;
         }
@@ -418,7 +419,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
 
     public void onHarmfulIngredientsValueClick(View view) {
         Intent intent = new Intent(this, MultiSpinnerActivity.class);
-        Map<String, Boolean> options = createHarmfulIngredientMap(mDepositRecord.harmful_info);
+        Map<String, Boolean> options = createHarmfulIngredientMap(mDepositRecord.harmful_infos);
         intent.putExtra(MultiSpinnerActivity.KEY_OPTIONS, CabinetCore.GSON.toJson(options));
         intent.putExtra(MultiSpinnerActivity.KEY_TIP_INFO, "请选择有害成分：");
         mHarmfulIngredientSelectLauncher.launch(intent);

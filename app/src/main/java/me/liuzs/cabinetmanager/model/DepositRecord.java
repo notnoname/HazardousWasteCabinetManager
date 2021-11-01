@@ -10,7 +10,7 @@ public class DepositRecord {
     public String output_operator;
     public String output_time;
     public String input_time;
-    public String harmful_info;
+    public String harmful_infos;
     public String remark;
     public boolean has_input_weight = false;
     public String input_weight;
