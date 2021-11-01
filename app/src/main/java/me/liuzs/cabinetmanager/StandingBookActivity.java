@@ -34,7 +34,6 @@ public class StandingBookActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_standing_book);
-        Util.fullScreen(this);
 
         TabLayout mTabLayout = findViewById(R.id.tabLayout);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

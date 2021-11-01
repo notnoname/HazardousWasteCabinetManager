@@ -53,7 +53,7 @@
     <string name="watch_camera">视频监控</string>
     <string name="take_in">危废入柜</string>
     <string name="stock_query">库存查询</string>
-    <string name="in_out_query">台账查询</string>
+    <string name="in_out_query">库存台账</string>
     <string name="title_activity_account_setting">使用人员管理</string>
     <string name="admin_name">管理员姓名：</string>
     <string name="id">ID：</string>

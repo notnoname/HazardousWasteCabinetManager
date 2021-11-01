@@ -5,7 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".DeviceBluetoothListActivity">
+    tools:context=".StandingBookActivity">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/background" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,9 +24,9 @@
             android:id="@+id/tabLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="64dp"
+            android:layout_marginStart="64px"
+            android:layout_marginTop="8px"
+            android:layout_marginEnd="64px"
             android:background="@drawable/background_edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,8 +85,8 @@
 
             <ImageButton
                 android:id="@+id/toolbar_back"
-                android:layout_width="45dp"
-                android:layout_height="35dp"
+                android:layout_width="90px"
+                android:layout_height="40px"
                 android:layout_gravity="start|center_vertical"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/app_name"
@@ -93,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/in_out_query"
-                android:textSize="30sp"
+                android:textSize="@dimen/tool_bar_title_height"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 

@@ -75,20 +75,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnIn" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnQuery"
-                android:layout_width="230px"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24px"
-                android:background="@drawable/background_button"
-                android:onClick="onInventoryQueryButtonClick"
-                android:text="@string/stock_query"
-                android:textColor="@color/white"
-                android:textSize="32px"
-                app:layout_constraintEnd_toEndOf="@+id/btnOut"
-                app:layout_constraintStart_toStartOf="@+id/btnOut"
-                app:layout_constraintTop_toBottomOf="@+id/btnOut" />
-
-            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnLedger"
                 android:layout_width="230px"
                 android:layout_height="wrap_content"
@@ -98,9 +84,9 @@
                 android:text="@string/in_out_query"
                 android:textColor="@color/white"
                 android:textSize="32px"
-                app:layout_constraintEnd_toEndOf="@+id/btnQuery"
-                app:layout_constraintStart_toStartOf="@+id/btnQuery"
-                app:layout_constraintTop_toBottomOf="@+id/btnQuery" />
+                app:layout_constraintEnd_toEndOf="@+id/btnIn"
+                app:layout_constraintStart_toStartOf="@+id/btnIn"
+                app:layout_constraintTop_toBottomOf="@+id/btnOut" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCamera"
