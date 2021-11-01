@@ -76,7 +76,7 @@ public class ContainerNoListActivity extends BaseActivity {
                 mContainerNoList.addAll(json.data.storage_nos);
                 mHandler.post(() -> mAdapter.add(mContainerNoList));
             } else {
-                showToast(json.errors);
+                showToast(json.error);
             }
             dismissProgressDialog();
 

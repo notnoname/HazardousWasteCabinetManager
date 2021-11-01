@@ -217,7 +217,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                     finish();
                 }
             } else {
-                showToast(agencyAPIJSON.errors);
+                showToast(agencyAPIJSON.error);
                 new AlertDialog.Builder(DepositActivity.this).setMessage("获取实验列表失败，是否切换为离线模式？").setNegativeButton("确认", (dialog, which) -> {
                     mOfflineModel.setChecked(true);
                     showDepositRecord();
@@ -254,16 +254,16 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                         mDepositRecord.container_size = record.container_size;
                     }
                 } else {
-                    mContainerNoValue.setText("");
+                    mContainerNoValue.setText(null);
                     showToast("单号错误！");
                 }
                 showDepositRecord();
             } else if (depositJSON.status == APIJSON.Status.error) {
-                mContainerNoValue.setText("");
+                mContainerNoValue.setText(null);
                 showToast("单号错误！");
                 showDepositRecord();
             } else {
-                showToast(depositJSON.errors);
+                showToast(depositJSON.error);
                 new AlertDialog.Builder(DepositActivity.this).setMessage("获取实验列表失败，是否切换为离线模式？").setNegativeButton("确认", (dialog, which) -> {
                     mOfflineModel.setChecked(true);
                     showDepositRecord();
@@ -304,7 +304,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 mOtherInfoValue.setEnabled(true);
             }
 
-            mContainerSpecValue.setText(mDepositRecord.container_size + "升");
+            mContainerSpecValue.setText(mDepositRecord.container_size != null ? mDepositRecord.container_size + "升" : null);
             mSourceValue.setText(getLaboratoryName(mDepositRecord.laboratory_id));
 
             mHarmfulIngredientsValue.setText(mDepositRecord.harmful_info);
@@ -381,7 +381,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 if (apijson.status == APIJSON.Status.ok) {
                     showToast("提交成功");
                 } else {
-                    showToast(apijson.errors);
+                    showToast(apijson.error);
                 }
             });
         } else {
@@ -426,7 +426,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                     if (containerNo.startsWith("NO")) {
                         getDeposit(containerNo);
                     } else {
-                        mContainerNoValue.setText("");
+                        mContainerNoValue.setText(null);
                         showToast("暂存号不正确！");
                     }
                 }
@@ -438,7 +438,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                     float weight = Float.parseFloat(weightStr);
                     mDepositRecord.in_weight = String.valueOf(weight);
                 } catch (Exception e) {
-                    mWeightValue.setText("");
+                    mWeightValue.setText(null);
                     showToast("请输入正确的入柜重量！");
                 }
             }
@@ -449,7 +449,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                     int shelfNo = Integer.parseInt(shelfNoStr);
                     mDepositRecord.storage_rack = String.valueOf(shelfNo);
                 } catch (Exception e) {
-                    mShelfNoValue.setText("");
+                    mShelfNoValue.setText(null);
                     showToast("货架号必须是数字！");
                 }
             }

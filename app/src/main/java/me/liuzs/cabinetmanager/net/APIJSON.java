@@ -6,7 +6,7 @@ public class APIJSON<T> {
     public static APIJSON buildServerErrorJSON(int httpCode) {
         APIJSON result = new APIJSON();
         result.status = Status.error;
-        result.errors = "服务器异常：" + httpCode;
+        result.error = "服务器异常：" + httpCode;
         return result;
     }
 
@@ -14,12 +14,12 @@ public class APIJSON<T> {
     public static APIJSON buildOtherErrorJSON(Exception exception) {
         APIJSON<?> result = new APIJSON();
         result.status = Status.other;
-        result.errors = "异常错误：" + exception.getMessage();
+        result.error = "异常错误：" + exception.getMessage();
         return result;
     }
 
     public Status status = Status.error;
-    public String errors = "";
+    public String error = "";
     public T data;
 
     public enum Status {

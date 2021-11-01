@@ -150,13 +150,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<Chemical>> result = new APIJSON<>();
                     result.status = APIJSON.Status.ok;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<Chemical>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -192,13 +192,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<DictType>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<DictType>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -234,13 +234,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<DictType>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<DictType>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -276,13 +276,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<DictType>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<DictType>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -318,13 +318,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<DictType>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<DictType>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -511,13 +511,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<InventoryItem>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<InventoryItem>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -559,13 +559,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<InventoryDetail>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<InventoryDetail>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -631,13 +631,13 @@ public class RemoteAPI {
                     }
                     APIJSON<String> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<String> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -758,13 +758,13 @@ public class RemoteAPI {
                     }
                     APIJSON<String> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<String> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -825,13 +825,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<StandingBookItem>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<StandingBookItem>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -872,13 +872,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<StandingBookItem>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<StandingBookItem>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }
@@ -919,13 +919,13 @@ public class RemoteAPI {
                     }
                     APIJSON<List<StandingBookItem>> result = new APIJSON<>();
                     result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
+                    result.error = "服务器返回错误";
                     return result;
                 }
             } catch (IOException e) {
                 APIJSON<List<StandingBookItem>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
+                result.error = "网络请求异常";
                 return result;
             }
         }

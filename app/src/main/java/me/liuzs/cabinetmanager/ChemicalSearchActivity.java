@@ -108,7 +108,7 @@ public class ChemicalSearchActivity extends BaseActivity {
                 sortData(json);
                 mActivity.get().mAdapter.setResult(json.data);
             } else {
-                mActivity.get().showToast(json.errors);
+                mActivity.get().showToast(json.error);
             }
             mActivity.get().dismissProgressDialog();
         }

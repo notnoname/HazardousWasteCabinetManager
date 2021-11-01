@@ -87,7 +87,7 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
             if (json.status == APIJSON.Status.ok) {
                 showToast("批次创建成功！");
             } else {
-                showToast(json.errors);
+                showToast(json.error);
             }
 
             mHandler.post(() -> {
@@ -116,7 +116,7 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
                     });
                 }
             } else {
-                showToast(json.errors);
+                showToast(json.error);
             }
             dismissProgressDialog();
 

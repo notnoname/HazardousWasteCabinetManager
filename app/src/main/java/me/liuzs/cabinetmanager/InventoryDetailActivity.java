@@ -141,7 +141,7 @@ public class InventoryDetailActivity extends BaseActivity {
                 if (isLoadMore) {
                     mActivity.get().mCurrentPage--;
                 }
-                mActivity.get().showToast(json.errors);
+                mActivity.get().showToast(json.error);
             }
             mActivity.get().dismissProgressDialog();
             mActivity.get().hideInputMethod();

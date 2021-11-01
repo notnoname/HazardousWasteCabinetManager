@@ -164,7 +164,7 @@ public class CabinetBindActivity extends BaseActivity {
             if (listJSON.status == APIJSON.Status.ok) {
                 mCabinetInfoList = listJSON.data.storages;
             } else {
-                showToast(listJSON.errors);
+                showToast(listJSON.error);
             }
             dismissProgressDialog();
         });

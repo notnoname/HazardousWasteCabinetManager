@@ -120,7 +120,7 @@ public class LoginActivity extends BaseActivity {
                     }
                 }
             } else {
-                showToast(userJSON.errors);
+                showToast(userJSON.error);
             }
             mFaceId.setClickable(true);
             dismissProgressDialog();
