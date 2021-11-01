@@ -43,7 +43,7 @@ public class TakeOutActivity extends BaseActivity {
             String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_VALUE);
             assert selectValue != null;
             Map<String, Boolean> select = CabinetCore.GSON.fromJson(selectValue, MultiSpinnerActivity.JSON_TYPE);
-            TakeOutActivity.this.mDepositRecord.harmful_ingredients = createHarmfulIngredientString(select);
+            TakeOutActivity.this.mDepositRecord.harmful_info = createHarmfulIngredientString(select);
             showDepositRecord();
         }
     });
@@ -55,7 +55,7 @@ public class TakeOutActivity extends BaseActivity {
             assert data != null;
             String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_VALUE);
             assert selectValue != null;
-            TakeOutActivity.this.mDepositRecord.container_spec = selectValue;
+            TakeOutActivity.this.mDepositRecord.container_size = selectValue;
             showDepositRecord();
         }
     });
@@ -153,8 +153,6 @@ public class TakeOutActivity extends BaseActivity {
         } else {
             isNewCreate = true;
             mDepositRecord = new DepositRecord();
-            mDepositRecord.operator = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
-            mDepositRecord.cabinet = CabinetCore.getCabinetInfo();
         }
     }
 
@@ -165,14 +163,14 @@ public class TakeOutActivity extends BaseActivity {
     }
 
     private void showDepositRecord() {
-        mContainerSpecValue.setText(mDepositRecord.container_spec);
-        mSourceValue.setText(mDepositRecord.source.name);
-        mHarmfulIngredientsValue.setText(mDepositRecord.harmful_ingredients);
+        mContainerSpecValue.setText(mDepositRecord.container_size);
+//        mSourceValue.setText(mDepositRecord.laboratory_id.name);
+        mHarmfulIngredientsValue.setText(mDepositRecord.harmful_info);
 
-        mContainerNoValue.setText(mDepositRecord.container_no_info.no);
+        mContainerNoValue.setText(mDepositRecord.storage_no);
         mOutWeightValue.setText(mDepositRecord.in_weight);
-        mShelfNoValue.setText(mDepositRecord.shelf_no);
-        mOtherInfoValue.setText(mDepositRecord.other_info);
+        mShelfNoValue.setText(mDepositRecord.storage_rack);
+        mOtherInfoValue.setText(mDepositRecord.remark);
     }
 
     public void onBackButtonClick(View view) {
@@ -198,7 +196,7 @@ public class TakeOutActivity extends BaseActivity {
 
     public void onHarmfulIngredientsValueClick(View view) {
         Intent intent = new Intent(this, MultiSpinnerActivity.class);
-        Map<String, Boolean> options = createHarmfulIngredientMap(mDepositRecord.harmful_ingredients);
+        Map<String, Boolean> options = createHarmfulIngredientMap(mDepositRecord.harmful_info);
         intent.putExtra(MultiSpinnerActivity.KEY_OPTIONS, CabinetCore.GSON.toJson(options));
         intent.putExtra(MultiSpinnerActivity.KEY_TIP_INFO, "请选择有害成分：");
         mHarmfulIngredientSelectLauncher.launch(intent);

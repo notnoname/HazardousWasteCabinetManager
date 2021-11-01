@@ -32,7 +32,8 @@
             android:textSize="22px"
             app:layout_constraintBottom_toBottomOf="@+id/etWeightValue"
             app:layout_constraintEnd_toEndOf="@+id/tvHarmfulIngredientsValue"
-            app:layout_constraintTop_toTopOf="@+id/etWeightValue" />
+            app:layout_constraintTop_toTopOf="@+id/etWeightValue"
+            tools:ignore="TextContrastCheck" />
 
         <EditText
             android:id="@+id/etContainerNoValue"
@@ -42,7 +43,7 @@
             android:background="@drawable/background_edit"
             android:digits="NO0123456789"
             android:hint="@string/input_container_no_please"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:minHeight="48px"
             android:padding="10px"
             android:textColor="@color/black"
@@ -50,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TextContrastCheck" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,16 +71,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
             android:background="@drawable/background_edit"
+            android:enabled="false"
             android:hint="@string/select_please"
-            android:padding="10px"
             android:onClick="onContainerSpecButtonClick"
+            android:padding="10px"
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="@+id/etContainerNoValue"
             app:layout_constraintStart_toStartOf="@+id/etContainerNoValue"
-            app:layout_constraintTop_toBottomOf="@+id/etContainerNoValue" />
+            app:layout_constraintTop_toBottomOf="@+id/etContainerNoValue"
+            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -99,7 +102,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
             android:background="@drawable/background_edit"
+            android:enabled="false"
             android:hint="@string/select_please"
+            android:onClick="onSourceButtonClick"
             android:padding="10px"
             android:singleLine="true"
             android:textColor="@color/black"
@@ -107,7 +112,8 @@
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="@+id/tvContainerSpecValue"
             app:layout_constraintStart_toStartOf="@+id/tvContainerSpecValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvContainerSpecValue" />
+            app:layout_constraintTop_toBottomOf="@+id/tvContainerSpecValue"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -139,16 +145,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
             android:background="@drawable/background_edit"
+            android:enabled="false"
             android:hint="@string/select_please"
+            android:onClick="onHarmfulIngredientsValueClick"
             android:padding="10px"
             android:singleLine="true"
-            android:onClick="onHarmfulIngredientsValueClick"
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="@+id/tvSourceValue"
             app:layout_constraintStart_toStartOf="@+id/tvSourceValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvSourceValue" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSourceValue"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -169,6 +177,7 @@
             android:layout_marginTop="20px"
             android:background="@drawable/background_edit"
             android:digits="0123456789"
+            android:enabled="false"
             android:hint="@string/input_number_please"
             android:inputType="number"
             android:padding="10px"
@@ -199,8 +208,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
             android:background="@drawable/background_edit"
+            android:enabled="false"
             android:hint="@string/select_input"
-            android:inputType="number"
+            android:inputType="text"
             android:padding="10px"
             android:singleLine="true"
             android:textColor="@color/black"
@@ -231,6 +241,7 @@
             android:layout_marginEnd="16px"
             android:background="@drawable/background_edit"
             android:digits="0123456789."
+            android:enabled="false"
             android:hint="@string/weight_tip"
             android:inputType="number"
             android:padding="10px"
@@ -254,14 +265,14 @@
             app:layout_constraintTop_toBottomOf="@+id/etOtherInfoValue">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnCancel"
+                android:id="@+id/btnReset"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/background_button"
                 android:gravity="center"
-                android:onClick="onBackButtonClick"
-                android:text="@string/cancel"
+                android:onClick="onResetButtonClick"
+                android:text="@string/reset"
                 android:textColor="@color/white"
                 android:textSize="24px" />
 
@@ -295,6 +306,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tool_bar_height"
+            android:padding="16px"
             android:background="@android:color/transparent"
             app:popupTheme="@style/Theme.CabinetManager.PopupOverlay">
 
@@ -308,7 +320,7 @@
                 android:onClick="onBackButtonClick"
                 android:scaleType="fitCenter"
                 android:src="@drawable/back_button"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -318,7 +330,33 @@
                 android:text="@string/take_in"
                 android:textSize="@dimen/tool_bar_title_height"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/off_line_model"
+                    android:textColor="@color/white"
+                    android:textSize="28px" />
+
+                <com.kyleduo.switchbutton.SwitchButton
+                    android:layout_marginStart="10px"
+                    android:id="@+id/swOfflineModel"
+                    android:layout_width="130px"
+                    android:layout_height="40px"
+                    android:gravity="left"
+                    android:textSize="28px" />
+            </LinearLayout>
+
+
         </androidx.appcompat.widget.Toolbar>
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

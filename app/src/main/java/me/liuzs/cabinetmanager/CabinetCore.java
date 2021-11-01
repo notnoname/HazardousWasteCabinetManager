@@ -69,7 +69,7 @@ public class CabinetCore {
         validateARCActive(new CabinetCore.CheckARCActiveListener() {
             @Override
             public void onCheckARCActiveFailure(String message, int code) {
-                if (BuildConfig.DEBUG) {
+                if (CabinetCore.isDebugState()) {
                     CabinetCore.validateAdminUserInfo();
                 } else {
                     Intent intent = new Intent(mContext, HardwareSetupActiveActivity.class);
@@ -442,6 +442,14 @@ public class CabinetCore {
                 CabinetCore.clearCabinetUser(type);
                 LoginActivity.start(mContext, type);
             }
+        }
+    }
+
+    public static boolean isDebugState() {
+        if (BuildConfig.DEBUG || TextUtils.equals(BuildConfig.BUILD_TYPE, "test")) {
+            return true;
+        } else {
+            return false;
         }
     }
 

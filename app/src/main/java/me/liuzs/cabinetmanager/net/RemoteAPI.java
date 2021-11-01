@@ -26,18 +26,16 @@ import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import me.liuzs.cabinetmanager.CabinetCore;
+import me.liuzs.cabinetmanager.model.Agency;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
-import me.liuzs.cabinetmanager.model.ContainerNoInfo;
+import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.InventoryDetail;
 import me.liuzs.cabinetmanager.model.InventoryItem;
 import me.liuzs.cabinetmanager.model.StandingBookItem;
-import me.liuzs.cabinetmanager.model.StorageLaboratoryDetail;
 import me.liuzs.cabinetmanager.model.SurveillanceCamera;
-import me.liuzs.cabinetmanager.model.TakeOutInfo;
-import me.liuzs.cabinetmanager.model.TakeOutItemInfo;
 import me.liuzs.cabinetmanager.model.User;
 
 public class RemoteAPI {
@@ -333,346 +331,6 @@ public class RemoteAPI {
     }
 
     /**
-     * 出库模块，相关接口
-     */
-    public static class TakeOut {
-
-        /**
-         * 获取容器详情
-         */
-        public static final String API_GET_CONTAINER_DETAIL = API_ROOT + "/drug/v1/labInventoryDetail/getInfoByConNo";
-
-        /**
-         * 获取所有化学品容器号列表
-         */
-        public static final String API_GET_CONTAINER_LIST = API_ROOT + "/drug/v1/useOutDetails/getConInfoList/";
-        /**
-         * 创建出柜任务
-         */
-        public static final String API_CREATE_TAKE_OUT_TASK = API_ROOT + "/drug/v1/useOutInfos";
-        /**
-         * 获取系统中当前所有出柜任务列表
-         */
-        public static final String API_GET_TAKE_OUT_TASK_LIST = API_ROOT + "/drug/v1/useOutInfos/pageList";
-        /**
-         * 获取出柜药品记录列表
-         */
-        public static final String API_GET_TAKE_OUT_ITEM_LIST = API_ROOT + "/drug/v1/useOutDetails/pageList";
-        /**
-         * 获取使用者详细信息
-         */
-        public static final String API_GET_STORAGE_LABORATORY_DETAIL = API_ROOT + "/drug/v1/storageLaboratory/storageLaboratoryDetail/";
-        /**
-         * 保存试剂出柜记录
-         */
-        public static final String API_SAVE_TAKE_OUT_ITEM_DETAIL = API_ROOT + "/drug/v1/useOutDetails";
-
-        /**
-         * 获取某个容器的详情
-         *
-         * @return 返回详情
-         */
-        public static APIJSON<List<TakeOutItemInfo>> getContainerDetail(String conNo) {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("conNo", conNo));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_CONTAINER_DETAIL + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<TakeOutItemInfo>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<TakeOutItemInfo>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<TakeOutItemInfo>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 获得所有库存化学品列表
-         *
-         * @return 返回库存信息列表
-         */
-        public static APIJSON<List<TakeOutItemInfo>> getContainerNoList(String devId) {
-
-            try {
-                Cabinet cabinetInfo = CabinetCore.getCabinetInfo();
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("devId", devId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_CONTAINER_LIST + devId + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<TakeOutItemInfo>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<TakeOutItemInfo>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<TakeOutItemInfo>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 创建一个出柜单任务
-         *
-         * @param address   出柜地址
-         * @param devId     出柜存储区域
-         * @param isControl 是否危险品 1，是，需要双人操作，0，否
-         * @return 创建是否成功
-         */
-        public static APIJSON<String> createTakeOutTask(String address, String devId, int isControl) {
-
-            try {
-                Cabinet info = CabinetCore.getCabinetInfo();
-                User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("useAddress", address));
-                valuePairs.add(new BasicNameValuePair("devId", devId));
-                valuePairs.add(new BasicNameValuePair("isControl", String.valueOf(isControl)));
-                valuePairs.add(new BasicNameValuePair("user1Id", user.id));
-                HttpPost httpPost = new HttpPost(API_CREATE_TAKE_OUT_TASK);
-                generalOptBaseHeader(httpPost);
-                httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<String> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<String> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 获取使用详情列表
-         *
-         * @return 如果条目详情列表
-         */
-        public static APIJSON<List<TakeOutInfo>> getLastTakeOutTaskList() {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("pageSize", "100"));
-                valuePairs.add(new BasicNameValuePair("currentPage", "1"));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_TAKE_OUT_TASK_LIST + "?" + params);
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<TakeOutInfo>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    APIJSON<List<TakeOutInfo>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<TakeOutInfo>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 获取使用详情列表
-         *
-         * @return 如果条目详情列表
-         */
-        public static APIJSON<List<TakeOutItemInfo>> getTakeOutItemList(String outId) {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("outId", outId));
-                valuePairs.add(new BasicNameValuePair("pageSize", "1024"));
-                valuePairs.add(new BasicNameValuePair("currentPage", "1"));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_TAKE_OUT_ITEM_LIST + "?" + params);
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<TakeOutItemInfo>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    APIJSON<List<TakeOutItemInfo>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<TakeOutItemInfo>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 获取使用者详细信息
-         *
-         * @return 使用者详细信息
-         */
-        public static APIJSON<StorageLaboratoryDetail> getStorageLaboratoryDetail() {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_STORAGE_LABORATORY_DETAIL + "?" + params);
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<StorageLaboratoryDetail>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    APIJSON<StorageLaboratoryDetail> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<StorageLaboratoryDetail> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 保存使用条目详情
-         *
-         * @return 条目详情id
-         */
-        public static APIJSON<String> saveTakeOutItemDetail(TakeOutItemInfo item) {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("outId", String.valueOf(item.outId)));
-                valuePairs.add(new BasicNameValuePair("conNo", item.conNo));
-                valuePairs.add(new BasicNameValuePair("outWeight", item.outWeight));
-                valuePairs.add(new BasicNameValuePair("purpose", item.purpose));
-                HttpPost httpPost = new HttpPost(API_SAVE_TAKE_OUT_ITEM_DETAIL);
-                generalOptBaseHeader(httpPost);
-                httpPost.setEntity(new UrlEncodedFormEntity(valuePairs));
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<String> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<String> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
-    }
-
-    /**
      * 单号管理
      */
     public static class ContainerNoManager {
@@ -916,72 +574,27 @@ public class RemoteAPI {
     /**
      * 初次存入模块，相关接口
      */
-    public static class Storage {
-        /**
-         * 获取入柜单号
-         */
-        public static final String API_GET_DEPOSIT_NO = API_ROOT + "/drug/v1/putLabInfo/getPutNo/";
+    public static class Deposit {
+
         /**
          * 保存入柜信息
          */
         public static final String API_SAVE_DEPOSIT = API_ROOT + "/drug/v1/putLabInfo/savePutLabInfo";
-        /**
-         * 获取入柜药品列表
-         */
-        public static final String API_GET_DEPOSIT_ITEM_LIST = API_ROOT + "/drug/v1/putLabDetail/putLabDetailPageList";
+
         /**
          * 提交入柜信息
          */
-        public static final String API_COMMIT_DEPOSIT = API_ROOT + "/drug/v1/putLabInfo/putLabConfirm/";
+        public static final String API_SUBMIT_DEPOSIT = API_ROOT + "/admin/storage_records";
+
         /**
-         * 保存药品入库记录
+         * 获取暂存柜记录列表
          */
-        public static final String API_SAVE_DEPOSIT_ITEM_DETAIL = API_ROOT + "/drug/v1/putLabDetail/savePutLabDetail";
-        /**
-         * 获得容器编号
-         */
-        public static final String API_GET_CONTAINER_NO = API_ROOT + "/drug/v1/putLabInfo/getNum/";
+        public static final String API_DEPOSIT_LIST = API_ROOT + "/admin/storage_records";
         /**
          * 移除试剂入库记录
          */
         public static final String API_REMOVE_PUT_LAB_DETAIL = API_ROOT + "/drug/v1/putLabDetail/removePutLabDetail/";
 
-
-        /**
-         * 获取入柜编号
-         *
-         * @return 入柜编号
-         */
-        public static APIJSON<String> getDepositNo() {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_DEPOSIT_NO + "?" + params);
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    APIJSON<String> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<String> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
-            }
-        }
 
         /**
          * 创建入柜单号后，立刻保存入柜单号，获取入柜ID
@@ -1034,89 +647,79 @@ public class RemoteAPI {
          *
          * @return 提交结果
          */
-        public static APIJSON<String> commitDeposit(String putId) {
+        public static APIJSON<String> submitDeposit(DepositRecord depositRecord) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
+                HttpPost method = new HttpPost(API_SUBMIT_DEPOSIT);
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("putId", putId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_COMMIT_DEPOSIT + putId + "?" + params);
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
+                valuePairs.add(new BasicNameValuePair("storage_record[storage_no]", depositRecord.storage_no));
+                valuePairs.add(new BasicNameValuePair("storage_record[storage_id]", depositRecord.storage_id));
+                valuePairs.add(new BasicNameValuePair("storage_record[container_size]", depositRecord.container_size));
+                valuePairs.add(new BasicNameValuePair("storage_record[storage_rack]", depositRecord.storage_rack));
+                valuePairs.add(new BasicNameValuePair("storage_record[input_weight]", depositRecord.in_weight));
+                valuePairs.add(new BasicNameValuePair("storage_record[harmful_info][]", depositRecord.harmful_info));
+                valuePairs.add(new BasicNameValuePair("storage_record[remark]", depositRecord.remark));
+                valuePairs.add(new BasicNameValuePair("storage_record[laboratory_id]", depositRecord.laboratory_id));
+                method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
+                Log.d(TAG, method.getURI().toString());
+                Log.d(TAG, valuePairs.toString());
+                generalOptBaseHeader(method);
+                HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
+                if (code == HTTP_OK) {
                     HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
+                    String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<String> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
+                    //noinspection unchecked
+                    return APIJSON.buildServerErrorJSON(code);
                 }
-            } catch (IOException e) {
-                APIJSON<String> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.errors = "网络请求异常";
-                return result;
+            } catch (Exception e) {
+                //noinspection unchecked
+                return APIJSON.buildOtherErrorJSON(e);
             }
         }
 
 
         /**
-         * 获取化学品容器编号
+         * 获取暂存记录
          *
-         * @param putId 入柜编号
-         * @return 容器编号
+         * @param no 暂存编号
+         * @return 暂存记录
          */
-        public static APIJSON<String> getContainerNo(String putId) {
+        public static APIJSON<DepositRecordListJSON> getDeposit(String no) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("putId", putId));
+                valuePairs.add(new BasicNameValuePair("storage_no", no));
+//                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(page_size)));
+//                valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(page_index)));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_GET_CONTAINER_NO + putId + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
+
+                HttpGet method = new HttpGet(API_DEPOSIT_LIST + "?" + params);
+                Log.d(TAG, method.getURI().toString());
+                generalOptBaseHeader(method);
+                HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
+                if (code == HTTP_OK) {
                     HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
+                    String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
+                    Type jsonType = new TypeToken<APIJSON<DepositRecordListJSON>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<String> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.errors = "服务器返回错误";
-                    return result;
+                    //noinspection unchecked
+                    return APIJSON.buildServerErrorJSON(code);
                 }
-            } catch (IOException e) {
-                APIJSON<String> result = new APIJSON<>();
-                result.status = APIJSON.Status.ok;
-                result.errors = "网络请求异常";
-                return result;
+            } catch (Exception e) {
+                //noinspection unchecked
+                return APIJSON.buildOtherErrorJSON(e);
             }
         }
 
@@ -1342,7 +945,12 @@ public class RemoteAPI {
         /**
          * 获取柜子绑定摄像头列表
          */
-        public static final String API_GET_CAMERA_LIST = API_ROOT + "/drug/v1/YSYVoder/getCameraStreamForApp/";
+        public static final String API_CAMERA_LIST = API_ROOT + "/drug/v1/YSYVoder/getCameraStreamForApp/";
+
+        /**
+         * 获取机构下实验室列表
+         */
+        public static final String API_LABORATORY_LIST = API_ROOT + "/admin/laboratories";
 
         /**
          * 查询管理员名下所有暂存柜列表
@@ -1377,6 +985,36 @@ public class RemoteAPI {
         }
 
         /**
+         * 获取实验列表
+         *
+         * @return 实验列表，放在Agency对象中
+         */
+        public static APIJSON<Agency> getLaboratoryList() {
+            try {
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                HttpGet method = new HttpGet(API_LABORATORY_LIST);
+                Log.d(TAG, method.getURI().toString());
+                generalOptBaseHeader(method);
+                HttpResponse httpResponse = httpClient.execute(method);
+                int code = httpResponse.getStatusLine().getStatusCode();
+                if (code == HTTP_OK) {
+                    HttpEntity entity = httpResponse.getEntity();
+                    String content = EntityUtils.toString(entity, UTF_8);
+                    Log.d(TAG, content);
+                    Type jsonType = new TypeToken<APIJSON<Agency>>() {
+                    }.getType();
+                    return CabinetCore.GSON.fromJson(content, jsonType);
+                } else {
+                    //noinspection unchecked
+                    return APIJSON.buildServerErrorJSON(code);
+                }
+            } catch (Exception e) {
+                //noinspection unchecked
+                return APIJSON.buildOtherErrorJSON(e);
+            }
+        }
+
+        /**
          * 查询柜子下所有摄像头列表
          *
          * @param tankId TankId
@@ -1388,7 +1026,7 @@ public class RemoteAPI {
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("tankId", tankId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet method = new HttpGet(API_GET_CAMERA_LIST + tankId + "?" + params);
+                HttpGet method = new HttpGet(API_CAMERA_LIST + tankId + "?" + params);
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
                 generalOptBaseHeader(method);

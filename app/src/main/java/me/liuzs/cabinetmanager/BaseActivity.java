@@ -210,28 +210,6 @@ abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    public void showToast(SubBoard.ControlResult result) {
-        if (!BuildConfig.DEBUG) {
-            return;
-        }
-        if (result == null) {
-            return;
-        }
-        try {
-            StringBuilder sb = new StringBuilder();
-            sb.append(result.result);
-            sb.append("\r\n").append(Arrays.toString(result.cmd));
-            if (result.response != null) {
-                int bSize = Math.min(result.response.length, result.size);
-                byte[] tb = new byte[bSize];
-                System.arraycopy(result.response, 0, tb, 0, bSize);
-                sb.append("\r\n").append(Arrays.toString(tb));
-            }
-            showToast(sb.toString());
-        } catch (Exception ignored) {
-        }
-    }
-
     @Override
     protected void onDestroy() {
         if (!executorService.isShutdown()) {

@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.22395833333333334" />
+        <entry key="../../.gradle/caches/transforms-3/3cccb830b61a523f3c03c0dc771fb28b/transformed/jetified-xprogressdialog-1.2.0/res/layout/view_xprogressdialog_circle_progress.xml" value="0.459375" />
+        <entry key="../../.gradle/caches/transforms-3/3cccb830b61a523f3c03c0dc771fb28b/transformed/jetified-xprogressdialog-1.2.0/res/layout/view_xprogressdialog_spot.xml" value="0.24765625" />
         <entry key="app/src/main/res/drawable-land/background_corner_orange.xml" value="0.23984375" />
         <entry key="app/src/main/res/drawable-land/background_corner_white.xml" value="0.23984375" />
         <entry key="app/src/main/res/drawable/background.xml" value="0.3546875" />
@@ -11,42 +13,61 @@
         <entry key="app/src/main/res/drawable/background_button_orange.xml" value="0.31796875" />
         <entry key="app/src/main/res/drawable/background_corner.xml" value="0.31796875" />
         <entry key="app/src/main/res/drawable/background_edit_normal.xml" value="0.31796875" />
+        <entry key="app/src/main/res/drawable/background_grid_content.xml" value="0.35546875" />
+        <entry key="app/src/main/res/drawable/background_grid_title.xml" value="0.48984375" />
+        <entry key="app/src/main/res/drawable/background_info_area.xml" value="0.48984375" />
         <entry key="app/src/main/res/drawable/background_input_area.xml" value="0.35625" />
-        <entry key="app/src/main/res/drawable/ic_alert.xml" value="0.1359375" />
-        <entry key="app/src/main/res/drawable/ic_auto.xml" value="0.11041666666666666" />
+        <entry key="app/src/main/res/drawable/background_state_green.xml" value="0.328125" />
+        <entry key="app/src/main/res/drawable/ic_ac_work_model_auto.xml" value="0.1640625" />
         <entry key="app/src/main/res/drawable/ic_back_white.xml" value="0.17" />
-        <entry key="app/src/main/res/drawable/ic_heating.xml" value="0.14907407407407408" />
-        <entry key="app/src/main/res/drawable/ic_manual.xml" value="0.11041666666666666" />
-        <entry key="app/src/main/res/drawable/ic_refrigeration.xml" value="0.14907407407407408" />
-        <entry key="app/src/main/res/drawable/ic_run.xml" value="0.14907407407407408" />
-        <entry key="app/src/main/res/drawable/ic_stop.xml" value="0.14907407407407408" />
-        <entry key="app/src/main/res/layout-land/activity_cabinet_name.xml" value="0.14937388193202147" />
-        <entry key="app/src/main/res/layout-land/activity_hardware_setup.xml" value="0.5" />
-        <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.28622540250447226" />
+        <entry key="app/src/main/res/drawable/ic_refrigeration.xml" value="0.146875" />
+        <entry key="app/src/main/res/drawable/ic_run.xml" value="0.16927083333333334" />
+        <entry key="app/src/main/res/drawable/ic_stop.xml" value="0.16927083333333334" />
+        <entry key="app/src/main/res/layout-land/activity_cabinet_name.xml" value="0.55" />
+        <entry key="app/src/main/res/layout-land/activity_deposit.xml" value="0.6765625" />
+        <entry key="app/src/main/res/layout-land/activity_hardware_setup.xml" value="0.55859375" />
+        <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.3684210526315789" />
+        <entry key="app/src/main/res/layout-land/activity_storage.xml" value="0.409375" />
+        <entry key="app/src/main/res/layout-land/fragment_deposit_item_create.xml" value="0.24609375" />
         <entry key="app/src/main/res/layout-land/fragment_setting_main.xml" value="0.31875" />
-        <entry key="app/src/main/res/layout/activity_account_setting.xml" value="0.3692708333333333" />
-        <entry key="app/src/main/res/layout/activity_auth.xml" value="0.37446581196581197" />
+        <entry key="app/src/main/res/layout/activity_account_setting.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_auth.xml" value="0.3328125" />
         <entry key="app/src/main/res/layout/activity_cabinet_name.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_camera_list.xml" value="0.27109375" />
-        <entry key="app/src/main/res/layout/activity_control_panel.xml" value="0.4796875" />
+        <entry key="app/src/main/res/layout/activity_container_no_create.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_container_no_list.xml" value="0.6171875" />
+        <entry key="app/src/main/res/layout/activity_container_number_management.xml" value="0.41822916666666665" />
+        <entry key="app/src/main/res/layout/activity_control_panel.xml" value="0.55859375" />
+        <entry key="app/src/main/res/layout/activity_deposit.xml" value="0.6515463917525773" />
         <entry key="app/src/main/res/layout/activity_hardware_setup.xml" value="0.3366733466933868" />
         <entry key="app/src/main/res/layout/activity_inventory_detail.xml" value="0.45" />
         <entry key="app/src/main/res/layout/activity_inventory_query.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/activity_launcher.xml" value="0.4546875" />
         <entry key="app/src/main/res/layout/activity_locker_manage.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/activity_log_view.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.30625" />
         <entry key="app/src/main/res/layout/activity_print.xml" value="0.48828125" />
-        <entry key="app/src/main/res/layout/activity_register_and_recognize.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_single_number_management.xml" value="0.14375" />
         <entry key="app/src/main/res/layout/activity_spinner.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_standing_book.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/layout/activity_sub_board_info.xml" value="0.33125" />
-        <entry key="app/src/main/res/layout/activity_system_setting.xml" value="0.3692708333333333" />
+        <entry key="app/src/main/res/layout/activity_system_setting.xml" value="0.63984375" />
         <entry key="app/src/main/res/layout/activity_video_player.xml" value="0.2421875" />
         <entry key="app/src/main/res/layout/activity_web_view.xml" value="0.2171875" />
-        <entry key="app/src/main/res/layout/fragment_account_setting.xml" value="0.3692708333333333" />
-        <entry key="app/src/main/res/layout/fragment_equipment_manage.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_weight.xml" value="0.30546875" />
+        <entry key="app/src/main/res/layout/fragment_account_setting.xml" value="0.18020833333333333" />
+        <entry key="app/src/main/res/layout/fragment_deposit_item_create.xml" value="0.2671875" />
+        <entry key="app/src/main/res/layout/fragment_equipment_manage.xml" value="0.465625" />
+        <entry key="app/src/main/res/layout/fragment_first_deposit.xml" value="0.26796875" />
+        <entry key="app/src/main/res/layout/fragment_mqtt_client.xml" value="0.24765625" />
         <entry key="app/src/main/res/layout/fragment_setting_main.xml" value="0.378125" />
+        <entry key="app/src/main/res/layout/fragment_take_out_item_create.xml" value="0.4" />
+        <entry key="app/src/main/res/layout/fragment_usage_item_create.xml" value="0.2671875" />
         <entry key="app/src/main/res/layout/recycler_item_camera.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/recycler_item_container_batch_info.xml" value="0.39010416666666664" />
+        <entry key="app/src/main/res/layout/recycler_item_container_no_info.xml" value="0.39791666666666664" />
+        <entry key="app/src/main/res/layout/recycler_item_deposit_record.xml" value="0.284375" />
+        <entry key="app/src/main/res/layout/recycler_item_inventory_detail.xml" value="0.284375" />
         <entry key="app/src/main/res/layout/recycler_item_inventory_search.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/recycler_item_locker.xml" value="0.75" />
         <entry key="app/src/main/res/layout/recycler_item_search_result.xml" value="0.5" />

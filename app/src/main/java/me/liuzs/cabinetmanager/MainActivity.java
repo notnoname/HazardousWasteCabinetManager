@@ -264,7 +264,7 @@ public class MainActivity extends BaseActivity {
 
     public void onControlPanelButtonClick(View view) {
 
-        if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
+        if (CabinetCore.isDebugState()) {
             Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
             startActivity(intent);
         } else {
@@ -283,7 +283,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onSettingButtonClick(View view) {
-        if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
+        if (CabinetCore.isDebugState()) {
             Intent intent = new Intent(MainActivity.this, SystemSettingActivity.class);
             startActivity(intent);
         } else {
@@ -302,7 +302,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onTakeOutButtonClick(View view) {
-        if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
+        if (CabinetCore.isDebugState()) {
             TakeOutActivity.start(MainActivity.this, null);
         } else {
             showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
@@ -324,7 +324,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onContainerNoManagerButtonClick(View view) {
-        if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
+        if (CabinetCore.isDebugState()) {
             Intent intent = new Intent(MainActivity.this, ContainerNoManagementActivity.class);
             startActivity(intent);
         } else {
@@ -348,7 +348,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onStandingBookQueryButtonClick(View view) {
-        if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
+        if (CabinetCore.isDebugState()) {
             Intent intent = new Intent(MainActivity.this, StandingBookActivity.class);
             startActivity(intent);
         } else {
@@ -367,7 +367,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onDepositButtonClick(View view) {
-        if (TextUtils.equals(BuildConfig.BUILD_TYPE, "debug")) {
+        if (CabinetCore.isDebugState()) {
             DepositActivity.start(MainActivity.this, null);
         } else {
             showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {

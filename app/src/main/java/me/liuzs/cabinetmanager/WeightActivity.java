@@ -47,12 +47,8 @@ public class WeightActivity extends AppCompatActivity implements Steelyard.Steel
         int index = CabinetCore.getCurrentScalesDevice();
         String scalesName = Config.ScalesDeviceName[index];
         mTip.setText("称重[" + scalesName + "]");
-        if (index == 0) {
-            HardwareService.weight(this);
-        } else if (index == 1) {
-            mTimer = new Timer();
-            mTimer.schedule(mWeightTask, 1000, 3000);
-        }
+        mTimer = new Timer();
+        mTimer.schedule(mWeightTask, 1000, 3000);
     }
 
     public void onOKButtonClick(View v) {

@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     showToast("用户鉴权成功，将进行人像识别");
                     mUser = user;
-                    if (BuildConfig.DEBUG) {
+                    if (CabinetCore.isDebugState()) {
                         onFaceIDRegisterSuccess();
                     } else {
                         startFaceIdRegister(user.username);

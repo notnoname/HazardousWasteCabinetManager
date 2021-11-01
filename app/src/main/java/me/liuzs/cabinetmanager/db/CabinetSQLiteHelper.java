@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import me.liuzs.cabinetmanager.BuildConfig;
 import me.liuzs.cabinetmanager.CabinetApplication;
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.util.StorageUtility;
 
@@ -13,7 +14,7 @@ public class CabinetSQLiteHelper extends SQLiteOpenHelper {
     private static CabinetSQLiteHelper INSTANCE = new CabinetSQLiteHelper();
 
     private CabinetSQLiteHelper() {
-        super(CabinetApplication.getInstance(), BuildConfig.DEBUG ? StorageUtility.getApplicationExternalWorkDirPath() + Config.DATABASE_NAME : Config.DATABASE_NAME, null, Config.DATABASE_VERSION);
+        super(CabinetApplication.getInstance(), CabinetCore.isDebugState() ? StorageUtility.getApplicationExternalWorkDirPath() + Config.DATABASE_NAME : Config.DATABASE_NAME, null, Config.DATABASE_VERSION);
         setWriteAheadLoggingEnabled(false);
     }
 

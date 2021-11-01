@@ -1,14 +1,13 @@
 package me.liuzs.cabinetmanager.model;
 
 public class DepositRecord {
-    public ContainerNoInfo container_no_info;
-    public Cabinet cabinet;
-    public User operator;
-    public String container_spec;
-    public Laboratory source;
-    public String harmful_ingredients;
-    public String other_info;
+    public String storage_no;
+    public String container_size;
+    public String laboratory_id;
+    public String harmful_info;
+    public String remark;
     public String in_weight;
     public String out_weight;
-    public String shelf_no;
+    public String storage_rack;
+    public String storage_id;
 }

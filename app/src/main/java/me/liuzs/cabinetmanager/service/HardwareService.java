@@ -25,17 +25,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import me.liuxy.cabinet.CabinetManager;
 import me.liuxy.cabinet.Steelyard;
 import me.liuxy.cabinet.TDA09C;
-import me.liuzs.cabinetmanager.BuildConfig;
 import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
-import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
-import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 import me.liuzs.cabinetmanager.model.Cabinet;
+import me.liuzs.cabinetmanager.model.HardwareValue;
+import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.modbus.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.modbus.FrequencyConverterStatus;
-import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.modbus.SetupValue;
+import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 
 public class HardwareService extends Service {
@@ -133,20 +132,20 @@ public class HardwareService extends Service {
         if (mManager != null) {
             return;
         }
-        if (BuildConfig.DEBUG) {
-            return;
-        }
 
         CabinetManager.Settings settings = new CabinetManager.Settings();
-        settings.SwitchesDeviceName = "/dev/ttysWK0";
+//settings.SwitchesDeviceName = "/dev/ttysWK0";
         settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[0];
         settings.TDA09C485Configs = new CabinetManager.TDA09C485Config[1];
         int c485 = CabinetCore.getTDA09C485Config(this);
-        settings.TDA09C485Configs[0] = new CabinetManager.TDA09C485Config((byte) c485);//按实际设备地址填写
-        settings.TVOCsDeviceName = new String[2];
-        settings.TVOCsDeviceName[0] = "/dev/ttysWK2";
-        settings.TVOCsDeviceName[1] = "/dev/ttysWK3";
-        settings.SHT3xDeviceName = "/dev/i2c-7";
+        //按实际设备地址填写
+        settings.TDA09C485Configs[0] = new CabinetManager.TDA09C485Config((byte) c485);
+        settings.TVOCsDeviceName = new String[0];
+/*
+settings.TVOCsDeviceName[0] = "/dev/ttysWK2";
+settings.TVOCsDeviceName[1] = "/dev/ttysWK3";
+settings.SHT3xDeviceName = "/dev/i2c-7";
+*/
         mManager = new CabinetManager(settings);
     }
 
@@ -271,68 +270,6 @@ public class HardwareService extends Service {
         }
     }
 
-    private void turnOnFan() {
-        if (mManager == null) {
-            return;
-        }
-        mManager.getSwitches().SwitchControl(0, true);
-    }
-
-    private void turnOffFan() {
-        if (mManager == null) {
-            return;
-        }
-        mManager.getSwitches().SwitchControl(0, false);
-    }
-
-    private void lightGreen() {
-        if (mManager == null) {
-            return;
-        }
-        mManager.getSwitches().SwitchControl(1, false);
-        mManager.getSwitches().SwitchControl(2, true);
-    }
-
-    private void lightRed() {
-        if (mManager == null) {
-            return;
-        }
-        mManager.getSwitches().SwitchControl(1, true);
-        mManager.getSwitches().SwitchControl(2, false);
-    }
-
-
-    public synchronized void switchFanControl(boolean onOff) {
-        if (onOff) {
-            turnOnFan();
-        } else {
-            turnOffFan();
-        }
-        HardwareValue value = getHardwareValue();
-        notifyValue(value);
-    }
-
-    public synchronized void switchLockerControl(boolean onOff) {
-        if (mManager == null) {
-            return;
-        }
-        mManager.getSwitches().SwitchControl(3, onOff);
-        if (mAutoLockTimer != null) {
-            mAutoLockTimer.cancel();
-        }
-        if (onOff) {
-            mAutoLockTimer = new Timer();
-            mAutoLockTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    switchLockerControl(false);
-                }
-            }, 120 * 1000);
-        }
-        HardwareValue value = getHardwareValue();
-        notifyValue(value);
-    }
-
     @Override
     public void onDestroy() {
         Log.d(TAG, "Destroy Service");
@@ -362,11 +299,6 @@ public class HardwareService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
-    }
-
-    private static class MaxValue {
-        long ppb;
-        float temp;
     }
 
     public class HardwareServiceBinder extends Binder {
