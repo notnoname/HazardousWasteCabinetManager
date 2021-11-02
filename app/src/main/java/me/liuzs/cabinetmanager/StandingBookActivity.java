@@ -25,24 +25,25 @@ import me.liuzs.cabinetmanager.ui.standingbook.StandingBookListAdapter;
  */
 public class StandingBookActivity extends BaseActivity {
 
-    class Pagination{
+    class Pagination {
         /**
          * 每页记录数
          */
-        public int page_size;
-        /**
-         * 总记录数
-         */
-        public int total_count;
+        public final int page_size = 20;
         /**
          * 第几页,1开始
          */
-        public int current_page;
+        public int current_page = 1;
 
         /**
          * 总页数
          */
-        public int total_pages;
+        public int total_pages = 0;
+
+        public void reset() {
+            total_pages = 0;
+            current_page = 1;
+        }
     }
 
     public static final String TAG = "StandingBookActivity";
@@ -61,6 +62,12 @@ public class StandingBookActivity extends BaseActivity {
         setContentView(R.layout.activity_standing_book);
 
         TabLayout mTabLayout = findViewById(R.id.tabLayout);
+
+        mPagination.put(DetailType.Inventories, new Pagination());
+        mPagination.put(DetailType.Deposit, new Pagination());
+        mPagination.put(DetailType.TakeOut, new Pagination());
+
+
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

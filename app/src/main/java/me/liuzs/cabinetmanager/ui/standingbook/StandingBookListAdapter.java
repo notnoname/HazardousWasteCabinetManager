@@ -16,15 +16,13 @@ import java.util.Map;
 
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.StandingBookActivity;
+import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.StandingBookItem;
 
 public class StandingBookListAdapter extends RecyclerView.Adapter<StandingBookItemViewHolder> {
 
-    private final List<StandingBookItem> mResultList = new LinkedList<>();
-    private final Map<String, String> purityValues = new HashMap<>();
-    private final Map<String, String> unitValues = new HashMap<>();
-    private final Map<String, String> measureSpecValues = new HashMap<>();
+    private final List<DepositRecord> mResultList = new LinkedList<>();
     private boolean isShowMore = false;
     private int mTotalCount = 0;
     private StandingBookActivity mActivity;
@@ -32,22 +30,6 @@ public class StandingBookListAdapter extends RecyclerView.Adapter<StandingBookIt
     public StandingBookListAdapter(StandingBookActivity activity) {
         super();
         mActivity = activity;
-    }
-
-    public boolean isSetDict() {
-        return purityValues.size() > 0 || unitValues.size() > 0l || measureSpecValues.size() > 0;
-    }
-
-    private void setDict(Map<String, String> map, List<DictType> list) {
-        for (DictType type : list) {
-            map.put(type.value, type.label);
-        }
-    }
-
-    public void setDict(List<DictType> purityDict, List<DictType> unitDict, List<DictType> measureSpec) {
-        setDict(purityValues, purityDict);
-        setDict(unitValues, unitDict);
-        setDict(measureSpecValues, measureSpec);
     }
 
     public boolean isShowMore() {
@@ -67,7 +49,7 @@ public class StandingBookListAdapter extends RecyclerView.Adapter<StandingBookIt
         return new StandingBookItemViewHolder(itemView);
     }
 
-    public void addResult(List<StandingBookItem> item, int totalCount) {
+    public void addResult(List<DepositRecord> item, int totalCount) {
         mResultList.addAll(item);
         updateTotalCountAndMoreButton(totalCount);
         notifyDataSetChanged();
