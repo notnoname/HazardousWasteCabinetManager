@@ -41,7 +41,8 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
         }
     });
     private RecyclerView mRecyclerView;
-    private int mPageSize = 20, mPageIndex = 1, mPageCount = 0;
+    private static final int mPageSize = 20;
+    private int mCurrentPage = 1, mTotalPage = 0;
     private EditText mBatchName, mOperator;
     private String mBatchNameValue = "", mOperatorValue = "";
 
@@ -66,8 +67,8 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
                 super.onScrollStateChanged(recyclerView, newState);
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 assert linearLayoutManager != null;
-                if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == mAdapter.getItemCount() - 1 && mPageIndex < mPageCount - 1) {
-                    mPageIndex++;
+                if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == mAdapter.getItemCount() - 1 && mCurrentPage < mTotalPage) {
+                    mCurrentPage++;
                     getContainerNoBatchList();
                 }
             }
@@ -94,7 +95,7 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
                 mBatchName.setText("");
                 mOperator.setText("");
                 hideInputMethod();
-                mPageIndex = 1;
+                mCurrentPage = 1;
                 getContainerNoBatchList();
             });
         });
@@ -103,13 +104,13 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
     private void getContainerNoBatchList() {
         showProgressDialog();
         getExecutorService().submit(() -> {
-            APIJSON<ContainerNoBatchListJSON> json = RemoteAPI.ContainerNoManager.getContainerNoBatchList(mBatchNameValue, mOperatorValue, mPageSize, mPageIndex);
+            APIJSON<ContainerNoBatchListJSON> json = RemoteAPI.ContainerNoManager.getContainerNoBatchList(mBatchNameValue, mOperatorValue, mPageSize, mCurrentPage);
             if (json.status == APIJSON.Status.ok) {
-                if(json.data.batches != null) {
-                    mPageIndex = json.data.current_page;
-                    mPageCount = json.data.total_pages;
+                if (json.data.batches != null) {
+                    mCurrentPage = json.data.current_page;
+                    mTotalPage = json.data.total_pages;
                     mHandler.post(() -> {
-                        if(mPageIndex == 1) {
+                        if (mCurrentPage == 1) {
                             mAdapter.clear();
                         }
                         mAdapter.add(json.data.batches);
@@ -134,8 +135,8 @@ public class ContainerNoManagementActivity extends BaseActivity implements TextW
     }
 
     public void onSearchButtonClick(View view) {
-        mPageIndex = 0;
-        mPageCount = 0;
+        mCurrentPage = 0;
+        mTotalPage = 0;
         mAdapter.clear();
         getContainerNoBatchList();
     }

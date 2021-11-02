@@ -51,7 +51,7 @@
         <entry key="app/src/main/res/layout/activity_print.xml" value="0.48828125" />
         <entry key="app/src/main/res/layout/activity_single_number_management.xml" value="0.14375" />
         <entry key="app/src/main/res/layout/activity_spinner.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/activity_standing_book.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_standing_book.xml" value="0.33989266547406083" />
         <entry key="app/src/main/res/layout/activity_sub_board_info.xml" value="0.33125" />
         <entry key="app/src/main/res/layout/activity_system_setting.xml" value="0.63984375" />
         <entry key="app/src/main/res/layout/activity_take_out.xml" value="0.2453125" />
@@ -74,6 +74,7 @@
         <entry key="app/src/main/res/layout/recycler_item_inventory_search.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/recycler_item_locker.xml" value="0.75" />
         <entry key="app/src/main/res/layout/recycler_item_search_result.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/recycler_item_standing_book.xml" value="0.5" />
         <entry key="app/src/main/res/layout/recycler_item_sub_board_info.xml" value="0.335" />
       </map>
     </option>

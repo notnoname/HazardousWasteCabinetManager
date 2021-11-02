@@ -462,33 +462,34 @@ public class RemoteAPI {
     }
 
     /**
-     * 库存查询模块，相关接口
+     * 记录查询
      */
-    public static class InventoryQuery {
-
-        /**
-         * 当前库存列表
-         */
-        public static final String API_INVENTORY_QUERY_LIST = API_ROOT + "/drug/v1/labInventory/getInventoryForApp";
-        /**
-         * 库存查询模块，库存药品详情
-         */
-        public static final String API_INVENTORY_QUERY_DETAIL = API_ROOT + "/drug/v1/labInventory/getInventoryDetailForApp";
+    public static class DepositRecordQuery {
 
         /**
          * 库存列表
-         *
-         * @param chemicalName 中文名，可通过化学品名模糊查询
+         */
+        public static final String API_INVENTORY_QUERY_LIST = API_ROOT + "/admin/storage_records/stocks";
+        /**
+         * 入柜流水
+         */
+        public static final String API_TAKE_IN_QUERY_DETAIL = API_ROOT + "/admin/storage_records/inputs";
+        /**
+         * 入柜流水
+         */
+        public static final String API_TAKE_OUT_QUERY_DETAIL = API_ROOT + "/admin/storage_records/outputs";
+
+        /**
+         * 库存列表
          * @return 返回库存列表
          */
-        public static APIJSON<List<InventoryItem>> queryInventoryList(String chemicalName, String currentPage) {
+        public static APIJSON<DepositRecordListJSON> queryInventoryList(String pageSize, String currentPage) {
 
             try {
                 Cabinet cabinetInfo = CabinetCore.getCabinetInfo();
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("chemicalName", chemicalName));
-                valuePairs.add(new BasicNameValuePair("pageSize", "1024"));
+                valuePairs.add(new BasicNameValuePair("pageSize", pageSize));
                 valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet httpGet = new HttpGet(API_INVENTORY_QUERY_LIST + "?" + params);
@@ -530,7 +531,7 @@ public class RemoteAPI {
          * @param chemicalId 化学平Id
          * @return 返回库存信息列表
          */
-        public static APIJSON<List<InventoryDetail>> queryInventoryDetail(String chemicalId, String currentPage) {
+        public static APIJSON<List<InventoryDetail>> queryTakeIn(String chemicalId, String currentPage) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();

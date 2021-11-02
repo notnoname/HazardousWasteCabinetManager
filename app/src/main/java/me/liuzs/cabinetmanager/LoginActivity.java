@@ -115,6 +115,7 @@ public class LoginActivity extends BaseActivity {
                     mUser = user;
                     if (CabinetCore.isDebugState()) {
                         onFaceIDRegisterSuccess();
+//startFaceIdRegister(user.username);
                     } else {
                         startFaceIdRegister(user.username);
                     }

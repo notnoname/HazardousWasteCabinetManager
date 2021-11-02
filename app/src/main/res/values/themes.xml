@@ -26,4 +26,8 @@
     <style name="Theme.CabinetManager.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.CabinetManager.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TabTheme" parent="@style/TextAppearance.AppCompat.Large">
+        <item name="android:textSize">28px</item>
+    </style>
 </resources>

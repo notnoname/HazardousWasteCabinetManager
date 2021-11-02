@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -340,11 +339,6 @@ public class MainActivity extends BaseActivity {
                 }
             });
         }
-    }
-
-    public void onInventoryQueryButtonClick(View view) {
-        Intent intent = new Intent(MainActivity.this, InventoryQueryActivity.class);
-        startActivity(intent);
     }
 
     public void onStandingBookQueryButtonClick(View view) {

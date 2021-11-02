@@ -110,10 +110,6 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
-            android:name=".InventoryQueryActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.CabinetManager.NoActionBar" />
-        <activity
             android:name=".ControlPanelActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
@@ -127,10 +123,6 @@
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
             android:name=".CameraListActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.CabinetManager.NoActionBar" />
-        <activity
-            android:name=".InventoryDetailActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity

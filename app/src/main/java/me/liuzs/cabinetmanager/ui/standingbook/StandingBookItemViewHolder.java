@@ -1,7 +1,7 @@
 package me.liuzs.cabinetmanager.ui.standingbook;
 
+import android.annotation.SuppressLint;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,33 +10,71 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.StandingBookActivity;
-import me.liuzs.cabinetmanager.model.StandingBookItem;
+import me.liuzs.cabinetmanager.model.DepositRecord;
 
-public class StandingBookItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class StandingBookItemViewHolder extends RecyclerView.ViewHolder {
 
-    TextView chemicalName, containerNo, weight, createTime, deviceName;
-    StandingBookItem depositItem;
+    TextView containerNo, containerSpec, source, harmful, inWeight, outWeight, inTime, outTime, inOpt, outOpt, otherInfo;
+    DepositRecord depositRecord;
     StandingBookActivity activity;
-    Button more;
-    ConstraintLayout itemInfo;
+    ConstraintLayout row;
 
 
     public StandingBookItemViewHolder(@NonNull View itemView) {
         super(itemView);
-        itemInfo = itemView.findViewById(R.id.csDetailInfo);
-        chemicalName = itemView.findViewById(R.id.tvChemicalNameValue);
-        containerNo = itemView.findViewById(R.id.tvConNoValue);
-        deviceName = itemView.findViewById(R.id.tvDeviceName);
-        createTime = itemView.findViewById(R.id.tvCreateTimeValue);
-        weight = itemView.findViewById(R.id.tvWeightValue);
-        more = itemView.findViewById(R.id.btnMore);
-        more.setOnClickListener(this);
+        row = itemView.findViewById(R.id.csRow);
+        containerNo = itemView.findViewById(R.id.tvNo);
+        containerSpec = itemView.findViewById(R.id.tvSpec);
+        source = itemView.findViewById(R.id.tvSource);
+        harmful = itemView.findViewById(R.id.tvHarmful);
+        inWeight = itemView.findViewById(R.id.tvInWeight);
+        outWeight = itemView.findViewById(R.id.tvOutWeight);
+        inTime = itemView.findViewById(R.id.tvInTime);
+        outTime = itemView.findViewById(R.id.tvOutTime);
+        inOpt = itemView.findViewById(R.id.tvInOperator);
+        outOpt = itemView.findViewById(R.id.tvOutOperator);
+        otherInfo = itemView.findViewById(R.id.tvInfo);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v == more) {
-            activity.onMoreButtonClick(v);
+    private void setBackground(boolean isTitle) {
+        for (int i = 0; i < row.getChildCount(); i++) {
+            TextView view = (TextView) row.getChildAt(i);
+            if (isTitle) {
+                view.setBackgroundResource(R.drawable.background_grid_title);
+            } else {
+                view.setBackgroundResource(R.drawable.background_grid_content);
+            }
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void show(boolean isTitle) {
+        setBackground(isTitle);
+        if (isTitle) {
+            containerNo.setText("单号");
+            containerSpec.setText("容器规格(升)");
+            source.setText("危废来源");
+            harmful.setText("有害成分");
+            inWeight.setText("入柜重量(KG)");
+            outWeight.setText("出柜重量(KG)");
+            inTime.setText("入柜时间");
+            outTime.setText("出柜时间");
+            inOpt.setText("入柜人员");
+            outOpt.setText("出柜人员");
+            otherInfo.setText("其他信息");
+        } else {
+            containerNo.setText(depositRecord.storage_no);
+            containerSpec.setText(depositRecord.container_size);
+            source.setText(depositRecord.laboratory);
+            harmful.setText(depositRecord.harmful_infos);
+            inWeight.setText(depositRecord.input_weight);
+            outWeight.setText(depositRecord.output_weight);
+            inTime.setText(depositRecord.input_time);
+            outTime.setText(depositRecord.output_time);
+            inOpt.setText(depositRecord.input_operator);
+            outOpt.setText(depositRecord.output_operator);
+            otherInfo.setText(depositRecord.remark);
+        }
+
     }
 }
