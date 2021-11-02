@@ -1,6 +1,7 @@
 package me.liuzs.cabinetmanager.model;
 
 public class DepositRecord {
+    public String id;
     public String storage_no;
     public String storage_name;
     public String container_size;

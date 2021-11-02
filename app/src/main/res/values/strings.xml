@@ -217,7 +217,7 @@
     <string name="weight_setup">称重设置</string>
     <string name="select_scales">请选择秤</string>
     <string name="calibration">标定</string>
-    <string name="in_detail">入库明细</string>
+    <string name="in_detail">入柜明细</string>
     <string name="take_out_detail">出柜明细</string>
     <string name="take_in_detail">入柜明细</string>
     <string name="load_more">加载更多</string>

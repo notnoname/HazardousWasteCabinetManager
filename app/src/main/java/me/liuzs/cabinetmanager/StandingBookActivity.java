@@ -10,21 +10,46 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.lang.ref.WeakReference;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.liuzs.cabinetmanager.model.DictType;
 import me.liuzs.cabinetmanager.model.StandingBookItem;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.ui.standingbook.StandingBookListAdapter;
-import me.liuzs.cabinetmanager.util.Util;
 
+/**
+ * 库存、台账
+ */
 public class StandingBookActivity extends BaseActivity {
+
+    class Pagination{
+        /**
+         * 每页记录数
+         */
+        public int page_size;
+        /**
+         * 总记录数
+         */
+        public int total_count;
+        /**
+         * 第几页,1开始
+         */
+        public int current_page;
+
+        /**
+         * 总页数
+         */
+        public int total_pages;
+    }
 
     public static final String TAG = "StandingBookActivity";
     private final StandingBookListAdapter mAdapter = new StandingBookListAdapter(this);
     private int mCurrentPage = 1;
-    private DetailType mDetailType = DetailType.Deposit;
+    private DetailType mDetailType = DetailType.Inventories;
+    private final Map<DetailType, Pagination> mPagination = new LinkedHashMap<>();
 
     @Override
     void afterRequestPermission(int requestCode, boolean isAllGranted) {
@@ -41,13 +66,13 @@ public class StandingBookActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 1:
-                        mDetailType = DetailType.TakeOut;
+                        mDetailType = DetailType.Deposit;
                         break;
                     case 2:
-                        mDetailType = DetailType.TakeIn;
+                        mDetailType = DetailType.TakeOut;
                         break;
                     default:
-                        mDetailType = DetailType.Deposit;
+                        mDetailType = DetailType.Inventories;
                 }
                 queryStandingBook(mDetailType, false);
             }
@@ -86,7 +111,7 @@ public class StandingBookActivity extends BaseActivity {
     }
 
     enum DetailType {
-        Deposit, TakeOut, TakeIn
+        Inventories, Deposit, TakeOut
     }
 
     static class GetStandingBookTask extends AsyncTask<String, Void, APIJSON<List<StandingBookItem>>> {
@@ -133,11 +158,11 @@ public class StandingBookActivity extends BaseActivity {
                 mActivity.get().mAdapter.setDict(mPurityTypes, mUnitTypes, mMeasureSpecTypes);
             }
             switch (mType) {
-                case Deposit:
+                case Inventories:
                     return RemoteAPI.StandingBook.queryStandingBookDeposit(strings[0]);
                 case TakeOut:
                     return RemoteAPI.StandingBook.queryStandingBookTakeOut(strings[0]);
-                case TakeIn:
+                case Deposit:
                     return RemoteAPI.StandingBook.queryStandingBookTakeIn(strings[0]);
             }
             return RemoteAPI.StandingBook.queryStandingBookDeposit(strings[0]);

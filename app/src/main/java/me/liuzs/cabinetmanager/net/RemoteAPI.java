@@ -607,7 +607,7 @@ public class RemoteAPI {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                String api_url = String.format(API_TAKE_OUT, depositRecord.storage_no);
+                String api_url = String.format(API_TAKE_OUT, depositRecord.id);
                 HttpPut method = new HttpPut(api_url);
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("storage_record[output_weight]", depositRecord.output_weight));

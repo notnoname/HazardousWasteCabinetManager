@@ -241,6 +241,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                         }
                     } else {
                         DepositRecord record = depositJSON.data.storage_records.get(0);
+                        mDepositRecord.id = record.id;
                         mDepositRecord.storage_no = record.storage_no;
                         mDepositRecord.input_weight = record.input_weight;
                         mDepositRecord.remark = record.remark;

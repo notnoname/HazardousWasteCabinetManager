@@ -296,6 +296,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
 
                         } else {
                             DepositRecord record = depositJSON.data.storage_records.get(0);
+                            mDepositRecord.id = record.id;
                             mDepositRecord.storage_no = record.storage_no;
                             mDepositRecord.input_weight = record.input_weight;
                             mDepositRecord.output_weight = record.input_weight;
