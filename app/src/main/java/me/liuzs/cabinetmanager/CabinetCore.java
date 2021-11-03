@@ -420,8 +420,9 @@ public class CabinetCore {
             if (user != null) {
                 APIJSON<User> userAPIJSON = RemoteAPI.System.login(user.username, user.password);
                 if (userAPIJSON.status == APIJSON.Status.ok && userAPIJSON.data != null) {
+                    userAPIJSON.data.password = user.password;
                     saveCabinetUser(userAPIJSON.data, RoleType.Admin);
-                } else {
+                } else if (userAPIJSON.status == APIJSON.Status.error) {
                     clearCabinetUser(RoleType.Admin);
                     clearCabinetUser(RoleType.Operator);
                     LoginActivity.start(mContext, RoleType.Admin);
@@ -431,8 +432,9 @@ public class CabinetCore {
             if (user != null) {
                 APIJSON<User> userAPIJSON = RemoteAPI.System.login(user.username, user.password);
                 if (userAPIJSON.status == APIJSON.Status.ok && userAPIJSON.data != null) {
+                    userAPIJSON.data.password = user.password;
                     saveCabinetUser(userAPIJSON.data, RoleType.Operator);
-                } else {
+                } else if (userAPIJSON.status == APIJSON.Status.error) {
                     clearCabinetUser(RoleType.Operator);
                     LoginActivity.start(mContext, RoleType.Operator);
                 }

@@ -49,25 +49,25 @@
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <LinearLayout
-        android:lines="4"
         android:id="@+id/llBarcodeInfo"
         android:layout_width="430px"
         android:layout_height="wrap_content"
         android:layout_marginTop="8px"
         android:background="@drawable/background_info_area_white"
         android:contentDescription="@string/app_name"
+        android:lines="4"
+        android:orientation="vertical"
         android:padding="15px"
         android:textSize="20px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPrinterState"
-        android:orientation="vertical" >
+        app:layout_constraintTop_toBottomOf="@+id/ivPrinterState">
 
         <TextView
             android:id="@+id/tvBatcbNoValue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="批次:"
+            android:text="批次名:"
             android:textColor="@color/black"
             android:textSize="20px" />
 
@@ -87,18 +87,19 @@
             android:textColor="@color/black"
             android:textSize="20px" />
 
+        <TextView
+            android:id="@+id/tvBarcodeValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="存单号:"
+            android:textColor="@color/black"
+            android:textSize="20px" />
+
         <ImageView
             android:id="@+id/ivBarCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/barcode" />
-
-        <TextView
-            android:id="@+id/tvBarcodeValue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="20px" />
 
     </LinearLayout>
 
