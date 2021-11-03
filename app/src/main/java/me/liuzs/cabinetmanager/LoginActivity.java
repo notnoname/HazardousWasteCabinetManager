@@ -108,6 +108,7 @@ public class LoginActivity extends BaseActivity {
             APIJSON<User> userJSON = RemoteAPI.System.login(username, password);
             if (userJSON.status == APIJSON.Status.ok) {
                 User user = userJSON.data;
+                user.password = password;
                 if (mType == CabinetCore.RoleType.Operator && !isHaveOptRight(user, CabinetCore.getCabinetInfo())) {
                     showToast("此用户无此暂存柜操作权限，请重新登录");
                 } else {
@@ -115,7 +116,6 @@ public class LoginActivity extends BaseActivity {
                     mUser = user;
                     if (CabinetCore.isDebugState()) {
                         onFaceIDRegisterSuccess();
-//startFaceIdRegister(user.username);
                     } else {
                         startFaceIdRegister(user.username);
                     }

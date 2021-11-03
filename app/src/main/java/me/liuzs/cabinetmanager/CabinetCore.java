@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
@@ -381,10 +383,9 @@ public class CabinetCore {
             mAuthTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-//                    new LoginTask(AuthType.Admin).execute(
-//                            mOperator.id, mOperator.passwordMD5);
+                    loginValidate();
                 }
-            }, 10 * 1000, 30 * 60 * 1000);
+            }, 20 * 1000, 30 * 60 * 1000);
         }
     }
 
@@ -411,38 +412,32 @@ public class CabinetCore {
         void onCheckARCActiveSuccess();
     }
 
-    private static class LoginTask extends AsyncTask<String, Void, APIJSON<User>> {
+    private final static ExecutorService executorService = Executors.newFixedThreadPool(1);
 
-        private final RoleType type;
-
-        public LoginTask(RoleType type) {
-            this.type = type;
-        }
-
-        @Override
-        protected APIJSON<User> doInBackground(String... strings) {
-            return RemoteAPI.System.login(strings[0], strings[1]);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(APIJSON<User> json) {
-            super.onPostExecute(json);
-            if (json.status == APIJSON.Status.ok) {
-                User user = json.data;
-                User oUser = getCabinetUser(type);
-                assert oUser != null;
-                user.faceId = oUser.faceId;
-                CabinetCore.saveCabinetUser(user, type);
-            } else if (json.status == APIJSON.Status.error) {
-                CabinetCore.clearCabinetUser(type);
-                LoginActivity.start(mContext, type);
+    private static void loginValidate() {
+        executorService.submit(() -> {
+            User user = getCabinetUser(RoleType.Admin);
+            if (user != null) {
+                APIJSON<User> userAPIJSON = RemoteAPI.System.login(user.username, user.password);
+                if (userAPIJSON.status == APIJSON.Status.ok && userAPIJSON.data != null) {
+                    saveCabinetUser(userAPIJSON.data, RoleType.Admin);
+                } else {
+                    clearCabinetUser(RoleType.Admin);
+                    clearCabinetUser(RoleType.Operator);
+                    LoginActivity.start(mContext, RoleType.Admin);
+                }
             }
-        }
+            user = getCabinetUser(RoleType.Operator);
+            if (user != null) {
+                APIJSON<User> userAPIJSON = RemoteAPI.System.login(user.username, user.password);
+                if (userAPIJSON.status == APIJSON.Status.ok && userAPIJSON.data != null) {
+                    saveCabinetUser(userAPIJSON.data, RoleType.Operator);
+                } else {
+                    clearCabinetUser(RoleType.Operator);
+                    LoginActivity.start(mContext, RoleType.Operator);
+                }
+            }
+        });
     }
 
     public static boolean isDebugState() {
