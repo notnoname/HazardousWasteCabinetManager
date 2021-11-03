@@ -28,6 +28,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import cz.msebera.android.httpclient.util.TextUtils;
 import me.liuzs.cabinetmanager.CabinetCore;
+import me.liuzs.cabinetmanager.StandingBookActivity;
 import me.liuzs.cabinetmanager.model.Agency;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.Chemical;
@@ -483,10 +484,10 @@ public class RemoteAPI {
          * 库存列表
          * @return 返回库存列表
          */
-        public static APIJSON<DepositRecordListJSON> queryInventoryList(String pageSize, String currentPage) {
+        public static APIJSON<DepositRecordListJSON> queryDepositList(StandingBookActivity.DetailType detailType, String pageSize, String currentPage) {
 
             try {
-                Cabinet cabinetInfo = CabinetCore.getCabinetInfo();
+                String url = null;
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("pageSize", pageSize));
@@ -519,54 +520,6 @@ public class RemoteAPI {
                 }
             } catch (IOException e) {
                 APIJSON<List<InventoryItem>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 库存详情
-         *
-         * @param chemicalId 化学平Id
-         * @return 返回库存信息列表
-         */
-        public static APIJSON<List<InventoryDetail>> queryTakeIn(String chemicalId, String currentPage) {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("chemicalId", chemicalId));
-                valuePairs.add(new BasicNameValuePair("pageSize", "1024"));
-                valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_INVENTORY_QUERY_DETAIL + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<InventoryDetail>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<InventoryDetail>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<InventoryDetail>> result = new APIJSON<>();
                 result.status = APIJSON.Status.other;
                 result.error = "网络请求异常";
                 return result;

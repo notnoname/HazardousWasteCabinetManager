@@ -73,22 +73,14 @@ public class StandingBookActivity extends BaseActivity {
     }
 
     public void getDepositRecordList(DetailType detailType) {
-        String url = null;
-        switch (detailType) {
-            case Inventories:
-                break;
-            case Deposit:
-                break;
-            case TakeOut:
-                break;
-        }
+
     }
 
     public void onBackButtonClick(View view) {
         finish();
     }
 
-    enum DetailType {
+    public enum DetailType {
         Inventories, Deposit, TakeOut
     }
 }
