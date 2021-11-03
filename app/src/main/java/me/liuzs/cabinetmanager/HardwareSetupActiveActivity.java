@@ -145,10 +145,10 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
 
     public void onPrinterButtonClick(View view) {
         ContainerNoInfo cl = new ContainerNoInfo();
-//        cl.batch_name = "PC00100";
-//        cl.agency_name = "清华大学";
-//        cl.operator = "刘道衡";
-        cl.no = "CN101120201218001";
+        cl.batch_name = "NB20211101015";
+        cl.org = "埃德伯格实验室";
+        cl.creator = "刘道衡";
+        cl.no = "NO202110312056450021";
         List<ContainerNoInfo> cls = new LinkedList<>();
         cls.add(cl);
         PrintActivity.startPrintContainerLabel(this, cls);

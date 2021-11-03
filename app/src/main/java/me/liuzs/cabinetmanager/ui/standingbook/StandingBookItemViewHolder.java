@@ -14,7 +14,7 @@ import me.liuzs.cabinetmanager.model.DepositRecord;
 
 public class StandingBookItemViewHolder extends RecyclerView.ViewHolder {
 
-    TextView containerNo, containerSpec, source, harmful, inWeight, outWeight, inTime, outTime, inOpt, outOpt, otherInfo;
+    TextView containerNo, containerSpec, source, harmful, shelfNo, inWeight, outWeight, inTime, outTime, inOpt, outOpt, otherInfo;
     DepositRecord depositRecord;
     StandingBookActivity activity;
     ConstraintLayout row;
@@ -27,6 +27,7 @@ public class StandingBookItemViewHolder extends RecyclerView.ViewHolder {
         containerSpec = itemView.findViewById(R.id.tvSpec);
         source = itemView.findViewById(R.id.tvSource);
         harmful = itemView.findViewById(R.id.tvHarmful);
+        shelfNo = itemView.findViewById(R.id.tvShelfNo);
         inWeight = itemView.findViewById(R.id.tvInWeight);
         outWeight = itemView.findViewById(R.id.tvOutWeight);
         inTime = itemView.findViewById(R.id.tvInTime);
@@ -55,6 +56,7 @@ public class StandingBookItemViewHolder extends RecyclerView.ViewHolder {
             containerSpec.setText("容器规格(升)");
             source.setText("危废来源");
             harmful.setText("有害成分");
+            shelfNo.setText("货架号");
             inWeight.setText("入柜重量(KG)");
             outWeight.setText("出柜重量(KG)");
             inTime.setText("入柜时间");
@@ -67,6 +69,7 @@ public class StandingBookItemViewHolder extends RecyclerView.ViewHolder {
             containerSpec.setText(depositRecord.container_size);
             source.setText(depositRecord.laboratory);
             harmful.setText(depositRecord.harmful_infos);
+            shelfNo.setText(depositRecord.storage_rack);
             inWeight.setText(depositRecord.input_weight);
             outWeight.setText(depositRecord.output_weight);
             inTime.setText(depositRecord.input_time);

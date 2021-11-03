@@ -46,7 +46,8 @@ public class PrintActivity extends BaseActivity {
     public static PrinterBluetoothInfo CurrentPrinterInfo;
     private static final Type JSON_TYPE = new TypeToken<List<ContainerNoInfo>>() {
     }.getType();
-    ;
+    public static final int PageWidth = 400;
+    public static final int PageHeight = 559;
     private final Handler mHandler = new Handler();
     private TextView mPrinterName, mTip, mBatchName, mOperator, mAgency, mBarcode;
     private PrinterInstanceApi mPrinterInstance;
@@ -124,9 +125,10 @@ public class PrintActivity extends BaseActivity {
         Log.d(TAG, "Page Size:" + pageWidth + "-" + pageHeight);
         showProgressDialog();
         new Thread(() -> {
-            for(mCurrentInfo = 0; mCurrentInfo < mContainerNoInfoList.size(); mCurrentInfo++) {
-                mHandler.post(()->showContainerNoInfo());
+            for (mCurrentInfo = 0; mCurrentInfo < mContainerNoInfoList.size(); mCurrentInfo++) {
+                mHandler.post(() -> showContainerNoInfo());
                 printInfo(mContainerNoInfoList.get(mCurrentInfo));
+                Util.sleep(1000);
             }
             dismissProgressDialog();
             mHandler.post(() -> showToast("打印结束"));
@@ -136,7 +138,66 @@ public class PrintActivity extends BaseActivity {
     }
 
     private void printInfo(ContainerNoInfo info) {
-        Util.sleep(2000);
+        /**
+         * CPCL开始命令
+         * @param offset 整个标签的水平偏移量,点为单位
+         * @param height 标签最大高度，点为单位
+         * @param page   打印标签的数量，最大 1024 张
+         */
+        PrinterInstance.getInstance().startCpcl(0, PageHeight, 1);
+        /**
+         * 文本命令
+         * @param direction     旋转角度 0、90、180、270
+         * @param font          24    字符(12*24)，汉字(24*24)
+         *                      55    字符(8*16)，汉字(16*16)
+         * @param size          字符高度选择 ----> 0 1 2 3 4 5 6 7 纵向放大 size 纵向放大 1(正常) 2(2倍高) 3 4 5 6 7 8
+         *                      字符宽度选择 ----> 0 10 20 30 40 50 60 70 横向放大 size  1(正常) 2(2倍高) 3 4 5 6 7 8
+         *                      示列:当传入3时，纵向放大3倍
+         *                      当传入30时，横向放大3倍
+         *                      当传入33时，横纵向同时放大3倍
+         * @param x             x坐标，点为单位
+         * @param y             y坐标，点为单位
+         * @param content       文本内容
+         */
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 340, 30, "批次名:" + info.batch_name + "存单号:" + info.no);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 300, 30, "创建人:" + info.creator);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 260, 30, "机构名:" + info.org);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 220, 30, "存单号:" + info.no);
+
+
+        /**
+         * 一维条码
+         *
+         * @param isTransverse true    打印横向条码
+         *                     false   打印纵向条码
+         * @param type         type 条码类型，一维条码的类型有:
+         *                     Type值     条码类型
+         *                     UPCA       UPC-A
+         *                     UPCE       UPC-E
+         *                     EAN13      JAN13 (EAN13)
+         *                     EAN8       JAN 8 (EAN8)
+         *                     39         CODE39
+         *                     CODABAR    CODABAR
+         *                     93         CODE93
+         *                     128        CODE128(Auto)
+         * @param width        条码宽度. 点为单位   宽度是根据内容及宽条宽和窄条宽比率定
+         * @param ratio        宽条宽和窄条宽比率
+         *                     0 = 1.5:1   20 = 2.0:1  25 = 2.5:1  30 = 3.0:1
+         *                     1 = 2.0:1   21 = 2.1:1  26 = 2.6:1
+         *                     2 = 2.5:1   22 = 2.2:1  27 = 2.7:1
+         *                     3 = 3.0:1   23 = 2.3:1  28 = 2.8:1
+         *                     4 = 3.5:1   24 = 2.4:1  29 = 2.9:1
+         * @param height       条码高度. 点为单位
+         * @param x            x坐标，点为单位
+         * @param y            y坐标，点为单位
+         * @param data         一维码内容
+         */
+        PrinterInstance.getInstance().pringCodeCpcl(true, "128", 1, 2, 100, 30, 30, info.no);
+        PrinterInstance.getInstance().calibrateCpcl();
+        /**
+         * 打印命令
+         */
+        PrinterInstance.getInstance().printCpcl();
     }
 
     @Override
@@ -252,6 +313,49 @@ public class PrintActivity extends BaseActivity {
     public void onBluetoothListButtonClick(View view) {
         Intent intent = new Intent(this, DeviceBluetoothListActivity.class);
         startActivity(intent);
+    }
+
+    public void printText(ContainerNoInfo info) {
+        /**
+         * CPCL开始命令
+         * @param offset 整个标签的水平偏移量,点为单位
+         * @param height 标签最大高度，点为单位
+         * @param page   打印标签的数量，最大 1024 张
+         */
+        PrinterInstance.getInstance().startCpcl(0, 700, 1);
+        /**
+         * 字体加粗开始指令(中间可以包含多条text指令)
+         * @param size  >1 设置打印字体为粗体    0 取消粗体模式
+         */
+//        PrinterInstance.getInstance().boldFontStartCpcl(0);
+        /**
+         * 文本命令
+         * @param direction     旋转角度 0、90、180、270
+         * @param font          24    字符(12*24)，汉字(24*24)
+         *                      55    字符(8*16)，汉字(16*16)
+         * @param size          字符高度选择 ----> 0 1 2 3 4 5 6 7 纵向放大 size 纵向放大 1(正常) 2(2倍高) 3 4 5 6 7 8
+         *                      字符宽度选择 ----> 0 10 20 30 40 50 60 70 横向放大 size  1(正常) 2(2倍高) 3 4 5 6 7 8
+         *                      示列:当传入3时，纵向放大3倍
+         *                      当传入30时，横向放大3倍
+         *                      当传入33时，横纵向同时放大3倍
+         * @param x             x坐标，点为单位
+         * @param y             y坐标，点为单位
+         * @param content       文本内容
+         */
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 360, 20, "批次名:" + info.batch_name);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 320, 20, "创建人:" + info.creator);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 280, 20, "机构名:" + info.org);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 50, 20, "存单号:" + info.no);
+
+        /**
+         * 字体加粗结束指令
+         */
+//        PrinterInstance.getInstance().boldFontEndCpcl();
+
+        /**
+         * 打印命令
+         */
+        PrinterInstance.getInstance().printCpcl();
     }
 
     /**

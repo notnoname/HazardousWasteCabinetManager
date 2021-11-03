@@ -482,48 +482,50 @@ public class RemoteAPI {
 
         /**
          * 库存列表
+         *
          * @return 返回库存列表
          */
-        public static APIJSON<DepositRecordListJSON> queryDepositList(StandingBookActivity.DetailType detailType, String pageSize, String currentPage) {
+        public static APIJSON<DepositRecordListJSON> queryDepositList(StandingBookActivity.DetailType detailType, int pageSize, int currentPage) {
 
             try {
                 String url = null;
+                switch (detailType) {
+                    case Inventories:
+                        url = API_INVENTORY_QUERY_LIST;
+                        break;
+                    case Deposit:
+                        url = API_TAKE_IN_QUERY_DETAIL;
+                        break;
+                    case TakeOut:
+                        url = API_TAKE_OUT_QUERY_DETAIL;
+                        break;
+                }
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("pageSize", pageSize));
-                valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
+                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(pageSize)));
+                valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(currentPage)));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_INVENTORY_QUERY_LIST + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
+                HttpGet method = new HttpGet(url + "?" + params);
+                Log.d(TAG, method.getURI().toString());
+                generalOptBaseHeader(method);
+                HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
+                if (code == HTTP_OK) {
                     HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
+                    String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<InventoryItem>>>() {
+                    Type jsonType = new TypeToken<APIJSON<DepositRecordListJSON>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<InventoryItem>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
+                    //noinspection unchecked
+                    return APIJSON.buildServerErrorJSON(code);
                 }
-            } catch (IOException e) {
-                APIJSON<List<InventoryItem>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
+            } catch (Exception e) {
+                //noinspection unchecked
+                return APIJSON.buildOtherErrorJSON(e);
             }
+
         }
     }
 
@@ -671,167 +673,6 @@ public class RemoteAPI {
             } catch (Exception e) {
                 //noinspection unchecked
                 return APIJSON.buildOtherErrorJSON(e);
-            }
-        }
-    }
-
-    /**
-     * 出入库查询(台账查询)模块，相关接口
-     */
-    public static class StandingBook {
-
-        /**
-         * 台账-入柜
-         */
-        public static final String API_STANDING_BOOK_DEPOSIT = API_ROOT + "/drug/v1/statistic/getLabPutDevStatisticByTankId";
-
-        /**
-         * 台账-出柜
-         */
-        public static final String API_STANDING_BOOK_TAKE_OUT = API_ROOT + "/drug/v1/statistic/getUseOutDetailDatas";
-        /**
-         * 台账-入柜
-         */
-        public static final String API_STANDING_BOOK_TAKE_IN = API_ROOT + "/drug/v1/statistic/getUsePutDetailDatas";
-
-        /**
-         * 入柜台账查询
-         *
-         * @return 返回入柜台账
-         */
-        public static APIJSON<List<StandingBookItem>> queryStandingBookDeposit(String currentPage) {
-            try {
-                Cabinet cabinet = CabinetCore.getCabinetInfo();
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("pageSize", "20"));
-                valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-//                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_STANDING_BOOK_DEPOSIT + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<StandingBookItem>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<StandingBookItem>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<StandingBookItem>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 台账-出柜
-         *
-         * @return 返回出柜台账
-         */
-        public static APIJSON<List<StandingBookItem>> queryStandingBookTakeOut(String currentPage) {
-            try {
-                Cabinet cabinet = CabinetCore.getCabinetInfo();
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("pageSize", "20"));
-                valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-//                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_STANDING_BOOK_TAKE_OUT + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<StandingBookItem>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<StandingBookItem>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<StandingBookItem>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 台账-入柜
-         *
-         * @return 返回入柜台账
-         */
-        public static APIJSON<List<StandingBookItem>> queryStandingBookTakeIn(String currentPage) {
-            try {
-                Cabinet cabinet = CabinetCore.getCabinetInfo();
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("pageSize", "20"));
-                valuePairs.add(new BasicNameValuePair("currentPage", currentPage));
-//                valuePairs.add(new BasicNameValuePair("devId", cabinetInfo.devId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet httpGet = new HttpGet(API_STANDING_BOOK_TAKE_IN + "?" + params);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<StandingBookItem>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<StandingBookItem>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<StandingBookItem>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
             }
         }
     }
