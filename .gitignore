@@ -1,12 +1,7 @@
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+/.idea/
 .DS_Store
 /build
 /captures
@@ -14,6 +9,4 @@
 .cxx
 local.properties
 /cabinet-release/build/.transforms/
-/app/release/app-release.apk
-/app/release_landscape/app-release_landscape.apk
-/app/release_landscape/output-metadata.json
+/app/release/
