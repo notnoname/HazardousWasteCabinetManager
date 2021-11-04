@@ -4,13 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-
-import androidx.appcompat.widget.Toolbar;
 
 import me.liuzs.cabinetmanager.ui.setting.EquipmentManageFragment;
 import me.liuzs.cabinetmanager.ui.setting.SettingMainFragment;
-import me.liuzs.cabinetmanager.util.Util;
 
 public class SystemSettingActivity extends BaseActivity {
 
@@ -26,7 +22,6 @@ public class SystemSettingActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_setting);
-        ((TextView) findViewById(R.id.toolbar_title)).setText(R.string.setting);
         if (savedInstanceState == null) {
             transToMainFragment();
         }

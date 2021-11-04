@@ -221,6 +221,10 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         Util.sleep(250);
     }
 
+    public void onOptLogButtonClick(View view) {
+        LogViewActivity.start(this, LogViewActivity.Type.Alert);
+    }
+
     public void onACWorkModelButtonClick(View view) {
         Intent intent = new Intent(this, SpinnerActivity.class);
         List<String> options = new ArrayList<>();

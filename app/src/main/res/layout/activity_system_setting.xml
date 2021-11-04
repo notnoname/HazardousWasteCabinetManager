@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/title_activity_account_setting"
+                android:text="@string/setting"
                 android:textSize="@dimen/tool_bar_title_height"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>

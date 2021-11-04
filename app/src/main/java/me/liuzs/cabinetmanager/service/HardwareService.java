@@ -63,7 +63,7 @@ public class HardwareService extends Service {
     private Timer mHardwareValueQueryTimer;
     private MqttAndroidClient mPublishClient;
     private Timer mAutoLockTimer;
-    private static final long mHardwareValueQueryInterval = 5000;
+    private static final long mHardwareValueQueryInterval = 10000;
 
     public synchronized static void weight(Steelyard.SteelyardCallback callback) {
         if (mManager == null) {
@@ -194,7 +194,7 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
                 publishValue(value);
                 isDoHardwareValueQuery.set(false);
             }
-        }, 0, mHardwareValueQueryInterval);
+        }, 1000, mHardwareValueQueryInterval);
     }
 
     private void notifyValue(HardwareValue value) {
@@ -203,26 +203,13 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
         }
         Intent intent = new Intent(Config.ACTION_HARDWARE_VALUE_SEND);
         String valueJSON = CabinetCore.GSON.toJson(value);
-        Log.d(TAG, "Hardware JSON:" + valueJSON);
         intent.putExtra(Config.KEY_HARDWARE_VALUE, valueJSON);
         sendBroadcast(intent);
     }
 
     private void publishValue(HardwareValue value) {
         Cabinet info = CabinetCore.getCabinetInfo();
-//        if (info != null) {
-//            DeviceInfo single = CabinetApplication.getSingleDevice();
-//            String mainDevId = single != null ? single.devId : null;
-//            List<String> devIds = new LinkedList<>();
-//            for (DeviceInfo device : info.devices) {
-//                devIds.add(device.devId);
-//            }
-//            publishValue(value, 1, info.id, mainDevId, devIds);
-//        }
-    }
-
-    private void publishValue(HardwareValue value, String tankType, String tankId, String mainDeviceId, List<String> subDeviceId) {
-        if (mPublishClient.isConnected() && value != null) {
+        if (info != null && mPublishClient.isConnected() && value != null) {
             try {
                 String payload = CabinetCore.GSON.toJson(value);
                 Log.d(TAG, "MQTT JSON:" + payload);
@@ -232,6 +219,7 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
                 mPublishClient.publish(RemoteAPI.MQTT.MQTT_HARDWARE_PUBLISH_TOPIC, message, null, mPublishActionListener);
             } catch (MqttException e) {
                 e.printStackTrace();
+                CabinetCore.saveHardwareValue(value);
             }
         }
     }
@@ -248,31 +236,44 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
             SetupValue setupValue = ModbusService.readSetupValue();
             if (setupValue.e == null) {
                 hValue.setupValue = setupValue;
+            } else {
+                CabinetCore.logAlert("设置参数获取失败");
             }
             EnvironmentStatus environmentStatus = ModbusService.readEnvironmentStatus();
             if (environmentStatus.e == null) {
                 hValue.environmentStatus = environmentStatus;
+            } else {
+                CabinetCore.logAlert("环境信息获取失败");
             }
             AirConditionerStatus airConditionerStatus = ModbusService.readAirConditionerStatus();
             if (airConditionerStatus.e == null) {
                 hValue.airConditionerStatus = airConditionerStatus;
+            } else {
+                CabinetCore.logAlert("控台状态获取失败");
             }
             FrequencyConverterStatus frequencyConverterStatus = ModbusService.readFrequencyConverterStatus();
             if (frequencyConverterStatus.e == null) {
                 hValue.frequencyConverterStatus = frequencyConverterStatus;
+            } else {
+                CabinetCore.logAlert("变频器状态获取失败");
             }
             StatusOption statusOption = ModbusService.readStatusOption();
             if (statusOption.e == null) {
                 hValue.statusOption = statusOption;
+            } else {
+                CabinetCore.logAlert("状态参数获取失败");
             }
             hValue.createTime = createTime;
             hValue.cabinet_id = cabinet.id;
-            CabinetCore.saveHardwareValue(hValue);
 
-            Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));
-            return hValue;
+            if (hValue.setupValue == null && hValue.airConditionerStatus == null && hValue.statusOption == null && hValue.airConditionerStatus == null) {
+                return null;
+            } else {
+                Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));
+                return hValue;
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            CabinetCore.logAlert("获取硬件数据异常");
             return null;
         }
     }

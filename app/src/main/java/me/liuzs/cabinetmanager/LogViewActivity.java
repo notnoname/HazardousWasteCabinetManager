@@ -1,26 +1,18 @@
 package me.liuzs.cabinetmanager;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.util.Date;
-import java.util.Objects;
 
 import me.liuzs.cabinetmanager.model.HardwareValue;
-import me.liuzs.cabinetmanager.util.Util;
 
 public class LogViewActivity extends BaseActivity {
 
@@ -29,26 +21,27 @@ public class LogViewActivity extends BaseActivity {
     private TextView mLog;
     @SuppressWarnings("unused")
     private ScrollView mScrollView;
-    private HardwareValueBroadcastReceiver mHardwareValueBroadcastReceiver;
 
     @Override
     void afterRequestPermission(int requestCode, boolean isAllGranted) {
 
     }
 
+    public enum Type {
+        Opt, Alert
+    }
+
+    public static void start(Context context, Type type) {
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        mHardwareValueBroadcastReceiver = new HardwareValueBroadcastReceiver();
-        IntentFilter filter = new IntentFilter(Config.ACTION_HARDWARE_VALUE_SEND);
-        registerReceiver(mHardwareValueBroadcastReceiver, filter);
-        Log.d(TAG, "RegisterReceiver");
     }
 
     @Override
     protected void onStop() {
-        unregisterReceiver(mHardwareValueBroadcastReceiver);
-        Log.d(TAG, "UnregisterReceiver");
         super.onStop();
     }
 
@@ -106,15 +99,5 @@ public class LogViewActivity extends BaseActivity {
                 "\n" +
                 mGson.toJson(value);
         mLog.setText(newInfo);
-    }
-
-    private class HardwareValueBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "OnReceiver");
-            String json = intent.getStringExtra(Config.KEY_HARDWARE_VALUE);
-            HardwareValue value = mGson.fromJson(json, HardwareValue.class);
-            mHandler.post(() -> showHardwareValue(value));
-        }
     }
 }
