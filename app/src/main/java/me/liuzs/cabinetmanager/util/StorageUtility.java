@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,12 +16,12 @@ import java.util.regex.Pattern;
 public class StorageUtility {
 
     private static String BaseDir = null;
-    private static StorageUtility INSTANCE = new StorageUtility();
+    private static final StorageUtility INSTANCE = new StorageUtility();
     private Context mContext;
 
     public static synchronized void init(Context context) {
         INSTANCE.mContext = context;
-        BaseDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + File.separator;
+        BaseDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
         File file = new File(BaseDir);
         if (file.exists() && !file.isDirectory()) {
             file.delete();
@@ -89,7 +90,7 @@ public class StorageUtility {
     private static void walkFiles(File directory, boolean recursive, Pattern fileNameFilter,
                                   Pattern directoryNameFilter, ArrayList<File> fileList) {
         File[] list = directory.listFiles();
-        for (int i = 0; i < list.length; i++) {
+        for (int i = 0; i < Objects.requireNonNull(list).length; i++) {
             File f = list[i];
             if (f.isDirectory()) {
                 if (recursive) {

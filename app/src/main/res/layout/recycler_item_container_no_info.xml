@@ -9,10 +9,11 @@
 
     <TextView
         android:id="@+id/tvNO"
-        android:layout_width="350px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_grid_title"
-        android:padding="5px"
+        android:ems="12"
+        android:padding="10px"
         android:singleLine="true"
         android:text="单号"
         android:textColor="@color/cardview_light_background"
@@ -23,10 +24,11 @@
 
     <TextView
         android:id="@+id/tvBatchName"
-        android:layout_width="300px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_grid_title"
-        android:padding="5px"
+        android:ems="10"
+        android:padding="10px"
         android:singleLine="true"
         android:text="批次名"
         android:textColor="@color/cardview_light_background"
@@ -41,7 +43,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/background_grid_title"
         android:maxLines="2"
-        android:padding="5px"
+        android:padding="10px"
         android:singleLine="false"
         android:text="机构"
         android:textColor="@color/cardview_light_background"
@@ -53,11 +55,12 @@
 
     <TextView
         android:id="@+id/tvCreateTime"
-        android:layout_width="300px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_grid_title"
+        android:ems="9"
         android:maxLines="2"
-        android:padding="5px"
+        android:padding="10px"
         android:singleLine="true"
         android:text="创建时间"
         android:textColor="@color/cardview_light_background"
@@ -68,11 +71,12 @@
 
     <TextView
         android:id="@+id/tvOperator"
-        android:layout_width="200px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_grid_title"
+        android:ems="5"
         android:maxLines="2"
-        android:padding="5px"
+        android:padding="10px"
         android:singleLine="true"
         android:text="创建人"
         android:textColor="@color/cardview_light_background"
@@ -83,12 +87,13 @@
 
     <TextView
         android:id="@+id/tvUsed"
-        android:layout_width="130px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_grid_title"
+        android:ems="4"
         android:gravity="center"
         android:maxLines="2"
-        android:padding="5px"
+        android:padding="10px"
         android:singleLine="true"
         android:text="是否使用"
         android:textColor="@color/cardview_light_background"
