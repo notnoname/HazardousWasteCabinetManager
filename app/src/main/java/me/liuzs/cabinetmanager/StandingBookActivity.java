@@ -50,6 +50,7 @@ public class StandingBookActivity extends BaseActivity {
                     default:
                         mDetailType = DetailType.Inventories;
                 }
+                mAdapter.clear();
                 getDepositRecordList(mDetailType);
             }
 

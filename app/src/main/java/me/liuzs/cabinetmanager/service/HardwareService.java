@@ -237,6 +237,10 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
     }
 
     private HardwareValue getHardwareValue() {
+        Cabinet cabinet = CabinetCore.getCabinetInfo();
+        if (cabinet == null) {
+            return null;
+        }
         long createTime = System.currentTimeMillis();
         Log.d(TAG, "Get HardwareValue: " + mLogTimeFormat.format(new Date(createTime)));
         try {
@@ -261,7 +265,10 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
             if (statusOption.e == null) {
                 hValue.statusOption = statusOption;
             }
-            HardwareValue._Cache = hValue;
+            hValue.createTime = createTime;
+            hValue.cabinet_id = cabinet.id;
+            CabinetCore.saveHardwareValue(hValue);
+
             Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));
             return hValue;
         } catch (Exception e) {

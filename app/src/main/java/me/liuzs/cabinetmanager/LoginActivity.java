@@ -46,7 +46,7 @@ public class LoginActivity extends BaseActivity {
     private void onFaceIDRegisterSuccess() {
         showToast(getResources().getString(R.string.login_success));
         mUser.faceId = mUser.username;
-        CabinetCore.saveCabinetUser(mUser, mType);
+        CabinetCore.saveCabinetUser(mUser, mType, true);
         CabinetCore.restart();
     }
 

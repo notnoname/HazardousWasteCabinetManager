@@ -89,18 +89,22 @@ public class CabinetBindActivity extends BaseActivity {
 
     @SuppressLint("SetTextI18n")
     private void showInfo() {
-        User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Admin);
-        assert user != null;
-        mUserName.setText(user.name);
-        mUserMobile.setText(user.phone);
-        if (mCabinetInfo == null) {
-            mTankSelect.setText("");
-            mTankBaseInfo.setText("");
-            mTankOrgInfo.setText("");
-        } else {
-            mTankSelect.setText(mCabinetInfo.name);
-            mTankBaseInfo.setText(mCabinetInfo.name + "/" + mCabinetInfo.code + "/" + mCabinetInfo.type);
-            mTankOrgInfo.setText(mCabinetInfo.org.full_name + "/" + mCabinetInfo.org.code);
+        try {
+            User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Admin);
+            assert user != null;
+            mUserName.setText(user.name);
+            mUserMobile.setText(user.phone);
+            if (mCabinetInfo == null) {
+                mTankSelect.setText("");
+                mTankBaseInfo.setText("");
+                mTankOrgInfo.setText("");
+            } else {
+                mTankSelect.setText(mCabinetInfo.name);
+                mTankBaseInfo.setText(mCabinetInfo.name + "/" + mCabinetInfo.code + "/" + mCabinetInfo.type);
+                mTankOrgInfo.setText(mCabinetInfo.org.full_name + "/" + mCabinetInfo.org.code);
+            }
+        } catch (Exception e) {
+
         }
     }
 

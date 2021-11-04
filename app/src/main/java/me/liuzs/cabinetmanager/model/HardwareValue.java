@@ -7,7 +7,8 @@ import me.liuzs.cabinetmanager.model.modbus.SetupValue;
 import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 
 public class HardwareValue {
-    public static HardwareValue _Cache;
+    public long id;
+    public String cabinet_id;
     public SetupValue setupValue;
     public EnvironmentStatus environmentStatus;
     public AirConditionerStatus airConditionerStatus;

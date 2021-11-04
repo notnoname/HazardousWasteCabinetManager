@@ -62,7 +62,7 @@ public class RemoteAPI {
         httpRequest.addHeader(accept);
         User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Admin);
         if (user != null) {
-            Header authorization = new BasicHeader("Token", user.token);
+            Header authorization = new BasicHeader("token", user.token);
             httpRequest.addHeader(authorization);
         }
     }
@@ -200,7 +200,7 @@ public class RemoteAPI {
          *
          * @return 创建是否成功
          */
-        public static APIJSON<ContainerNoBatchListJSON> getContainerNoBatchList(String batchName, String operator, int page_size, int page_index) {
+        public static APIJSON<ContainerNoBatchListJSON> getContainerNoBatchList(String batchName, String operator, int pageSize, int pageIndex) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -208,8 +208,8 @@ public class RemoteAPI {
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("batch_name", batchName));
                 valuePairs.add(new BasicNameValuePair("creator", operator));
-                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(page_size)));
-                valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(page_index)));
+                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(pageSize)));
+                valuePairs.add(new BasicNameValuePair("page", String.valueOf(pageIndex)));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet method = new HttpGet(API_GET_CONTAINER_NO_BATCH_LIST + "?" + params);
                 Log.d(TAG, method.getURI().toString());
@@ -243,7 +243,6 @@ public class RemoteAPI {
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 assert user != null;
                 valuePairs.add(new BasicNameValuePair("userId", user.id));
-                valuePairs.add(new BasicNameValuePair("token", user.token));
                 valuePairs.add(new BasicNameValuePair("batch_id", batchId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, UTF_8));
                 HttpGet method = new HttpGet(API_GET_CONTAINER_NO_BATCH_NO_LIST + batchId + "?" + params);
@@ -312,6 +311,7 @@ public class RemoteAPI {
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(pageSize)));
                 valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(currentPage)));
+                valuePairs.add(new BasicNameValuePair("storage_id", CabinetCore.getCabinetInfo().id));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
                 HttpGet method = new HttpGet(url + "?" + params);
                 Log.d(TAG, method.getURI().toString());
@@ -447,14 +447,14 @@ public class RemoteAPI {
          * @param no 暂存编号
          * @return 暂存记录
          */
-        public static APIJSON<DepositRecordListJSON> getDeposit(String no, int page_size, int page_index) {
+        public static APIJSON<DepositRecordListJSON> getDeposit(String no, int pageSize, int pageIndex) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("storage_no", no));
-                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(page_size)));
-                valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(page_index)));
+                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(pageSize)));
+                valuePairs.add(new BasicNameValuePair("page", String.valueOf(pageIndex)));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
 
                 HttpGet method = new HttpGet(API_DEPOSIT_LIST + "?" + params);

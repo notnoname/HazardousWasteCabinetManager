@@ -59,6 +59,7 @@ package me.liuzs.cabinetmanager.model.modbus;
  * 7	探头故障
  */
 public class EnvironmentStatus {
+    public long id;
     public static final int VOCLowerAddress = 40513;
     public static final int VOCUpperAddress = 40518;
     public static final int FGLowerAddress = 40524;

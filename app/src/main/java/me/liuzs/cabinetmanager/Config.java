@@ -13,17 +13,13 @@ import java.util.List;
  * @author Liuzs
  */
 public class Config {
-    public static final String DEVICE_NAME_PRE = "Cabinet";
     public static final String DATABASE_NAME = "CabinetDatabase";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String EZ_APP_KEY = "15e1da4c183a470c89ebb68c3a26a349";
 
     public static final String SYSTEM_PREFERENCE_NAME = "SystemPreference";
     public static final String SYSPRE_Cabinet_User = "SYSPRE_Cabinet_User";
     public static final String SYSPRE_CABINET_INFO = "CABINET_INFO_FULL_VERSION_3";
-    public static final String UN_SUBMIT_DEPOSIT_INFO = "UN_SUBMIT_DEPOSIT_INFO";
-    public static final String UN_SUBMIT_USAGE_INFO = "UN_SUBMIT_USAGE_INFO";
-    public static final String UN_SUBMIT_TAKE_OUT_INFO = "UN_SUBMIT_TAKE_OUT_INFO";
     public static final String PRINTER_BLUETOOTH_INFO = "PRINTER_BLUETOOTH_INFO";
     public static final String SYSPRE_CAMERA_VERIFY_CODE = "SYSPRE_CAMERA_VERIFY_CODE";
     public static final String MODBUS_ADDRESS = "MODBUS_ADDRESS";
@@ -31,15 +27,16 @@ public class Config {
     public static final String ARC_APP_ID = "5UQUZXBwq4RknCfrk4zs7nBew3BQrNh7ZQH1ALQybdNR";
     public static final String ARC_SDK_KEY = "AzFyDx3GmvuvVWDSGZW9ZCe8uerNp1zoVcYfj45eXcNd";
 
-    //public static final String SUB_BOARD_CONFIG = "SUB_BOARD_CONFIG";
     public static final String TDA09C485_CONFIG = "TDA09C485_CONFIG";
     public static final String SCALES_DEVICE = "SCALES_DEVICE";
     //public static final int DEFAULT_SUB_BOARD_ADDRESS = 1;
     public static final int DEFAULT_TDA09C485_ADDRESS = 31;
+
     /**
      * IR预览数据相对于RGB预览数据的横向偏移量，注意：是预览数据，一般的摄像头的预览数据都是 width > height
      */
     public static final int HORIZONTAL_OFFSET = 0;
+
     /**
      * IR预览数据相对于RGB预览数据的纵向偏移量，注意：是预览数据，一般的摄像头的预览数据都是 width > height
      */

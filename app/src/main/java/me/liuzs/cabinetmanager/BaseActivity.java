@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -157,6 +158,26 @@ abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         executorService = Executors.newFixedThreadPool(1);
+    }
+
+    private void logOpt() {
+        TextView titleView = findViewById(R.id.toolbar_title);
+        if (titleView != null) {
+            String title = titleView.getText().toString();
+            if (!TextUtils.isEmpty(title) && !title.contains("登陆")) {
+                if(title.contains("设置")){
+                    CabinetCore.logOpt(CabinetCore.RoleType.Admin, "打开", title);
+                } else {
+                    CabinetCore.logOpt(CabinetCore.RoleType.Operator, "打开", title);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        logOpt();
     }
 
     @Override

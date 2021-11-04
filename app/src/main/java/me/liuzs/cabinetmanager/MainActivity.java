@@ -174,24 +174,31 @@ public class MainActivity extends BaseActivity {
                 addAlertStatusTextViewToContainer("无异常", R.drawable.background_state_green);
             } else {
                 if (statusOption.vocAlert) {
+                    CabinetCore.logAlert("VOC浓度高");
                     addAlertStatusTextViewToContainer("VOC浓度高", R.drawable.background_state_red);
                 }
                 if (statusOption.fgAlert) {
+                    CabinetCore.logAlert("可燃气体浓度高");
                     addAlertStatusTextViewToContainer("可燃气体浓度高", R.drawable.background_state_red);
                 }
                 if (statusOption.tempHighAlert) {
+                    CabinetCore.logAlert("VOC浓度高");
                     addAlertStatusTextViewToContainer("温度高", R.drawable.background_state_red);
                 }
                 if (statusOption.tempLowAlert) {
+                    CabinetCore.logAlert("温度低");
                     addAlertStatusTextViewToContainer("温度低", R.drawable.background_state_red);
                 }
                 if (statusOption.humidityHighAlert) {
+                    CabinetCore.logAlert("湿度高");
                     addAlertStatusTextViewToContainer("湿度高", R.drawable.background_state_red);
                 }
                 if (statusOption.humidityLowAlert) {
+                    CabinetCore.logAlert("湿度低");
                     addAlertStatusTextViewToContainer("湿度低", R.drawable.background_state_red);
                 }
                 if (statusOption.fireAlert) {
+                    CabinetCore.logAlert("火警");
                     addAlertStatusTextViewToContainer("火警", R.drawable.background_state_red);
                 }
             }
@@ -262,7 +269,6 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onControlPanelButtonClick(View view) {
-
         if (CabinetCore.isDebugState()) {
             Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
             startActivity(intent);

@@ -35,20 +35,20 @@ public class StandingBookListAdapter extends RecyclerView.Adapter<StandingBookIt
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void clear() {
+    public synchronized void clear() {
         mResultList.clear();
         notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setResult(List<DepositRecord> data) {
+    public synchronized void setResult(List<DepositRecord> data) {
         mResultList.clear();
         mResultList.addAll(data);
         notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void addResult(List<DepositRecord> data) {
+    public synchronized void addResult(List<DepositRecord> data) {
         mResultList.addAll(data);
         notifyDataSetChanged();
     }

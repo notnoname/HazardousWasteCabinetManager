@@ -60,6 +60,7 @@ public class SettingMainFragment extends Fragment implements View.OnClickListene
         if (mCabinetSetup.equals(v)) {
             CabinetBindActivity.start(getActivity(), CabinetCore.getCabinetInfo());
         } else if (mEquipmentManage.equals(v)) {
+            CabinetCore.logOpt(CabinetCore.RoleType.Admin, "打开", "设备管理");
             mActivity.transToEquipmentManageFragment();
         } else if (mAdmin.equals(v)) {
             new AlertDialog.Builder(mActivity).setMessage("注意：登陆成功后会切换管理员！").setNegativeButton("确认", (dialog, which) -> LoginActivity.start(mActivity, CabinetCore.RoleType.Admin)).setNeutralButton("取消", null).show();
@@ -76,10 +77,7 @@ public class SettingMainFragment extends Fragment implements View.OnClickListene
     private void reset() {
         CabinetCore.clearCabinetUser(CabinetCore.RoleType.Admin);
         CabinetCore.clearCabinetUser(CabinetCore.RoleType.Operator);
-        CabinetCore.removeUnSubmitDepositRecord(getActivity());
         CabinetCore.clearCabinetInfo();
-        CabinetCore.removeUnSubmitTakeOutInfo(getActivity());
-        CabinetCore.removeUnSubmitUsageInfo(getActivity());
         CabinetCore.removeConnectedPrinterInfo(getActivity());
         FaceServer.getInstance().clearAllFaces(getActivity());
         CabinetCore.restart();

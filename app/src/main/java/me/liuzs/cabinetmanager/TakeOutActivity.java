@@ -101,20 +101,6 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
         }
     }
 
-    public static Map<String, Boolean> createHarmfulIngredientMap(String harmfulIngredient) {
-        List<String> harmfulIngredientList = new LinkedList<>();
-        if (!TextUtils.isEmpty(harmfulIngredient)) {
-            String[] his = harmfulIngredient.split(",");
-            Collections.addAll(harmfulIngredientList, his);
-        }
-        Map<String, Boolean> result = new LinkedHashMap<>();
-        for (String hi : DefaultDict.HarmfulIngredient) {
-            boolean has = harmfulIngredientList.contains(hi);
-            result.put(hi, has);
-        }
-        return result;
-    }
-
     @Override
     void afterRequestPermission(int requestCode, boolean isAllGranted) {
 
@@ -168,8 +154,8 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
                 mOutWeightValue.setEnabled(false);
             } else {
                 mContainerNoValue.setEnabled(false);
-                mWeight.setEnabled(mDepositRecord.has_storage_rack);
-                mOutWeightValue.setEnabled(mDepositRecord.has_storage_rack);
+                mWeight.setEnabled(!mDepositRecord.has_output_weight);
+                mOutWeightValue.setEnabled(!mDepositRecord.has_output_weight);
             }
 
             mContainerSpecValue.setText(mDepositRecord.container_size != null ? mDepositRecord.container_size + "升" : null);
@@ -218,7 +204,9 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
     }
 
     public void onSubmitButtonClick(View view) {
-        if (validateDeposit()) {
+        if (mDepositRecord.has_output_weight) {
+            showToast("此暂存记录已经出柜！");
+        } else if (validateDeposit()) {
             showProgressDialog();
             getExecutorService().submit(() -> {
                 APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.takeOutDeposit(mDepositRecord);
@@ -306,6 +294,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
                             mDepositRecord.harmful_infos = record.harmful_infos;
                             mDepositRecord.storage_rack = record.storage_rack;
                             mDepositRecord.container_size = record.container_size;
+                            mDepositRecord.has_output_weight = !TextUtils.isEmpty(record.output_weight);
                             mDepositRecord.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
                             mDepositRecord.has_input_weight = !TextUtils.isEmpty(record.input_weight);
                         }
@@ -328,6 +317,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
             }
         });
     }
+
     private void reset() {
         mDepositRecord = new DepositRecord();
         mDepositRecord.storage_id = Objects.requireNonNull(CabinetCore.getCabinetInfo()).id;

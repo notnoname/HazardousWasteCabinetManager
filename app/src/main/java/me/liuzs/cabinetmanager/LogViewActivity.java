@@ -56,11 +56,6 @@ public class LogViewActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_view);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
-        Util.fullScreen(this);
-
         mScrollView = findViewById(R.id.sv);
         mLog = findViewById(R.id.tvLog);
         startShowInfo();
@@ -111,7 +106,6 @@ public class LogViewActivity extends BaseActivity {
                 "\n" +
                 mGson.toJson(value);
         mLog.setText(newInfo);
-//        mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
     }
 
     private class HardwareValueBroadcastReceiver extends BroadcastReceiver {

@@ -1,12 +1,14 @@
 package me.liuzs.cabinetmanager;
 
+import static me.liuzs.cabinetmanager.CabinetCore.RoleType.Admin;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.arcsoft.face.ActiveFileInfo;
@@ -15,9 +17,12 @@ import com.arcsoft.face.FaceEngine;
 import com.arcsoft.face.enums.RuntimeABI;
 import com.google.gson.Gson;
 
+import org.afinal.simplecache.ACache;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -29,10 +34,11 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import me.liuzs.cabinetmanager.db.CDatabase;
+import me.liuzs.cabinetmanager.model.AlertLog;
 import me.liuzs.cabinetmanager.model.Cabinet;
-import me.liuzs.cabinetmanager.model.DepositRecord;
-import me.liuzs.cabinetmanager.model.TakeOutInfo;
-import me.liuzs.cabinetmanager.model.UsageInfo;
+import me.liuzs.cabinetmanager.model.HardwareValue;
+import me.liuzs.cabinetmanager.model.OptLog;
 import me.liuzs.cabinetmanager.model.User;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
@@ -40,7 +46,8 @@ import me.liuzs.cabinetmanager.printer.PrinterBluetoothInfo;
 import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.util.Util;
 
-@SuppressLint("SimpleDateFormat")
+@SuppressLint({"SimpleDateFormat", "StaticFieldLeak"})
+@SuppressWarnings({"unused"})
 public class CabinetCore {
 
     public final static SimpleDateFormat _YearFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -55,9 +62,18 @@ public class CabinetCore {
             "yyyyMMddHHmmss");
     public final static Gson GSON = new Gson();
     private static final String TAG = "CabinetCore";
+    private final static ExecutorService executorService = Executors.newFixedThreadPool(1);
+    private static final String KEY_OPT_LOG_INDEX = "KEY_OPT_LOG_INDEX";
     private static Timer mAuthTimer;
-    @SuppressLint("StaticFieldLeak")
     private static Context mContext;
+    private static ACache _ACache;
+
+    public static void showToast(String text) {
+        if (mContext != null) {
+            Toast toast = Toast.makeText(mContext, text, Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
 
     /**
      * 启动系统各项配置的校验，从ARC库开始。
@@ -65,7 +81,7 @@ public class CabinetCore {
     public static void startValidateSystem() {
 //检查是人像识别库是否全
         if (!Config.isLibraryExists(mContext)) {
-//            showToast(mContext.getString(R.string.library_not_found));
+            showToast(mContext.getString(R.string.library_not_found));
             return;
         }
         validateARCActive(new CabinetCore.CheckARCActiveListener() {
@@ -182,7 +198,10 @@ public class CabinetCore {
         editor.apply();
     }
 
-    public static void saveCabinetUser(User user, RoleType type) {
+    public static void saveCabinetUser(User user, RoleType type, boolean log) {
+        if(log) {
+            CabinetCore.logOpt(type, "登陆" + (type == Admin ? "(管理员)":"(操作员)") , "系统");
+        }
         SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(Config.SYSPRE_Cabinet_User + type, GSON.toJson(user));
@@ -214,6 +233,11 @@ public class CabinetCore {
 
     public static void init(CabinetApplication application) {
         mContext = application;
+        _ACache = ACache.get(mContext);
+    }
+
+    public static ACache getACache() {
+        return _ACache;
     }
 
     public synchronized static String getCameraVerifyCode(Context context, String sn, int channel) {
@@ -227,82 +251,6 @@ public class CabinetCore {
         editor.putString(Config.SYSPRE_CAMERA_VERIFY_CODE + sn + channel, code == null ? "" : code);
         editor.apply();
     }
-
-    public static DepositRecord getUnSubmitDepositRecord(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String info = sp.getString(Config.UN_SUBMIT_DEPOSIT_INFO, null);
-        if (info != null) {
-            return GSON.fromJson(info, DepositRecord.class);
-        } else {
-            return null;
-        }
-    }
-
-    public static UsageInfo getUnSubmitUsageInfo(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String info = sp.getString(Config.UN_SUBMIT_USAGE_INFO, null);
-        if (info != null) {
-            return GSON.fromJson(info, UsageInfo.class);
-        } else {
-            return null;
-        }
-    }
-
-    public static TakeOutInfo getUnSubmitTakeOutInfo(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String info = sp.getString(Config.UN_SUBMIT_TAKE_OUT_INFO, null);
-        if (info != null) {
-            return GSON.fromJson(info, TakeOutInfo.class);
-        } else {
-            return null;
-        }
-    }
-
-    public static void saveUnSubmitDepositRecord(Context context, DepositRecord record) {
-        String json = GSON.toJson(record);
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(Config.UN_SUBMIT_DEPOSIT_INFO, json);
-        editor.apply();
-    }
-
-    public static void saveUnSubmitTakeOutInfo(Context context, TakeOutInfo info) {
-        String json = GSON.toJson(info);
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(Config.UN_SUBMIT_TAKE_OUT_INFO, json);
-        editor.apply();
-    }
-
-    public static void saveUnSubmitUsageInfo(Context context, UsageInfo info) {
-        String json = GSON.toJson(info);
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(Config.UN_SUBMIT_USAGE_INFO, json);
-        editor.apply();
-    }
-
-    public static void removeUnSubmitDepositRecord(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(Config.UN_SUBMIT_DEPOSIT_INFO);
-        editor.apply();
-    }
-
-    public static void removeUnSubmitUsageInfo(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(Config.UN_SUBMIT_USAGE_INFO);
-        editor.apply();
-    }
-
-    public static void removeUnSubmitTakeOutInfo(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(Config.UN_SUBMIT_TAKE_OUT_INFO);
-        editor.apply();
-    }
-
 
     public static void saveConnectedPrinterInfo(Context context, PrinterBluetoothInfo info) {
         String json = GSON.toJson(info);
@@ -343,9 +291,9 @@ public class CabinetCore {
      * 检查管理员登录信息
      */
     public static void validateAdminUserInfo() {
-        User user = CabinetCore.getCabinetUser(RoleType.Admin);
+        User user = CabinetCore.getCabinetUser(Admin);
         if (user == null) {
-            LoginActivity.start(mContext, RoleType.Admin);
+            LoginActivity.start(mContext, Admin);
         } else {
             validateCabinetInfo();
         }
@@ -402,30 +350,18 @@ public class CabinetCore {
         }).start();
     }
 
-    public enum RoleType {
-        Admin, Operator
-    }
-
-    interface CheckARCActiveListener {
-        void onCheckARCActiveFailure(String info, int code);
-
-        void onCheckARCActiveSuccess();
-    }
-
-    private final static ExecutorService executorService = Executors.newFixedThreadPool(1);
-
     private static void loginValidate() {
         executorService.submit(() -> {
-            User user = getCabinetUser(RoleType.Admin);
+            User user = getCabinetUser(Admin);
             if (user != null) {
                 APIJSON<User> userAPIJSON = RemoteAPI.System.login(user.username, user.password);
                 if (userAPIJSON.status == APIJSON.Status.ok && userAPIJSON.data != null) {
                     userAPIJSON.data.password = user.password;
-                    saveCabinetUser(userAPIJSON.data, RoleType.Admin);
+                    saveCabinetUser(userAPIJSON.data, Admin, false);
                 } else if (userAPIJSON.status == APIJSON.Status.error) {
-                    clearCabinetUser(RoleType.Admin);
+                    clearCabinetUser(Admin);
                     clearCabinetUser(RoleType.Operator);
-                    LoginActivity.start(mContext, RoleType.Admin);
+                    LoginActivity.start(mContext, Admin);
                 }
             }
             user = getCabinetUser(RoleType.Operator);
@@ -433,7 +369,7 @@ public class CabinetCore {
                 APIJSON<User> userAPIJSON = RemoteAPI.System.login(user.username, user.password);
                 if (userAPIJSON.status == APIJSON.Status.ok && userAPIJSON.data != null) {
                     userAPIJSON.data.password = user.password;
-                    saveCabinetUser(userAPIJSON.data, RoleType.Operator);
+                    saveCabinetUser(userAPIJSON.data, RoleType.Operator, false);
                 } else if (userAPIJSON.status == APIJSON.Status.error) {
                     clearCabinetUser(RoleType.Operator);
                     LoginActivity.start(mContext, RoleType.Operator);
@@ -443,15 +379,40 @@ public class CabinetCore {
     }
 
     public static boolean isDebugState() {
-        if (BuildConfig.DEBUG || TextUtils.equals(BuildConfig.BUILD_TYPE, "test")) {
-            return true;
-        } else {
-            return false;
-        }
+        return BuildConfig.DEBUG || TextUtils.equals(BuildConfig.BUILD_TYPE, "test");
     }
 
-    public static void log(String who, String obj, String opt, String time) {
-        
+    public static void logOpt(RoleType roleType, @NotNull String opt, @NotNull String obj) {
+        User user = getCabinetUser(roleType);
+        String userName = user != null ? user.name : "Unknown User";
+        String time = _SecondFormatter.format(new Date(System.currentTimeMillis()));
+        OptLog optLog = new OptLog(userName, obj, opt, time);
+        CDatabase.getInstance().addOptLog(optLog);
+    }
+
+    public static void logAlert(String alertEvent) {
+        AlertLog alertLog = new AlertLog();
+        alertLog.alert = alertEvent;
+        alertLog.time = _SecondFormatter.format(new Date(System.currentTimeMillis()));
+        CDatabase.getInstance().addAlertLog(alertLog);
+    }
+
+    public static void saveHardwareValue(@NotNull HardwareValue hardwareValue) {
+        CDatabase.getInstance().addHardwareValue(hardwareValue);
+    }
+
+    public synchronized static void listLogOpt() {
+
+    }
+
+    public enum RoleType {
+        Admin, Operator
+    }
+
+    interface CheckARCActiveListener {
+        void onCheckARCActiveFailure(String info, int code);
+
+        void onCheckARCActiveSuccess();
     }
 
 }

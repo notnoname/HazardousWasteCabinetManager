@@ -202,17 +202,14 @@ public class EquipmentManageFragment extends Fragment implements CompoundButton.
                 showValue();
                 mActivity.getExecutorService().submit(() -> {
                     final boolean result = ModbusService.saveSetupValue(mValue);
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showValue();
-                            if(result) {
-                                mActivity.showToast("设置保存成功!");
-                            } else {
-                                mActivity.showToast("设置保存失败!");
-                            }
-                            mSave.setEnabled(true);
+                    mActivity.runOnUiThread(() -> {
+                        showValue();
+                        if(result) {
+                            mActivity.showToast("设置保存成功!");
+                        } else {
+                            mActivity.showToast("设置保存失败!");
                         }
+                        mSave.setEnabled(true);
                     });
                 });
 

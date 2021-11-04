@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import com.kyleduo.switchbutton.SwitchButton;
@@ -150,10 +151,11 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
             if (mAirConditionerStatus.e != null || mStatusOption.e != null) {
-                showToast("设备信息读取失败，请立即检查设备！");
-                mHandler.postDelayed(this::finish, 1000);
+                mHandler.post(() -> new AlertDialog.Builder(ControlPanelActivity.this).setMessage("设备信息读取失败，请立即检查设备！").setNegativeButton("确认", (dialog, which) ->
+                        finish()).show());
+            } else {
+                mHandler.post(this::showStatusOption);
             }
-            showStatusOption();
         });
     }
 
