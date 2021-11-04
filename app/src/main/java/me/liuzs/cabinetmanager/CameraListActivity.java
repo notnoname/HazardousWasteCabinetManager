@@ -22,14 +22,13 @@ import me.liuzs.cabinetmanager.model.SurveillanceCamera;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.ui.cameralist.CameraListAdapter;
-import me.liuzs.cabinetmanager.util.Util;
 
 /**
  * 子板环境信息
  */
 public class CameraListActivity extends BaseActivity {
 
-    public static final String TAG = "LockerManageActivity";
+    public static final String TAG = "CameraListActivity";
     private final CameraListAdapter mAdapter = new CameraListAdapter(this);
     private final List<SurveillanceCamera> mCamera = new LinkedList<>();
     private RecyclerView mRecyclerView;
@@ -42,7 +41,6 @@ public class CameraListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_list);
-        Util.fullScreen(this);
 
         mRecyclerView = findViewById(R.id.rvRecord);
         mRecyclerView.setAdapter(mAdapter);
@@ -81,25 +79,27 @@ public class CameraListActivity extends BaseActivity {
         protected APIJSON<List<SurveillanceCamera>> doInBackground(String... strings) {
             APIJSON<List<SurveillanceCamera>> result = RemoteAPI.System.getCameraList(strings[0]);
             EZOpenSDK sdk = EZOpenSDK.getInstance();
-            for (SurveillanceCamera camera : result.data) {
-                try {
-                    String fakeUrl = camera.url.replace("ezopen", "http");
+            if(result.data != null) {
+                for (SurveillanceCamera camera : result.data) {
+                    try {
+                        String fakeUrl = camera.url.replace("ezopen", "http");
 
-                    URL url = new URL(fakeUrl);
-                    String path = url.getPath();
-                    String[] paths = path.split("/");
-                    Log.d("VideoPlayer", path);
-                    for (String p : paths) {
-                        Log.d("VideoPlayer", p);
+                        URL url = new URL(fakeUrl);
+                        String path = url.getPath();
+                        String[] paths = path.split("/");
+                        Log.d("VideoPlayer", path);
+                        for (String p : paths) {
+                            Log.d("VideoPlayer", p);
+                        }
+                        camera.serialNo = paths[1];
+                        camera.channelNo = Integer.parseInt(paths[2].substring(0, paths[2].indexOf('.')));
+                        Log.d("VideoPlayer", camera.serialNo + ":" + camera.channelNo);
+                        EZDeviceInfo info = sdk.getDeviceInfo(camera.serialNo);
+                        sdk.setAccessToken(camera.accessToken);
+                        camera.status = info.getStatus();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    camera.serialNo = paths[1];
-                    camera.channelNo = Integer.parseInt(paths[2].substring(0, paths[2].indexOf('.')));
-                    Log.d("VideoPlayer", camera.serialNo + ":" + camera.channelNo);
-                    EZDeviceInfo info = sdk.getDeviceInfo(camera.serialNo);
-                    sdk.setAccessToken(camera.accessToken);
-                    camera.status = info.getStatus();
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
             return result;
@@ -116,7 +116,9 @@ public class CameraListActivity extends BaseActivity {
         protected void onPostExecute(APIJSON<List<SurveillanceCamera>> json) {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
-            mActivity.get().mAdapter.setResult(json.data);
+            if(json.data != null) {
+                mActivity.get().mAdapter.setResult(json.data);
+            }
         }
     }
 }

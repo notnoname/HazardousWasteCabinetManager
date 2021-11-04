@@ -21,11 +21,9 @@ import me.liuzs.cabinetmanager.model.DepositRecord;
 public class StandingBookListAdapter extends RecyclerView.Adapter<StandingBookItemViewHolder> {
 
     private final List<DepositRecord> mResultList = new LinkedList<>();
-    private StandingBookActivity mActivity;
 
-    public StandingBookListAdapter(StandingBookActivity activity) {
+    public StandingBookListAdapter() {
         super();
-        mActivity = activity;
     }
 
     @NonNull

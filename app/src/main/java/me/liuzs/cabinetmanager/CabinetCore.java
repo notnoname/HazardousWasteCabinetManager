@@ -450,4 +450,8 @@ public class CabinetCore {
         }
     }
 
+    public static void log(String who, String obj, String opt, String time) {
+        
+    }
+
 }

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpEntity;
@@ -16,7 +15,6 @@ import cz.msebera.android.httpclient.HttpHeaders;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
-import cz.msebera.android.httpclient.client.methods.HttpDelete;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.client.methods.HttpPut;
@@ -30,14 +28,9 @@ import cz.msebera.android.httpclient.util.TextUtils;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.StandingBookActivity;
 import me.liuzs.cabinetmanager.model.Agency;
-import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
 import me.liuzs.cabinetmanager.model.DepositRecord;
-import me.liuzs.cabinetmanager.model.DictType;
-import me.liuzs.cabinetmanager.model.InventoryDetail;
-import me.liuzs.cabinetmanager.model.InventoryItem;
-import me.liuzs.cabinetmanager.model.StandingBookItem;
 import me.liuzs.cabinetmanager.model.SurveillanceCamera;
 import me.liuzs.cabinetmanager.model.User;
 
@@ -53,9 +46,6 @@ public class RemoteAPI {
      * HTTP接口Root地址
      */
     public static final String API_ROOT = "http://47.104.235.225:8090";
-    //http://47.104.235.225:1080/collage
-    //http://idburgsafe.com:1080/collage_pro
-    private static final Random _Random = new Random();
 
     private static void generalOptBaseHeader(HttpRequestBase httpRequest) {
         Header accept = new BasicHeader(HttpHeaders.ACCEPT, "application/json");
@@ -100,22 +90,6 @@ public class RemoteAPI {
          * 搜索化学品信息
          */
         public static final String API_SEARCH_CHEMICAL = API_ROOT + "/drug/v1/chemicalInfo/chemicalInfoPageList";
-        /**
-         * 获取单位字典
-         */
-        public static final String API_GET_UNIT_DICT_CODE = API_ROOT + "/drug/v1/sysDict/dictCode/unitTypes?dictCode=unitTypes";
-        /**
-         * 获取纯度字典
-         */
-        public static final String API_GET_PURITY_DICT_CODE = API_ROOT + "/drug/v1/sysDict/dictCode/purityTypes?dictCode=purityTypes";
-        /**
-         * 获取计量规格字典
-         */
-        public static final String API_GET_MEASURE_SPEC_DICT_CODE = API_ROOT + "/drug/v1/sysDict/dictCode/measureSpec?dictCode=measureSpec";
-        /**
-         * 获取化学品用途字典
-         */
-        public static final String API_GET_PURPOSE_Types_DICT_CODE = API_ROOT + "/drug/v1/sysDict/dictCode/purposeLTypes?dictCode=purposeLTypes";
 
         /**
          * 化学品查询
@@ -164,173 +138,6 @@ public class RemoteAPI {
             }
         }
 
-        /**
-         * 获取单位字典
-         *
-         * @return 返回单位字典
-         */
-        public static APIJSON<List<DictType>> getUnitDictCode() {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpGet httpGet = new HttpGet(API_GET_UNIT_DICT_CODE);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<DictType>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<DictType>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<DictType>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 获取纯度字典
-         *
-         * @return 返回纯度字典
-         */
-        public static APIJSON<List<DictType>> getPurityDictCode() {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpGet httpGet = new HttpGet(API_GET_PURITY_DICT_CODE);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<DictType>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<DictType>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<DictType>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 获取计量规格字典
-         *
-         * @return 返回计量规格字典
-         */
-        public static APIJSON<List<DictType>> getMeasureSpecDictCode() {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpGet httpGet = new HttpGet(API_GET_MEASURE_SPEC_DICT_CODE);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<DictType>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<DictType>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<DictType>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
-            }
-        }
-
-        /**
-         * 获取用途字典
-         *
-         * @return 返回用户字典
-         */
-        public static APIJSON<List<DictType>> getPurposeDictCode() {
-
-            try {
-                CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpGet httpGet = new HttpGet(API_GET_PURPOSE_Types_DICT_CODE);
-                Log.d(TAG, httpGet.getURI().toString());
-                generalOptBaseHeader(httpGet);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                int code = httpResponse.getStatusLine().getStatusCode();
-                if (code == 200) {
-                    HttpEntity entity = httpResponse.getEntity();
-                    String content = EntityUtils.toString(entity, "utf-8");
-                    Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<DictType>>>() {
-                    }.getType();
-                    return CabinetCore.GSON.fromJson(content, jsonType);
-                } else {
-                    try {
-                        HttpEntity entity = httpResponse.getEntity();
-                        String content = EntityUtils.toString(entity, "utf-8");
-                        Log.d(TAG, content);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    APIJSON<List<DictType>> result = new APIJSON<>();
-                    result.status = APIJSON.Status.error;
-                    result.error = "服务器返回错误";
-                    return result;
-                }
-            } catch (IOException e) {
-                APIJSON<List<DictType>> result = new APIJSON<>();
-                result.status = APIJSON.Status.other;
-                result.error = "网络请求异常";
-                return result;
-            }
-        }
     }
 
     /**
@@ -434,6 +241,7 @@ public class RemoteAPI {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
 
                 List<NameValuePair> valuePairs = new ArrayList<>();
+                assert user != null;
                 valuePairs.add(new BasicNameValuePair("userId", user.id));
                 valuePairs.add(new BasicNameValuePair("token", user.token));
                 valuePairs.add(new BasicNameValuePair("batch_id", batchId));
@@ -530,14 +338,9 @@ public class RemoteAPI {
     }
 
     /**
-     * 初次存入模块，相关接口
+     * 出入柜模块
      */
     public static class Deposit {
-
-        /**
-         * 保存入柜信息
-         */
-        public static final String API_SAVE_DEPOSIT = API_ROOT + "/drug/v1/putLabInfo/savePutLabInfo";
 
         /**
          * 提交入柜信息
@@ -608,8 +411,8 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("storage_record[input_weight]", depositRecord.input_weight));
                 if (!TextUtils.isEmpty(depositRecord.harmful_infos)) {
                     String[] hi = depositRecord.harmful_infos.split(",");
-                    for (int i = 0; i < hi.length; i++) {
-                        valuePairs.add(new BasicNameValuePair("storage_record[harmful_info][]", hi[i]));
+                    for (String s : hi) {
+                        valuePairs.add(new BasicNameValuePair("storage_record[harmful_info][]", s));
                     }
                 }
                 valuePairs.add(new BasicNameValuePair("storage_record[remark]", depositRecord.remark));

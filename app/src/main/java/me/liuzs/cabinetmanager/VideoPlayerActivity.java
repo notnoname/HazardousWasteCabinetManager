@@ -28,7 +28,6 @@ import me.liuzs.cabinetmanager.util.Util;
 
 public class VideoPlayerActivity extends BaseActivity {
 
-    private static Gson _Gson = new Gson();
     private TextureView mVideoView;
     private SurveillanceCamera mCamera;
     private EZPlayer mPlayer;
@@ -87,7 +86,7 @@ public class VideoPlayerActivity extends BaseActivity {
 
     public static void start(SurveillanceCamera camera, Context context) {
         Intent intent = new Intent(context, VideoPlayerActivity.class);
-        intent.putExtra("CameraParam", _Gson.toJson(camera));
+        intent.putExtra("CameraParam", CabinetCore.GSON.toJson(camera));
         context.startActivity(intent);
     }
 
@@ -98,10 +97,8 @@ public class VideoPlayerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_player);
-        Util.fullScreen(this);
-        mCamera = _Gson.fromJson(getIntent().getStringExtra("CameraParam"), SurveillanceCamera.class);
+        mCamera = CabinetCore.GSON.fromJson(getIntent().getStringExtra("CameraParam"), SurveillanceCamera.class);
         ((TextView)findViewById(R.id.toolbar_title)).setText(mCamera.videoName);
         EZOpenSDK sdk = EZOpenSDK.getInstance();
         sdk.setAccessToken(mCamera.accessToken);

@@ -2,7 +2,6 @@ package me.liuzs.cabinetmanager;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -270,12 +269,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 new AlertDialog.Builder(DepositActivity.this).setMessage("获取实验列表失败，是否切换为离线模式？").setNegativeButton("确认", (dialog, which) -> {
                     mOfflineModel.setChecked(true);
                     showDepositRecord();
-                }).setNeutralButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                }).show();
+                }).setNeutralButton("取消", (dialogInterface, i) -> finish()).show();
             }
         });
     }

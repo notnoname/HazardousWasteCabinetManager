@@ -20,7 +20,7 @@ import me.liuzs.cabinetmanager.ui.standingbook.StandingBookListAdapter;
 public class StandingBookActivity extends BaseActivity {
 
     public static final String TAG = "StandingBookActivity";
-    private final StandingBookListAdapter mAdapter = new StandingBookListAdapter(this);
+    private final StandingBookListAdapter mAdapter = new StandingBookListAdapter();
     private DetailType mDetailType = DetailType.Inventories;
     private int mCurrentPage = 1, mTotalPage = 0;
     private static final int _PageSize = 20;
