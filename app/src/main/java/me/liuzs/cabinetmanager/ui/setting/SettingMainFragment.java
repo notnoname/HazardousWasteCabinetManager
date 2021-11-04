@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import me.liuzs.cabinetmanager.CabinetBindActivity;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.HardwareSetupActiveActivity;
+import me.liuzs.cabinetmanager.LoginActivity;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SystemSettingActivity;
 import me.liuzs.cabinetmanager.faceid.FaceServer;
@@ -21,7 +22,7 @@ import me.liuzs.cabinetmanager.faceid.FaceServer;
 
 public class SettingMainFragment extends Fragment implements View.OnClickListener {
 
-    private AppCompatButton mCabinetSetup, mEquipmentManage, mEquipmentLog, mHardwareSetup, mReset;
+    private AppCompatButton mCabinetSetup, mEquipmentManage, mHardwareSetup, mReset, mAdmin, mOperator;
 
     private SystemSettingActivity mActivity;
 
@@ -40,12 +41,14 @@ public class SettingMainFragment extends Fragment implements View.OnClickListene
         View rootView = inflater.inflate(R.layout.fragment_setting_main, container, false);
         mCabinetSetup = rootView.findViewById(R.id.btnCabinetSet);
         mEquipmentManage = rootView.findViewById(R.id.btnHardwareManage);
-        mEquipmentLog = rootView.findViewById(R.id.btnLog);
+        mAdmin = rootView.findViewById(R.id.btnAdminLogin);
+        mOperator = rootView.findViewById(R.id.btnOperatorLogin);
         mHardwareSetup = rootView.findViewById(R.id.btnHardwareSetup);
         mReset = rootView.findViewById(R.id.btnFCReset);
         mCabinetSetup.setOnClickListener(this);
         mEquipmentManage.setOnClickListener(this);
-        mEquipmentLog.setOnClickListener(this);
+        mAdmin.setOnClickListener(this);
+        mOperator.setOnClickListener(this);
         mHardwareSetup.setOnClickListener(this);
         mReset.setOnClickListener(this);
         mActivity = (SystemSettingActivity) getActivity();
@@ -58,8 +61,10 @@ public class SettingMainFragment extends Fragment implements View.OnClickListene
             CabinetBindActivity.start(getActivity(), CabinetCore.getCabinetInfo());
         } else if (mEquipmentManage.equals(v)) {
             mActivity.transToEquipmentManageFragment();
-        } else if (mEquipmentLog.equals(v)) {
-//TODO
+        } else if (mAdmin.equals(v)) {
+            new AlertDialog.Builder(mActivity).setMessage("注意：登陆成功后会切换管理员！").setNegativeButton("确认", (dialog, which) -> LoginActivity.start(mActivity, CabinetCore.RoleType.Admin)).setNeutralButton("取消", null).show();
+        } else if (mOperator.equals(v)) {
+            new AlertDialog.Builder(mActivity).setMessage("注意：登陆成功后会切换操作员！").setNegativeButton("确认", (dialog, which) -> LoginActivity.start(mActivity, CabinetCore.RoleType.Operator)).setNeutralButton("取消", null).show();
         } else if (mHardwareSetup.equals(v)) {
             Intent intent = new Intent(mActivity, HardwareSetupActiveActivity.class);
             mActivity.startActivity(intent);

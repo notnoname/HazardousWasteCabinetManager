@@ -1,6 +1,5 @@
 package me.liuzs.cabinetmanager.ui;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -70,8 +69,6 @@ public class NewProgressDialog extends AlertDialog {
             message.setText(messageText);
         }
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        //setCanceledOnTouchOutside(false);
-        //setCancelable(false);
     }
 
     public void setCancelOnClickListener(View.OnClickListener onClickListener) {
@@ -106,12 +103,7 @@ public class NewProgressDialog extends AlertDialog {
     public void show() {
         super.show();
         if (progressBar instanceof HeartProgressView) {
-            progressBar.post(new Runnable() {
-                @Override
-                public void run() {
-                    ((HeartProgressView) progressBar).start();
-                }
-            });
+            progressBar.post(() -> ((HeartProgressView) progressBar).start());
         }
     }
 }

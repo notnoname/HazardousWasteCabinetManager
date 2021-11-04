@@ -50,6 +50,10 @@ public class LoginActivity extends BaseActivity {
         CabinetCore.restart();
     }
 
+    public void onBackButtonClick(View view) {
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,15 +64,23 @@ public class LoginActivity extends BaseActivity {
         mTitleView = findViewById(R.id.toolbar_title);
         mLabelAccountID = findViewById(R.id.tvAccountIDLabel);
         mType = (CabinetCore.RoleType) getIntent().getSerializableExtra(KEY_AUTH_TYPE);
+        User user = null;
+        Cabinet cabinet = CabinetCore.getCabinetInfo();
         switch (mType) {
             case Admin:
                 mTitleView.setText(R.string.title_login_admin);
                 mLabelAccountID.setText(R.string.admin_id);
+                user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Admin);
                 break;
             case Operator:
                 mTitleView.setText(R.string.title_login_operator);
                 mLabelAccountID.setText(R.string.operator_id);
+                user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
                 break;
+        }
+        //切换用户时候显示返回按钮
+        if (user != null && cabinet != null) {
+            findViewById(R.id.toolbar_back).setVisibility(View.VISIBLE);
         }
     }
 
@@ -109,15 +121,20 @@ public class LoginActivity extends BaseActivity {
             if (userJSON.status == APIJSON.Status.ok) {
                 User user = userJSON.data;
                 user.password = password;
-                if (mType == CabinetCore.RoleType.Operator && !isHaveOptRight(user, CabinetCore.getCabinetInfo())) {
+                Cabinet cabinet = CabinetCore.getCabinetInfo();
+                if (mType == CabinetCore.RoleType.Operator && !isHaveOptRight(user, cabinet)) {
                     showToast("此用户无此暂存柜操作权限，请重新登录");
                 } else {
-                    showToast("用户鉴权成功，将进行人像识别");
-                    mUser = user;
-                    if (CabinetCore.isDebugState()) {
-                        onFaceIDRegisterSuccess();
+                    if (mType == CabinetCore.RoleType.Admin && cabinet != null && !isHaveAdminRight(user, CabinetCore.getCabinetInfo())) {
+                        showToast("此用户无此暂存柜管理权限，请重新登录");
                     } else {
-                        startFaceIdRegister(user.username);
+                        showToast("用户鉴权成功，将进行人像识别");
+                        mUser = user;
+                        if (CabinetCore.isDebugState()) {
+                            onFaceIDRegisterSuccess();
+                        } else {
+                            startFaceIdRegister(user.username);
+                        }
                     }
                 }
             } else {
@@ -133,6 +150,18 @@ public class LoginActivity extends BaseActivity {
             return false;
         }
         for (String id : user.opt_storages) {
+            if (cabinet.id.equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isHaveAdminRight(User user, Cabinet cabinet) {
+        if (user == null || user.own_storages == null || user.own_storages.length == 0 || cabinet == null) {
+            return false;
+        }
+        for (String id : user.own_storages) {
             if (cabinet.id.equals(id)) {
                 return true;
             }
