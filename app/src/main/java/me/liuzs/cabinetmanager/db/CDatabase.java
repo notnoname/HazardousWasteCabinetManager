@@ -22,7 +22,6 @@ import me.liuzs.cabinetmanager.model.AlertLog;
 import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.OptLog;
-import me.liuzs.cabinetmanager.model.modbus.EnvironmentStatus;
 
 public class CDatabase {
     public static final String TAG = "CabinetDatabase";
@@ -36,20 +35,28 @@ public class CDatabase {
 
     private final static CDatabase INSTANCE = new CDatabase();
 
-    private final CabinetSQLiteHelper mHelper;
+    private final CabinetSQLiteHelper mDefaultHelper;
 
     private final Gson mGson = new Gson();
 
     private CDatabase() {
-        mHelper = new CabinetSQLiteHelper();
+        mDefaultHelper = new CabinetSQLiteHelper();
+    }
+
+    public void close() {
+        try {
+            mDefaultHelper.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static CDatabase getInstance() {
         return INSTANCE;
     }
 
-    public synchronized List<DepositRecord> getDepositRecordList(Filter filter) {
-        LinkedHashMap<Long, String> strList = getDataList(Offline, filter);
+    public synchronized List<DepositRecord> getDepositRecordList(Filter filter, boolean orderByDESC, int pageSize, int offSet) {
+        LinkedHashMap<Long, String> strList = getDataList(Offline, filter, orderByDESC, pageSize, offSet);
         List<DepositRecord> result = new LinkedList<>();
         for (Map.Entry<Long, String> entry : strList.entrySet()) {
             DepositRecord depositRecord = mGson.fromJson(entry.getValue(), DepositRecord.class);
@@ -59,8 +66,8 @@ public class CDatabase {
         return result;
     }
 
-    public synchronized List<OptLog> getOptLogList(Filter filter) {
-        LinkedHashMap<Long, String> strList = getDataList(Log, filter);
+    public synchronized List<OptLog> getOptLogList(Filter filter, boolean orderByDESC, int pageSize, int offSet) {
+        LinkedHashMap<Long, String> strList = getDataList(Log, filter, orderByDESC, pageSize, offSet);
         List<OptLog> result = new LinkedList<>();
         for (Map.Entry<Long, String> entry : strList.entrySet()) {
             OptLog optLog = mGson.fromJson(entry.getValue(), OptLog.class);
@@ -70,8 +77,8 @@ public class CDatabase {
         return result;
     }
 
-    public synchronized List<HardwareValue> getHardwareValueList(Filter filter) {
-        LinkedHashMap<Long, String> strList = getDataList(HardwareValue, filter);
+    public synchronized List<HardwareValue> getHardwareValueList(Filter filter, boolean orderByDESC, int pageSize, int offSet) {
+        LinkedHashMap<Long, String> strList = getDataList(HardwareValue, filter, orderByDESC, pageSize, offSet);
         List<HardwareValue> result = new LinkedList<>();
         for (Map.Entry<Long, String> entry : strList.entrySet()) {
             HardwareValue env = mGson.fromJson(entry.getValue(), HardwareValue.class);
@@ -81,8 +88,8 @@ public class CDatabase {
         return result;
     }
 
-    public synchronized List<AlertLog> getAlertLogList(Filter filter) {
-        LinkedHashMap<Long, String> strList = getDataList(Alert, filter);
+    public synchronized List<AlertLog> getAlertLogList(Filter filter, boolean orderByDESC, int pageSize, int offSet) {
+        LinkedHashMap<Long, String> strList = getDataList(Alert, filter, orderByDESC, pageSize, offSet);
         List<AlertLog> result = new LinkedList<>();
         for (Map.Entry<Long, String> entry : strList.entrySet()) {
             AlertLog env = mGson.fromJson(entry.getValue(), AlertLog.class);
@@ -109,7 +116,7 @@ public class CDatabase {
     }
 
     private long addData(Table table, String data) {
-        try (SQLiteDatabase database = mHelper.getReadableDatabase()) {
+        try (SQLiteDatabase database = mDefaultHelper.getWritableDatabase()) {
             String tableName = null;
             switch (table) {
                 case Log:
@@ -129,16 +136,15 @@ public class CDatabase {
             values.put(COLUMN_VALUE, data);
             values.put(COLUMN_IS_SENT, "0");
             return database.insert(tableName, null, values);
-
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
         }
     }
 
-    private LinkedHashMap<Long, String> getDataList(Table table, Filter filter) {
+    private LinkedHashMap<Long, String> getDataList(Table table, Filter filter, boolean orderByDESC, int pageSize, int offSet) {
         LinkedHashMap<Long, String> result = new LinkedHashMap<>();
-        try (SQLiteDatabase database = mHelper.getReadableDatabase()) {
+        try (SQLiteDatabase database = mDefaultHelper.getReadableDatabase()) {
             String[] columns = new String[]{COLUMN_ID, COLUMN_VALUE};
             String selection = null;
             String[] selectArgs = null;
@@ -172,9 +178,12 @@ public class CDatabase {
                     break;
             }
             try (Cursor cursor = database.query(tableName, columns, selection,
-                    selectArgs, null, null, COLUMN_ID)) {
+                    selectArgs, null, null, COLUMN_ID + (orderByDESC ? " DESC" : " ASC"), offSet + "," + pageSize)) {
                 while (cursor != null && cursor.moveToNext()) {
                     result.put(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)), cursor.getString(cursor.getColumnIndex(COLUMN_VALUE)));
+                }
+                if (cursor != null) {
+                    cursor.close();
                 }
             }
         } catch (Exception e) {

@@ -40,16 +40,7 @@ public class FrequencyConverterStatus {
     public static final int FCResetAddress = 40558;
 
     public enum Status {
-        Clockwise(1), Counterclockwise(2), Stop(3), Fault(4), PowerOff(5);
-        private final int id;
-
-        Status(int id) {
-            this.id = id;
-        }
-
-        public int getValue() {
-            return id;
-        }
+        UnKnown, Clockwise, Counterclockwise, Stop, Fault, PowerOff;
     }
 
     public Status status = Status.PowerOff;

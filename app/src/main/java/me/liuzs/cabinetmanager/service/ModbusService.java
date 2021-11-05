@@ -154,10 +154,9 @@ public class ModbusService {
             frequencyConverterStatus.targetFrequency = getIntValue(results, 3) / 100f;
 
         } catch (Exception e) {
+            e.printStackTrace();
             frequencyConverterStatus.e = e;
         }
-
-        Log.d(TAG, CabinetCore.GSON.toJson(frequencyConverterStatus));
         return frequencyConverterStatus;
     }
 
@@ -191,6 +190,7 @@ public class ModbusService {
             statusOption.fanWorkModel = StatusOption.FanWorkModel.values()[readHoldingRegister(StatusOption.UnionWorkModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED).intValue()];
 
         } catch (Exception e) {
+            e.printStackTrace();
             statusOption.e = e;
         }
 
@@ -229,10 +229,9 @@ public class ModbusService {
             environmentStatus.humidityA = getIntValue(results, 6) / 10f;
             environmentStatus.humidityB = getIntValue(results, 7) / 10f;
         } catch (Exception e) {
+            e.printStackTrace();
             environmentStatus.e = e;
         }
-
-        Log.d(TAG, CabinetCore.GSON.toJson(environmentStatus));
         return environmentStatus;
     }
 
@@ -265,6 +264,7 @@ public class ModbusService {
             airConditionerStatus.fanSweep = getIntValue(results, 5) == 1;
             airConditionerStatus.remoteWorkModel = AirConditionerStatus.RemoteWorkModel.values()[getIntValue(results, 6)];
         } catch (Exception e) {
+            e.printStackTrace();
             airConditionerStatus.e = e;
         }
 
@@ -317,6 +317,7 @@ public class ModbusService {
             setupValue.alertSoundLight = getIntValue(results, 16) == 1;
 
         } catch (Exception e) {
+            e.printStackTrace();
             setupValue.e = e;
         }
         return setupValue;

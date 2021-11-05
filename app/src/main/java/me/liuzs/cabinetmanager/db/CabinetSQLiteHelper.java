@@ -10,7 +10,7 @@ public class CabinetSQLiteHelper extends SQLiteOpenHelper {
 
     public CabinetSQLiteHelper() {
         super(CabinetApplication.getInstance(), Config.DATABASE_NAME, null, Config.DATABASE_VERSION);
-        setWriteAheadLoggingEnabled(false);
+        setWriteAheadLoggingEnabled(true);
     }
 
     @Override

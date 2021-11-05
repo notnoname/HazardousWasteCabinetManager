@@ -320,7 +320,8 @@
                 android:onClick="onBackButtonClick"
                 android:scaleType="fitCenter"
                 android:src="@drawable/back_button"
-                android:visibility="visible" />
+                android:visibility="visible"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -345,12 +346,13 @@
                     android:textSize="28px" />
 
                 <com.kyleduo.switchbutton.SwitchButton
-                    android:layout_marginStart="10px"
                     android:id="@+id/swOfflineModel"
                     android:layout_width="130px"
                     android:layout_height="40px"
+                    android:layout_marginStart="10px"
                     android:gravity="left"
-                    android:textSize="28px" />
+                    android:textSize="28px"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
 

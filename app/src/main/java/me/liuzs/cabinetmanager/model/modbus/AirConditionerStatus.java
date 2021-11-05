@@ -56,13 +56,16 @@ public class AirConditionerStatus {
 
 
     /**
-     * 工作模式
+     * 空调工作模式
      */
     public enum WorkModel {
         Auto, Refrigeration, Heating, Dehumidification,
         AirSupply
     }
 
+    /**
+     * 空调遥控器工作模式
+     */
     public enum RemoteWorkModel {
         Receive, Launch, Pair, Run
     }
@@ -74,6 +77,9 @@ public class AirConditionerStatus {
         Auto, Low, Middle, High
     }
 
+    /**
+     * 开关
+     */
     public boolean powerOn;
     public boolean autoCtrl;
     public WorkModel workModel;

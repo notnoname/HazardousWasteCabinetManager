@@ -21,7 +21,7 @@ public class StorageUtility {
 
     public static synchronized void init(Context context) {
         INSTANCE.mContext = context;
-        BaseDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+        BaseDir = context.getExternalFilesDir(null).getAbsolutePath() + File.separator;
         File file = new File(BaseDir);
         if (file.exists() && !file.isDirectory()) {
             file.delete();
@@ -36,7 +36,7 @@ public class StorageUtility {
      *
      * @return 外部存储空间路径。
      */
-    public static String getApplicationExternalWorkDirPath() {
+    public static String getExternalWorkDirPath() {
         return BaseDir;
     }
 

@@ -9,7 +9,10 @@ import android.util.Log;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -17,7 +20,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,30 +42,115 @@ import me.liuzs.cabinetmanager.net.RemoteAPI;
 public class HardwareService extends Service {
 
     public static final String TAG = "HardwareService";
+    public static final String MQTT = "MQTT";
     @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat mLogTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+    private static final long mHardwareValueQueryInterval = 10000;
     public static int Qos = 2;
     private static CabinetManager mManager;
-    private final String PublisherID = MqttClient.generateClientId();
+    private final String MQTTClientID = MqttClient.generateClientId();
     private final HardwareServiceBinder mBinder = new HardwareServiceBinder();
-    private final IMqttActionListener mPublishActionListener = new IMqttActionListener() {
+    private final IMqttActionListener mMQTTPublishAction = new IMqttActionListener() {
         @Override
         public void onSuccess(IMqttToken asyncActionToken) {
-            Log.d(TAG, "MQTT Publish success");
+            String[] topics = asyncActionToken.getTopics();
+            if (topics != null) {
+                for (String topic : topics) {
+                    Log.d(MQTT, "Publish topic:" + topic);
+                }
+            }
+            Log.d(MQTT, "Publish success");
         }
 
         @Override
         public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
             if (exception != null) {
-                Log.i(TAG, "MQTT Publish failure: " + exception.getMessage());
+                Log.i(MQTT, "Publish failure: " + exception.getMessage());
+            }
+            Object value = asyncActionToken.getUserContext();
+            if (value instanceof HardwareValue) {
+                CabinetCore.saveHardwareValue((HardwareValue) value);
+            }
+
+        }
+    };
+    private final IMqttActionListener mMQTTSubscriptTopicAction = new IMqttActionListener() {
+        @Override
+        public void onSuccess(IMqttToken asyncActionToken) {
+            String[] topics = asyncActionToken.getTopics();
+            if (topics != null) {
+                for (String topic : topics) {
+                    Log.d(MQTT, "Subscript topic:" + topic);
+                }
+            }
+            Log.d(MQTT, "Subscript success");
+        }
+
+        @Override
+        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+            if (exception != null) {
+                Log.i(MQTT, "Subscript failure: " + exception.getMessage());
+            }
+        }
+    };
+    private final IMqttActionListener mMQTTUnSubscriptTopicAction = new IMqttActionListener() {
+        @Override
+        public void onSuccess(IMqttToken asyncActionToken) {
+            String[] topics = asyncActionToken.getTopics();
+            if (topics != null) {
+                for (String topic : topics) {
+                    Log.d(MQTT, "UnSubscript Topic:" + topic);
+                }
+            }
+            Log.d(MQTT, "UnSubscript success");
+        }
+
+        @Override
+        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+            if (exception != null) {
+                Log.i(MQTT, "UnSubscript failure: " + exception.getMessage());
             }
         }
     };
     private final AtomicBoolean isDoHardwareValueQuery = new AtomicBoolean(false);
+    private final MqttCallback mMqttCallback = new MqttCallback() {
+        @Override
+        public void connectionLost(Throwable cause) {
+            Log.i(MQTT, "Callback-" + "connectionLost");
+        }
+
+        @Override
+        public void messageArrived(String topic, MqttMessage message) {
+            Log.i(MQTT, "Callback topic-" + topic);
+            Log.i(MQTT, "Callback message-" + new String(message.getPayload()));
+        }
+
+        @Override
+        public void deliveryComplete(IMqttDeliveryToken token) {
+            Log.i(MQTT, "Callback-" + "deliverComplete");
+        }
+    };
+    private final IMqttMessageListener mMessageListener = (topic, message) -> {
+        Log.i(MQTT, "Message Topic:" + topic);
+        Log.i(MQTT, "Message:" + new String(message.getPayload()));
+    };
     private Timer mHardwareValueQueryTimer;
     private MqttAndroidClient mPublishClient;
+    private final IMqttActionListener mMQTTConnectAction = new IMqttActionListener() {
+        @Override
+        public void onSuccess(IMqttToken asyncActionToken) {
+            Log.d(MQTT, "Connect success");
+            subScriptTopics();
+        }
+
+        @Override
+        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+            if (exception != null) {
+                Log.i(MQTT, "Connect failure:" + exception.getMessage());
+            }
+        }
+    };
     private Timer mAutoLockTimer;
-    private static final long mHardwareValueQueryInterval = 10000;
 
     public synchronized static void weight(Steelyard.SteelyardCallback callback) {
         if (mManager == null) {
@@ -106,17 +193,8 @@ public class HardwareService extends Service {
     private static MqttConnectOptions setUpConnectionOptions() {
         MqttConnectOptions connOpts = new MqttConnectOptions();
         connOpts.setCleanSession(true);
-        connOpts.setUserName(RemoteAPI.MQTT.MQTT_USER);
-        connOpts.setPassword(RemoteAPI.MQTT.MQTT_PASSWORD.toCharArray());
+        connOpts.setAutomaticReconnect(true);
         return connOpts;
-    }
-
-    public static void sleep() {
-        try {
-            Thread.sleep(35);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -134,18 +212,12 @@ public class HardwareService extends Service {
         }
 
         CabinetManager.Settings settings = new CabinetManager.Settings();
-//settings.SwitchesDeviceName = "/dev/ttysWK0";
         settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[0];
         settings.TDA09C485Configs = new CabinetManager.TDA09C485Config[1];
         int c485 = CabinetCore.getTDA09C485Config(this);
         //按实际设备地址填写
         settings.TDA09C485Configs[0] = new CabinetManager.TDA09C485Config((byte) c485);
         settings.TVOCsDeviceName = new String[0];
-/*
-settings.TVOCsDeviceName[0] = "/dev/ttysWK2";
-settings.TVOCsDeviceName[1] = "/dev/ttysWK3";
-settings.SHT3xDeviceName = "/dev/i2c-7";
-*/
         mManager = new CabinetManager(settings);
     }
 
@@ -153,23 +225,40 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Log.d(TAG, "Service StartCommand");
-        if (mPublishClient == null) {
-            mPublishClient = new MqttAndroidClient(this, RemoteAPI.MQTT.MQTT_ROOT, PublisherID);
-        }
-//        initMQTTPublishClient();
+        initMQTTClient();
         initCabinetManager();
         initHardwareValueQueryTimer();
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void initMQTTPublishClient() {
+    private void initMQTTClient() {
+        if (mPublishClient == null) {
+            mPublishClient = new MqttAndroidClient(this, RemoteAPI.MQTT.MQTT_ROOT, MQTTClientID);
+            mPublishClient.setCallback(mMqttCallback);
+        }
         if (!mPublishClient.isConnected()) {
             try {
                 MqttConnectOptions connOpts = setUpConnectionOptions();
-                mPublishClient.connect(connOpts);
-            } catch (MqttException e) {
+                mPublishClient.connect(connOpts, null, mMQTTConnectAction);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void subScriptTopics() {
+        String[] topicFilter = new String[]{RemoteAPI.MQTT.MQTT_ControlTopic, RemoteAPI.MQTT.MQTT_SetupValueTopic};
+        IMqttMessageListener[] messageListener = new IMqttMessageListener[]{mMessageListener, mMessageListener};
+        int[] qos = {Qos, Qos};
+        try {
+            mPublishClient.unsubscribe(topicFilter, null, mMQTTUnSubscriptTopicAction);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            mPublishClient.subscribe(topicFilter, qos, null, mMQTTSubscriptTopicAction, messageListener);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -188,7 +277,7 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
                     return;
                 }
                 Log.d(TAG, "Do hardware value query");
-                initMQTTPublishClient();
+                initMQTTClient();
                 HardwareValue value = getHardwareValue();
                 notifyValue(value);
                 publishValue(value);
@@ -209,16 +298,20 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
 
     private void publishValue(HardwareValue value) {
         Cabinet info = CabinetCore.getCabinetInfo();
-        if (info != null && mPublishClient.isConnected() && value != null) {
-            try {
-                String payload = CabinetCore.GSON.toJson(value);
-                Log.d(TAG, "MQTT JSON:" + payload);
-                MqttMessage message = new MqttMessage();
-                message.setPayload(payload.getBytes());
-                message.setQos(Qos);
-                mPublishClient.publish(RemoteAPI.MQTT.MQTT_HARDWARE_PUBLISH_TOPIC, message, null, mPublishActionListener);
-            } catch (MqttException e) {
-                e.printStackTrace();
+        if (info != null && value != null) {
+            if (mPublishClient.isConnected()) {
+                try {
+                    String payload = CabinetCore.GSON.toJson(value);
+                    MqttMessage message = new MqttMessage();
+                    message.setPayload(payload.getBytes());
+                    message.setQos(Qos);
+                    mPublishClient.publish(RemoteAPI.MQTT.MQTT_HARDWARE_PUBLISH_TOPIC, message, value, mMQTTPublishAction);
+                    mPublishClient.publish(RemoteAPI.MQTT.MQTT_ControlTopic, message, value, mMQTTPublishAction);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                    CabinetCore.saveHardwareValue(value);
+                }
+            } else {
                 CabinetCore.saveHardwareValue(value);
             }
         }
@@ -266,7 +359,7 @@ settings.SHT3xDeviceName = "/dev/i2c-7";
             hValue.createTime = createTime;
             hValue.cabinet_id = cabinet.id;
 
-            if (hValue.setupValue == null && hValue.airConditionerStatus == null && hValue.statusOption == null && hValue.airConditionerStatus == null) {
+            if (hValue.setupValue == null && hValue.statusOption == null && hValue.airConditionerStatus == null && hValue.environmentStatus == null && hValue.frequencyConverterStatus == null) {
                 return null;
             } else {
                 Log.d(TAG, "HardwareValue:" + CabinetCore.GSON.toJson(hValue));

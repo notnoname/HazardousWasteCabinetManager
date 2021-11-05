@@ -99,10 +99,25 @@ public class SetupValue {
      * 可燃气体自动告警阈值
      */
     public float fgAlertThreshold;
+    /**
+     * 高温告警阈值
+     */
     public float tempHighAlertThreshold;
+    /**
+     * 低温告警阈值
+     */
     public float tempLowAlertThreshold;
+    /**
+     * 高湿度告警阈值
+     */
     public float humidityHighAlertThreshold;
+    /**
+     * 低湿度告警阈值
+     */
     public float humidityLowAlertThreshold;
+    /**
+     * 是否声光告警
+     */
     public boolean alertSoundLight;
     public Exception e;
 

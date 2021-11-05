@@ -114,18 +114,18 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
     });
 
     /**
-     * @param content           上线文
+     * @param context           上下文
      * @param depositRecordJSON 离线数据
      */
-    public static void start(Context content, @Nullable String depositRecordJSON) {
-        Intent intent = new Intent(content, DepositActivity.class);
+    public static void start(Context context, @Nullable String depositRecordJSON) {
+        Intent intent = new Intent(context, DepositActivity.class);
         if (depositRecordJSON != null) {
             intent.putExtra(KEY_ORG_VALUE, depositRecordJSON);
         }
-        if (!(content instanceof Activity)) {
+        if (!(context instanceof Activity)) {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        content.startActivity(intent);
+        context.startActivity(intent);
     }
 
     public static String createHarmfulIngredientString(Map<String, Boolean> harmfulIngredientMap) {

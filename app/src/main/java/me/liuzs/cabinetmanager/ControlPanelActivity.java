@@ -151,8 +151,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
             if (mAirConditionerStatus.e != null || mStatusOption.e != null) {
-                mHandler.post(() -> new AlertDialog.Builder(ControlPanelActivity.this).setMessage("设备信息读取失败，请立即检查设备！").setNegativeButton("确认", (dialog, which) ->
-                        finish()).show());
+                mHandler.post(() -> new AlertDialog.Builder(ControlPanelActivity.this).setMessage("设备信息读取失败，请立即检查设备！").setNegativeButton("确认", null).show());
             } else {
                 mHandler.post(this::showStatusOption);
             }
@@ -222,7 +221,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     }
 
     public void onOptLogButtonClick(View view) {
-        LogViewActivity.start(this, LogViewActivity.Type.Alert);
+        LogViewActivity.start(this);
     }
 
     public void onACWorkModelButtonClick(View view) {
@@ -290,7 +289,6 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
             if (mStatusOption.e != null || mAirConditionerStatus.e != null) {
                 showToast("信息获取失败");
-                mHandler.postDelayed(this::finish, 1000);
             } else {
                 mHandler.post(this::showStatusOption);
             }

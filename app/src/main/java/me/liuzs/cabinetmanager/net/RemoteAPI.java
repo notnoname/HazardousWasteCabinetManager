@@ -76,9 +76,9 @@ public class RemoteAPI {
          * MQTT Root地址
          */
         public static final String MQTT_ROOT = "tcp://47.104.235.225:1883";
-        public static final String MQTT_USER = "admin";
-        public static final String MQTT_PASSWORD = "public";
-        public static final String MQTT_HARDWARE_PUBLISH_TOPIC = "LAB/UP/JSONDATA";
+        public static final String MQTT_HARDWARE_PUBLISH_TOPIC = "test1";
+        public static final String MQTT_ControlTopic = "test2";
+        public static final String MQTT_SetupValueTopic = "test1";
     }
 
     /**
@@ -277,15 +277,7 @@ public class RemoteAPI {
         /**
          * 库存列表
          */
-        public static final String API_INVENTORY_QUERY_LIST = API_ROOT + "/admin/storage_records/stocks";
-        /**
-         * 入柜流水
-         */
-        public static final String API_TAKE_IN_QUERY_DETAIL = API_ROOT + "/admin/storage_records/inputs";
-        /**
-         * 入柜流水
-         */
-        public static final String API_TAKE_OUT_QUERY_DETAIL = API_ROOT + "/admin/storage_records/outputs";
+        public static final String API_INVENTORY_QUERY_LIST = API_ROOT + "/admin/storage_record_book";
 
         /**
          * 库存列表
@@ -295,16 +287,16 @@ public class RemoteAPI {
         public static APIJSON<DepositRecordListJSON> queryDepositList(StandingBookActivity.DetailType detailType, int pageSize, int currentPage) {
 
             try {
-                String url = null;
+                String type = null;
                 switch (detailType) {
                     case Inventories:
-                        url = API_INVENTORY_QUERY_LIST;
+                        type = "stock";
                         break;
                     case Deposit:
-                        url = API_TAKE_IN_QUERY_DETAIL;
+                        type = "input";
                         break;
                     case TakeOut:
-                        url = API_TAKE_OUT_QUERY_DETAIL;
+                        type = "output";
                         break;
                 }
                 CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -312,8 +304,9 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(pageSize)));
                 valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(currentPage)));
                 valuePairs.add(new BasicNameValuePair("storage_id", CabinetCore.getCabinetInfo().id));
+                valuePairs.add(new BasicNameValuePair("type", type));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet method = new HttpGet(url + "?" + params);
+                HttpGet method = new HttpGet(API_INVENTORY_QUERY_LIST + "?" + params);
                 Log.d(TAG, method.getURI().toString());
                 generalOptBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);

@@ -54,7 +54,7 @@
                 android:background="@drawable/background_button"
                 android:onClick="onOptLogButtonClick"
                 android:singleLine="true"
-                android:text="操作日志"
+                android:text="日志"
                 android:textColor="@color/white"
                 android:textSize="25px"
                 app:layout_constraintStart_toEndOf="@+id/tvLogLabel"
