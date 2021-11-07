@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,10 +78,12 @@ abstract class BaseActivity extends AppCompatActivity {
         mHandler.post(() -> {
             if (mToast == null) {
                 mToast = Toast.makeText(BaseActivity.this, showInfo, Toast.LENGTH_SHORT);
+                LinearLayout layout = (LinearLayout) mToast.getView();
+                layout.setBackgroundResource(R.drawable.background_toast);
                 TextView v = mToast.getView().findViewById(android.R.id.message);
                 v.setPadding(10, 10, 10, 10);
-                v.setTextColor(Color.BLACK);
-                v.setTextSize(40);
+                v.setTextColor(Color.WHITE);
+                v.setTextSize(TypedValue.COMPLEX_UNIT_PX, 30);
                 v.setGravity(Gravity.CENTER);
                 mToast.setGravity(Gravity.CENTER, 0, 0);
             }
@@ -165,7 +169,7 @@ abstract class BaseActivity extends AppCompatActivity {
         if (titleView != null) {
             String title = titleView.getText().toString();
             if (!TextUtils.isEmpty(title) && !title.contains("登陆")) {
-                if(title.contains("设置")){
+                if (title.contains("设置")) {
                     CabinetCore.logOpt(CabinetCore.RoleType.Admin, "打开", title);
                 } else {
                     CabinetCore.logOpt(CabinetCore.RoleType.Operator, "打开", title);

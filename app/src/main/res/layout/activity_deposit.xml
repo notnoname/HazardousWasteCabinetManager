@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".DepositActivity">
+    tools:context=".DepositActivity"
+    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck">
 
     <ImageView
         android:id="@+id/background"
@@ -32,8 +33,7 @@
             android:textSize="22px"
             app:layout_constraintBottom_toBottomOf="@+id/etWeightValue"
             app:layout_constraintEnd_toEndOf="@+id/tvHarmfulIngredientsValue"
-            app:layout_constraintTop_toTopOf="@+id/etWeightValue"
-            tools:ignore="TextContrastCheck" />
+            app:layout_constraintTop_toTopOf="@+id/etWeightValue" />
 
         <EditText
             android:id="@+id/etContainerNoValue"
@@ -43,15 +43,14 @@
             android:background="@drawable/background_edit"
             android:digits="NO0123456789"
             android:hint="@string/input_container_no_please"
-            android:inputType="text"
+            android:inputType="textVisiblePassword"
             android:minHeight="48px"
             android:padding="10px"
             android:textColor="@color/black"
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TextContrastCheck" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -81,8 +80,7 @@
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="@+id/etContainerNoValue"
             app:layout_constraintStart_toStartOf="@+id/etContainerNoValue"
-            app:layout_constraintTop_toBottomOf="@+id/etContainerNoValue"
-            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+            app:layout_constraintTop_toBottomOf="@+id/etContainerNoValue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -112,8 +110,7 @@
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="@+id/tvContainerSpecValue"
             app:layout_constraintStart_toStartOf="@+id/tvContainerSpecValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvContainerSpecValue"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:layout_constraintTop_toBottomOf="@+id/tvContainerSpecValue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -155,8 +152,7 @@
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="@+id/tvSourceValue"
             app:layout_constraintStart_toStartOf="@+id/tvSourceValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvSourceValue"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSourceValue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -187,8 +183,7 @@
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="@+id/btnWeight"
             app:layout_constraintStart_toStartOf="@+id/etWeightValue"
-            app:layout_constraintTop_toBottomOf="@+id/etWeightValue"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:layout_constraintTop_toBottomOf="@+id/etWeightValue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -218,8 +213,7 @@
             android:textSize="28px"
             app:layout_constraintEnd_toEndOf="@+id/etShelfNoValue"
             app:layout_constraintStart_toStartOf="@+id/etShelfNoValue"
-            app:layout_constraintTop_toBottomOf="@+id/etShelfNoValue"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:layout_constraintTop_toBottomOf="@+id/etShelfNoValue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -251,8 +245,7 @@
             android:textSize="28px"
             app:layout_constraintEnd_toStartOf="@+id/btnWeight"
             app:layout_constraintStart_toStartOf="@+id/tvHarmfulIngredientsValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvHarmfulIngredientsValue"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:layout_constraintTop_toBottomOf="@+id/tvHarmfulIngredientsValue" />
 
 
         <LinearLayout
@@ -284,7 +277,7 @@
                 android:background="@drawable/background_button"
                 android:gravity="center"
                 android:onClick="onSubmitButtonClick"
-                android:text="@string/ok"
+                android:text="@string/submit"
                 android:textColor="@color/white"
                 android:textSize="24px" />
 
@@ -306,8 +299,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tool_bar_height"
-            android:padding="16px"
             android:background="@android:color/transparent"
+            android:padding="16px"
             app:popupTheme="@style/Theme.CabinetManager.PopupOverlay">
 
             <ImageButton
@@ -320,8 +313,7 @@
                 android:onClick="onBackButtonClick"
                 android:scaleType="fitCenter"
                 android:src="@drawable/back_button"
-                android:visibility="visible"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -350,9 +342,8 @@
                     android:layout_width="130px"
                     android:layout_height="40px"
                     android:layout_marginStart="10px"
-                    android:gravity="left"
-                    android:textSize="28px"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:gravity="start"
+                    android:textSize="28px" />
             </LinearLayout>
 
 

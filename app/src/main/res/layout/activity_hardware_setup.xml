@@ -183,7 +183,7 @@
                 android:background="@drawable/background_edit"
                 android:ems="10"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="textVisiblePassword"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="24sp"

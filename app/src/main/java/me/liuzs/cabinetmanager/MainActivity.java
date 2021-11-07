@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -210,7 +211,8 @@ public class MainActivity extends BaseActivity {
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextColor(Color.WHITE);
-        textView.setTextSize(24);
+        textView.setSingleLine(true);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX ,22);
         textView.setPadding(10, 10, 10, 10);
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(bgRes);
@@ -287,6 +289,25 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void onOfflineButtonClick(View view) {
+        if (CabinetCore.isDebugState()) {
+            Intent intent = new Intent(MainActivity.this, OfflineDepositRecordActivity.class);
+            startActivity(intent);
+        } else {
+            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
+                @Override
+                public void onAuthCancel() {
+                }
+
+                @Override
+                public void onAuthSuccess(CabinetCore.RoleType type) {
+                    Intent intent = new Intent(MainActivity.this, OfflineDepositRecordActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
     public void onSettingButtonClick(View view) {
         if (CabinetCore.isDebugState()) {
             Intent intent = new Intent(MainActivity.this, SystemSettingActivity.class);
@@ -308,7 +329,7 @@ public class MainActivity extends BaseActivity {
 
     public void onTakeOutButtonClick(View view) {
         if (CabinetCore.isDebugState()) {
-            TakeOutActivity.start(MainActivity.this, null);
+            TakeOutActivity.start(MainActivity.this);
         } else {
             showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
                 @Override
@@ -317,7 +338,7 @@ public class MainActivity extends BaseActivity {
 
                 @Override
                 public void onAuthSuccess(CabinetCore.RoleType type) {
-                    TakeOutActivity.start(MainActivity.this, null);
+                    TakeOutActivity.start(MainActivity.this);
                 }
             });
         }
@@ -368,7 +389,7 @@ public class MainActivity extends BaseActivity {
 
     public void onDepositButtonClick(View view) {
         if (CabinetCore.isDebugState()) {
-            DepositActivity.start(MainActivity.this, null);
+            DepositActivity.start(MainActivity.this);
         } else {
             showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
                 @Override
@@ -377,7 +398,7 @@ public class MainActivity extends BaseActivity {
 
                 @Override
                 public void onAuthSuccess(CabinetCore.RoleType type) {
-                    DepositActivity.start(MainActivity.this, null);
+                    DepositActivity.start(MainActivity.this);
                 }
             });
         }

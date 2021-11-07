@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".TakeOutActivity">
+    tools:context=".TakeOutActivity"
+    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck">
 
     <ImageView
         android:id="@+id/background"
@@ -42,7 +43,7 @@
             android:background="@drawable/background_edit"
             android:digits="NO0123456789"
             android:hint="@string/input_container_no_please"
-            android:inputType="text"
+            android:inputType="textVisiblePassword"
             android:minHeight="48px"
             android:padding="10px"
             android:textColor="@color/black"
@@ -50,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -261,8 +262,7 @@
             android:textSize="28px"
             app:layout_constraintEnd_toStartOf="@+id/btnWeight"
             app:layout_constraintStart_toStartOf="@+id/tvInWeightValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvInWeightValue"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:layout_constraintTop_toBottomOf="@+id/tvInWeightValue" />
 
 
         <LinearLayout
@@ -358,7 +358,7 @@
                     android:layout_width="130px"
                     android:layout_height="40px"
                     android:layout_marginStart="10px"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:textSize="28px" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>

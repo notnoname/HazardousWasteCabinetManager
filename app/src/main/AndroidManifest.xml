@@ -51,6 +51,10 @@
             android:label="@string/title_activity_storage"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
         <activity
+            android:name=".OfflineDepositRecordActivity"
+            android:label="@string/title_activity_storage"
+            android:theme="@style/Theme.CabinetManager.NoActionBar" />
+        <activity
             android:name=".TakeOutActivity"
             android:label="@string/title_activity_storage"
             android:theme="@style/Theme.CabinetManager.NoActionBar" />

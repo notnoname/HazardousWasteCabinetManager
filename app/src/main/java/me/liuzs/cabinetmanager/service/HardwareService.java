@@ -15,11 +15,11 @@ import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -52,6 +52,7 @@ public class HardwareService extends Service {
     private final HardwareServiceBinder mBinder = new HardwareServiceBinder();
     private final IMqttActionListener mMQTTPublishAction = new IMqttActionListener() {
         @Override
+        @SuppressWarnings("unchecked")
         public void onSuccess(IMqttToken asyncActionToken) {
             String[] topics = asyncActionToken.getTopics();
             if (topics != null) {
@@ -59,17 +60,22 @@ public class HardwareService extends Service {
                     Log.d(MQTT, "Publish topic:" + topic);
                 }
             }
+            Object value = asyncActionToken.getUserContext();
+            if (value instanceof List) {
+                CabinetCore.setHardwareValueSent((List<HardwareValue>) value);
+            }
             Log.d(MQTT, "Publish success");
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
             if (exception != null) {
                 Log.i(MQTT, "Publish failure: " + exception.getMessage());
             }
             Object value = asyncActionToken.getUserContext();
-            if (value instanceof HardwareValue) {
-                CabinetCore.saveHardwareValue((HardwareValue) value);
+            if (value instanceof List) {
+                CabinetCore.saveSentFailHardwareValueList((List<HardwareValue>) value);
             }
 
         }
@@ -278,9 +284,11 @@ public class HardwareService extends Service {
                 }
                 Log.d(TAG, "Do hardware value query");
                 initMQTTClient();
+                List<HardwareValue> values = CabinetCore.getUnSentHardwareValueList();
                 HardwareValue value = getHardwareValue();
                 notifyValue(value);
-                publishValue(value);
+                values.add(value);
+                publishValue(values);
                 isDoHardwareValueQuery.set(false);
             }
         }, 1000, mHardwareValueQueryInterval);
@@ -296,23 +304,22 @@ public class HardwareService extends Service {
         sendBroadcast(intent);
     }
 
-    private void publishValue(HardwareValue value) {
+    private void publishValue(List<HardwareValue> valueList) {
         Cabinet info = CabinetCore.getCabinetInfo();
-        if (info != null && value != null) {
+        if (info != null && valueList != null) {
             if (mPublishClient.isConnected()) {
                 try {
-                    String payload = CabinetCore.GSON.toJson(value);
+                    String payload = CabinetCore.GSON.toJson(valueList);
                     MqttMessage message = new MqttMessage();
                     message.setPayload(payload.getBytes());
                     message.setQos(Qos);
-                    mPublishClient.publish(RemoteAPI.MQTT.MQTT_HARDWARE_PUBLISH_TOPIC, message, value, mMQTTPublishAction);
-                    mPublishClient.publish(RemoteAPI.MQTT.MQTT_ControlTopic, message, value, mMQTTPublishAction);
-                } catch (MqttException e) {
+                    mPublishClient.publish(RemoteAPI.MQTT.MQTT_HARDWARE_PUBLISH_TOPIC, message, valueList, mMQTTPublishAction);
+                } catch (Exception e) {
                     e.printStackTrace();
-                    CabinetCore.saveHardwareValue(value);
+                    CabinetCore.saveSentFailHardwareValueList(valueList);
                 }
             } else {
-                CabinetCore.saveHardwareValue(value);
+                CabinetCore.saveSentFailHardwareValueList(valueList);
             }
         }
     }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
@@ -61,7 +62,7 @@ public class NewProgressDialog extends AlertDialog {
                 break;
         }
         message = findViewById(R.id.message);
-        message.setTextSize(28);
+        message.setTextSize(TypedValue.COMPLEX_UNIT_PX,28);
         message.setSingleLine(true);
         tvCancel = findViewById(R.id.tv_cancel);
         progressBar = findViewById(R.id.progress);

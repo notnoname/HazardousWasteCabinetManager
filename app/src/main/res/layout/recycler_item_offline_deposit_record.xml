@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/csRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5px"
+    android:padding="5px"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        android:id="@+id/tvNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="5"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="单号"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSpec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="4"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="容器规格(升)"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvNo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="8"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="来源"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvSpec"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHarmful"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="8"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="有害成分"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvSource"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvShelfNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="4"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="货架号"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvHarmful"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvInWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="4"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="入柜重量(KG)"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvShelfNo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvOutWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="4"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="出柜重量(KG)"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvInWeight"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvInTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="6"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="入柜时间"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvOutWeight"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvOutTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="6"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="出柜时间"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvInTime"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvInOperator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="4"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="入柜人员"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvOutTime"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvOutOperator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:ems="4"
+        android:gravity="center"
+        android:lines="2"
+        android:padding="10px"
+        android:text="出柜人员"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvInOperator"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_title"
+        android:gravity="center_vertical"
+        android:lines="2"
+        android:padding="10px"
+        android:text="其他信息"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvOutOperator"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

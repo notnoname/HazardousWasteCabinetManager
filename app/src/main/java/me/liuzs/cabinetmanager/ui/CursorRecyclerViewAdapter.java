@@ -15,7 +15,7 @@ package me.liuzs.cabinetmanager.ui;/*
  *
  */
  
-import static me.liuzs.cabinetmanager.db.CDatabase.COLUMN_ID;
+import static me.liuzs.cabinetmanager.db.CabinetDatabase.COLUMN_ID;
 
 import android.content.Context;
 import android.database.Cursor;

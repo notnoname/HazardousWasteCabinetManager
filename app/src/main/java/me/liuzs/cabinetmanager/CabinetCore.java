@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.arcsoft.face.ActiveFileInfo;
@@ -16,13 +15,16 @@ import com.arcsoft.face.ErrorInfo;
 import com.arcsoft.face.FaceEngine;
 import com.arcsoft.face.enums.RuntimeABI;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.afinal.simplecache.ACache;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -34,10 +36,12 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import me.liuzs.cabinetmanager.db.CDatabase;
+import me.liuzs.cabinetmanager.db.CabinetDatabase;
 import me.liuzs.cabinetmanager.model.AlertLog;
 import me.liuzs.cabinetmanager.model.Cabinet;
+import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.model.HardwareValue;
+import me.liuzs.cabinetmanager.model.Laboratory;
 import me.liuzs.cabinetmanager.model.OptLog;
 import me.liuzs.cabinetmanager.model.User;
 import me.liuzs.cabinetmanager.net.APIJSON;
@@ -64,6 +68,8 @@ public class CabinetCore {
     private static final String TAG = "CabinetCore";
     private final static ExecutorService executorService = Executors.newFixedThreadPool(1);
     private static final String KEY_OPT_LOG_INDEX = "KEY_OPT_LOG_INDEX";
+    private static final Type LaboratoryListType = new TypeToken<List<Laboratory>>() {
+    }.getType();
     private static Timer mAuthTimer;
     private static Context mContext;
     private static ACache _ACache;
@@ -198,9 +204,26 @@ public class CabinetCore {
         editor.apply();
     }
 
+    public static void saveLaboratoryListCache(List<Laboratory> laboratoryList) {
+        SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(Config.SYSPRE_Laboratory_Cache, GSON.toJson(laboratoryList));
+        editor.apply();
+    }
+
+    public static List<Laboratory> getLaboratoryListCache() {
+        SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String cabinetInfo = sp.getString(Config.SYSPRE_Laboratory_Cache, null);
+        if (TextUtils.isEmpty(cabinetInfo)) {
+            return null;
+        } else {
+            return GSON.fromJson(cabinetInfo, LaboratoryListType);
+        }
+    }
+
     public static void saveCabinetUser(User user, RoleType type, boolean log) {
-        if(log) {
-            CabinetCore.logOpt(type, "登陆" + (type == Admin ? "(管理员)":"(操作员)") , "系统");
+        if (log) {
+            CabinetCore.logOpt(type, "登陆" + (type == Admin ? "(管理员)" : "(操作员)"), "系统");
         }
         SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -382,27 +405,71 @@ public class CabinetCore {
         return BuildConfig.DEBUG || TextUtils.equals(BuildConfig.BUILD_TYPE, "test");
     }
 
+
+    public static DepositRecord getDepositRecord(String containerNo) {
+        List<DepositRecord> depositRecordList = CabinetDatabase.getInstance().getDepositRecordList(CabinetDatabase.Filter.All, containerNo, false, Integer.MAX_VALUE, 0);
+        for (DepositRecord depositRecord : depositRecordList) {
+            if (TextUtils.equals(depositRecord.storage_no, containerNo)) {
+                return depositRecord;
+            }
+        }
+        return null;
+    }
+
+    public static List<DepositRecord> getUnSubmitDepositRecord() {
+        return CabinetDatabase.getInstance().getDepositRecordList(CabinetDatabase.Filter.NoUpload, null, false, Integer.MAX_VALUE, 0);
+    }
+
+    public static void saveDepositRecord(DepositRecord depositRecord) {
+        if (depositRecord.localId == -1) {
+            CabinetDatabase.getInstance().deleteDepositRecord(depositRecord.localId);
+        }
+        DepositRecord record = getDepositRecord(depositRecord.storage_no);
+        if (record != null) {
+            CabinetDatabase.getInstance().deleteDepositRecord(record.localId);
+        }
+        CabinetDatabase.getInstance().addDepositRecord(depositRecord);
+    }
+
+    public static void deleteDepositRecord(long localId) {
+        CabinetDatabase.getInstance().deleteDepositRecord(localId);
+    }
+
     public static void logOpt(RoleType roleType, @NotNull String opt, @NotNull String obj) {
         User user = getCabinetUser(roleType);
         String userName = user != null ? user.name : "Unknown User";
         String time = _SecondFormatter.format(new Date(System.currentTimeMillis()));
         OptLog optLog = new OptLog(userName, obj, opt, time);
-        CDatabase.getInstance().addOptLog(optLog);
+        CabinetDatabase.getInstance().addOptLog(optLog);
     }
 
     public static void logAlert(String alertEvent) {
         AlertLog alertLog = new AlertLog();
         alertLog.alert = alertEvent;
         alertLog.time = _SecondFormatter.format(new Date(System.currentTimeMillis()));
-        CDatabase.getInstance().addAlertLog(alertLog);
+        CabinetDatabase.getInstance().addAlertLog(alertLog);
     }
 
-    public static void saveHardwareValue(@NotNull HardwareValue hardwareValue) {
-        CDatabase.getInstance().addHardwareValue(hardwareValue);
+    public static void saveSentFailHardwareValueList(@NotNull List<HardwareValue> hardwareValueList) {
+        for (HardwareValue hardwareValue : hardwareValueList) {
+            if (hardwareValue.id == -1) {
+                CabinetDatabase.getInstance().addHardwareValue(hardwareValue);
+            }
+        }
     }
 
-    public synchronized static void listLogOpt() {
+    public static List<HardwareValue> getUnSentHardwareValueList() {
+        return CabinetDatabase.getInstance().getHardwareValueList(CabinetDatabase.Filter.NoUpload, false, Integer.MAX_VALUE, 0);
+    }
 
+    public static void setHardwareValueSent(@NotNull List<HardwareValue> hardwareValueList) {
+        List<String> ids = new LinkedList<>();
+        for (HardwareValue value : hardwareValueList) {
+            if (value.id != -1) {
+                ids.add(String.valueOf(value.id));
+            }
+        }
+        CabinetDatabase.getInstance().setDataSent(CabinetDatabase.Table.HardwareValue, ids);
     }
 
     public enum RoleType {

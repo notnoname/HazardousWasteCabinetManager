@@ -2,7 +2,6 @@ package me.liuzs.cabinetmanager;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,19 +17,13 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.kyleduo.switchbutton.SwitchButton;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 import java.util.Objects;
 
-import me.liuzs.cabinetmanager.model.DefaultDict;
 import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.net.APIJSON;
 import me.liuzs.cabinetmanager.net.DepositRecordListJSON;
@@ -41,13 +34,11 @@ import me.liuzs.cabinetmanager.net.RemoteAPI;
  */
 public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, TextWatcher {
 
-    public final static String TAG = "DepositActivity";
-    public final static String KEY_ORG_VALUE = "KEY_ORG_VALUE";
     private DepositRecord mDepositRecord;
-    private boolean isRestore = false;
     private TextView mContainerSpecValue, mSourceValue, mHarmfulIngredientsValue, mInWeightValue, mShelfNoValue, mOtherInfoValue;
     private EditText mContainerNoValue, mOutWeightValue;
-    private Button mWeight;
+    private Button mWeight, mSubmit;
+    private SwitchButton mOfflineModel;
     private final ActivityResultLauncher<Intent> mWeightLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -71,40 +62,23 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
             }
         }
     });
-    private SwitchButton mOfflineModel;
 
-    public static void start(Context content, @Nullable String depositRecordJSON) {
-        Intent intent = new Intent(content, TakeOutActivity.class);
-        if (depositRecordJSON != null) {
-            intent.putExtra(KEY_ORG_VALUE, depositRecordJSON);
-        }
-        if (!(content instanceof Activity)) {
+    /**
+     * @param context 上下文
+     */
+    public static void start(Context context) {
+        Intent intent = new Intent(context, TakeOutActivity.class);
+        if (!(context instanceof Activity)) {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        content.startActivity(intent);
-    }
-
-    public static String createHarmfulIngredientString(Map<String, Boolean> harmfulIngredientMap) {
-        if (harmfulIngredientMap != null) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Map.Entry<String, Boolean> entry : harmfulIngredientMap.entrySet()) {
-                if (entry.getValue()) {
-                    if (stringBuilder.length() > 0) {
-                        stringBuilder.append(",");
-                    }
-                    stringBuilder.append(entry.getKey());
-                }
-            }
-            return stringBuilder.toString();
-        } else {
-            return null;
-        }
+        context.startActivity(intent);
     }
 
     @Override
     void afterRequestPermission(int requestCode, boolean isAllGranted) {
 
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,24 +100,19 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
         mContainerNoValue = findViewById(R.id.etContainerNoValue);
         mOutWeightValue = findViewById(R.id.etOutWeightValue);
 
+        mSubmit = findViewById(R.id.btnOK);
+
         mContainerNoValue.addTextChangedListener(this);
         mOutWeightValue.addTextChangedListener(this);
+        mShelfNoValue.addTextChangedListener(this);
+        mOtherInfoValue.addTextChangedListener(this);
 
-        String depositRecordJSON = getIntent().getStringExtra(KEY_ORG_VALUE);
-        if (depositRecordJSON != null) {
-            mDepositRecord = CabinetCore.GSON.fromJson(depositRecordJSON, DepositRecord.class);
-            isRestore = true;
-        } else {
-            mDepositRecord = new DepositRecord();
-            mDepositRecord.storage_id = Objects.requireNonNull(CabinetCore.getCabinetInfo()).id;
-            isRestore = false;
-        }
+        reset();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        showDepositRecord();
     }
 
     private void showDepositRecord() {
@@ -168,6 +137,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
             mOutWeightValue.setText(mDepositRecord.output_weight);
             mShelfNoValue.setText(mDepositRecord.storage_rack);
             mOtherInfoValue.setText(mDepositRecord.remark);
+
         });
 
     }
@@ -204,28 +174,46 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
     }
 
     public void onSubmitButtonClick(View view) {
-        if (mDepositRecord.has_output_weight) {
-            showToast("此暂存记录已经出柜！");
-        } else if (validateDeposit()) {
+        if (!validateDeposit()) {
+            showToast("请完善信息再提交.");
+            return;
+        }
+        if (mOfflineModel.isChecked()) {
+            mDepositRecord.output_time = CabinetCore._SecondFormatter.format(new Date(System.currentTimeMillis()));
+            CabinetCore.saveDepositRecord(mDepositRecord);
+            showToast("提交成功");
+            reset();
+        } else {
             showProgressDialog();
             getExecutorService().submit(() -> {
                 APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.takeOutDeposit(mDepositRecord);
                 dismissProgressDialog();
                 if (apijson.status == APIJSON.Status.ok) {
                     showToast("提交成功");
+                    mDepositRecord.isSent = true;
+                    CabinetCore.saveDepositRecord(mDepositRecord);
                     reset();
+                } else if (apijson.status == APIJSON.Status.error) {
+                    showToast(apijson.error);
+                    showModelSwitchDialog();
                 } else {
                     showToast(apijson.error);
+                    showModelSwitchDialog();
                 }
             });
-        } else {
-            showToast("请完善信息再提交！");
         }
     }
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
+        if (compoundButton == mOfflineModel) {
+            if (b) {
+                mSubmit.setText(R.string.save);
+            } else {
+                mSubmit.setText(R.string.submit);
+            }
+            reset();
+        }
     }
 
     public void onResetButtonClick(View view) {
@@ -242,17 +230,41 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
 
     }
 
+    private void onContainerNoTextChange(String containerNo) {
+        if (mOfflineModel.isChecked()) {
+            DepositRecord record = CabinetCore.getDepositRecord(containerNo);
+            if (record != null) {
+                record.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
+                record.has_input_weight = !TextUtils.isEmpty(record.input_weight);
+                record.has_output_weight = !TextUtils.isEmpty(record.output_weight);
+                if(record.has_output_weight) {
+                    showToast("此单号已经有记录，请勿重复提交.");
+                    reset();
+                } else {
+                    record.output_operator = mDepositRecord.output_operator;
+                    mDepositRecord = record;
+                    showToast("离线存单将不校验数据.");
+                    showDepositRecord();
+                }
+            } else {
+                showToast("本机未查询到入柜记录,请先入柜.");
+                reset();
+            }
+        } else {
+            getRemoteDepositRecord(containerNo);
+        }
+    }
+
     @Override
     public void afterTextChanged(Editable editable) {
         if (editable == mContainerNoValue.getEditableText()) {
             if (mContainerNoValue.isEnabled()) {
                 String containerNo = editable.toString();
                 if (containerNo.length() >= 20) {
-                    if (containerNo.startsWith("NO")) {
-                        getDeposit(containerNo);
+                    if (containerNo.startsWith("NO") && TextUtils.isDigitsOnly(containerNo.substring(2))) {
+                        onContainerNoTextChange(containerNo);
                     } else {
-                        mContainerNoValue.setText(null);
-                        showToast("暂存号不正确！");
+                        showToast(getString(R.string.invalidate_no));
                     }
                 }
             }
@@ -262,67 +274,86 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
                 try {
                     float weight = Float.parseFloat(weightStr);
                     mDepositRecord.output_weight = String.valueOf(weight);
+                    if (mOfflineModel.isChecked()) {
+                        if (!mDepositRecord.has_input_weight) {
+                            mDepositRecord.input_weight = mDepositRecord.output_weight;
+                            mInWeightValue.setText(mDepositRecord.input_weight);
+                        }
+                    }
                 } catch (Exception e) {
                     mOutWeightValue.setText(null);
-                    showToast("请输入正确的入柜重量！");
+                    showToast("请输入正确的出柜重量！");
                 }
+            }
+        } else if (editable == mShelfNoValue.getEditableText()) {
+            if (mOfflineModel.isChecked()) {
+                String shelfNoStr = editable.toString();
+                if (!TextUtils.isEmpty(shelfNoStr)) {
+                    try {
+                        int shelfNo = Integer.parseInt(shelfNoStr);
+                        mDepositRecord.storage_rack = String.valueOf(shelfNo);
+                    } catch (Exception e) {
+                        mShelfNoValue.setText(null);
+                        showToast("货架号必须是数字！");
+                    }
+                }
+            }
+        } else if (editable == mOtherInfoValue.getEditableText()) {
+            if (mOfflineModel.isChecked()) {
+                mDepositRecord.remark = editable.toString();
             }
         }
     }
 
-    private void getDeposit(String no) {
+    private void getRemoteDepositRecord(String no) {
         showProgressDialog();
         getExecutorService().submit(() -> {
             APIJSON<DepositRecordListJSON> depositJSON = RemoteAPI.Deposit.getDeposit(no, 20, 1);
             dismissProgressDialog();
             if (depositJSON.status == APIJSON.Status.ok) {
-                if (depositJSON.data != null) {
-                    if (depositJSON.data.storage_records == null || depositJSON.data.storage_records.size() == 0) {
-                        showToast("此单号无暂存记录!");
-                    } else {
-                        if (isRestore) {
-
-                        } else {
-                            DepositRecord record = depositJSON.data.storage_records.get(0);
-                            mDepositRecord.id = record.id;
-                            mDepositRecord.storage_no = record.storage_no;
-                            mDepositRecord.input_weight = record.input_weight;
-                            mDepositRecord.output_weight = record.input_weight;
-                            mDepositRecord.remark = record.remark;
-                            mDepositRecord.laboratory_id = record.laboratory_id;
-                            mDepositRecord.laboratory = record.laboratory;
-                            mDepositRecord.harmful_infos = record.harmful_infos;
-                            mDepositRecord.storage_rack = record.storage_rack;
-                            mDepositRecord.container_size = record.container_size;
-                            mDepositRecord.has_output_weight = !TextUtils.isEmpty(record.output_weight);
-                            mDepositRecord.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
-                            mDepositRecord.has_input_weight = !TextUtils.isEmpty(record.input_weight);
-                        }
-                    }
+                if (depositJSON.data.storage_records == null || depositJSON.data.storage_records.size() == 0) {
+                    showToast("未查询到入柜记录,请先入柜.");
+                    reset();
                 } else {
-                    mContainerNoValue.setText(null);
-                    showToast("单号错误！");
+                    DepositRecord record = depositJSON.data.storage_records.get(0);
+                    record.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
+                    record.has_input_weight = !TextUtils.isEmpty(record.input_weight);
+                    record.has_output_weight = !TextUtils.isEmpty(record.output_weight);
+                    if(!record.has_storage_rack) {
+                        showToast("未查询到入柜记录,请先入柜.");
+                    } else if(record.has_output_weight) {
+                        showToast("此单号已经出柜，请勿重复出柜.");
+                    } else {
+                        record.output_operator = mDepositRecord.output_operator;
+                        mDepositRecord = record;
+                        showDepositRecord();
+                    }
                 }
-                showDepositRecord();
+
             } else if (depositJSON.status == APIJSON.Status.error) {
-                mContainerNoValue.setText(null);
-                showToast("单号错误！");
-                showDepositRecord();
+                showToast("单号错误.");
+                reset();
             } else {
                 showToast(depositJSON.error);
-                new AlertDialog.Builder(TakeOutActivity.this).setMessage("获取实验列表失败，是否切换为离线模式？").setNegativeButton("确认", (dialog, which) -> {
-                    mOfflineModel.setChecked(true);
-                    showDepositRecord();
-                }).setNeutralButton("取消", (dialogInterface, i) -> finish()).show();
+                showModelSwitchDialog();
             }
         });
     }
 
+    private void showModelSwitchDialog() {
+        new AlertDialog.Builder(TakeOutActivity.this).setMessage(R.string.switch_offline_model_tip).setNegativeButton(R.string.ok, (dialog, which) -> mOfflineModel.setChecked(true)).setNeutralButton(R.string.cancel, (dialogInterface, i) -> finish()).show();
+    }
+
     private void reset() {
+        initDepositRecord();
+        mContainerNoValue.setText(null);
+        showDepositRecord();
+    }
+
+    private void initDepositRecord() {
         mDepositRecord = new DepositRecord();
         mDepositRecord.storage_id = Objects.requireNonNull(CabinetCore.getCabinetInfo()).id;
-        isRestore = false;
-        mOfflineModel.setChecked(false);
-        showDepositRecord();
+        mDepositRecord.output_operator = Objects.requireNonNull(CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator)).name;
+
     }
 }

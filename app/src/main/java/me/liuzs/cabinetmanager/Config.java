@@ -14,11 +14,12 @@ import java.util.List;
  */
 public class Config {
     public static final String DATABASE_NAME = "CabinetDatabase";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 4;
     public static final String EZ_APP_KEY = "15e1da4c183a470c89ebb68c3a26a349";
 
     public static final String SYSTEM_PREFERENCE_NAME = "SystemPreference";
     public static final String SYSPRE_Cabinet_User = "SYSPRE_Cabinet_User";
+    public static final String SYSPRE_Laboratory_Cache = "SYSPRE_Laboratory_Cache";
     public static final String SYSPRE_CABINET_INFO = "CABINET_INFO_FULL_VERSION_3";
     public static final String PRINTER_BLUETOOTH_INFO = "PRINTER_BLUETOOTH_INFO";
     public static final String SYSPRE_CAMERA_VERIFY_CODE = "SYSPRE_CAMERA_VERIFY_CODE";

@@ -17,12 +17,12 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.kyleduo.switchbutton.SwitchButton;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,15 +42,11 @@ import me.liuzs.cabinetmanager.net.RemoteAPI;
  */
 public class DepositActivity extends BaseActivity implements TextWatcher, CompoundButton.OnCheckedChangeListener {
 
-    public final static String TAG = "DepositActivity";
-    public final static String KEY_ORG_VALUE = "KEY_ORG_VALUE";
+    private final List<Laboratory> mLaboratoryList = new LinkedList<>();
     private DepositRecord mDepositRecord;
-    private boolean isRestore = false;
     private TextView mContainerSpecValue, mSourceValue, mHarmfulIngredientsValue;
     private EditText mContainerNoValue, mWeightValue, mShelfNoValue, mOtherInfoValue;
-    private Button mWeight;
-    private SwitchButton mOfflineModel;
-    private final List<Laboratory> mLaboratoryList = new LinkedList<>();
+    private Button mWeight, mSubmit;
     private final ActivityResultLauncher<Intent> mHarmfulIngredientSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
         if (resultCode == RESULT_OK) {
@@ -63,7 +59,6 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
             showDepositRecord();
         }
     });
-
 
     private final ActivityResultLauncher<Intent> mContainerSpecSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
@@ -82,9 +77,10 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         if (resultCode == RESULT_OK) {
             Intent data = result.getData();
             assert data != null;
-            String selectValue = data.getStringExtra(SpinnerActivity.KEY_SELECT_INDEX);
-            assert selectValue != null;
-            DepositActivity.this.mDepositRecord.laboratory_id = mLaboratoryList.get(Integer.parseInt(selectValue)).id;
+            String selectIndex = data.getStringExtra(SpinnerActivity.KEY_SELECT_INDEX);
+            assert selectIndex != null;
+            DepositActivity.this.mDepositRecord.laboratory_id = mLaboratoryList.get(Integer.parseInt(selectIndex)).id;
+            DepositActivity.this.mDepositRecord.laboratory = mLaboratoryList.get(Integer.parseInt(selectIndex)).name;
             showDepositRecord();
         }
     });
@@ -113,15 +109,13 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         }
     });
 
+    private SwitchButton mOfflineModel;
+
     /**
-     * @param context           上下文
-     * @param depositRecordJSON 离线数据
+     * @param context 上下文
      */
-    public static void start(Context context, @Nullable String depositRecordJSON) {
+    public static void start(Context context) {
         Intent intent = new Intent(context, DepositActivity.class);
-        if (depositRecordJSON != null) {
-            intent.putExtra(KEY_ORG_VALUE, depositRecordJSON);
-        }
         if (!(context instanceof Activity)) {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -183,24 +177,17 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         mShelfNoValue = findViewById(R.id.etShelfNoValue);
         mOtherInfoValue = findViewById(R.id.etOtherInfoValue);
 
+        mSubmit = findViewById(R.id.btnOK);
+
         mContainerNoValue.addTextChangedListener(this);
         mWeightValue.addTextChangedListener(this);
         mShelfNoValue.addTextChangedListener(this);
         mOtherInfoValue.addTextChangedListener(this);
 
-        String depositRecordJSON = getIntent().getStringExtra(KEY_ORG_VALUE);
-        if (depositRecordJSON != null) {
-            mDepositRecord = CabinetCore.GSON.fromJson(depositRecordJSON, DepositRecord.class);
-            isRestore = true;
-        } else {
-            mDepositRecord = new DepositRecord();
-            mDepositRecord.storage_id = Objects.requireNonNull(CabinetCore.getCabinetInfo()).id;
-            isRestore = false;
-        }
         getLaboratoryList();
     }
 
-    private void getLaboratoryList() {
+    private void getRemoteLaboratoryList() {
         showProgressDialog();
         getExecutorService().submit(() -> {
             APIJSON<Agency> agencyAPIJSON = RemoteAPI.System.getLaboratoryList();
@@ -210,66 +197,78 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                     List<Laboratory> laboratoryList = agencyAPIJSON.data.laboratories;
                     mLaboratoryList.clear();
                     mLaboratoryList.addAll(laboratoryList);
-                    showDepositRecord();
+                    CabinetCore.saveLaboratoryListCache(mLaboratoryList);
+                    initDepositRecord();
                 } else {
-                    showToast("机构下无实验室，请去平台创建！");
+                    showToast(getString(R.string.no_laboratory_tip));
                     finish();
                 }
             } else {
                 showToast(agencyAPIJSON.error);
-                new AlertDialog.Builder(DepositActivity.this).setMessage("获取实验列表失败，是否切换为离线模式？").setNegativeButton("确认", (dialog, which) -> {
-                    mOfflineModel.setChecked(true);
-                    showDepositRecord();
-                }).setNeutralButton("取消", (dialogInterface, i) -> finish()).show();
+                showModelSwitchDialog();
             }
         });
     }
 
-    private void getDeposit(String no) {
+    private void showModelSwitchDialog() {
+        new AlertDialog.Builder(DepositActivity.this).setMessage(R.string.switch_offline_model_tip).setNegativeButton(R.string.ok, (dialog, which) -> mOfflineModel.setChecked(true)).setNeutralButton(R.string.cancel, (dialogInterface, i) -> finish()).show();
+    }
+
+    private void getLocalLaboratoryList() {
+        List<Laboratory> laboratoryList = CabinetCore.getLaboratoryListCache();
+        if (laboratoryList != null) {
+            mLaboratoryList.clear();
+            mLaboratoryList.addAll(laboratoryList);
+            initDepositRecord();
+        } else {
+            showToast(getString(R.string.local_info_poor_tip));
+            finish();
+        }
+    }
+
+    private void getLaboratoryList() {
+        if (mOfflineModel.isChecked()) {
+            getRemoteLaboratoryList();
+        } else {
+            getLocalLaboratoryList();
+        }
+
+    }
+
+    private void initDepositRecord() {
+        mDepositRecord = new DepositRecord();
+        mDepositRecord.storage_id = Objects.requireNonNull(CabinetCore.getCabinetInfo()).id;
+        mDepositRecord.input_operator = Objects.requireNonNull(CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator)).name;
+        showDepositRecord();
+    }
+
+    private void getRemoteDepositRecord(String no) {
         showProgressDialog();
         getExecutorService().submit(() -> {
             APIJSON<DepositRecordListJSON> depositJSON = RemoteAPI.Deposit.getDeposit(no, 20, 1);
             dismissProgressDialog();
             if (depositJSON.status == APIJSON.Status.ok) {
-                if (depositJSON.data != null) {
-                    if (depositJSON.data.storage_records == null || depositJSON.data.storage_records.size() == 0) {
-                        if (isRestore) {
-
-                        } else {
-                            mDepositRecord.storage_no = no;
-                        }
-                    } else {
-                        DepositRecord record = depositJSON.data.storage_records.get(0);
-                        mDepositRecord.id = record.id;
-                        mDepositRecord.storage_no = record.storage_no;
-                        mDepositRecord.input_weight = record.input_weight;
-                        mDepositRecord.remark = record.remark;
-                        mDepositRecord.laboratory_id = record.laboratory_id;
-                        mDepositRecord.laboratory = record.laboratory;
-                        mDepositRecord.harmful_infos = record.harmful_infos;
-                        mDepositRecord.storage_rack = record.storage_rack;
-                        mDepositRecord.container_size = record.container_size;
-                        mDepositRecord.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
-                        mDepositRecord.has_input_weight = !TextUtils.isEmpty(record.input_weight);
-                        if (mDepositRecord.has_storage_rack) {
-                            showToast("此单号已经入柜，无法再次提交!");
-                        }
-                    }
+                if (depositJSON.data.storage_records == null || depositJSON.data.storage_records.size() == 0) {
+                    mDepositRecord.storage_no = no;
                 } else {
-                    mContainerNoValue.setText(null);
-                    showToast("单号错误！");
+                    DepositRecord record = depositJSON.data.storage_records.get(0);
+                    record.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
+                    record.has_input_weight = !TextUtils.isEmpty(record.input_weight);
+                    record.input_operator = mDepositRecord.input_operator;
+                    mDepositRecord = record;
+                    if (mDepositRecord.has_storage_rack) {
+                        showToast("此单号已经入柜，无法再次提交.");
+                        CabinetCore.saveDepositRecord(record);
+                        reset();
+                    }
                 }
                 showDepositRecord();
             } else if (depositJSON.status == APIJSON.Status.error) {
-                mContainerNoValue.setText(null);
-                showToast("单号错误！");
-                showDepositRecord();
-            } else {
+                showToast(R.string.invalidate_no);
+                reset();
+            } else if (depositJSON.status == APIJSON.Status.other) {
                 showToast(depositJSON.error);
-                new AlertDialog.Builder(DepositActivity.this).setMessage("获取实验列表失败，是否切换为离线模式？").setNegativeButton("确认", (dialog, which) -> {
-                    mOfflineModel.setChecked(true);
-                    showDepositRecord();
-                }).setNeutralButton("取消", (dialogInterface, i) -> finish()).show();
+                showModelSwitchDialog();
             }
         });
     }
@@ -367,40 +366,44 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         if (TextUtils.isEmpty(mDepositRecord.container_size)) {
             return false;
         }
-        if (TextUtils.isEmpty(mDepositRecord.storage_rack)) {
-            return false;
-        }
-        return true;
+        return !TextUtils.isEmpty(mDepositRecord.storage_rack);
     }
 
     public void onSubmitButtonClick(View view) {
-        if (mDepositRecord.has_storage_rack) {
-            showToast("此单号已经入柜，无法再次提交!");
+        if (!validateDeposit()) {
+            showToast("请完善信息再提交.");
             return;
         }
-        if (validateDeposit()) {
+        if (mOfflineModel.isChecked()) {
+            mDepositRecord.input_time = CabinetCore._SecondFormatter.format(new Date(System.currentTimeMillis()));
+            CabinetCore.saveDepositRecord(mDepositRecord);
+            showToast("提交成功");
+            reset();
+        } else {
             showProgressDialog();
             getExecutorService().submit(() -> {
                 APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.submitDeposit(mDepositRecord);
                 dismissProgressDialog();
                 if (apijson.status == APIJSON.Status.ok) {
                     showToast("提交成功");
+                    CabinetCore.saveDepositRecord(mDepositRecord);
                     reset();
+                } else if (apijson.status == APIJSON.Status.error) {
+                    showToast(apijson.error);
+                    showModelSwitchDialog();
                 } else {
                     showToast(apijson.error);
+                    showModelSwitchDialog();
                 }
             });
-        } else {
-            showToast("请完善信息再提交！");
         }
+
     }
 
     private void reset() {
-        mDepositRecord = new DepositRecord();
-        mDepositRecord.storage_id = Objects.requireNonNull(CabinetCore.getCabinetInfo()).id;
-        isRestore = false;
-        mOfflineModel.setChecked(false);
+        initDepositRecord();
         showDepositRecord();
+        mContainerNoValue.setText(null);
     }
 
     public void onContainerSpecButtonClick(View view) {
@@ -437,11 +440,10 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
             if (mContainerNoValue.isEnabled()) {
                 String containerNo = editable.toString();
                 if (containerNo.length() >= 20) {
-                    if (containerNo.startsWith("NO")) {
-                        getDeposit(containerNo);
+                    if (containerNo.startsWith("NO") && TextUtils.isDigitsOnly(containerNo.substring(2))) {
+                        onContainerNoTextChange(containerNo);
                     } else {
-                        mContainerNoValue.setText(null);
-                        showToast("暂存号不正确！");
+                        showToast(getString(R.string.invalidate_no));
                     }
                 }
             }
@@ -472,8 +474,32 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         }
     }
 
+    private void onContainerNoTextChange(String containerNo) {
+        if (mOfflineModel.isChecked()) {
+            DepositRecord record = CabinetCore.getDepositRecord(containerNo);
+            if (record != null) {
+                showToast("次单号已经有记录，请勿重复提交.");
+                reset();
+            } else {
+                showToast("离线存单将不校验数据.");
+                mDepositRecord.storage_no = containerNo;
+                showDepositRecord();
+            }
+        } else {
+            getRemoteDepositRecord(containerNo);
+        }
+    }
+
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        showDepositRecord();
+        if (compoundButton == mOfflineModel) {
+            if (b) {
+                mSubmit.setText(R.string.save);
+            } else {
+                mSubmit.setText(R.string.submit);
+            }
+            reset();
+
+        }
     }
 }

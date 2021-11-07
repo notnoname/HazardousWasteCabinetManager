@@ -233,4 +233,9 @@
     <string name="modbus_address">Modbus地址</string>
     <string name="no_alert">无告警</string>
     <string name="input_container_no_please">请扫描或者输入暂存单号</string>
+    <string name="offline_deposit">离线存单</string>
+    <string name="switch_offline_model_tip">服务器访问失败,是否切换为离线模式？</string>
+    <string name="local_info_poor_tip">本地缺乏基本数据,无法进行离线操作.</string>
+    <string name="no_laboratory_tip">机构下无实验室,请去平台创建.</string>
+    <string name="invalidate_no">单号不正确.</string>
 </resources>

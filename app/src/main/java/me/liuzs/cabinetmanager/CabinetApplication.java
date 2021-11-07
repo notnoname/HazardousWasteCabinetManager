@@ -7,7 +7,7 @@ import android.content.Intent;
 import com.puty.sdk.PrinterInstance;
 import com.videogo.openapi.EZOpenSDK;
 
-import me.liuzs.cabinetmanager.db.CDatabase;
+import me.liuzs.cabinetmanager.db.CabinetDatabase;
 import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.util.StorageUtility;
 import me.liuzs.cabinetmanager.util.Util;
@@ -65,7 +65,7 @@ public class CabinetApplication extends Application {
         INSTANCE = null;
 //        stopService(new Intent(this, MQTTService.class));
         stopService(new Intent(this, HardwareService.class));
-        CDatabase.getInstance().close();
+        CabinetDatabase.getInstance().close();
         super.onTerminate();
     }
 }

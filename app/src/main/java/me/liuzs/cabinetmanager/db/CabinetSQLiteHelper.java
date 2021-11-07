@@ -24,10 +24,10 @@ public class CabinetSQLiteHelper extends SQLiteOpenHelper {
     }
 
     public void createTable(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(String.format("create table if not exists %s(%s integer PRIMARY KEY AUTOINCREMENT,%s TEXT,%s integer)", CDatabase.LOG_TABLE_NAME, CDatabase.COLUMN_ID, CDatabase.COLUMN_VALUE, CDatabase.COLUMN_IS_SENT));
-        sqLiteDatabase.execSQL(String.format("create table if not exists %s(%s integer PRIMARY KEY AUTOINCREMENT,%s TEXT,%s integer)", CDatabase.HWV_TABLE_NAME, CDatabase.COLUMN_ID, CDatabase.COLUMN_VALUE, CDatabase.COLUMN_IS_SENT));
-        sqLiteDatabase.execSQL(String.format("create table if not exists %s(%s integer PRIMARY KEY AUTOINCREMENT,%s TEXT,%s integer)", CDatabase.OFFLINE_TABLE_NAME, CDatabase.COLUMN_ID, CDatabase.COLUMN_VALUE, CDatabase.COLUMN_IS_SENT));
-        sqLiteDatabase.execSQL(String.format("create table if not exists %s(%s integer PRIMARY KEY AUTOINCREMENT,%s TEXT,%s integer)", CDatabase.ALERT_TABLE_NAME, CDatabase.COLUMN_ID, CDatabase.COLUMN_VALUE, CDatabase.COLUMN_IS_SENT));
+        sqLiteDatabase.execSQL(String.format("create table if not exists %s(%s integer PRIMARY KEY AUTOINCREMENT,%s TEXT,%s integer)", CabinetDatabase.LOG_TABLE_NAME, CabinetDatabase.COLUMN_ID, CabinetDatabase.COLUMN_VALUE, CabinetDatabase.COLUMN_IS_SENT));
+        sqLiteDatabase.execSQL(String.format("create table if not exists %s(%s integer PRIMARY KEY AUTOINCREMENT,%s TEXT,%s integer)", CabinetDatabase.HWV_TABLE_NAME, CabinetDatabase.COLUMN_ID, CabinetDatabase.COLUMN_VALUE, CabinetDatabase.COLUMN_IS_SENT));
+        sqLiteDatabase.execSQL(String.format("create table if not exists %s(%s integer PRIMARY KEY AUTOINCREMENT,%s VARCHAR(20),%s TEXT,%s integer)", CabinetDatabase.DEPOSIT_TABLE_NAME, CabinetDatabase.COLUMN_ID, CabinetDatabase.COLUMN_CONTAINER_NO, CabinetDatabase.COLUMN_VALUE, CabinetDatabase.COLUMN_IS_SENT));
+        sqLiteDatabase.execSQL(String.format("create table if not exists %s(%s integer PRIMARY KEY AUTOINCREMENT,%s TEXT,%s integer)", CabinetDatabase.ALERT_TABLE_NAME, CabinetDatabase.COLUMN_ID, CabinetDatabase.COLUMN_VALUE, CabinetDatabase.COLUMN_IS_SENT));
 
     }
 }

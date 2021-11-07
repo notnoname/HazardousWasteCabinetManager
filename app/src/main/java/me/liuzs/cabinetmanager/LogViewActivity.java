@@ -3,7 +3,6 @@ package me.liuzs.cabinetmanager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 
@@ -17,7 +16,7 @@ import com.google.gson.GsonBuilder;
 import java.util.LinkedList;
 import java.util.List;
 
-import me.liuzs.cabinetmanager.db.CDatabase;
+import me.liuzs.cabinetmanager.db.CabinetDatabase;
 import me.liuzs.cabinetmanager.model.AlertLog;
 import me.liuzs.cabinetmanager.model.OptLog;
 import me.liuzs.cabinetmanager.ui.log.LogAdapter;
@@ -99,7 +98,7 @@ public class LogViewActivity extends BaseActivity {
     public static final int PageSize = 100;
 
     public synchronized void getOptLog() {
-        List<OptLog> list = CDatabase.getInstance().getOptLogList(CDatabase.Filter.All, true, PageSize, mLeftDataSize);
+        List<OptLog> list = CabinetDatabase.getInstance().getOptLogList(CabinetDatabase.Filter.All, true, PageSize, mLeftDataSize);
         if (list.size() == 0) {
             isLeftCanLoadMore = false;
         } else {
@@ -114,7 +113,7 @@ public class LogViewActivity extends BaseActivity {
     }
 
     public synchronized void getAlertLog() {
-        List<AlertLog> list = CDatabase.getInstance().getAlertLogList(CDatabase.Filter.All, true, PageSize, mRightDataSize);
+        List<AlertLog> list = CabinetDatabase.getInstance().getAlertLogList(CabinetDatabase.Filter.All, true, PageSize, mRightDataSize);
         if (list.size() == 0) {
             isRightCanLoadMore = false;
         } else {
