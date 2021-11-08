@@ -357,13 +357,12 @@
                     android:textColor="@color/black"
                     android:textSize="32px" />
 
-                <TextView
+                <ImageView
                     android:layout_width="90px"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/ppm"
-                    android:textColor="@color/white"
-                    android:textSize="32px" />
+                    android:layout_height="28px"
+                    android:cropToPadding="true"
+                    android:src="@drawable/ic_percent_sign"
+                    tools:ignore="ContentDescription" />
             </LinearLayout>
 
             <LinearLayout

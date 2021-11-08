@@ -325,23 +325,40 @@ public class ModbusService {
 
     public synchronized static boolean saveSetupValue(SetupValue setupValue) {
         try {
-            writeHoldingRegister(SetupValue.VOCUnionMaxAddress - 1, (int) (setupValue.vocUnionMax * 100));
-            writeHoldingRegister(SetupValue.VOCUnionMinAddress - 1, (int) (setupValue.vocUnionMin * 100));
-            writeHoldingRegister(SetupValue.FanUnionWorkTimeAddress - 1, setupValue.fanUnionWorkTime);
-            writeHoldingRegister(SetupValue.FanUnionStopTimeAddress - 1, setupValue.fanUnionStopTime);
-            writeHoldingRegister(SetupValue.FanUnionFrequencyAddress - 1, (int) (setupValue.fanUnionFrequency * 100));
-            writeHoldingRegister(SetupValue.VOCAlertAutoAddress - 1, setupValue.vocAlertAuto ? 1 : 0);
-            writeHoldingRegister(SetupValue.TempHighAlertAutoAddress - 1, setupValue.tempHighAlertAuto ? 1 : 0);
-            writeHoldingRegister(SetupValue.TempLowAlertAutoAddress - 1, setupValue.tempLowAlertAuto ? 1 : 0);
-            writeHoldingRegister(SetupValue.HumidityHighAlertAutoAddress - 1, setupValue.humidityHighAlertAuto ? 1 : 0);
-            writeHoldingRegister(SetupValue.HumidityLowAlertAutoAddress - 1, setupValue.humidityLowAlertAuto ? 1 : 0);
-            writeHoldingRegister(SetupValue.VOCAlertAutoThresholdAddress - 1, (int) (setupValue.vocAlertAutoThreshold * 100));
-            writeHoldingRegister(SetupValue.FGAlertAutoThresholdAddress - 1, (int) (setupValue.fgAlertThreshold * 100));
-            writeHoldingRegister(SetupValue.TempHighAlertThresholdAddress - 1, (int) (setupValue.tempHighAlertThreshold * 10));
-            writeHoldingRegister(SetupValue.TempLowAlertThresholdAddress - 1, (int) (setupValue.tempLowAlertThreshold * 10));
-            writeHoldingRegister(SetupValue.HumidityHighAlertThresholdAddress - 1, (int) (setupValue.humidityHighAlertThreshold * 10));
-            writeHoldingRegister(SetupValue.HumidityLowAlertThresholdAddress - 1, (int) (setupValue.humidityLowAlertThreshold * 10));
-            writeHoldingRegister(SetupValue.AlertSoundLightAddress - 1, setupValue.alertSoundLight ? 1 : 0);
+            if (setupValue.vocUnionMax != null)
+                writeHoldingRegister(SetupValue.VOCUnionMaxAddress - 1, (int) (setupValue.vocUnionMax * 100));
+            if (setupValue.vocUnionMin != null)
+                writeHoldingRegister(SetupValue.VOCUnionMinAddress - 1, (int) (setupValue.vocUnionMin * 100));
+            if (setupValue.fanUnionWorkTime != null)
+                writeHoldingRegister(SetupValue.FanUnionWorkTimeAddress - 1, setupValue.fanUnionWorkTime);
+            if (setupValue.fanUnionStopTime != null)
+                writeHoldingRegister(SetupValue.FanUnionStopTimeAddress - 1, setupValue.fanUnionStopTime);
+            if (setupValue.fanUnionFrequency != null)
+                writeHoldingRegister(SetupValue.FanUnionFrequencyAddress - 1, (int) (setupValue.fanUnionFrequency * 100));
+            if (setupValue.vocAlertAuto != null)
+                writeHoldingRegister(SetupValue.VOCAlertAutoAddress - 1, setupValue.vocAlertAuto ? 1 : 0);
+            if (setupValue.tempHighAlertAuto != null)
+                writeHoldingRegister(SetupValue.TempHighAlertAutoAddress - 1, setupValue.tempHighAlertAuto ? 1 : 0);
+            if (setupValue.tempLowAlertAuto != null)
+                writeHoldingRegister(SetupValue.TempLowAlertAutoAddress - 1, setupValue.tempLowAlertAuto ? 1 : 0);
+            if (setupValue.humidityHighAlertAuto != null)
+                writeHoldingRegister(SetupValue.HumidityHighAlertAutoAddress - 1, setupValue.humidityHighAlertAuto ? 1 : 0);
+            if (setupValue.humidityLowAlertAuto != null)
+                writeHoldingRegister(SetupValue.HumidityLowAlertAutoAddress - 1, setupValue.humidityLowAlertAuto ? 1 : 0);
+            if (setupValue.vocAlertAutoThreshold != null)
+                writeHoldingRegister(SetupValue.VOCAlertAutoThresholdAddress - 1, (int) (setupValue.vocAlertAutoThreshold * 100));
+            if (setupValue.fgAlertThreshold != null)
+                writeHoldingRegister(SetupValue.FGAlertAutoThresholdAddress - 1, (int) (setupValue.fgAlertThreshold * 100));
+            if (setupValue.tempHighAlertThreshold != null)
+                writeHoldingRegister(SetupValue.TempHighAlertThresholdAddress - 1, (int) (setupValue.tempHighAlertThreshold * 10));
+            if (setupValue.tempLowAlertThreshold != null)
+                writeHoldingRegister(SetupValue.TempLowAlertThresholdAddress - 1, (int) (setupValue.tempLowAlertThreshold * 10));
+            if (setupValue.humidityHighAlertThreshold != null)
+                writeHoldingRegister(SetupValue.HumidityHighAlertThresholdAddress - 1, (int) (setupValue.humidityHighAlertThreshold * 10));
+            if (setupValue.humidityLowAlertThreshold != null)
+                writeHoldingRegister(SetupValue.HumidityLowAlertThresholdAddress - 1, (int) (setupValue.humidityLowAlertThreshold * 10));
+            if (setupValue.alertSoundLight != null)
+                writeHoldingRegister(SetupValue.AlertSoundLightAddress - 1, setupValue.alertSoundLight ? 1 : 0);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

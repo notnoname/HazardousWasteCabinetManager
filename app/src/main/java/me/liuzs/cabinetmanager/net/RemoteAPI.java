@@ -77,8 +77,8 @@ public class RemoteAPI {
          */
         public static final String MQTT_ROOT = "tcp://47.104.235.225:1883";
         public static final String MQTT_HARDWARE_PUBLISH_TOPIC = "test1";
-        public static final String MQTT_ControlTopic = "test2";
-        public static final String MQTT_SetupValueTopic = "test1";
+        public static final String Topic_Control = "test2";
+        public static final String Topic_SetupValue = "test3";
     }
 
     /**

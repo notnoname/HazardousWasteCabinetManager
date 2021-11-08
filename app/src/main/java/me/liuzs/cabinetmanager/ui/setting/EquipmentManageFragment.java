@@ -14,6 +14,7 @@ import com.kyleduo.switchbutton.SwitchButton;
 
 import java.text.DecimalFormat;
 
+import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.SystemSettingActivity;
 import me.liuzs.cabinetmanager.model.modbus.SetupValue;
@@ -151,7 +152,7 @@ public class EquipmentManageFragment extends Fragment implements CompoundButton.
             result = new SetupValue();
             result.fanUnionWorkTime = (int) unionFanRunTime;
             result.fanUnionStopTime = (int) unionFanStopTime;
-            result.fanUnionFrequency = (int) unionFC;
+            result.fanUnionFrequency = unionFC;
             result.vocUnionMax = unionVOCMax;
             result.vocUnionMin = unionVOCMin;
 
@@ -202,6 +203,7 @@ public class EquipmentManageFragment extends Fragment implements CompoundButton.
                 showValue();
                 mActivity.getExecutorService().submit(() -> {
                     final boolean result = ModbusService.saveSetupValue(mValue);
+                    CabinetCore.logOpt(CabinetCore.RoleType.Admin, "保存", "设置");
                     mActivity.runOnUiThread(() -> {
                         showValue();
                         if(result) {

@@ -435,9 +435,16 @@ public class CabinetCore {
         CabinetDatabase.getInstance().deleteDepositRecord(localId);
     }
 
-    public static void logOpt(RoleType roleType, @NotNull String opt, @NotNull String obj) {
+    public static void logOpt(@NotNull RoleType roleType, @NotNull String opt, @NotNull String obj) {
         User user = getCabinetUser(roleType);
         String userName = user != null ? user.name : "Unknown User";
+        String time = _SecondFormatter.format(new Date(System.currentTimeMillis()));
+        OptLog optLog = new OptLog(userName, obj, opt, time);
+        CabinetDatabase.getInstance().addOptLog(optLog);
+    }
+
+    public static void logOpt(@NotNull String opt, @NotNull String obj) {
+        String userName = "服务端用户";
         String time = _SecondFormatter.format(new Date(System.currentTimeMillis()));
         OptLog optLog = new OptLog(userName, obj, opt, time);
         CabinetDatabase.getInstance().addOptLog(optLog);
@@ -459,7 +466,7 @@ public class CabinetCore {
     }
 
     public static List<HardwareValue> getUnSentHardwareValueList() {
-        return CabinetDatabase.getInstance().getHardwareValueList(CabinetDatabase.Filter.NoUpload, false, Integer.MAX_VALUE, 0);
+        return CabinetDatabase.getInstance().getHardwareValueList(CabinetDatabase.Filter.NoUpload, false, 20, 0);
     }
 
     public static void setHardwareValueSent(@NotNull List<HardwareValue> hardwareValueList) {

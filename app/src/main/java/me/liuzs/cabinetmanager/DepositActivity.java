@@ -228,11 +228,10 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
 
     private void getLaboratoryList() {
         if (mOfflineModel.isChecked()) {
-            getRemoteLaboratoryList();
-        } else {
             getLocalLaboratoryList();
+        } else {
+            getRemoteLaboratoryList();
         }
-
     }
 
     private void initDepositRecord() {

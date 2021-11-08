@@ -5,7 +5,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.google.gson.JsonSyntaxException;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -52,18 +55,7 @@ public class HardwareService extends Service {
     private final HardwareServiceBinder mBinder = new HardwareServiceBinder();
     private final IMqttActionListener mMQTTPublishAction = new IMqttActionListener() {
         @Override
-        @SuppressWarnings("unchecked")
         public void onSuccess(IMqttToken asyncActionToken) {
-            String[] topics = asyncActionToken.getTopics();
-            if (topics != null) {
-                for (String topic : topics) {
-                    Log.d(MQTT, "Publish topic:" + topic);
-                }
-            }
-            Object value = asyncActionToken.getUserContext();
-            if (value instanceof List) {
-                CabinetCore.setHardwareValueSent((List<HardwareValue>) value);
-            }
             Log.d(MQTT, "Publish success");
         }
 
@@ -131,14 +123,26 @@ public class HardwareService extends Service {
             Log.i(MQTT, "Callback message-" + new String(message.getPayload()));
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public void deliveryComplete(IMqttDeliveryToken token) {
-            Log.i(MQTT, "Callback-" + "deliverComplete");
+            Object value = token.getUserContext();
+            if (value instanceof List) {
+                CabinetCore.setHardwareValueSent((List<HardwareValue>) value);
+            }
+            Log.i(MQTT, "Callback-" + "deliver complete");
         }
     };
     private final IMqttMessageListener mMessageListener = (topic, message) -> {
         Log.i(MQTT, "Message Topic:" + topic);
-        Log.i(MQTT, "Message:" + new String(message.getPayload()));
+        String msg = new String(message.getPayload());
+        Log.i(MQTT, "Message:" + msg);
+        if (TextUtils.equals(topic, RemoteAPI.MQTT.Topic_SetupValue)) {
+            processSetupCommand(msg);
+        } else if (TextUtils.equals(topic, RemoteAPI.MQTT.Topic_Control)) {
+            processControlCommand(msg);
+        }
+
     };
     private Timer mHardwareValueQueryTimer;
     private MqttAndroidClient mPublishClient;
@@ -253,7 +257,7 @@ public class HardwareService extends Service {
     }
 
     private void subScriptTopics() {
-        String[] topicFilter = new String[]{RemoteAPI.MQTT.MQTT_ControlTopic, RemoteAPI.MQTT.MQTT_SetupValueTopic};
+        String[] topicFilter = new String[]{RemoteAPI.MQTT.Topic_Control, RemoteAPI.MQTT.Topic_SetupValue};
         IMqttMessageListener[] messageListener = new IMqttMessageListener[]{mMessageListener, mMessageListener};
         int[] qos = {Qos, Qos};
         try {
@@ -287,7 +291,9 @@ public class HardwareService extends Service {
                 List<HardwareValue> values = CabinetCore.getUnSentHardwareValueList();
                 HardwareValue value = getHardwareValue();
                 notifyValue(value);
-                values.add(value);
+                if (value != null) {
+                    values.add(value);
+                }
                 publishValue(values);
                 isDoHardwareValueQuery.set(false);
             }
@@ -407,6 +413,20 @@ public class HardwareService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
+    }
+
+    private void processControlCommand(String mqttMessage) {
+
+    }
+
+    private void processSetupCommand(String mqttMessage) {
+        try {
+            SetupValue setupValue = CabinetCore.GSON.fromJson(mqttMessage, SetupValue.class);
+            ModbusService.saveSetupValue(setupValue);
+            CabinetCore.logOpt("保存","设置");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public class HardwareServiceBinder extends Binder {

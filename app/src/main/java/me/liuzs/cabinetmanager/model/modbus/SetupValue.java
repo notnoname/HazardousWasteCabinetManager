@@ -43,32 +43,32 @@ public class SetupValue {
     /**
      * VOC联动，最大值
      */
-    public float vocUnionMax;
+    public Float vocUnionMax;
 
     /**
      * VOC联动，最小值
      */
-    public float vocUnionMin;
+    public Float vocUnionMin;
 
     /**
      * 风机联动，工作时长
      */
-    public int fanUnionWorkTime;
+    public Integer fanUnionWorkTime;
 
     /**
      * 风机联动，停止时长
      */
-    public int fanUnionStopTime;
+    public Integer fanUnionStopTime;
 
     /**
      * 风机联动，启动频率
      */
-    public float fanUnionFrequency;
+    public Float fanUnionFrequency;
 
     /**
      * VOC自动告警
      */
-    public boolean vocAlertAuto;
+    public Boolean vocAlertAuto;
     /**
      * 可燃气体自动告警
      */
@@ -76,49 +76,49 @@ public class SetupValue {
     /**
      * 温度高位自动报警
      */
-    public boolean tempHighAlertAuto;
+    public Boolean tempHighAlertAuto;
     /**
      * 温度低位自动报警
      */
-    public boolean tempLowAlertAuto;
+    public Boolean tempLowAlertAuto;
     /**
      * 湿度高位自动报警
      */
-    public boolean humidityHighAlertAuto;
+    public Boolean humidityHighAlertAuto;
     /**
      * 湿度低位自动报警
      */
-    public boolean humidityLowAlertAuto;
+    public Boolean humidityLowAlertAuto;
 
     /**
      * VOC自动告警阈值
      */
-    public float vocAlertAutoThreshold;
+    public Float vocAlertAutoThreshold;
 
     /**
      * 可燃气体自动告警阈值
      */
-    public float fgAlertThreshold;
+    public Float fgAlertThreshold;
     /**
      * 高温告警阈值
      */
-    public float tempHighAlertThreshold;
+    public Float tempHighAlertThreshold;
     /**
      * 低温告警阈值
      */
-    public float tempLowAlertThreshold;
+    public Float tempLowAlertThreshold;
     /**
      * 高湿度告警阈值
      */
-    public float humidityHighAlertThreshold;
+    public Float humidityHighAlertThreshold;
     /**
      * 低湿度告警阈值
      */
-    public float humidityLowAlertThreshold;
+    public Float humidityLowAlertThreshold;
     /**
      * 是否声光告警
      */
-    public boolean alertSoundLight;
+    public Boolean alertSoundLight;
     public Exception e;
 
 }
