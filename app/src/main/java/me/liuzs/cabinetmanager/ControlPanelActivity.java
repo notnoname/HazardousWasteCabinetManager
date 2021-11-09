@@ -1,8 +1,12 @@
 package me.liuzs.cabinetmanager;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +29,7 @@ import java.util.concurrent.Executors;
 import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.modbus.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.modbus.StatusOption;
+import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.service.ModbusService;
 import me.liuzs.cabinetmanager.util.Util;
 
@@ -222,6 +227,22 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
 
     public void onOptLogButtonClick(View view) {
         LogViewActivity.start(this);
+    }
+
+    public void onOpenDoorButtonClick(View view) {
+        ServiceConnection serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                HardwareService.HardwareServiceBinder binder = (HardwareService.HardwareServiceBinder) service;
+                binder.getHardwareService().remoteUnlock();
+            }
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+            }
+        };
+        bindService(new Intent(this, HardwareService.class),
+                serviceConnection,Context.BIND_AUTO_CREATE);
+
     }
 
     public void onACWorkModelButtonClick(View view) {
