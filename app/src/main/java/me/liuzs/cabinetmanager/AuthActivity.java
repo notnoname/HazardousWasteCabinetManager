@@ -3,8 +3,10 @@ package me.liuzs.cabinetmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,6 +48,24 @@ public class AuthActivity extends AppCompatActivity {
             }
         }
     });
+    private TextView.OnEditorActionListener mEnterListener = new TextView.OnEditorActionListener() {
+
+
+        /**
+         * 参数说明
+         * @param v 被监听的对象
+         * @param actionId  动作标识符,如果值等于EditorInfo.IME_NULL，则回车键被按下。
+         * @param event    如果由输入键触发，这是事件；否则，这是空的(比如非输入键触发是空的)。
+         * @return 返回你的动作
+         */
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                onOKButtonClick(mOK);
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +78,7 @@ public class AuthActivity extends AppCompatActivity {
         mCancel = findViewById(R.id.btnCancel);
         mFaceId = findViewById(R.id.btnFaceId);
         mPassword = findViewById(R.id.editTextTextPassword);
+        mPassword.setOnEditorActionListener(mEnterListener);
         mInfo = findViewById(R.id.tvInfo);
         switch (mType) {
             case Admin:
@@ -87,7 +108,7 @@ public class AuthActivity extends AppCompatActivity {
                 data.putExtra(KEY_AUTH_TYPE, mType);
                 setResult(RESULT_OK, data);
                 finish();
-            }, 1000);
+            }, 500);
 
         } else {
             mInfo.setText("密码错误，请重新输入！");

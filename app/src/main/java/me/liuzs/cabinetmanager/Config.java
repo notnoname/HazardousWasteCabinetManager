@@ -25,6 +25,7 @@ public class Config {
     public static final String SYSPRE_CAMERA_VERIFY_CODE = "SYSPRE_CAMERA_VERIFY_CODE";
     public static final String MODBUS_ADDRESS = "MODBUS_ADDRESS";
     public static final String DOOR_ACCESS_MAC_ADDRESS = "DOOR_ACCESS_MAC_ADDRESS";
+    public static final String AUTH_TIME_OUT = "AUTH_TIME_OUT";
 
     public static final String ARC_APP_ID = "5UQUZXBwq4RknCfrk4zs7nBew3BQrNh7ZQH1ALQybdNR";
     public static final String ARC_SDK_KEY = "AzFyDx3GmvuvVWDSGZW9ZCe8uerNp1zoVcYfj45eXcNd";

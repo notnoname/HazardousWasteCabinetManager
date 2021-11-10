@@ -27,14 +27,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import me.liuxy.cabinet.SubBoard;
 import me.liuzs.cabinetmanager.ui.NewProgressDialog;
 
 abstract class BaseActivity extends AppCompatActivity {
@@ -57,6 +55,8 @@ abstract class BaseActivity extends AppCompatActivity {
             mAuthListener.onAuthCancel();
         }
     });
+
+    private static long mPreAuthTime = 0;
 
     public synchronized void showProgressDialog() {
         if (mProgressDialog == null) {
@@ -217,12 +217,23 @@ abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressWarnings("SameParameterValue")
     protected void showAuthActivity(CabinetCore.RoleType type, AuthListener lsn) {
-        Intent intent = new Intent(BaseActivity.this, AuthActivity.class);
-        intent.putExtra(AuthActivity.KEY_AUTH_TYPE, type);
         mAuthListener = lsn;
-        mLauncher.launch(intent);
+        if(type == CabinetCore.RoleType.Operator) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - mPreAuthTime >= CabinetCore.getAuthTimeOut()) {
+                Intent intent = new Intent(BaseActivity.this, AuthActivity.class);
+                intent.putExtra(AuthActivity.KEY_AUTH_TYPE, type);
+                mLauncher.launch(intent);
+                mPreAuthTime = currentTime;
+            } else {
+                mAuthListener.onAuthSuccess(type);
+            }
+        } else {
+            Intent intent = new Intent(BaseActivity.this, AuthActivity.class);
+            intent.putExtra(AuthActivity.KEY_AUTH_TYPE, type);
+            mLauncher.launch(intent);
+        }
     }
 
     public void hideInputMethod() {
@@ -241,12 +252,6 @@ abstract class BaseActivity extends AppCompatActivity {
             executorService.shutdownNow();
         }
         super.onDestroy();
-    }
-
-    public interface AuthListener {
-        void onAuthCancel();
-
-        void onAuthSuccess(CabinetCore.RoleType roleType);
     }
 
     public ExecutorService getExecutorService() {
@@ -288,5 +293,11 @@ abstract class BaseActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
+    public interface AuthListener {
+        void onAuthCancel();
+
+        void onAuthSuccess(CabinetCore.RoleType roleType);
     }
 }

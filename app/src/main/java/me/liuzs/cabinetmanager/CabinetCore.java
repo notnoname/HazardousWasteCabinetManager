@@ -193,6 +193,7 @@ public class CabinetCore {
         }
     }
 
+
     public static void saveCabinetInfo(Cabinet info) {
         SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -249,9 +250,9 @@ public class CabinetCore {
         if (input == null) {
             return false;
         }
-        String inputMd5 = Util.md5(input);
+//        String inputMd5 = Util.md5(input);
         User user = getCabinetUser(type);
-        return user != null && inputMd5.equals(user.password);
+        return user != null && TextUtils.equals(input, user.password);
     }
 
     public static void init(CabinetApplication application) {
@@ -492,6 +493,22 @@ public class CabinetCore {
         SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(Config.DOOR_ACCESS_MAC_ADDRESS, address);
+        editor.apply();
+    }
+
+    public static long getAuthTimeOut() {
+        try {
+            SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            return sp.getLong(Config.AUTH_TIME_OUT, 60 * 1000 * 10);
+        } catch (Exception e) {
+            return 60 * 1000 * 10;
+        }
+    }
+
+    public static void saveAuthTimeOut(long timeOut) {
+        SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(Config.AUTH_TIME_OUT, timeOut);
         editor.apply();
     }
 

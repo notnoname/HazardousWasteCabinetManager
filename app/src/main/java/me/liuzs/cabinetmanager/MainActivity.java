@@ -271,77 +271,58 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onControlPanelButtonClick(View view) {
-        if (CabinetCore.isDebugState()) {
-            Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
-            startActivity(intent);
-        } else {
-            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
+        showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
+            @Override
+            public void onAuthCancel() {
+            }
 
-                @Override
-                public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+            @Override
+            public void onAuthSuccess(CabinetCore.RoleType type) {
+                Intent intent = new Intent(MainActivity.this, ControlPanelActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onOfflineButtonClick(View view) {
-        if (CabinetCore.isDebugState()) {
-            Intent intent = new Intent(MainActivity.this, OfflineDepositRecordActivity.class);
-            startActivity(intent);
-        } else {
-            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
+        showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
+            @Override
+            public void onAuthCancel() {
+            }
 
-                @Override
-                public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, OfflineDepositRecordActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+            @Override
+            public void onAuthSuccess(CabinetCore.RoleType type) {
+                Intent intent = new Intent(MainActivity.this, OfflineDepositRecordActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onSettingButtonClick(View view) {
-        if (CabinetCore.isDebugState()) {
-            Intent intent = new Intent(MainActivity.this, SystemSettingActivity.class);
-            startActivity(intent);
-        } else {
-            showAuthActivity(CabinetCore.RoleType.Admin, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
+        showAuthActivity(CabinetCore.RoleType.Admin, new AuthListener() {
+            @Override
+            public void onAuthCancel() {
+            }
 
-                @Override
-                public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, SystemSettingActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+            @Override
+            public void onAuthSuccess(CabinetCore.RoleType type) {
+                Intent intent = new Intent(MainActivity.this, SystemSettingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onTakeOutButtonClick(View view) {
-        if (CabinetCore.isDebugState()) {
-            TakeOutActivity.start(MainActivity.this);
-        } else {
-            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
+        showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
+            @Override
+            public void onAuthCancel() {
+            }
 
-                @Override
-                public void onAuthSuccess(CabinetCore.RoleType type) {
-                    TakeOutActivity.start(MainActivity.this);
-                }
-            });
-        }
+            @Override
+            public void onAuthSuccess(CabinetCore.RoleType type) {
+                TakeOutActivity.start(MainActivity.this);
+            }
+        });
     }
 
     public void onCameraButtonClick(View view) {
@@ -350,58 +331,44 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onContainerNoManagerButtonClick(View view) {
-        if (CabinetCore.isDebugState()) {
-            Intent intent = new Intent(MainActivity.this, ContainerNoManagementActivity.class);
-            startActivity(intent);
-        } else {
-            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
+        showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
+            @Override
+            public void onAuthCancel() {
+            }
 
-                @Override
-                public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, ContainerNoManagementActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+            @Override
+            public void onAuthSuccess(CabinetCore.RoleType type) {
+                Intent intent = new Intent(MainActivity.this, ContainerNoManagementActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onStandingBookQueryButtonClick(View view) {
-        if (CabinetCore.isDebugState()) {
-            Intent intent = new Intent(MainActivity.this, StandingBookActivity.class);
-            startActivity(intent);
-        } else {
-            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
+        showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
+            @Override
+            public void onAuthCancel() {
+            }
 
-                @Override
-                public void onAuthSuccess(CabinetCore.RoleType type) {
-                    Intent intent = new Intent(MainActivity.this, StandingBookActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+            @Override
+            public void onAuthSuccess(CabinetCore.RoleType type) {
+                Intent intent = new Intent(MainActivity.this, StandingBookActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onDepositButtonClick(View view) {
-        if (CabinetCore.isDebugState()) {
-            DepositActivity.start(MainActivity.this);
-        } else {
-            showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
-                @Override
-                public void onAuthCancel() {
-                }
+        showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
+            @Override
+            public void onAuthCancel() {
+            }
 
-                @Override
-                public void onAuthSuccess(CabinetCore.RoleType type) {
-                    DepositActivity.start(MainActivity.this);
-                }
-            });
-        }
+            @Override
+            public void onAuthSuccess(CabinetCore.RoleType type) {
+                DepositActivity.start(MainActivity.this);
+            }
+        });
     }
 
 
