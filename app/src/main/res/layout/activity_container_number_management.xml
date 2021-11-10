@@ -21,14 +21,14 @@
         android:layout_marginTop="@dimen/tool_bar_height">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:id="@+id/csToolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24px"
             android:layout_marginTop="16px"
             android:layout_marginEnd="24px"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -59,10 +59,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16px"
                 android:background="@drawable/background_edit"
-                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:ems="8"
                 android:hint="按批创建人搜索"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:padding="10px"
                 android:text=""
                 android:textAlignment="center"

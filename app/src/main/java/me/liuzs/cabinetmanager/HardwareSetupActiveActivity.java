@@ -1,7 +1,11 @@
 package me.liuzs.cabinetmanager;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -19,6 +23,7 @@ import com.videogo.util.IPAddressUtil;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.netty.util.internal.MacAddressUtil;
 import me.liuzs.cabinetmanager.model.ContainerNoInfo;
 import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.service.ModbusService;
@@ -43,7 +48,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
 
     private TextView mARCState, mARCInfo, mPrinterName, mScalesName;
     private Button mARCActive, mWeight, mCalibration;
-    private EditText mBarcode,mModbusAddress;
+    private EditText mBarcode, mModbusAddress, mDoorMacAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +62,12 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
         mPrinterName = findViewById(R.id.tvPrinterNameValue);
         mScalesName = findViewById(R.id.tvScalesName);
         mModbusAddress = findViewById(R.id.etModbusAddress);
+        mDoorMacAddress = findViewById(R.id.etDoorMacAddress);
 
         mBarcode = findViewById(R.id.etBarcode);
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mBarcode.getWindowToken(), 0);
-        CabinetCore.validateARCActive( this);
+        CabinetCore.validateARCActive(this);
     }
 
     @Override
@@ -74,6 +80,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
         }
         showScalesDeviceName();
         showModbusAddress();
+        showDoorAccessMacAddress();
     }
 
     private void showScalesDeviceName() {
@@ -84,6 +91,11 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
     private void showModbusAddress() {
         String address = CabinetCore.getModbusAddress();
         mModbusAddress.setText(address);
+    }
+
+    private void showDoorAccessMacAddress() {
+        String address = CabinetCore.getDoorAccessMacAddress();
+        mDoorMacAddress.setText(address);
     }
 
     @Override
@@ -106,7 +118,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
 
     public void onActiveButtonClick(View view) {
         mARCActive.setEnabled(false);
-        CabinetCore.validateARCActive( this);
+        CabinetCore.validateARCActive(this);
     }
 
     @Override
@@ -119,7 +131,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
 
     public void onModbusAddressSaveButtonClick(View view) {
         String address = mModbusAddress.getEditableText().toString();
-        if(IPAddressUtil.isIPv4LiteralAddress(address)){
+        if (IPAddressUtil.isIPv4LiteralAddress(address)) {
             CabinetCore.saveModbusAddress(address);
             ModbusService.setModbusAddress(address);
             showToast("保存成功！");
@@ -128,6 +140,13 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
         } else {
             showToast("地址不正确！");
         }
+    }
+
+    public void onDoorAccessMacAddressSaveButtonClick(View view) {
+        String address = mDoorMacAddress.getEditableText().toString();
+        CabinetCore.saveDoorAccessMacAddress(address);
+        showToast("保存成功！");
+        showDoorAccessMacAddress();
     }
 
     @Override
@@ -164,6 +183,27 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
                     dialog.dismiss();
                 });
         alertDialog.show();
+    }
+
+    public void onOpenDoorButtonClick(View view) {
+        ServiceConnection serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                HardwareService.HardwareServiceBinder binder = (HardwareService.HardwareServiceBinder) service;
+                if(binder.getHardwareService().unlockRemoteDoor()) {
+                    showToast("门禁打开指令发送成功");
+                } else {
+                    showToast("门禁打开指令发送失败");
+                }
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+            }
+        };
+        bindService(new Intent(this, HardwareService.class),
+                serviceConnection, Context.BIND_AUTO_CREATE);
+
     }
 
     public void onTitleClick(View view) {

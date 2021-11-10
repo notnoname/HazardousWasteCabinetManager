@@ -40,13 +40,13 @@ package me.liuzs.cabinetmanager.model.modbus;
  */
 public class AirConditionerStatus {
     public static final int ACStatusAddress = 40573;
-    public static final int ACWorkModelAddress = 40581;
-    public static final int ACCtrlModelAddress = 40586;
-    public static final int ACTargetTempAddress = 40582;
-    public static final int ACFanSpeedModelAddress = 40583;
-    public static final int ACFanSweepAddress = 40584;
-    public static final int ACPowerSetAddress = 40244;
     public static final int ACRemoteWorkModelAddress = 40243;
+    public static final int ACPowerSetAddress = 40244;
+    public static final int ACWorkModelAddress = 40245;
+    public static final int ACTargetTempAddress = 40246;
+    public static final int ACFanSpeedModelAddress = 40247;
+    public static final int ACFanSweepAddress = 40248;
+    public static final int ACCtrlModelAddress = 40250;
 
 
     public static final int ACRemoteIDSetCommitAddress = 2001;

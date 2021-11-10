@@ -479,6 +479,22 @@ public class CabinetCore {
         CabinetDatabase.getInstance().setDataSent(CabinetDatabase.Table.HardwareValue, ids);
     }
 
+    public static String getDoorAccessMacAddress() {
+        try {
+            SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            return sp.getString(Config.DOOR_ACCESS_MAC_ADDRESS, "1E:95:10:BC:6E:58");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static void saveDoorAccessMacAddress(String address) {
+        SharedPreferences sp = mContext.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(Config.DOOR_ACCESS_MAC_ADDRESS, address);
+        editor.apply();
+    }
+
     public enum RoleType {
         Admin, Operator
     }

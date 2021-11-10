@@ -1,5 +1,7 @@
 package me.liuzs.cabinetmanager.service;
 
+import static me.liuzs.cabinetmanager.net.RemoteAPI.MQTT.PublishTopicPre;
+
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
@@ -55,6 +57,12 @@ public class HardwareService extends Service {
         @Override
         public void onSuccess(IMqttToken asyncActionToken) {
             Log.d(MQTT, "Publish success");
+            Object value = asyncActionToken.getUserContext();
+            if (value instanceof List) {
+                Log.d(MQTT, "Publish Hardware value: " + CabinetCore.GSON.toJson(value));
+            } else if (value instanceof MQTTCommand) {
+                Log.d(MQTT, "Publish Open door command: " + CabinetCore.GSON.toJson(value));
+            }
         }
 
         @SuppressWarnings("unchecked")
@@ -62,10 +70,15 @@ public class HardwareService extends Service {
         public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
             if (exception != null) {
                 Log.i(MQTT, "Publish failure: " + exception.getMessage());
+            } else {
+                Log.i(MQTT, "Publish failure");
             }
             Object value = asyncActionToken.getUserContext();
             if (value instanceof List) {
                 CabinetCore.saveSentFailHardwareValueList((List<HardwareValue>) value);
+                Log.d(MQTT, "Save failure: " + CabinetCore.GSON.toJson(value));
+            } else if (value instanceof MQTTCommand) {
+                Log.d(MQTT, "Publish Open door command failure: " + CabinetCore.GSON.toJson(value));
             }
         }
     };
@@ -85,6 +98,8 @@ public class HardwareService extends Service {
         public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
             if (exception != null) {
                 Log.i(MQTT, "Subscript failure: " + exception.getMessage());
+            } else {
+                Log.i(MQTT, "Subscript failure");
             }
         }
     };
@@ -104,6 +119,8 @@ public class HardwareService extends Service {
         public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
             if (exception != null) {
                 Log.i(MQTT, "UnSubscript failure: " + exception.getMessage());
+            } else {
+                Log.i(MQTT, "UnSubscript failure");
             }
         }
     };
@@ -132,13 +149,15 @@ public class HardwareService extends Service {
         }
     };
     private final IMqttMessageListener mMessageListener = (topic, message) -> {
-        Log.i(MQTT, "Message Topic:" + topic);
-        String msg = new String(message.getPayload());
-        Log.i(MQTT, "Message:" + msg);
-        if (TextUtils.equals(topic, RemoteAPI.MQTT.Topic_SetupValue)) {
-            processSetupCommand(msg);
-        } else if (TextUtils.equals(topic, RemoteAPI.MQTT.Topic_Control)) {
-            processControlCommand(msg);
+        if (!TextUtils.isEmpty(topic)) {
+            Log.i(MQTT, "Message Topic:" + topic);
+            String msg = new String(message.getPayload());
+            Log.i(MQTT, "Message:" + msg);
+            if (topic.startsWith(RemoteAPI.MQTT.Topic_SetupValue_Subscribe)) {
+                processSetupCommand(msg);
+            } else if (topic.startsWith(RemoteAPI.MQTT.Topic_Control_Subscribe)) {
+                processControlCommand(msg);
+            }
         }
 
     };
@@ -148,7 +167,8 @@ public class HardwareService extends Service {
         @Override
         public void onSuccess(IMqttToken asyncActionToken) {
             Log.d(MQTT, "Connect success");
-            subScriptTopics();
+            String id = asyncActionToken.getUserContext().toString();
+            subScriptTopics(id);
         }
 
         @Override
@@ -229,8 +249,6 @@ public class HardwareService extends Service {
         mManager = new CabinetManager(settings);
     }
 
-    private DoorAccess mDoorAccess;
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -238,13 +256,7 @@ public class HardwareService extends Service {
         initMQTTClient();
         initCabinetManager();
         initHardwareValueQueryTimer();
-        initDoorAccess();
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    private void initDoorAccess() {
-        mDoorAccess = new DoorAccess(getApplicationContext());
-        mDoorAccess.initMQTTClient("testclientId", "testclientSecret", "1E:95:10:BC:6E:58");
     }
 
     private void initMQTTClient() {
@@ -253,17 +265,21 @@ public class HardwareService extends Service {
             mMQTTClient.setCallback(mMqttCallback);
         }
         if (!mMQTTClient.isConnected()) {
+            Cabinet cabinet = CabinetCore.getCabinetInfo();
+            if (cabinet == null || TextUtils.isEmpty(cabinet.id)) {
+                return;
+            }
             try {
                 MqttConnectOptions connOpts = setUpConnectionOptions();
-                mMQTTClient.connect(connOpts, null, mMQTTConnectAction);
+                mMQTTClient.connect(connOpts, cabinet.id, mMQTTConnectAction);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void subScriptTopics() {
-        String[] topicFilter = new String[]{RemoteAPI.MQTT.Topic_Control, RemoteAPI.MQTT.Topic_SetupValue};
+    private void subScriptTopics(String cabinetId) {
+        String[] topicFilter = new String[]{RemoteAPI.MQTT.Topic_Control_Subscribe + cabinetId, RemoteAPI.MQTT.Topic_SetupValue_Subscribe + cabinetId};
         IMqttMessageListener[] messageListener = new IMqttMessageListener[]{mMessageListener, mMessageListener};
         int[] qos = {Qos, Qos};
         try {
@@ -325,7 +341,7 @@ public class HardwareService extends Service {
                     MqttMessage message = new MqttMessage();
                     message.setPayload(payload.getBytes());
                     message.setQos(Qos);
-                    mMQTTClient.publish(RemoteAPI.MQTT.MQTT_HARDWARE_PUBLISH_TOPIC, message, valueList, mMQTTPublishAction);
+                    mMQTTClient.publish(RemoteAPI.MQTT.Topic_Hardware_Value_Publish, message, valueList, mMQTTPublishAction);
                 } catch (Exception e) {
                     e.printStackTrace();
                     CabinetCore.saveSentFailHardwareValueList(valueList);
@@ -334,6 +350,29 @@ public class HardwareService extends Service {
                 CabinetCore.saveSentFailHardwareValueList(valueList);
             }
         }
+    }
+
+    public boolean unlockRemoteDoor() {
+        if (mMQTTClient.isConnected()) {
+            try {
+                long time = System.currentTimeMillis();
+                MQTTCommand mc = new MQTTCommand();
+                mc.t = CabinetCore.getDoorAccessMacAddress();
+                mc.mi = String.valueOf(time / 1000);
+                OpenDoorCommand openDoorCommand = new OpenDoorCommand();
+                openDoorCommand.time = time / 1000;
+                mc.m = openDoorCommand;
+                String payload = CabinetCore.GSON.toJson(mc);
+                MqttMessage message = new MqttMessage();
+                message.setPayload(payload.getBytes());
+                message.setQos(Qos);
+                mMQTTClient.publish(PublishTopicPre + CabinetCore.getDoorAccessMacAddress(), message, mc, mMQTTPublishAction);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     private HardwareValue getHardwareValue() {
@@ -435,15 +474,23 @@ public class HardwareService extends Service {
         }
     }
 
+    public static class OpenDoorCommand {
+        public final String cmd = "open";
+        public final int open_s = 1;
+        public long time;
+    }
+
+    public static class MQTTCommand {
+        public final int c = 12;
+        public final String f = "server";
+        public String t;
+        public String mi;
+        public OpenDoorCommand m;
+    }
+
     public class HardwareServiceBinder extends Binder {
         public HardwareService getHardwareService() {
             return HardwareService.this;
-        }
-    }
-
-    public void remoteUnlock() {
-        if (mDoorAccess != null) {
-            mDoorAccess.openDoor();
         }
     }
 }

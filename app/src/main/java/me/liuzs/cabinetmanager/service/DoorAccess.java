@@ -1,7 +1,6 @@
 package me.liuzs.cabinetmanager.service;
 
 import android.content.Context;
-import android.net.MacAddress;
 import android.util.Log;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -33,10 +32,9 @@ import me.liuzs.cabinetmanager.net.RemoteAPI;
 
 public class DoorAccess {
     public static final String TAG = "DoorAccess";
-    public static final String MQTT_SERVER = "tcp://49.234.194.98:1883";
     private static final String ROOT = "http://49.234.194.98:30900/";
     private static final String API_AccessToken = ROOT + "oauth/token?clientId=testclientId&clientSecret=testclientSecret";
-    public static String PublishTopic;
+    public static final String PublishTopicPre = "/one2one/device/";
     public static String SubScribeTopic;
     public static String PreSubScribeTopic;
     private final IMqttActionListener mMQTTSubscriptTopicAction = new IMqttActionListener() {
@@ -134,7 +132,6 @@ public class DoorAccess {
             }
         }
     };
-    private String mMACAddress;
 
     public DoorAccess(Context context) {
         mContext = context;
@@ -161,10 +158,10 @@ public class DoorAccess {
 
     private void subScriptTopics() {
         String[] preTopicFilter = new String[]{PreSubScribeTopic};
-        String[] topicFilter = new String[]{PublishTopic};
+        String[] topicFilter = new String[]{SubScribeTopic};
         IMqttMessageListener[] messageListener = new IMqttMessageListener[]{mMessageListener};
         int[] qos = {2};
-        if(PreSubScribeTopic != null) {
+        if (PreSubScribeTopic != null) {
             try {
                 mMQTTClient.unsubscribe(preTopicFilter, null, mMQTTUnSubscriptTopicAction);
             } catch (Exception e) {
@@ -178,16 +175,13 @@ public class DoorAccess {
         }
     }
 
-    public void initMQTTClient(String clientId, String secret, String mac) {
+    public void initMQTTClient(String clientId, String secret) {
         if (mMQTTClient == null) {
-            mMQTTClient = new MqttAndroidClient(mContext, MQTT_SERVER, MQTTClientID);
+            mMQTTClient = new MqttAndroidClient(mContext, RemoteAPI.MQTT.MQTT_ROOT, MQTTClientID);
             mMQTTClient.setCallback(mMqttCallback);
         }
-        mMACAddress = mac;
-        PublishTopic = "/one2one/device/$"+mMACAddress;
-
         new Thread(() -> {
-            while(true) {
+            while (true) {
                 AccessTokenResponse response = getAccessToken(clientId, secret);
                 int expiresIn = 10;
                 if (response != null) {
@@ -239,17 +233,17 @@ public class DoorAccess {
         if (mMQTTClient.isConnected()) {
             try {
                 long time = System.currentTimeMillis();
-                MQTTCommand mc = new MQTTCommand();
-                mc.t = mMACAddress;
+                HardwareService.MQTTCommand mc = new HardwareService.MQTTCommand();
+                mc.t = CabinetCore.getDoorAccessMacAddress();
                 mc.mi = String.valueOf(time / 1000);
-                OpenDoorCommand openDoorCommand = new OpenDoorCommand();
+                HardwareService.OpenDoorCommand openDoorCommand = new HardwareService.OpenDoorCommand();
                 openDoorCommand.time = time / 1000;
                 mc.m = openDoorCommand;
                 String payload = CabinetCore.GSON.toJson(mc);
                 MqttMessage message = new MqttMessage();
                 message.setPayload(payload.getBytes());
                 message.setQos(2);
-                mMQTTClient.publish(RemoteAPI.MQTT.MQTT_HARDWARE_PUBLISH_TOPIC, message, mc, mMQTTPublishAction);
+                mMQTTClient.publish(PublishTopicPre + CabinetCore.getDoorAccessMacAddress(), message, mc, mMQTTPublishAction);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -263,17 +257,4 @@ public class DoorAccess {
         public String accessToken;
     }
 
-    public static class OpenDoorCommand {
-        public final String cmd = "open";
-        public final int open_s = 1;
-        public long time;
-    }
-
-    public static class MQTTCommand {
-        public final int c = 12;
-        public final String f = "server";
-        public String t;
-        public String mi;
-        public OpenDoorCommand m;
-    }
 }

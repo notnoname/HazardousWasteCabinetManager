@@ -76,9 +76,10 @@ public class RemoteAPI {
          * MQTT Root地址
          */
         public static final String MQTT_ROOT = "tcp://47.104.235.225:1883";
-        public static final String MQTT_HARDWARE_PUBLISH_TOPIC = "test1";
-        public static final String Topic_Control = "test2";
-        public static final String Topic_SetupValue = "test3";
+        public static final String Topic_Hardware_Value_Publish = "storage-env";
+        public static final String Topic_Control_Subscribe = "storage-ctr-";
+        public static final String Topic_SetupValue_Subscribe = "storage-set-";
+        public static final String PublishTopicPre = "/one2one/device/";
     }
 
     /**
@@ -339,13 +340,12 @@ public class RemoteAPI {
          * 提交入柜信息
          */
         public static final String API_SUBMIT_DEPOSIT = API_ROOT + "/admin/storage_records";
-
         /**
          * 获取暂存柜记录列表
          */
         public static final String API_DEPOSIT_LIST = API_ROOT + "/admin/storage_records";
         /**
-         * 移除试剂入库记录
+         * 提交出柜信息
          */
         public static final String API_TAKE_OUT = API_ROOT + "/admin/storage_records/%s?update_action=output";
 

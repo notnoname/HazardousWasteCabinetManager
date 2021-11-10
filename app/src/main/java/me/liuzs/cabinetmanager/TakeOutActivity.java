@@ -189,7 +189,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
                 APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.takeOutDeposit(mDepositRecord);
                 dismissProgressDialog();
                 if (apijson.status == APIJSON.Status.ok) {
-                    showToast("提交成功");
+                    showToast("出柜成功");
                     mDepositRecord.isSent = true;
                     CabinetCore.saveDepositRecord(mDepositRecord);
                     reset();
