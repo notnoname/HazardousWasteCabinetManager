@@ -51,6 +51,7 @@ abstract class BaseActivity extends AppCompatActivity {
             assert data != null;
             CabinetCore.RoleType type = (CabinetCore.RoleType) data.getSerializableExtra(AuthActivity.KEY_AUTH_TYPE);
             mAuthListener.onAuthSuccess(type);
+            mPreAuthTime = System.currentTimeMillis();
         } else if (resultCode == RESULT_CANCELED) {
             mAuthListener.onAuthCancel();
         }
@@ -220,12 +221,10 @@ abstract class BaseActivity extends AppCompatActivity {
     protected void showAuthActivity(CabinetCore.RoleType type, AuthListener lsn) {
         mAuthListener = lsn;
         if(type == CabinetCore.RoleType.Operator) {
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - mPreAuthTime >= CabinetCore.getAuthTimeOut()) {
+            if (System.currentTimeMillis() - mPreAuthTime >= CabinetCore.getAuthTimeOut()) {
                 Intent intent = new Intent(BaseActivity.this, AuthActivity.class);
                 intent.putExtra(AuthActivity.KEY_AUTH_TYPE, type);
                 mLauncher.launch(intent);
-                mPreAuthTime = currentTime;
             } else {
                 mAuthListener.onAuthSuccess(type);
             }
