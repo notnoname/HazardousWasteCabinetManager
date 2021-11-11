@@ -15,21 +15,21 @@ import me.liuzs.cabinetmanager.model.SurveillanceCamera;
 public class CameraItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private static final String TAG = "CameraItemViewHolder";
-    TextView labName, status;
+    TextView cabinetName, status;
     Button watch;
     ImageView logo;
     SurveillanceCamera camera;
 
     public CameraItemViewHolder(@NonNull View itemView) {
         super(itemView);
-        labName = itemView.findViewById(R.id.tvLabName);
+        cabinetName = itemView.findViewById(R.id.tvCabinetName);
         status = itemView.findViewById(R.id.tvStatus);
         watch = itemView.findViewById(R.id.btnWatch);
         watch.setOnClickListener(this);
     }
 
     public void show() {
-        labName.setText(camera.videoName);
+        cabinetName.setText(camera.videoName);
         status.setText(camera.status == 1 ? "在线" : "未知");
     }
 

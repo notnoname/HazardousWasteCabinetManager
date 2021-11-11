@@ -83,7 +83,6 @@ public class CameraListActivity extends BaseActivity {
                 for (SurveillanceCamera camera : result.data) {
                     try {
                         String fakeUrl = camera.url.replace("ezopen", "http");
-
                         URL url = new URL(fakeUrl);
                         String path = url.getPath();
                         String[] paths = path.split("/");

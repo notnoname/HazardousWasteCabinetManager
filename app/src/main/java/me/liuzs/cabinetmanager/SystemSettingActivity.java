@@ -1,10 +1,12 @@
 package me.liuzs.cabinetmanager;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.ui.setting.EquipmentManageFragment;
 import me.liuzs.cabinetmanager.ui.setting.SettingMainFragment;
 
@@ -34,6 +36,12 @@ public class SystemSettingActivity extends BaseActivity {
         } else {
             transToMainFragment();
         }
+    }
+
+    public void onDownloadButtonClick(View view) {
+        Uri uri = Uri.parse(RemoteAPI.APP_DOWNLOAD);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     public void transToMainFragment() {

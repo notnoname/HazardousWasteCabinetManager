@@ -201,10 +201,10 @@ public class PrintActivity extends BaseActivity {
          * @param y             y坐标，点为单位
          * @param content       文本内容
          */
-        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 340, 30, "批次名:" + info.batch_name + "存单号:" + info.no);
-        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 300, 30, "创建人:" + info.creator);
-        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 260, 30, "机构名:" + info.org);
-        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 220, 30, "存单号:" + info.no);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 340, 20, "批次:" + info.batch_name);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 300, 20, "人员:" + info.creator);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 260, 20, "机构:" + info.org);
+        PrinterInstance.getInstance().pringTextCpcl(270, 55, 11, 200, 20, "单号:" + info.no);
 
         /*
           一维条码

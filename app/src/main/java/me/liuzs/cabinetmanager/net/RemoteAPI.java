@@ -47,6 +47,8 @@ public class RemoteAPI {
      */
     public static final String API_ROOT = "http://47.104.235.225:8090";
 
+    public static final String APP_DOWNLOAD = API_ROOT + "/app_download/hazardous_waste_cabinet_manage.apk";
+
     private static void generalOptBaseHeader(HttpRequestBase httpRequest) {
         Header accept = new BasicHeader(HttpHeaders.ACCEPT, "application/json");
         httpRequest.addHeader(accept);
@@ -487,7 +489,7 @@ public class RemoteAPI {
         /**
          * 获取柜子绑定摄像头列表
          */
-        public static final String API_CAMERA_LIST = API_ROOT + "/drug/v1/YSYVoder/getCameraStreamForApp/";
+        public static final String API_CAMERA_LIST = API_ROOT + "/cameralist/";
 
         /**
          * 获取机构下实验室列表
@@ -559,16 +561,15 @@ public class RemoteAPI {
         /**
          * 查询柜子下所有摄像头列表
          *
-         * @param tankId TankId
          * @return 监控摄像头列表
          */
-        public static APIJSON<List<SurveillanceCamera>> getCameraList(String tankId) {
+        public static APIJSON<List<SurveillanceCamera>> getCameraList(String cabinetId) {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("tankId", tankId));
+                valuePairs.add(new BasicNameValuePair("storage_id", cabinetId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet method = new HttpGet(API_CAMERA_LIST + tankId + "?" + params);
+                HttpGet method = new HttpGet(API_CAMERA_LIST + "?" + params);
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
                 generalOptBaseHeader(method);

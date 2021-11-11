@@ -48,7 +48,21 @@
                 android:text="@string/setting"
                 android:textSize="@dimen/tool_bar_title_height"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDownloadApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:background="@drawable/background_grid_title"
+                android:onClick="onDownloadButtonClick"
+                android:padding="10px"
+                android:text="下载最新包"
+                android:textColor="@color/white"
+                android:textSize="24px" />
         </androidx.appcompat.widget.Toolbar>
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
