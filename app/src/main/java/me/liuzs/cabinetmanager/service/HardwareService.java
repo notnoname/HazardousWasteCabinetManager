@@ -36,11 +36,13 @@ import me.liuzs.cabinetmanager.Config;
 import me.liuzs.cabinetmanager.model.Cabinet;
 import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
+import me.liuzs.cabinetmanager.model.modbus.ControlCommand;
 import me.liuzs.cabinetmanager.model.modbus.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.modbus.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.modbus.SetupValue;
 import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
+import me.liuzs.cabinetmanager.util.Util;
 
 public class HardwareService extends Service {
 
@@ -461,7 +463,73 @@ public class HardwareService extends Service {
     }
 
     private void processControlCommand(String mqttMessage) {
+        if (mqttMessage != null) {
+            ControlCommand controlCommand = CabinetCore.GSON.fromJson(mqttMessage, ControlCommand.class);
+            if (controlCommand.fanWorkModel != null) {
+                CabinetCore.logOpt("设置", "风机运行模式:" + (controlCommand.fanWorkModel ? "自动" : "手动"));
+                setHardware(StatusOption.UnionWorkModelAddress, 0, controlCommand.fanWorkModel ? StatusOption.FanWorkModel.Auto.ordinal() : StatusOption.FanWorkModel.Manual.ordinal());
+            }
+            if (controlCommand.autoCtrl != null) {
+                CabinetCore.logOpt("设置", "空调控制模式:" + (controlCommand.autoCtrl ? "自动" : "手动"));
+                setHardware(AirConditionerStatus.ACCtrlModelAddress, AirConditionerStatus.ACSetCommitAddress, controlCommand.autoCtrl ? 1 : 0);
+            }
+            if (controlCommand.powerOn != null) {
+                CabinetCore.logOpt(controlCommand.powerOn ? "开" : "关", "空调");
+                setHardware(AirConditionerStatus.ACCtrlModelAddress, AirConditionerStatus.ACSetCommitAddress, controlCommand.autoCtrl ? 1 : 0);
+            }
+            if (controlCommand.fanPowerOn != null) {
+                if (controlCommand.fanPowerOn) {
+                    CabinetCore.logOpt("开", "风机");
+                    setAndResetHardware(StatusOption.FanStartAddress);
+                } else {
+                    CabinetCore.logOpt("关", "风机");
+                    setAndResetHardware(StatusOption.FanStopAddress);
+                }
+            }
+            if (controlCommand.oxygenPowerOn != null) {
+                if (controlCommand.oxygenPowerOn) {
+                    CabinetCore.logOpt("开", "光氧");
+                    setAndResetHardware(StatusOption.OxygenStartAddress);
+                } else {
+                    CabinetCore.logOpt("关", "光氧");
+                    setAndResetHardware(StatusOption.OxygenStopAddress);
+                }
+            }
+            if (controlCommand.frequencyReset != null) {
+                if (controlCommand.oxygenPowerOn) {
+                    CabinetCore.logOpt("复位", "变频器");
+                    setHardware(FrequencyConverterStatus.FCResetAddress, 0, 1);
+                }
+            }
+            if (controlCommand.workModel != null) {
+                CabinetCore.logOpt("设置", "空调工作模式");
+                setACWorkModelOption(controlCommand.workModel);
+            }
+            if (controlCommand.remoteWorkModel != null) {
+                CabinetCore.logOpt("设置", "遥控器工作模式");
+                setACRemoteWorkModelOption(controlCommand.remoteWorkModel);
+            }
+        }
+    }
 
+    private boolean setACWorkModelOption(AirConditionerStatus.WorkModel workModel) {
+        return ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACSetCommitAddress, true);
+    }
+
+    private boolean setACRemoteWorkModelOption(AirConditionerStatus.RemoteWorkModel workModel) {
+        return ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACRemoteWorkModelSetCommitAddress, true);
+    }
+
+    private boolean setHardware(int valueAddress, int commitAddress, int value) {
+        return ModbusService.setHardwareHoldingRegisterOption(valueAddress, value) && (commitAddress == 0 || ModbusService.setHardwareCoilStatusOption(commitAddress, true));
+    }
+
+    private void setAndResetHardware(int address) {
+        new Thread(() -> {
+            ModbusService.setHardwareCoilStatusOption(address, true);
+            Util.sleep(1000);
+            ModbusService.setHardwareCoilStatusOption(address, false);
+        }).start();
     }
 
     private void processSetupCommand(String mqttMessage) {

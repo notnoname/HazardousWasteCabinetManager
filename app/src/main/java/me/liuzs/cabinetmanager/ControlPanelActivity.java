@@ -71,10 +71,13 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         compoundButton.setChecked(b);
         if (compoundButton == mFanWorkModel) {
+            CabinetCore.logOpt(CabinetCore.RoleType.Operator, "设置", "风机运行模式:" + (b ? "自动" : "手动"));
             setHardware(StatusOption.UnionWorkModelAddress, 0, b ? StatusOption.FanWorkModel.Auto.ordinal() : StatusOption.FanWorkModel.Manual.ordinal());
         } else if (compoundButton == mACCtrlModel) {
+            CabinetCore.logOpt(CabinetCore.RoleType.Operator, "设置", "空调控制模式:" + (b ? "自动" : "手动"));
             setHardware(AirConditionerStatus.ACCtrlModelAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
         } else if (compoundButton == mACPower) {
+            CabinetCore.logOpt(CabinetCore.RoleType.Operator, b ? "开" : "关", "空调");
             setHardware(AirConditionerStatus.ACPowerSetAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
         }
     }
@@ -118,9 +121,10 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACSetCommitAddress, true);
             if (success) {
-                showToast("空调模式设置成功!");
+                CabinetCore.logOpt(CabinetCore.RoleType.Operator, "设置", "空调工作模式");
+                showToast("空调模式设置成功");
             } else {
-                showToast("空调模式设置失败!");
+                showToast("空调模式设置失败");
             }
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
@@ -161,50 +165,54 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     }
 
     private void showStatusOption() {
-        switch (mStatusOption.fanWorkModel) {
-            case None:
-                mFanWorkModelValue.setText(R.string.none);
-                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
-                mFanWorkModel.setChecked(false);
-                break;
-            case Auto:
-                mFanWorkModelValue.setText(R.string.auto);
-                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
-                mFanWorkModel.setChecked(true);
-                break;
-            case Manual:
-                mFanWorkModelValue.setText(R.string.manual);
-                mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
-                mFanWorkModel.setChecked(true);
-                break;
+        if (mStatusOption.e == null) {
+            switch (mStatusOption.fanWorkModel) {
+                case None:
+                    mFanWorkModelValue.setText(R.string.none);
+                    mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
+                    mFanWorkModel.setChecked(false);
+                    break;
+                case Auto:
+                    mFanWorkModelValue.setText(R.string.auto);
+                    mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
+                    mFanWorkModel.setChecked(true);
+                    break;
+                case Manual:
+                    mFanWorkModelValue.setText(R.string.manual);
+                    mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
+                    mFanWorkModel.setChecked(true);
+                    break;
+            }
+            if (mStatusOption.fireAlert) {
+                mSoundLightAlertValue.setText(R.string.open);
+                mSoundLightAlertValue.setBackgroundResource(R.drawable.background_state_red);
+            } else {
+                mSoundLightAlertValue.setText(R.string.close);
+                mSoundLightAlertValue.setBackgroundResource(R.drawable.background_state_green);
+            }
         }
-        if (mStatusOption.fireAlert) {
-            mSoundLightAlertValue.setText(R.string.open);
-            mSoundLightAlertValue.setBackgroundResource(R.drawable.background_state_red);
-        } else {
-            mSoundLightAlertValue.setText(R.string.close);
-            mSoundLightAlertValue.setBackgroundResource(R.drawable.background_state_green);
+        if (mAirConditionerStatus.e == null) {
+            if (mAirConditionerStatus.autoCtrl) {
+                mACCtrlModelValue.setText(R.string.auto);
+                mACCtrlModelValue.setBackgroundResource(R.drawable.background_state_green);
+                mACCtrlModel.setChecked(true);
+            } else {
+                mACCtrlModelValue.setText(R.string.manual);
+                mACCtrlModelValue.setBackgroundResource(R.drawable.background_state_green);
+                mACCtrlModel.setChecked(false);
+            }
+            if (mAirConditionerStatus.powerOn) {
+                mACPowerValue.setText(R.string.open);
+                mACPowerValue.setBackgroundResource(R.drawable.background_state_green);
+                mACPower.setChecked(true);
+            } else {
+                mACPowerValue.setText(R.string.close);
+                mACPowerValue.setBackgroundResource(R.drawable.background_state_red);
+                mACPower.setChecked(false);
+            }
+            mACWorkModelValue.setText(getString(ACWorkModelNameResId[mAirConditionerStatus.workModel.ordinal()]));
+            mRemoteCtrlModelValue.setText(getString(ACRemoteWorkModelNameResId[mAirConditionerStatus.remoteWorkModel.ordinal()]));
         }
-        if (mAirConditionerStatus.autoCtrl) {
-            mACCtrlModelValue.setText(R.string.auto);
-            mACCtrlModelValue.setBackgroundResource(R.drawable.background_state_green);
-            mACCtrlModel.setChecked(true);
-        } else {
-            mACCtrlModelValue.setText(R.string.manual);
-            mACCtrlModelValue.setBackgroundResource(R.drawable.background_state_green);
-            mACCtrlModel.setChecked(false);
-        }
-        if (mAirConditionerStatus.powerOn) {
-            mACPowerValue.setText(R.string.open);
-            mACPowerValue.setBackgroundResource(R.drawable.background_state_green);
-            mACPower.setChecked(true);
-        } else {
-            mACPowerValue.setText(R.string.close);
-            mACPowerValue.setBackgroundResource(R.drawable.background_state_red);
-            mACPower.setChecked(false);
-        }
-        mACWorkModelValue.setText(getString(ACWorkModelNameResId[mAirConditionerStatus.workModel.ordinal()]));
-        mRemoteCtrlModelValue.setText(getString(ACRemoteWorkModelNameResId[mAirConditionerStatus.remoteWorkModel.ordinal()]));
     }
 
     public void onBackButtonClick(View view) {
@@ -247,8 +255,8 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (mStatusOption.fanWorkModel != StatusOption.FanWorkModel.Auto) {
-            showToast("自动模式下才能操作！");
+        if (mStatusOption.fanWorkModel == StatusOption.FanWorkModel.Auto) {
+            showToast("手动模式下才能操作！");
         } else {
             int address = 0;
             if (view == mFanOpen) {
@@ -277,7 +285,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareHoldingRegisterOption(valueAddress, value) && (commitAddress == 0 || ModbusService.setHardwareCoilStatusOption(commitAddress, true));
             if (!success) {
-                showToast("操作失败!");
+                showToast("操作失败");
                 mHandler.post(this::showStatusOption);
                 return;
             }
@@ -295,7 +303,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareCoilStatusOption(address, true);
             if (!success) {
-                showToast("操作失败!");
+                showToast("操作失败");
                 mHandler.post(this::showStatusOption);
             }
         });
@@ -305,7 +313,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareCoilStatusOption(address, false);
             if (!success) {
-                showToast("复位失败!");
+                showToast("复位失败");
                 mHandler.post(this::showStatusOption);
             }
             mStatusOption = ModbusService.readStatusOption();

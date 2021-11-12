@@ -37,7 +37,7 @@ public class FrequencyConverterStatus {
     public static final int FCRotatingSpeedAddress = 40562;
     public static final int FCFrequencyAddress = 40557;
     public static final int FCFrequencyTargetAddress = 40558;
-    public static final int FCResetAddress = 40558;
+    public static final int FCResetAddress = 40702;
 
     public enum Status {
         UnKnown, Clockwise, Counterclockwise, Stop, Fault, PowerOff;
