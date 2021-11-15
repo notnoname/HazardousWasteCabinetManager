@@ -489,7 +489,7 @@ public class RemoteAPI {
         /**
          * 获取柜子绑定摄像头列表
          */
-        public static final String API_CAMERA_LIST = API_ROOT + "/cameralist/";
+        public static final String API_CAMERA_LIST = API_ROOT + "/admin/storages/%s/cameras";
 
         /**
          * 获取机构下实验室列表
@@ -566,10 +566,10 @@ public class RemoteAPI {
         public static APIJSON<List<SurveillanceCamera>> getCameraList(String cabinetId) {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
+                String api_url = String.format(API_CAMERA_LIST, cabinetId);
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("storage_id", cabinetId));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet method = new HttpGet(API_CAMERA_LIST + "?" + params);
+                HttpGet method = new HttpGet(api_url);
                 Log.d(TAG, method.getURI().toString());
                 Log.d(TAG, valuePairs.toString());
                 generalOptBaseHeader(method);
