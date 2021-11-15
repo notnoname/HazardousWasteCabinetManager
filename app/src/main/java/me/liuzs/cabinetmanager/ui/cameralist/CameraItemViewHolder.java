@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import me.liuzs.cabinetmanager.R;
 import me.liuzs.cabinetmanager.VideoPlayerActivity;
-import me.liuzs.cabinetmanager.model.SurveillanceCamera;
+import me.liuzs.cabinetmanager.model.Camera;
 
 public class CameraItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -18,7 +18,7 @@ public class CameraItemViewHolder extends RecyclerView.ViewHolder implements Vie
     TextView cabinetName, status;
     Button watch;
     ImageView logo;
-    SurveillanceCamera camera;
+    Camera camera;
 
     public CameraItemViewHolder(@NonNull View itemView) {
         super(itemView);

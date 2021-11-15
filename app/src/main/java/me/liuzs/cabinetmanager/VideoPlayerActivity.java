@@ -10,26 +10,23 @@ import android.os.Message;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.gson.Gson;
 import com.videogo.errorlayer.ErrorInfo;
 import com.videogo.openapi.EZConstants;
 import com.videogo.openapi.EZOpenSDK;
 import com.videogo.openapi.EZPlayer;
 
-import me.liuzs.cabinetmanager.model.SurveillanceCamera;
-import me.liuzs.cabinetmanager.util.Util;
+import me.liuzs.cabinetmanager.model.Camera;
 
 public class VideoPlayerActivity extends BaseActivity {
 
     private TextureView mVideoView;
-    private SurveillanceCamera mCamera;
+    private Camera mCamera;
     private EZPlayer mPlayer;
     private final Handler mVideoHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -84,7 +81,7 @@ public class VideoPlayerActivity extends BaseActivity {
         }
     };
 
-    public static void start(SurveillanceCamera camera, Context context) {
+    public static void start(Camera camera, Context context) {
         Intent intent = new Intent(context, VideoPlayerActivity.class);
         intent.putExtra("CameraParam", CabinetCore.GSON.toJson(camera));
         context.startActivity(intent);
@@ -98,7 +95,7 @@ public class VideoPlayerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
-        mCamera = CabinetCore.GSON.fromJson(getIntent().getStringExtra("CameraParam"), SurveillanceCamera.class);
+        mCamera = CabinetCore.GSON.fromJson(getIntent().getStringExtra("CameraParam"), Camera.class);
         ((TextView)findViewById(R.id.toolbar_title)).setText(mCamera.video_name);
         EZOpenSDK sdk = EZOpenSDK.getInstance();
         sdk.setAccessToken(mCamera.access_token);

@@ -13,11 +13,11 @@ import java.util.List;
 
 import me.liuzs.cabinetmanager.CameraListActivity;
 import me.liuzs.cabinetmanager.R;
-import me.liuzs.cabinetmanager.model.SurveillanceCamera;
+import me.liuzs.cabinetmanager.model.Camera;
 
 public class CameraListAdapter extends RecyclerView.Adapter<CameraItemViewHolder> {
 
-    private List<SurveillanceCamera> mResultList;
+    private List<Camera> mResultList;
     private CameraListActivity mActivity;
 
     public CameraListAdapter(CameraListActivity activity) {
@@ -33,14 +33,14 @@ public class CameraListAdapter extends RecyclerView.Adapter<CameraItemViewHolder
         return new CameraItemViewHolder(itemView);
     }
 
-    public void setResult(List<SurveillanceCamera> items) {
+    public void setResult(List<Camera> items) {
         mResultList = items;
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull CameraItemViewHolder holder, int position) {
-        SurveillanceCamera item = mResultList.get(position);
+        Camera item = mResultList.get(position);
         holder.camera = item;
         holder.show();
     }

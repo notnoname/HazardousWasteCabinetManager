@@ -13,13 +13,13 @@ import com.videogo.openapi.EZOpenSDK;
 import com.videogo.openapi.bean.EZDeviceInfo;
 
 import java.lang.ref.WeakReference;
-import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
 import me.liuzs.cabinetmanager.model.Cabinet;
-import me.liuzs.cabinetmanager.model.SurveillanceCamera;
+import me.liuzs.cabinetmanager.model.Camera;
 import me.liuzs.cabinetmanager.net.APIJSON;
+import me.liuzs.cabinetmanager.net.CameraListJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.ui.cameralist.CameraListAdapter;
 
@@ -30,7 +30,7 @@ public class CameraListActivity extends BaseActivity {
 
     public static final String TAG = "CameraListActivity";
     private final CameraListAdapter mAdapter = new CameraListAdapter(this);
-    private final List<SurveillanceCamera> mCamera = new LinkedList<>();
+    private final List<Camera> mCamera = new LinkedList<>();
     private RecyclerView mRecyclerView;
 
     @Override
@@ -67,7 +67,7 @@ public class CameraListActivity extends BaseActivity {
         finish();
     }
 
-    static class GetCameraListTask extends AsyncTask<String, Void, APIJSON<List<SurveillanceCamera>>> {
+    static class GetCameraListTask extends AsyncTask<String, Void, APIJSON<CameraListJSON>> {
 
         private final WeakReference<CameraListActivity> mActivity;
 
@@ -76,11 +76,11 @@ public class CameraListActivity extends BaseActivity {
         }
 
         @Override
-        protected APIJSON<List<SurveillanceCamera>> doInBackground(String... strings) {
-            APIJSON<List<SurveillanceCamera>> result = RemoteAPI.System.getCameraList(strings[0]);
+        protected APIJSON<CameraListJSON> doInBackground(String... strings) {
+            APIJSON<CameraListJSON> result = RemoteAPI.System.getCameraList(strings[0]);
             EZOpenSDK sdk = EZOpenSDK.getInstance();
-            if (result.data != null) {
-                for (SurveillanceCamera camera : result.data) {
+            if (result.data != null && result.data.cameras != null) {
+                for (Camera camera : result.data.cameras) {
                     try {
                         Log.d("VideoPlayer", camera.serial_no + ":" + camera.channel_no);
                         EZDeviceInfo info = sdk.getDeviceInfo(camera.serial_no);
@@ -102,11 +102,11 @@ public class CameraListActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(APIJSON<List<SurveillanceCamera>> json) {
+        protected void onPostExecute(APIJSON<CameraListJSON> json) {
             super.onPostExecute(json);
             mActivity.get().dismissProgressDialog();
             if (json.data != null) {
-                mActivity.get().mAdapter.setResult(json.data);
+                mActivity.get().mAdapter.setResult(json.data.cameras);
             }
         }
     }

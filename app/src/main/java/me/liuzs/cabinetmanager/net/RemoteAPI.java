@@ -31,7 +31,7 @@ import me.liuzs.cabinetmanager.model.Agency;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
 import me.liuzs.cabinetmanager.model.DepositRecord;
-import me.liuzs.cabinetmanager.model.SurveillanceCamera;
+import me.liuzs.cabinetmanager.model.Camera;
 import me.liuzs.cabinetmanager.model.User;
 
 public class RemoteAPI {
@@ -563,7 +563,7 @@ public class RemoteAPI {
          *
          * @return 监控摄像头列表
          */
-        public static APIJSON<List<SurveillanceCamera>> getCameraList(String cabinetId) {
+        public static APIJSON<CameraListJSON> getCameraList(String cabinetId) {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 String api_url = String.format(API_CAMERA_LIST, cabinetId);
@@ -576,7 +576,7 @@ public class RemoteAPI {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, "utf-8");
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<List<SurveillanceCamera>>>() {
+                    Type jsonType = new TypeToken<APIJSON<CameraListJSON>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
