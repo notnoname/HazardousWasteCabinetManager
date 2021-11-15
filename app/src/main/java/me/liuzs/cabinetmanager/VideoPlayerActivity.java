@@ -58,7 +58,7 @@ public class VideoPlayerActivity extends BaseActivity {
                                 .setView(et)
                                 .setPositiveButton("确定", (dialog, which) -> {
                                     String input = et.getText().toString().trim();
-                                    CabinetCore.saveCameraVerifyCode(VideoPlayerActivity.this, mCamera.serialNo, mCamera.channelNo, input);
+                                    CabinetCore.saveCameraVerifyCode(VideoPlayerActivity.this, mCamera.serial_no, mCamera.channel_no, input);
                                     startRealPlay();
                                 })
                                 .setNegativeButton("取消", (dialogInterface, i) -> finish())
@@ -99,10 +99,10 @@ public class VideoPlayerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
         mCamera = CabinetCore.GSON.fromJson(getIntent().getStringExtra("CameraParam"), SurveillanceCamera.class);
-        ((TextView)findViewById(R.id.toolbar_title)).setText(mCamera.videoName);
+        ((TextView)findViewById(R.id.toolbar_title)).setText(mCamera.video_name);
         EZOpenSDK sdk = EZOpenSDK.getInstance();
-        sdk.setAccessToken(mCamera.accessToken);
-        mPlayer = sdk.createPlayer(mCamera.serialNo, mCamera.channelNo);
+        sdk.setAccessToken(mCamera.access_token);
+        mPlayer = sdk.createPlayer(mCamera.serial_no, mCamera.channel_no);
         mPlayer.setHandler(mVideoHandler);
 
         mVideoView = findViewById(R.id.textureView);
@@ -137,7 +137,7 @@ public class VideoPlayerActivity extends BaseActivity {
 
     private void startRealPlay() {
         if (mPlayer != null) {
-            mPlayer.setPlayVerifyCode(CabinetCore.getCameraVerifyCode(this, mCamera.serialNo, mCamera.channelNo));
+            mPlayer.setPlayVerifyCode(CabinetCore.getCameraVerifyCode(this, mCamera.serial_no, mCamera.channel_no));
             mPlayer.startRealPlay();
         }
     }

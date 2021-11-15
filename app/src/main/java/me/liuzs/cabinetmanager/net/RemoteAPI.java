@@ -567,11 +567,8 @@ public class RemoteAPI {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 String api_url = String.format(API_CAMERA_LIST, cabinetId);
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("storage_id", cabinetId));
                 HttpGet method = new HttpGet(api_url);
                 Log.d(TAG, method.getURI().toString());
-                Log.d(TAG, valuePairs.toString());
                 generalOptBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();

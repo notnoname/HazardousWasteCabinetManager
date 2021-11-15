@@ -29,7 +29,7 @@ public class CameraItemViewHolder extends RecyclerView.ViewHolder implements Vie
     }
 
     public void show() {
-        cabinetName.setText(camera.videoName);
+        cabinetName.setText(camera.video_name);
         status.setText(camera.status == 1 ? "在线" : "未知");
     }
 
