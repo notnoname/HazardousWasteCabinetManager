@@ -174,6 +174,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
     }
 
     public void onCalibrationButtonClick(View view) {
+        HardwareService.steelyardInit();
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(R.string.calibration);
         alertDialog.setMessage("请放置500g标定砝码后，点击确定按钮");

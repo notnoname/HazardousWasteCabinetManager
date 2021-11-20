@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import me.liuxy.cabinet.CabinetManager;
 import me.liuxy.cabinet.Steelyard;
-import me.liuxy.cabinet.TDA09C;
+import me.liuxy.cabinet.TDA04A;
 import me.liuzs.cabinetmanager.CabinetApplication;
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.Config;
@@ -196,27 +196,49 @@ public class HardwareService extends Service {
         }
     }
 
-    public synchronized static void steelyardCalibration(int value) {
+    public synchronized static void steelyardInit() {
         if (mManager == null) {
             return;
         }
         try {
-            TDA09C c = mManager.getTDA09CInstance(0);
-            c.Calibrate(TDA09C.CalibrateType.ECALIBRATE_ZERO);
-            c.SetGain(value);
-            c.Calibrate(TDA09C.CalibrateType.ECALIBRATE_GAIN);
+            TDA04A c = mManager.getTDA04CInstance(0);
+            c.setIndexValue();
+            c.setRange();
+            c.calibrate(TDA04A.CalibrateType.E_CALIBRATE_ZERO);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public synchronized static float getWeight() {
+    public synchronized static void steelyardCalibration(int value) {
+        if (mManager == null) {
+            return;
+        }
         try {
-            TDA09C c = mManager.getTDA09CInstance(0);
-            c.Calibrate(TDA09C.CalibrateType.ECALIBRATE_ZERO);
-            return c.getWeight() / 10f;
+            TDA04A c = mManager.getTDA04CInstance(0);
+//            c.SetGain(value);
+            c.calibrate(TDA04A.CalibrateType.E_CALIBRATE_GAIN);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized static float steelyardWeight() {
+        try {
+            TDA04A c = mManager.getTDA04CInstance(0);
+//            c.calibrate(TDA04A.CalibrateType.E_CALIBRATE_ZERO);
+            return c.getWeight() / 100000f;
         } catch (Exception e) {
             return Float.MIN_VALUE;
+        }
+    }
+
+    public synchronized static void steelyardClear() {
+        try {
+            TDA04A c = mManager.getTDA04CInstance(0);
+            c.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -243,10 +265,10 @@ public class HardwareService extends Service {
 
         CabinetManager.Settings settings = new CabinetManager.Settings();
         settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[0];
-        settings.TDA09C485Configs = new CabinetManager.TDA09C485Config[1];
+        settings.TDA04A485Configs = new CabinetManager.TDA04A485Config[1];
         int c485 = CabinetCore.getTDA09C485Config(this);
         //按实际设备地址填写
-        settings.TDA09C485Configs[0] = new CabinetManager.TDA09C485Config((byte) c485);
+        settings.TDA04A485Configs[0] = new CabinetManager.TDA04A485Config((byte) c485);
         settings.TVOCsDeviceName = new String[0];
         mManager = new CabinetManager(settings);
     }

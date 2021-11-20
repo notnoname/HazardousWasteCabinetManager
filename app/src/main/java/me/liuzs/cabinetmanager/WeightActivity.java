@@ -26,7 +26,7 @@ public class WeightActivity extends AppCompatActivity implements Steelyard.Steel
     private final TimerTask mWeightTask = new TimerTask() {
         @Override
         public void run() {
-            float value = HardwareService.getWeight();
+            float value = HardwareService.steelyardWeight();
             if (value != Float.MIN_VALUE) {
                 WeightActivity.this.OnData(value);
             } else {
@@ -62,6 +62,10 @@ public class WeightActivity extends AppCompatActivity implements Steelyard.Steel
         } catch (Exception ignored) {
 
         }
+    }
+
+    public void onClearButtonClick(View v) {
+        HardwareService.steelyardClear();
     }
 
     @Override
