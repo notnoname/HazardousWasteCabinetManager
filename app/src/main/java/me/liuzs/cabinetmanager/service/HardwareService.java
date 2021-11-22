@@ -266,9 +266,8 @@ public class HardwareService extends Service {
         CabinetManager.Settings settings = new CabinetManager.Settings();
         settings.SubBoardConfigs = new CabinetManager.SubBoardConfig[0];
         settings.TDA04A485Configs = new CabinetManager.TDA04A485Config[1];
-        int c485 = CabinetCore.getTDA09C485Config(this);
         //按实际设备地址填写
-        settings.TDA04A485Configs[0] = new CabinetManager.TDA04A485Config((byte) c485);
+        settings.TDA04A485Configs[0] = new CabinetManager.TDA04A485Config((byte) 1);
         settings.TVOCsDeviceName = new String[0];
         mManager = new CabinetManager(settings);
     }

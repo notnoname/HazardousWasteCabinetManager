@@ -88,25 +88,28 @@ public class CabinetCore {
 //检查是人像识别库是否全
         if (!Config.isLibraryExists(mContext)) {
             showToast(mContext.getString(R.string.library_not_found));
-            return;
-        }
-        validateARCActive(new CabinetCore.CheckARCActiveListener() {
-            @Override
-            public void onCheckARCActiveFailure(String message, int code) {
-                if (CabinetCore.isDebugState()) {
-                    CabinetCore.validateAdminUserInfo();
-                } else {
-                    Intent intent = new Intent(mContext, HardwareSetupActiveActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onCheckARCActiveSuccess() {
+            if(isDebugState()) {
                 CabinetCore.validateAdminUserInfo();
             }
-        });
+        } else {
+            validateARCActive(new CabinetCore.CheckARCActiveListener() {
+                @Override
+                public void onCheckARCActiveFailure(String message, int code) {
+                    if (CabinetCore.isDebugState()) {
+                        CabinetCore.validateAdminUserInfo();
+                    } else {
+                        Intent intent = new Intent(mContext, HardwareSetupActiveActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContext.startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onCheckARCActiveSuccess() {
+                    CabinetCore.validateAdminUserInfo();
+                }
+            });
+        }
     }
 
     public static void validateARCActive(CheckARCActiveListener lsn) {
@@ -296,11 +299,6 @@ public class CabinetCore {
         return sp.getInt(Config.SCALES_DEVICE, 0);
     }
 
-    public static int getTDA09C485Config(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        return sp.getInt(Config.TDA09C485_CONFIG, Config.DEFAULT_TDA09C485_ADDRESS);
-    }
-
     public static PrinterBluetoothInfo getConnectedPrinterInfo(Context context) {
         SharedPreferences sp = context.getSharedPreferences(Config.SYSTEM_PREFERENCE_NAME, Context.MODE_PRIVATE);
         String info = sp.getString(Config.PRINTER_BLUETOOTH_INFO, null);
@@ -403,7 +401,7 @@ public class CabinetCore {
     }
 
     public static boolean isDebugState() {
-        return BuildConfig.DEBUG || TextUtils.equals(BuildConfig.BUILD_TYPE, "test");
+        return BuildConfig.DEBUG || TextUtils.equals(BuildConfig.BUILD_TYPE, "release_test");
     }
 
 

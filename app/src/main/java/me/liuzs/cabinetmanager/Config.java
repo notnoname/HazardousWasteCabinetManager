@@ -30,10 +30,8 @@ public class Config {
     public static final String ARC_APP_ID = "5UQUZXBwq4RknCfrk4zs7nBew3BQrNh7ZQH1ALQybdNR";
     public static final String ARC_SDK_KEY = "AzFyDx3GmvuvVWDSGZW9ZCe8uerNp1zoVcYfj45eXcNd";
 
-    public static final String TDA09C485_CONFIG = "TDA09C485_CONFIG";
     public static final String SCALES_DEVICE = "SCALES_DEVICE";
     //public static final int DEFAULT_SUB_BOARD_ADDRESS = 1;
-    public static final int DEFAULT_TDA09C485_ADDRESS = 31;
 
     /**
      * IR预览数据相对于RGB预览数据的横向偏移量，注意：是预览数据，一般的摄像头的预览数据都是 width > height

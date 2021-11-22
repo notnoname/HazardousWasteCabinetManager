@@ -48,7 +48,11 @@ public class CabinetApplication extends Application {
         Util.upgradeRootPermission(getPackageCodePath());
         mSerialNo = android.os.Build.SERIAL;
         StorageUtility.init(this);
-        PrinterInstance.init(this);
+        try {
+            PrinterInstance.init(this);
+        } catch (UnsatisfiedLinkError e) {
+            e.printStackTrace();
+        }
         CabinetCore.init(this);
 
         /** * sdk日志开关，正式发布需要去掉 */
