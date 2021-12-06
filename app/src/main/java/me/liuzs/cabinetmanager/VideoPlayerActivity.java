@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
@@ -134,6 +135,9 @@ public class VideoPlayerActivity extends BaseActivity {
 
     private void startRealPlay() {
         if (mPlayer != null) {
+            if(!TextUtils.isEmpty(mCamera.valid_code)) {
+                CabinetCore.saveCameraVerifyCode(this, mCamera.serial_no, mCamera.channel_no, mCamera.valid_code);
+            }
             mPlayer.setPlayVerifyCode(CabinetCore.getCameraVerifyCode(this, mCamera.serial_no, mCamera.channel_no));
             mPlayer.startRealPlay();
         }

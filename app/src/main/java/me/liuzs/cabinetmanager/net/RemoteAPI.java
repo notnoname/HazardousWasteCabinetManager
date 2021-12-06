@@ -151,15 +151,15 @@ public class RemoteAPI {
         /**
          * 创建单号批次
          */
-        public static final String API_CREATE_CONTAINER_NO_BATCH = API_ROOT + "/admin/storage_no_batches";
+        public static final String API_CREATE_CONTAINER_NO_BATCH = API_ROOT + "/api/storage_no_batches";
         /**
          * 获取单号批次列表
          */
-        public static final String API_GET_CONTAINER_NO_BATCH_LIST = API_ROOT + "/admin/storage_no_batches";
+        public static final String API_GET_CONTAINER_NO_BATCH_LIST = API_ROOT + "/api/storage_no_batches";
         /**
          * 获取单号批次下单号列表
          */
-        public static final String API_GET_CONTAINER_NO_BATCH_NO_LIST = API_ROOT + "/admin/storage_no_batches/";
+        public static final String API_GET_CONTAINER_NO_BATCH_NO_LIST = API_ROOT + "/api/storage_no_batches/";
 
 
         /**
@@ -280,7 +280,8 @@ public class RemoteAPI {
         /**
          * 库存列表
          */
-        public static final String API_INVENTORY_QUERY_LIST = API_ROOT + "/admin/storage_record_book";
+        //public static final String API_INVENTORY_QUERY_LIST = API_ROOT + "/api/storage_record_book";
+        public static final String API_INVENTORY_QUERY_LIST = API_ROOT + "/api/storages/%s/storage_records/%s";
 
         /**
          * 库存列表
@@ -293,23 +294,22 @@ public class RemoteAPI {
                 String type = null;
                 switch (detailType) {
                     case Inventories:
-                        type = "stock";
+                        type = "stocks";
                         break;
                     case Deposit:
-                        type = "input";
+                        type = "inputs";
                         break;
                     case TakeOut:
-                        type = "output";
+                        type = "outputs";
                         break;
                 }
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(pageSize)));
                 valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(currentPage)));
-                valuePairs.add(new BasicNameValuePair("storage_id", CabinetCore.getCabinetInfo().id));
-                valuePairs.add(new BasicNameValuePair("type", type));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                HttpGet method = new HttpGet(API_INVENTORY_QUERY_LIST + "?" + params);
+                String api_url = String.format(API_INVENTORY_QUERY_LIST, CabinetCore.getCabinetInfo().id, type);
+                HttpGet method = new HttpGet(api_url + "?" + params);
                 Log.d(TAG, method.getURI().toString());
                 generalOptBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
@@ -341,15 +341,15 @@ public class RemoteAPI {
         /**
          * 提交入柜信息
          */
-        public static final String API_SUBMIT_DEPOSIT = API_ROOT + "/admin/storage_records";
+        public static final String API_SUBMIT_DEPOSIT = API_ROOT + "/api/storage_records";
         /**
          * 获取暂存柜记录列表
          */
-        public static final String API_DEPOSIT_LIST = API_ROOT + "/admin/storage_records";
+        public static final String API_DEPOSIT_LIST = API_ROOT + "/api/storage_records";
         /**
          * 提交出柜信息
          */
-        public static final String API_TAKE_OUT = API_ROOT + "/admin/storage_records/%s?update_action=output";
+        public static final String API_TAKE_OUT = API_ROOT + "/api/storage_records/%s?update_action=output";
 
 
         /**
@@ -480,21 +480,21 @@ public class RemoteAPI {
         /**
          * 登录
          */
-        public static final String API_LOGIN = API_ROOT + "/admin/sessions";
+        public static final String API_LOGIN = API_ROOT + "/api/sessions";
         /**
          * 用户名下一体机设备搜索
          */
-        public static final String API_CABINET_LIST = API_ROOT + "/admin/admins/%s/storages";
+        public static final String API_CABINET_LIST = API_ROOT + "/api/storages";
 
         /**
          * 获取柜子绑定摄像头列表
          */
-        public static final String API_CAMERA_LIST = API_ROOT + "/admin/storages/%s/cameras";
+        public static final String API_CAMERA_LIST = API_ROOT + "/api/storages/%s/cameras";
 
         /**
          * 获取机构下实验室列表
          */
-        public static final String API_LABORATORY_LIST = API_ROOT + "/admin/laboratories";
+        public static final String API_LABORATORY_LIST = API_ROOT + "/api/laboratories";
 
         /**
          * 查询管理员名下所有暂存柜列表
@@ -505,9 +505,11 @@ public class RemoteAPI {
         public static APIJSON<CabinetListJSON> getCabinetList(String userId) {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                String api_url = String.format(API_CABINET_LIST, userId);
-                HttpGet method = new HttpGet(api_url);
-                Log.d(TAG, method.getURI().toString());
+                List<NameValuePair> valuePairs = new ArrayList<>();
+                valuePairs.add(new BasicNameValuePair("userId", userId));
+                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, UTF_8));
+                HttpGet method = new HttpGet(API_CABINET_LIST + "?" + params);
+               Log.d(TAG, method.getURI().toString());
                 generalAdminBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();

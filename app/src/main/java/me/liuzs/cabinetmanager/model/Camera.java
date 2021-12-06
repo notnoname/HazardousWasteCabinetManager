@@ -7,4 +7,5 @@ public class Camera {
     public String serial_no;
     public int channel_no;
     public String video_type;
+    public String valid_code;
 }
