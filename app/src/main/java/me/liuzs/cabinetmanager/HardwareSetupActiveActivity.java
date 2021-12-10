@@ -41,7 +41,7 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
                 assert data != null;
                 String selectValue = data.getStringExtra(WeightActivity.KEY_SELECT_VALUE);
                 assert selectValue != null;
-                showToast("Weight:" + selectValue);
+                showToast("重量:" + selectValue + "kg");
             }
         }
     });

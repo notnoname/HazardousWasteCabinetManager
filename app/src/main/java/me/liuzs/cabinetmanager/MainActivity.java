@@ -76,6 +76,11 @@ public class MainActivity extends BaseActivity {
         mFanSpeed = findViewById(R.id.tvFanSpeedValue);
 
         mAlertStatus = findViewById(R.id.llAlertStatus);
+
+        Cabinet info = CabinetCore.getCabinetInfo();
+        if (info != null) {
+            mCabinetName.setText(info.name);
+        }
     }
 
     private void showHardwareValue(HardwareValue value) {
@@ -348,6 +353,7 @@ public class MainActivity extends BaseActivity {
         showAuthActivity(CabinetCore.RoleType.Operator, new AuthListener() {
             @Override
             public void onAuthCancel() {
+                //throw new RuntimeException("测试崩溃");
             }
 
             @Override

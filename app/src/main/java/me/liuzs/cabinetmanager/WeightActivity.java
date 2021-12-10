@@ -15,6 +15,7 @@ import java.util.TimerTask;
 
 import me.liuxy.cabinet.Steelyard;
 import me.liuzs.cabinetmanager.service.HardwareService;
+import me.liuzs.cabinetmanager.util.Util;
 
 public class WeightActivity extends AppCompatActivity implements Steelyard.SteelyardCallback {
 
@@ -22,13 +23,14 @@ public class WeightActivity extends AppCompatActivity implements Steelyard.Steel
     public static final String TAG = "WeightActivity";
     private final Handler mHandler = new Handler();
     private TextView mWeight, mTip;
+    private float mWeightValue;
     private Timer mTimer;
     private final TimerTask mWeightTask = new TimerTask() {
         @Override
         public void run() {
             float value = HardwareService.steelyardWeight();
             if (value != Float.MIN_VALUE) {
-                WeightActivity.this.OnData(value);
+                WeightActivity.this.OnData(Util.getScaleFloat(value, 3));
             } else {
                 WeightActivity.this.OnError(Steelyard.ErrorCode.ERROR_DEVICE_CANNOT_OPEN);
             }
@@ -53,15 +55,9 @@ public class WeightActivity extends AppCompatActivity implements Steelyard.Steel
 
     public void onOKButtonClick(View v) {
         Intent data = new Intent();
-        String s = mWeight.getText().toString();
-        try {
-            float weight = Float.parseFloat(s);
-            data.putExtra(KEY_SELECT_VALUE, String.valueOf(weight));
-            setResult(RESULT_OK, data);
-            finish();
-        } catch (Exception ignored) {
-
-        }
+        data.putExtra(KEY_SELECT_VALUE, String.valueOf(mWeightValue));
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     public void onClearButtonClick(View v) {
@@ -86,10 +82,12 @@ public class WeightActivity extends AppCompatActivity implements Steelyard.Steel
         finish();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void OnData(float v) {
+        mWeightValue = v;
         try {
-            mHandler.post(() -> mWeight.setText(String.valueOf(v)));
+            mHandler.post(() -> mWeight.setText(mWeightValue + "kg"));
         } catch (Exception e) {
             e.printStackTrace();
         }

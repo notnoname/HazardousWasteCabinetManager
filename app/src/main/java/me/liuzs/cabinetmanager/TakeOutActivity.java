@@ -308,14 +308,14 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
     private void getRemoteDepositRecord(String no) {
         showProgressDialog();
         getExecutorService().submit(() -> {
-            APIJSON<DepositRecordListJSON> depositJSON = RemoteAPI.Deposit.getDeposit(no, 20, 1);
+            APIJSON<DepositRecord> depositJSON = RemoteAPI.Deposit.getDeposit(no);
             dismissProgressDialog();
             if (depositJSON.status == APIJSON.Status.ok) {
-                if (depositJSON.data.storage_records == null || depositJSON.data.storage_records.size() == 0) {
+                if (depositJSON.data == null || depositJSON.data.id == null) {
                     showToast("未查询到入柜记录,请先入柜.");
                     reset();
                 } else {
-                    DepositRecord record = depositJSON.data.storage_records.get(0);
+                    DepositRecord record = depositJSON.data;
                     record.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
                     record.has_input_weight = !TextUtils.isEmpty(record.input_weight);
                     record.has_output_weight = !TextUtils.isEmpty(record.output_weight);
@@ -325,6 +325,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
                         showToast("此单号已经出柜，请勿重复出柜.");
                     } else {
                         record.output_operator = mDepositRecord.output_operator;
+                        record.output_weight = record.input_weight;
                         mDepositRecord = record;
                         showDepositRecord();
                     }

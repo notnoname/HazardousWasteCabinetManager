@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 
 import java.io.DataOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -209,6 +210,13 @@ public class Util {
 
     public static void main(String[] args) {
         System.out.print(md5("00000000"));
+    }
+
+    public static float getScaleFloat(float value, int scale) {
+        int roundingMode = 4;//表示四舍五入，可以选择其他舍值方式，例如去尾，等等.
+        BigDecimal bd = BigDecimal.valueOf((double) value);
+        bd = bd.setScale(scale, roundingMode);
+        return bd.floatValue();
     }
 
 }

@@ -63,12 +63,12 @@ public class OfflineDepositRecordActivity extends BaseActivity {
     }
 
     private void submitDepositRecord(DepositRecord record) {
-        APIJSON<DepositRecordListJSON> json = RemoteAPI.Deposit.getDeposit(record.storage_no, 20, 1);
+        APIJSON<DepositRecord> json = RemoteAPI.Deposit.getDeposit(record.storage_no);
         if (json.status == APIJSON.Status.ok) {
-            if (json.data == null || json.data.storage_records == null || json.data.storage_records.size() == 0) {
+            if (json.data == null || json.data.id == null) {
                 submitCorrectDepositRecord(record);
             } else {
-                DepositRecord remoteRecord = json.data.storage_records.get(0);
+                DepositRecord remoteRecord = json.data;
                 remoteRecord.has_storage_rack = !TextUtils.isEmpty(remoteRecord.storage_rack);
                 remoteRecord.has_input_weight = !TextUtils.isEmpty(remoteRecord.input_weight);
                 remoteRecord.has_output_weight = !TextUtils.isEmpty(remoteRecord.output_weight);

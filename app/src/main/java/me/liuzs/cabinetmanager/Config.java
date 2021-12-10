@@ -16,6 +16,7 @@ public class Config {
     public static final String DATABASE_NAME = "CabinetDatabase";
     public static final int DATABASE_VERSION = 4;
     public static final String EZ_APP_KEY = "15e1da4c183a470c89ebb68c3a26a349";
+    public static final String UMENG_APP_KEY = "61b2e5ace0f9bb492b8d7c16";
 
     public static final String SYSTEM_PREFERENCE_NAME = "SystemPreference";
     public static final String SYSPRE_Cabinet_User = "SYSPRE_Cabinet_User";

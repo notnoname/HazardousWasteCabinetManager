@@ -244,13 +244,13 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
     private void getRemoteDepositRecord(String no) {
         showProgressDialog();
         getExecutorService().submit(() -> {
-            APIJSON<DepositRecordListJSON> depositJSON = RemoteAPI.Deposit.getDeposit(no, 20, 1);
+            APIJSON<DepositRecord> depositJSON = RemoteAPI.Deposit.getDeposit(no);
             dismissProgressDialog();
             if (depositJSON.status == APIJSON.Status.ok) {
-                if (depositJSON.data.storage_records == null || depositJSON.data.storage_records.size() == 0) {
+                if (depositJSON.data == null || depositJSON.data.id == null) {
                     mDepositRecord.storage_no = no;
                 } else {
-                    DepositRecord record = depositJSON.data.storage_records.get(0);
+                    DepositRecord record = depositJSON.data;
                     record.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
                     record.has_input_weight = !TextUtils.isEmpty(record.input_weight);
                     record.input_operator = mDepositRecord.input_operator;
@@ -263,7 +263,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 }
                 showDepositRecord();
             } else if (depositJSON.status == APIJSON.Status.error) {
-                showToast(R.string.invalidate_no);
+                showToast(depositJSON.error);
                 reset();
             } else if (depositJSON.status == APIJSON.Status.other) {
                 showToast(depositJSON.error);

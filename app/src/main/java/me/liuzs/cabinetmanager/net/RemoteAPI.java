@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpEntity;
@@ -31,7 +32,6 @@ import me.liuzs.cabinetmanager.model.Agency;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
 import me.liuzs.cabinetmanager.model.DepositRecord;
-import me.liuzs.cabinetmanager.model.Camera;
 import me.liuzs.cabinetmanager.model.User;
 
 public class RemoteAPI {
@@ -207,7 +207,6 @@ public class RemoteAPI {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("batch_name", batchName));
                 valuePairs.add(new BasicNameValuePair("creator", operator));
@@ -306,9 +305,9 @@ public class RemoteAPI {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(pageSize)));
-                valuePairs.add(new BasicNameValuePair("page_index", String.valueOf(currentPage)));
+                valuePairs.add(new BasicNameValuePair("page", String.valueOf(currentPage)));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-                String api_url = String.format(API_INVENTORY_QUERY_LIST, CabinetCore.getCabinetInfo().id, type);
+                String api_url = String.format(API_INVENTORY_QUERY_LIST, Objects.requireNonNull(CabinetCore.getCabinetInfo()).id, type);
                 HttpGet method = new HttpGet(api_url + "?" + params);
                 Log.d(TAG, method.getURI().toString());
                 generalOptBaseHeader(method);
@@ -341,15 +340,15 @@ public class RemoteAPI {
         /**
          * 提交入柜信息
          */
-        public static final String API_SUBMIT_DEPOSIT = API_ROOT + "/api/storage_records";
+        public static final String API_SUBMIT_DEPOSIT = API_ROOT + "/api/storages/%s/storage_records";
         /**
          * 获取暂存柜记录列表
          */
-        public static final String API_DEPOSIT_LIST = API_ROOT + "/api/storage_records";
+        public static final String API_DEPOSIT_LIST = API_ROOT + "/api/storage_nos/%s/storage_record";
         /**
          * 提交出柜信息
          */
-        public static final String API_TAKE_OUT = API_ROOT + "/api/storage_records/%s?update_action=output";
+        public static final String API_TAKE_OUT = API_ROOT + "/api/storages/%s/storage_records/%s?update_action=output";
 
 
         /**
@@ -361,7 +360,7 @@ public class RemoteAPI {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                String api_url = String.format(API_TAKE_OUT, depositRecord.id);
+                String api_url = String.format(API_TAKE_OUT, CabinetCore.getCabinetInfo().id, depositRecord.id);
                 HttpPut method = new HttpPut(api_url);
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("storage_record[output_weight]", depositRecord.output_weight));
@@ -397,10 +396,11 @@ public class RemoteAPI {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                HttpPost method = new HttpPost(API_SUBMIT_DEPOSIT);
+                String api_url = String.format(API_SUBMIT_DEPOSIT, depositRecord.storage_id);
+                HttpPost method = new HttpPost(api_url);
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("storage_record[storage_no]", depositRecord.storage_no));
-                valuePairs.add(new BasicNameValuePair("storage_record[storage_id]", depositRecord.storage_id));
+//                valuePairs.add(new BasicNameValuePair("storage_record[storage_id]", depositRecord.storage_id));
                 valuePairs.add(new BasicNameValuePair("storage_record[container_size]", depositRecord.container_size));
                 valuePairs.add(new BasicNameValuePair("storage_record[storage_rack]", depositRecord.storage_rack));
                 valuePairs.add(new BasicNameValuePair("storage_record[input_weight]", depositRecord.input_weight));
@@ -442,17 +442,12 @@ public class RemoteAPI {
          * @param no 暂存编号
          * @return 暂存记录
          */
-        public static APIJSON<DepositRecordListJSON> getDeposit(String no, int pageSize, int pageIndex) {
+        public static APIJSON<DepositRecord> getDeposit(String no) {
 
             try {
+                String api_url = String.format(API_DEPOSIT_LIST, no);
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                List<NameValuePair> valuePairs = new ArrayList<>();
-                valuePairs.add(new BasicNameValuePair("storage_no", no));
-                valuePairs.add(new BasicNameValuePair("page_size", String.valueOf(pageSize)));
-                valuePairs.add(new BasicNameValuePair("page", String.valueOf(pageIndex)));
-                String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, "UTF-8"));
-
-                HttpGet method = new HttpGet(API_DEPOSIT_LIST + "?" + params);
+                HttpGet method = new HttpGet(api_url);
                 Log.d(TAG, method.getURI().toString());
                 generalOptBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
@@ -461,7 +456,7 @@ public class RemoteAPI {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<DepositRecordListJSON>>() {
+                    Type jsonType = new TypeToken<APIJSON<DepositRecord>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
@@ -509,7 +504,7 @@ public class RemoteAPI {
                 valuePairs.add(new BasicNameValuePair("userId", userId));
                 String params = EntityUtils.toString(new UrlEncodedFormEntity(valuePairs, UTF_8));
                 HttpGet method = new HttpGet(API_CABINET_LIST + "?" + params);
-               Log.d(TAG, method.getURI().toString());
+                Log.d(TAG, method.getURI().toString());
                 generalAdminBaseHeader(method);
                 HttpResponse httpResponse = httpClient.execute(method);
                 int code = httpResponse.getStatusLine().getStatusCode();
