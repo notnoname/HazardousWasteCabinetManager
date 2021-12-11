@@ -34,7 +34,6 @@ import me.liuzs.cabinetmanager.model.DefaultDict;
 import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.model.Laboratory;
 import me.liuzs.cabinetmanager.net.APIJSON;
-import me.liuzs.cabinetmanager.net.DepositRecordListJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 
 /**
@@ -304,6 +303,9 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                 mSourceValue.setText(getLaboratoryName(mDepositRecord.laboratory_id));
             } else {
                 mSourceValue.setText(mDepositRecord.laboratory);
+                if (TextUtils.isEmpty(mDepositRecord.laboratory_id)) {
+                    mDepositRecord.laboratory_id = getLaboratoryId(mDepositRecord.laboratory);
+                }
             }
 
             mHarmfulIngredientsValue.setText(mDepositRecord.harmful_infos);
@@ -320,6 +322,15 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         for (Laboratory laboratory : mLaboratoryList) {
             if (TextUtils.equals(laboratory_id, laboratory.id)) {
                 return laboratory.name;
+            }
+        }
+        return null;
+    }
+
+    private String getLaboratoryId(String laboratory_name) {
+        for (Laboratory laboratory : mLaboratoryList) {
+            if (TextUtils.equals(laboratory_name, laboratory.name)) {
+                return laboratory.id;
             }
         }
         return null;
@@ -370,7 +381,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
 
     public void onSubmitButtonClick(View view) {
         if (!validateDeposit()) {
-            showToast("请完善信息再提交.");
+            showToast("请完善信息再提交");
             return;
         }
         if (mOfflineModel.isChecked()) {

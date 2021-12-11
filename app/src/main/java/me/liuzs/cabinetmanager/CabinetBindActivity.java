@@ -30,7 +30,7 @@ public class CabinetBindActivity extends BaseActivity {
     private boolean isInit = false;
     private Cabinet mCabinetInfo;
     private List<Cabinet> mCabinetInfoList;
-    private TextView mUserName, mUserMobile, mTankSelect, mTankBaseInfo, mTankOrgInfo;
+    private TextView mUserName, mOptName, mUserMobile, mOptMobile, mTankSelect, mTankBaseInfo, mTankOrgInfo;
     private final ActivityResultLauncher<Intent> mTankSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -68,7 +68,9 @@ public class CabinetBindActivity extends BaseActivity {
         setContentView(R.layout.activity_cabinet_name);
 
         mUserName = findViewById(R.id.tvSafetyPersonValue);
+        mOptName = findViewById(R.id.tvOptPersonValue);
         mUserMobile = findViewById(R.id.tvMobileValue);
+        mOptMobile = findViewById(R.id.tvOptMobileValue);
         mTankSelect = findViewById(R.id.tvSelect);
         mTankBaseInfo = findViewById(R.id.tvTankNameValue);
         mTankOrgInfo = findViewById(R.id.tvOrgInfoValue);
@@ -91,9 +93,10 @@ public class CabinetBindActivity extends BaseActivity {
     private void showInfo() {
         try {
             User user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Admin);
-            assert user != null;
-            mUserName.setText(user.name);
-            mUserMobile.setText(user.phone);
+            if(user != null) {
+                mUserName.setText(user.name);
+                mUserMobile.setText(user.mobile);
+            }
             if (mCabinetInfo == null) {
                 mTankSelect.setText("");
                 mTankBaseInfo.setText("");
@@ -102,6 +105,11 @@ public class CabinetBindActivity extends BaseActivity {
                 mTankSelect.setText(mCabinetInfo.name);
                 mTankBaseInfo.setText(mCabinetInfo.name + "/" + mCabinetInfo.code + "/" + mCabinetInfo.type);
                 mTankOrgInfo.setText(mCabinetInfo.org.full_name + "/" + mCabinetInfo.org.code);
+            }
+            user = CabinetCore.getCabinetUser(CabinetCore.RoleType.Operator);
+            if(user != null) {
+                mOptName.setText(user.name);
+                mOptMobile.setText(user.mobile);
             }
         } catch (Exception e) {
 

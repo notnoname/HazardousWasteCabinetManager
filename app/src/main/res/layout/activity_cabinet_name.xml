@@ -57,14 +57,12 @@
             android:layout_marginEnd="64dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llMobile">
+            app:layout_constraintTop_toBottomOf="@+id/llOptMobile">
 
             <TextView
                 android:id="@+id/tvSelect"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:background="@drawable/background_edit"
                 android:gravity="center"
                 android:hint="请点击选择一体机"
@@ -82,9 +80,7 @@
                 android:id="@+id/llOrgInfo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginTop="8px"
                 android:gravity="center"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +111,7 @@
                 android:id="@+id/llTankName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="8px"
                 android:gravity="center"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +141,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/llSafetyPerson"
+            android:id="@+id/llAdminPerson"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24px"
@@ -176,15 +172,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/llMobile"
+            android:id="@+id/llAdminMobile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16px"
+            android:layout_marginTop="8px"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llSafetyPerson">
+            app:layout_constraintTop_toBottomOf="@+id/llAdminPerson">
 
             <TextView
                 android:id="@+id/tvMobileLabel"
@@ -196,6 +192,67 @@
 
             <TextView
                 android:id="@+id/tvMobileValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16px"
+                android:text="13800000000"
+                android:textColor="@color/white"
+                android:textSize="32px" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llOptPerson"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24px"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llAdminMobile">
+
+            <TextView
+                android:id="@+id/tvOptPersonLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="操作员姓名"
+                android:textColor="@color/white"
+                android:textSize="40px"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/tvOptPersonValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16px"
+                android:text="刘道衡"
+                android:textColor="@color/white"
+                android:textSize="40px"
+                tools:ignore="TextContrastCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llOptMobile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8px"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llOptPerson">
+
+            <TextView
+                android:id="@+id/tvOptMobileLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="操作员电话"
+                android:textColor="@color/white"
+                android:textSize="32px" />
+
+            <TextView
+                android:id="@+id/tvOptMobileValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16px"
