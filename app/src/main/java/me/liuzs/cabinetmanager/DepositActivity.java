@@ -392,7 +392,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         } else {
             showProgressDialog();
             getExecutorService().submit(() -> {
-                APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.submitDeposit(mDepositRecord);
+                APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.takeInDeposit(mDepositRecord);
                 dismissProgressDialog();
                 if (apijson.status == APIJSON.Status.ok) {
                     showToast("提交成功");

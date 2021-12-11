@@ -107,7 +107,15 @@ public class DoorAccess {
     private final IMqttActionListener mMQTTPublishAction = new IMqttActionListener() {
         @Override
         public void onSuccess(IMqttToken asyncActionToken) {
-            Log.d(TAG, "Publish success");
+
+            String[] topics = asyncActionToken.getTopics();
+            if(topics != null) {
+                for(String topic : topics) {
+                    Log.d(TAG, "Publish success, Topic: " + topic);
+                }
+            } else {
+                Log.d(TAG, "Publish success");
+            }
         }
 
         @Override

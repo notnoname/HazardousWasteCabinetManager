@@ -338,17 +338,19 @@ public class RemoteAPI {
     public static class Deposit {
 
         /**
-         * 提交入柜信息
-         */
-        public static final String API_SUBMIT_DEPOSIT = API_ROOT + "/api/storages/%s/storage_records";
-        /**
          * 获取暂存柜记录列表
          */
         public static final String API_DEPOSIT_LIST = API_ROOT + "/api/storage_nos/%s/storage_record";
+
+        /**
+         * 提交入柜信息
+         */
+        public static final String API_TAKE_IN = API_ROOT + "/api/storages/%s/storage_records/opt_input";
+
         /**
          * 提交出柜信息
          */
-        public static final String API_TAKE_OUT = API_ROOT + "/api/storages/%s/storage_records/%s?update_action=output";
+        public static final String API_TAKE_OUT = API_ROOT + "/api/storages/%s/storage_records/opt_output";
 
 
         /**
@@ -360,9 +362,10 @@ public class RemoteAPI {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                String api_url = String.format(API_TAKE_OUT, CabinetCore.getCabinetInfo().id, depositRecord.id);
-                HttpPut method = new HttpPut(api_url);
+                String api_url = String.format(API_TAKE_OUT, Objects.requireNonNull(CabinetCore.getCabinetInfo()).id);
+                HttpPost method = new HttpPost(api_url);
                 List<NameValuePair> valuePairs = new ArrayList<>();
+                valuePairs.add(new BasicNameValuePair("storage_record[storage_no]", depositRecord.storage_no));
                 valuePairs.add(new BasicNameValuePair("storage_record[output_weight]", depositRecord.output_weight));
                 method.setEntity(new UrlEncodedFormEntity(valuePairs, UTF_8));
                 Log.d(TAG, method.getURI().toString());
@@ -392,15 +395,15 @@ public class RemoteAPI {
          *
          * @return 提交结果
          */
-        public static APIJSON<DepositRecord> submitDeposit(DepositRecord depositRecord) {
+        public static APIJSON<DepositRecord> takeInDeposit(DepositRecord depositRecord) {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                String api_url = String.format(API_SUBMIT_DEPOSIT, Objects.requireNonNull(CabinetCore.getCabinetInfo()).id);
+                String api_url = String.format(API_TAKE_IN, Objects.requireNonNull(CabinetCore.getCabinetInfo()).id);
                 HttpPost method = new HttpPost(api_url);
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("storage_record[storage_no]", depositRecord.storage_no));
-//                valuePairs.add(new BasicNameValuePair("storage_record[storage_id]", depositRecord.storage_id));
+//              valuePairs.add(new BasicNameValuePair("storage_record[storage_id]", depositRecord.storage_id));
                 valuePairs.add(new BasicNameValuePair("storage_record[container_size]", depositRecord.container_size));
                 valuePairs.add(new BasicNameValuePair("storage_record[storage_rack]", depositRecord.storage_rack));
                 valuePairs.add(new BasicNameValuePair("storage_record[input_weight]", depositRecord.input_weight));

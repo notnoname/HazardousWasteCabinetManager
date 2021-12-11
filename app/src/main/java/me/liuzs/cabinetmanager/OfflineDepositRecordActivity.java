@@ -12,7 +12,6 @@ import java.util.List;
 
 import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.net.APIJSON;
-import me.liuzs.cabinetmanager.net.DepositRecordListJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.ui.offline.OfflineDepositRecordListAdapter;
 import me.liuzs.cabinetmanager.util.Util;
@@ -100,7 +99,7 @@ public class OfflineDepositRecordActivity extends BaseActivity {
     }
 
     private void submitCorrectDepositRecord(DepositRecord record) {
-        APIJSON<DepositRecord> submitJSON = RemoteAPI.Deposit.submitDeposit(record);
+        APIJSON<DepositRecord> submitJSON = RemoteAPI.Deposit.takeInDeposit(record);
         dismissProgressDialog();
         if (submitJSON.status == APIJSON.Status.ok) {
             showToast("提交成功");
