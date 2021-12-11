@@ -4,6 +4,7 @@ public class User {
     public String create_time;
     public String email;
     public String phone;
+    public String mobile;
     public String username;
     public String id;
     public String name;

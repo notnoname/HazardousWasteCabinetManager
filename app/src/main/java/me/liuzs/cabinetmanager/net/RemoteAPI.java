@@ -396,7 +396,7 @@ public class RemoteAPI {
 
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
-                String api_url = String.format(API_SUBMIT_DEPOSIT, depositRecord.storage_id);
+                String api_url = String.format(API_SUBMIT_DEPOSIT, CabinetCore.getCabinetInfo().id);
                 HttpPost method = new HttpPost(api_url);
                 List<NameValuePair> valuePairs = new ArrayList<>();
                 valuePairs.add(new BasicNameValuePair("storage_record[storage_no]", depositRecord.storage_no));
