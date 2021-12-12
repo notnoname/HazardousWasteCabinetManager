@@ -28,7 +28,6 @@ import me.liuzs.cabinetmanager.model.HardwareValue;
 import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.modbus.EnvironmentStatus;
 import me.liuzs.cabinetmanager.model.modbus.FrequencyConverterStatus;
-import me.liuzs.cabinetmanager.model.modbus.SetupValue;
 import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 import me.liuzs.cabinetmanager.util.Util;
 
@@ -97,10 +96,6 @@ public class MainActivity extends BaseActivity {
         }
         mHardwareValue = value;
         if (mHardwareValue == null) {
-            return;
-        }
-        SetupValue setupValue = mHardwareValue.setupValue;
-        if (setupValue == null) {
             return;
         }
         EnvironmentStatus environmentStatus = mHardwareValue.environmentStatus;

@@ -66,7 +66,7 @@ public class EnvironmentStatus {
     public static final int FGUpperAddress = 40528;
     public static final int TemperatureAAddress = 40534;
     public static final int TemperatureBAddress = 40543;
-    public static final int HumidityAAddress = 40534;
+    public static final int HumidityAAddress = 40539;
     public static final int HumidityBAddress = 40548;
     public long createTime;
     public float vocLowerPart;

@@ -23,26 +23,21 @@ import com.videogo.util.IPAddressUtil;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.netty.util.internal.MacAddressUtil;
 import me.liuzs.cabinetmanager.model.ContainerNoInfo;
 import me.liuzs.cabinetmanager.service.HardwareService;
 import me.liuzs.cabinetmanager.service.ModbusService;
 
 public class HardwareSetupActiveActivity extends BaseActivity implements CabinetCore.CheckARCActiveListener {
 
-    public static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
     private static final String TAG = "HardwareSetupActiveActivity";
-    private final ActivityResultLauncher<Intent> mWeightLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            int resultCode = result.getResultCode();
-            if (resultCode == RESULT_OK) {
-                Intent data = result.getData();
-                assert data != null;
-                String selectValue = data.getStringExtra(WeightActivity.KEY_SELECT_VALUE);
-                assert selectValue != null;
-                showToast("重量:" + selectValue + "kg");
-            }
+    private final ActivityResultLauncher<Intent> mWeightLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        int resultCode = result.getResultCode();
+        if (resultCode == RESULT_OK) {
+            Intent data = result.getData();
+            assert data != null;
+            String selectValue = data.getStringExtra(WeightActivity.KEY_SELECT_VALUE);
+            assert selectValue != null;
+            showToast("重量:" + selectValue + "kg");
         }
     });
 
@@ -104,7 +99,6 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
 
     public void onFinishButtonClick(View view) {
@@ -140,6 +134,10 @@ public class HardwareSetupActiveActivity extends BaseActivity implements Cabinet
         } else {
             showToast("地址不正确！");
         }
+    }
+
+    public void onModbusTestButtonClick(View view) {
+        ModbusDebugActivity.start(this);
     }
 
     public void onDoorAccessMacAddressSaveButtonClick(View view) {

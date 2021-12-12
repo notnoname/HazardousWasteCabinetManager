@@ -27,6 +27,10 @@ public class ModbusService {
     private static final int ModbusPort = 502;
     private static final int ModbusSlaveId = 1;
 
+    public static String getModbusIP() {
+        return ModbusIP + ":" + ModbusPort + "(" + ModbusSlaveId + ")";
+    }
+
     public static void setModbusAddress(String address) {
         ModbusIP = address;
     }
@@ -63,7 +67,7 @@ public class ModbusService {
      * @throws ErrorResponseException   异常
      * @throws ModbusInitException      异常
      */
-    private static Boolean readCoilStatus(int offset)
+    public static Boolean readCoilStatus(int offset)
             throws ModbusTransportException, ErrorResponseException, ModbusInitException {
         // 01 Coil Status
         BaseLocator<Boolean> loc = BaseLocator.coilStatus(ModbusSlaveId, offset);
@@ -105,7 +109,7 @@ public class ModbusService {
      * @throws ErrorResponseException   异常
      * @throws ModbusInitException      异常
      */
-    private static Number readHoldingRegister(int offset, int dataType)
+    public static Number readHoldingRegister(int offset, int dataType)
             throws ModbusTransportException, ErrorResponseException, ModbusInitException {
         // 03 Holding Register类型数据读取
         BaseLocator<Number> loc = BaseLocator.holdingRegister(ModbusSlaveId, offset, dataType);
