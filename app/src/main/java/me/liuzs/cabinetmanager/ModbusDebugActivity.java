@@ -69,7 +69,8 @@ public class ModbusDebugActivity extends BaseActivity {
             } catch (Exception e) {
                 sb.append("Modbus read number exception:").append("\n").append(e.getMessage()).append("\n");
             } finally {
-                mInfo.setText(sb.toString());
+                mHandler.post(() -> mInfo.setText(sb.toString()));
+                showToast(sb.toString());
             }
         });
     }
@@ -89,7 +90,8 @@ public class ModbusDebugActivity extends BaseActivity {
             } catch (Exception e) {
                 sb.append("Modbus read boolean exception:").append("\n").append(e.getMessage()).append("\n");
             } finally {
-                mInfo.setText(sb.toString());
+                mHandler.post(() -> mInfo.setText(sb.toString()));
+                showToast(sb.toString());
             }
         });
 

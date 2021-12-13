@@ -55,6 +55,7 @@ public class ModbusService {
         // modbusFactory.createAsciiMaster(wrapper);//ASCII 协议
         ModbusMaster master = mModbusFactory.createTcpMaster(params, false);// TCP 协议
         master.init();
+        master.setTimeout(1000);
         return master;
     }
 
