@@ -172,11 +172,11 @@
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
                 <Button
-                    android:onClick="onReadBooleanButtonClick"
                     android:id="@+id/btnReadBoolean"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
+                    android:onClick="onReadBooleanButtonClick"
                     android:text="读取" />
             </LinearLayout>
 
@@ -240,9 +240,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/background_info_area"
-            android:gravity="top|start"
             android:enabled="false"
+            android:gravity="top|start"
             android:padding="5px"
+            android:textColor="@color/white"
             android:textColorHint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
