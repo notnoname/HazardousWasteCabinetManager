@@ -60,14 +60,14 @@ package me.liuzs.cabinetmanager.model.modbus;
  */
 public class EnvironmentStatus {
     public long id;
-    public static final int VOCLowerAddress = 40513;
-    public static final int VOCUpperAddress = 40518;
-    public static final int FGLowerAddress = 40524;
-    public static final int FGUpperAddress = 40528;
-    public static final int TemperatureAAddress = 40534;
-    public static final int TemperatureBAddress = 40543;
-    public static final int HumidityAAddress = 40539;
-    public static final int HumidityBAddress = 40548;
+    public static final int VOCLowerAddress = 513;
+    public static final int VOCUpperAddress = 518;
+    public static final int FGLowerAddress = 523;
+    public static final int FGUpperAddress = 528;
+    public static final int TemperatureAAddress = 533;
+    public static final int TemperatureBAddress = 543;
+    public static final int HumidityAAddress = 538;
+    public static final int HumidityBAddress = 548;
     public long createTime;
     public float vocLowerPart;
     public float vocUpperPart;

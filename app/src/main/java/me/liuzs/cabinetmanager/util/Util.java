@@ -255,10 +255,6 @@ public class Util {
                             continue;// skip ipv6
                         }
                         String addressIp = ia.getHostAddress();
-                        // 过滤掉127段的ip地址
-                        if (!"127.0.0.1".equals(ip)) {
-                            break;
-                        }
                         addressSb.append(addressIp).append(" ");
                     }
                     availableInterface.add(ni.getName() + " - " + addressSb.toString());

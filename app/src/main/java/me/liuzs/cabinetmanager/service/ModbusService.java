@@ -53,11 +53,15 @@ public class ModbusService {
         // modbusFactory.createRtuMaster(wapper); //RTU 协议
         // modbusFactory.createUdpMaster(params);//UDP 协议
         // modbusFactory.createAsciiMaster(wrapper);//ASCII 协议
-        ModbusMaster master = mModbusFactory.createTcpMaster(params, true);// TCP 协议
-        master.setTimeout(1000);
-        master.init();
-        return master;
+        if (mMaster == null || !mMaster.isConnected()) {
+            mMaster = mModbusFactory.createTcpMaster(params, true);// TCP 协议
+            mMaster.setTimeout(1000);
+            mMaster.init();
+        }
+        return mMaster;
     }
+
+    private static ModbusMaster mMaster;
 
     /**
      * 读取[01 Coil Status 0x]类型 开关数据
@@ -211,14 +215,14 @@ public class ModbusService {
 
         try {
             BatchRead<Integer> batch = new BatchRead<>();
-            batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.VOCLowerAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.VOCUpperAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.FGLowerAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(3, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.FGUpperAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(4, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.TemperatureAAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(5, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.TemperatureBAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(6, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.HumidityAAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(7, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.HumidityBAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.VOCLowerAddress, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.VOCUpperAddress, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.FGLowerAddress, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(3, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.FGUpperAddress, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(4, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.TemperatureAAddress, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(5, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.TemperatureBAddress, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(6, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.HumidityAAddress, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(7, BaseLocator.holdingRegister(ModbusSlaveId, EnvironmentStatus.HumidityBAddress, DataType.TWO_BYTE_INT_SIGNED));
 
             ModbusMaster master = getMaster();
 
