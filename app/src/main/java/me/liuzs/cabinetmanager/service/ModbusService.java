@@ -53,9 +53,9 @@ public class ModbusService {
         // modbusFactory.createRtuMaster(wapper); //RTU 协议
         // modbusFactory.createUdpMaster(params);//UDP 协议
         // modbusFactory.createAsciiMaster(wrapper);//ASCII 协议
-        ModbusMaster master = mModbusFactory.createTcpMaster(params, false);// TCP 协议
-        master.init();
+        ModbusMaster master = mModbusFactory.createTcpMaster(params, true);// TCP 协议
         master.setTimeout(1000);
+        master.init();
         return master;
     }
 

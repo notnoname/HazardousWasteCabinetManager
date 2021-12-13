@@ -8,14 +8,23 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import java.io.DataOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class Util {
+    private static final String TAG = "Util";
+
     public static void sleep(long millis) {
         try {
             Thread.sleep(millis);
@@ -217,6 +226,57 @@ public class Util {
         BigDecimal bd = BigDecimal.valueOf((double) value);
         bd = bd.setScale(scale, roundingMode);
         return bd.floatValue();
+    }
+
+    public static String[] getAllNetInterface() {
+        ArrayList<String> availableInterface = new ArrayList<>();
+        String[] interfaces = null;
+        try {
+            Enumeration nis = NetworkInterface.getNetworkInterfaces();
+            InetAddress ia = null;
+            while (nis.hasMoreElements()) {
+                NetworkInterface ni = (NetworkInterface) nis.nextElement();
+                Enumeration<InetAddress> ias = ni.getInetAddresses();
+                while (ias.hasMoreElements()) {
+                    ia = ias.nextElement();
+                    if (ia instanceof Inet6Address) {
+                        continue;// skip ipv6
+                    }
+
+                    String ip = ia.getHostAddress();
+                    Log.d(TAG, "getAllNetInterface,available interface:" + ni.getName() + ",address:" + ip);
+                    // 过滤掉127段的ip地址
+//                    if (!"127.0.0.1".equals(ip)) {
+                    StringBuilder addressSb = new StringBuilder();
+                    Enumeration<InetAddress> addressEnu = ni.getInetAddresses();
+                    while (addressEnu.hasMoreElements()) {
+                        ia = addressEnu.nextElement();
+                        if (ia instanceof Inet6Address) {
+                            continue;// skip ipv6
+                        }
+                        String addressIp = ia.getHostAddress();
+                        // 过滤掉127段的ip地址
+                        if (!"127.0.0.1".equals(ip)) {
+                            break;
+                        }
+                        addressSb.append(addressIp).append(" ");
+                    }
+                    availableInterface.add(ni.getName() + " - " + addressSb.toString());
+//                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "all interface:" + availableInterface.toString());
+        int size = availableInterface.size();
+        if (size > 0) {
+            interfaces = new String[size];
+            for (int i = 0; i < size; i++) {
+                interfaces[i] = availableInterface.get(i);
+            }
+        }
+        return interfaces;
     }
 
 }

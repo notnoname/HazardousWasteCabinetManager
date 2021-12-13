@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.serotonin.modbus4j.code.DataType;
 
 import me.liuzs.cabinetmanager.service.ModbusService;
+import me.liuzs.cabinetmanager.util.Util;
 
 public class ModbusDebugActivity extends BaseActivity {
 
@@ -54,11 +55,20 @@ public class ModbusDebugActivity extends BaseActivity {
         mWriteNumber = findViewById(R.id.etWriteNumber);
     }
 
+    private void outputNetworkAddressToInfo(StringBuilder sb) {
+        sb.append("Local network address:").append("\n");
+        String[] address = Util.getAllNetInterface();
+        for(String add : address) {
+            sb.append(add).append("\n");
+        }
+    }
+
     public void onReadNumberButtonClick(View view) {
         getExecutorService().submit(() -> {
             StringBuilder sb = new StringBuilder();
             try {
                 sb.append("Modbus read number").append("\n");
+                outputNetworkAddressToInfo(sb);
                 sb.append("Modbus Address:").append(ModbusService.getModbusIP()).append("\n");
                 int offSet = Integer.parseInt(mReadNumberAddress.getEditableText().toString());
                 sb.append("Offset:").append(offSet);
