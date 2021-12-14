@@ -136,9 +136,9 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACRemoteWorkModelSetCommitAddress, true);
             if (success) {
-                showToast("遥控器工作模式设置成功!");
+                showToast("遥控器工作模式设置成功");
             } else {
-                showToast("遥控器工作模式设置失败!");
+                showToast("遥控器工作模式设置失败");
             }
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
@@ -151,7 +151,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
             if (mAirConditionerStatus.e != null || mStatusOption.e != null) {
-                mHandler.post(() -> new AlertDialog.Builder(ControlPanelActivity.this).setMessage("设备信息读取失败，请立即检查设备！").setNegativeButton("确认", null).show());
+                mHandler.post(() -> new AlertDialog.Builder(ControlPanelActivity.this).setMessage("设备信息读取失败，请立即检查设备").setNegativeButton("确认", null).show());
             } else {
                 mHandler.post(this::showStatusOption);
             }

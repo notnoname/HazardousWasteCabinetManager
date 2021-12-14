@@ -74,6 +74,46 @@
             app:layout_constraintTop_toBottomOf="@+id/clACCtrl">
 
             <TextView
+                android:id="@+id/tvFilterValidateDateValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24px"
+                android:gravity="center"
+                android:text="剩余天数:"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnFilterReset"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFilterResetLabel"
+                android:layout_width="200px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24px"
+                android:gravity="center"
+                android:text="滤芯更换复位"
+                android:textColor="@color/white"
+                android:textSize="28px"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnFCReset"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnFilterReset"
+                android:layout_width="120px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24px"
+                android:background="@drawable/background_button"
+                android:onClick="onFCResetButtonClick"
+                android:singleLine="true"
+                android:text="@string/reset"
+                android:textColor="@color/white"
+                android:textSize="25px"
+                app:layout_constraintStart_toEndOf="@+id/tvFilterResetLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/tvFCResetLabel"
                 android:layout_width="170px"
                 android:layout_height="wrap_content"

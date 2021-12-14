@@ -216,6 +216,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
                     android:background="@drawable/background_info_area_white"
+                    android:digits="0123456789"
                     android:ems="5"
                     android:gravity="center"
                     android:hint="填写数值"
@@ -231,6 +232,63 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10px"
+                    android:onClick="onWriteNumberButtonClick"
+                    android:text="写入" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5px">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="写入布尔值"
+                    android:textColor="@color/white"
+                    android:textSize="30px" />
+
+                <EditText
+                    android:id="@+id/etWriteBooleanAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10px"
+                    android:background="@drawable/background_info_area_white"
+                    android:ems="5"
+                    android:gravity="center"
+                    android:hint="填写地址"
+                    android:inputType="number"
+                    android:padding="10px"
+                    android:textColor="@color/black"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="22px"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                <EditText
+                    android:id="@+id/etWriteBoolean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10px"
+                    android:background="@drawable/background_info_area_white"
+                    android:digits="01"
+                    android:ems="8"
+                    android:gravity="center"
+                    android:hint="0:false;1:true"
+                    android:inputType="number"
+                    android:padding="10px"
+                    android:textColor="@color/black"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="22px"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                <Button
+                    android:id="@+id/btnWriteBoolean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10px"
+                    android:onClick="onWriteBooleanButtonClick"
                     android:text="写入" />
             </LinearLayout>
         </LinearLayout>

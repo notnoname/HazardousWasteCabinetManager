@@ -79,12 +79,12 @@ public class ModbusService {
         return getMaster().getValue(loc);
     }
 
-    private static void writeCoilStatus(int offset, boolean value) throws ModbusInitException, ErrorResponseException, ModbusTransportException {
+    public static void writeCoilStatus(int offset, boolean value) throws ModbusInitException, ErrorResponseException, ModbusTransportException {
         BaseLocator<Boolean> loc = BaseLocator.coilStatus(ModbusSlaveId, offset);
         getMaster().setValue(loc, value);
     }
 
-    private static void writeHoldingRegister(int offset, Integer value) throws ModbusInitException, ErrorResponseException, ModbusTransportException {
+    public static void writeHoldingRegister(int offset, Integer value) throws ModbusInitException, ErrorResponseException, ModbusTransportException {
         BaseLocator<Number> loc = BaseLocator.holdingRegister(ModbusSlaveId, offset, DataType.TWO_BYTE_INT_SIGNED);
         getMaster().setValue(loc, value);
     }
