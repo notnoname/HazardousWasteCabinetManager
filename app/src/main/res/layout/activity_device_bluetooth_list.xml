@@ -22,14 +22,15 @@
 
             <ImageButton
                 android:id="@+id/toolbar_back"
-                android:layout_width="45dp"
-                android:layout_height="35dp"
+                android:layout_width="120px"
+                android:layout_height="50px"
                 android:layout_gravity="start|center_vertical"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/app_name"
                 android:onClick="onBackButtonClick"
                 android:scaleType="fitCenter"
-                android:src="@drawable/back_button" />
+                android:src="@drawable/back_button"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -47,10 +48,10 @@
         android:id="@+id/srl_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="20px"
         android:layout_marginTop="@dimen/tool_bar_height"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20px"
+        android:layout_marginBottom="20px"
         android:background="@drawable/background_info_area"
         android:orientation="vertical"
         android:padding="@dimen/dp_10">

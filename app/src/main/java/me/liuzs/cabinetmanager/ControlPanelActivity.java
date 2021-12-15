@@ -254,7 +254,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("滤芯更换时间重置");
         alertDialog.setMessage("更换所有滤芯后点击确认按钮.");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "确定",
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "确定",
                 (dialog, which) -> {
                     showProgressDialog();
                     getExecutorService().submit(() -> {
@@ -267,7 +267,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
                     });
                     dialog.dismiss();
                 });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", (dialog, which) -> {
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "取消", (dialog, which) -> {
             dialog.dismiss();
         });
         alertDialog.show();

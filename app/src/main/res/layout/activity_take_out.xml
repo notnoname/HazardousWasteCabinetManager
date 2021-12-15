@@ -321,8 +321,8 @@
 
             <ImageButton
                 android:id="@+id/toolbar_back"
-                android:layout_width="90px"
-                android:layout_height="40px"
+                android:layout_width="120px"
+                android:layout_height="50px"
                 android:layout_gravity="start|center_vertical"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/app_name"
