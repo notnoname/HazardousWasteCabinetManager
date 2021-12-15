@@ -119,6 +119,6 @@ public class SetupValue {
      * 是否声光告警
      */
     public Boolean alertSoundLight;
-    public Exception e;
+    public transient Exception e;
 
 }

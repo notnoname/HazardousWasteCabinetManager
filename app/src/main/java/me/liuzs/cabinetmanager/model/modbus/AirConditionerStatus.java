@@ -91,6 +91,7 @@ public class AirConditionerStatus {
      */
     public boolean fanSweep;
 
-    public Exception e;
+
+    public transient Exception e;
 
 }

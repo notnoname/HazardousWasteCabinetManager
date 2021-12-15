@@ -51,6 +51,6 @@ public class FrequencyConverterStatus {
 
     public float targetFrequency;
 
-    public Exception e;
+    public transient Exception e;
 
 }

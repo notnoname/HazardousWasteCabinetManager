@@ -77,5 +77,5 @@ public class EnvironmentStatus {
     public float tempB;
     public float humidityA;
     public float humidityB;
-    public Exception e = null;
+    public transient Exception e = null;
 }

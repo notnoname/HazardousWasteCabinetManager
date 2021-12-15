@@ -495,6 +495,16 @@ public class RemoteAPI {
         public static final String API_LABORATORY_LIST = API_ROOT + "/api/laboratories";
 
         /**
+         * 滤芯重置
+         */
+        public static final String API_FILTER_RESET = API_ROOT + "api/storages/%s/reset_filter_time";
+
+        /**
+         * 获取滤芯重置时间
+         */
+        public static final String API_FILTER_RESET_TIME = API_ROOT + "api/storages/%s/filter_time";
+
+        /**
          * 查询管理员名下所有暂存柜列表
          *
          * @param userId 管理员Id
@@ -516,6 +526,68 @@ public class RemoteAPI {
                     String content = EntityUtils.toString(entity, UTF_8);
                     Log.d(TAG, content);
                     Type jsonType = new TypeToken<APIJSON<CabinetListJSON>>() {
+                    }.getType();
+                    return CabinetCore.GSON.fromJson(content, jsonType);
+                } else {
+                    //noinspection unchecked
+                    return APIJSON.buildServerErrorJSON(code);
+                }
+            } catch (Exception e) {
+                //noinspection unchecked
+                return APIJSON.buildOtherErrorJSON(e);
+            }
+        }
+
+        /**
+         * 滤芯重置
+         *
+         * @return 结果
+         */
+        public static APIJSON<String> filterReset() {
+            try {
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                String api_url = String.format(API_FILTER_RESET, Objects.requireNonNull(CabinetCore.getCabinetInfo()).id);
+                HttpPut method = new HttpPut(api_url);
+                Log.d(TAG, method.getURI().toString());
+                generalOptBaseHeader(method);
+                HttpResponse httpResponse = httpClient.execute(method);
+                int code = httpResponse.getStatusLine().getStatusCode();
+                if (code == HTTP_OK) {
+                    HttpEntity entity = httpResponse.getEntity();
+                    String content = EntityUtils.toString(entity, "utf-8");
+                    Log.d(TAG, content);
+                    Type jsonType = new TypeToken<APIJSON<String>>() {
+                    }.getType();
+                    return CabinetCore.GSON.fromJson(content, jsonType);
+                } else {
+                    //noinspection unchecked
+                    return APIJSON.buildServerErrorJSON(code);
+                }
+            } catch (Exception e) {
+                //noinspection unchecked
+                return APIJSON.buildOtherErrorJSON(e);
+            }
+        }
+
+        /**
+         * 获取滤芯重置时间
+         *
+         * @return 结果
+         */
+        public static APIJSON<String> filterResetTime() {
+            try {
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                String api_url = String.format(API_FILTER_RESET_TIME, Objects.requireNonNull(CabinetCore.getCabinetInfo()).id);
+                HttpGet method = new HttpGet(api_url);
+                Log.d(TAG, method.getURI().toString());
+                generalOptBaseHeader(method);
+                HttpResponse httpResponse = httpClient.execute(method);
+                int code = httpResponse.getStatusLine().getStatusCode();
+                if (code == HTTP_OK) {
+                    HttpEntity entity = httpResponse.getEntity();
+                    String content = EntityUtils.toString(entity, "utf-8");
+                    Log.d(TAG, content);
+                    Type jsonType = new TypeToken<APIJSON<String>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {

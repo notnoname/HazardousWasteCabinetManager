@@ -180,11 +180,6 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-
-        <service
-            android:name=".service.MQTTBrokerService"
-            android:enabled="true"
-            android:exported="false" />
         <service
             android:name=".service.HardwareService"
             android:enabled="true"

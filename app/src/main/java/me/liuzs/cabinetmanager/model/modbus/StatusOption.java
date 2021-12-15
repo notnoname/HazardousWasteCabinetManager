@@ -43,5 +43,5 @@ public class StatusOption {
     public boolean humidityLowAlert;
     public boolean fireAlert;
 
-    public Exception e;
+    public transient Exception e;
 }

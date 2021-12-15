@@ -50,7 +50,7 @@ public class HardwareService extends Service {
     public static final String MQTT = "MQTT";
     @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat mLogTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-    private static final long mHardwareValueQueryInterval = 1000;
+    private static final long mHardwareValueQueryInterval = 5000;
     public static int Qos = 2;
     private static CabinetManager mManager;
     private final String MQTTClientID = MqttClient.generateClientId();
@@ -181,6 +181,7 @@ public class HardwareService extends Service {
         }
     };
     private Timer mAutoLockTimer;
+    private String mHardwareValueGSONCache;
 
     public synchronized static void weight(Steelyard.SteelyardCallback callback) {
         if (mManager == null) {
@@ -335,8 +336,8 @@ public class HardwareService extends Service {
                 initMQTTClient();
                 List<HardwareValue> values = CabinetCore.getUnSentHardwareValueList();
                 HardwareValue value = getHardwareValue();
-                notifyValue(value);
-                if (value != null) {
+                if (value != null && validateHardwareValueChange(value)) {
+                    notifyValue(value);
                     values.add(value);
                 }
                 publishValue(values);
@@ -357,7 +358,7 @@ public class HardwareService extends Service {
 
     private void publishValue(List<HardwareValue> valueList) {
         Cabinet info = CabinetCore.getCabinetInfo();
-        if (info != null && valueList != null) {
+        if (info != null && valueList != null && valueList.size() > 0) {
             if (mMQTTClient.isConnected()) {
                 try {
                     String payload = CabinetCore.GSON.toJson(valueList);
@@ -398,6 +399,27 @@ public class HardwareService extends Service {
         return false;
     }
 
+    private boolean validateHardwareValueChange(HardwareValue value) {
+        long createTime = value.createTime;
+        long id = value.id;
+        String cabinet_id = value.cabinet_id;
+        value.id = -1;
+        value.createTime = 0;
+        value.cabinet_id = null;
+        String gson = CabinetCore.GSON.toJson(value);
+        boolean result = !TextUtils.equals(gson, mHardwareValueGSONCache);
+        mHardwareValueGSONCache = gson;
+        value.cabinet_id = cabinet_id;
+        value.id = id;
+        value.createTime = createTime;
+        return result;
+    }
+
+    /**
+     * 当前是否报错
+     */
+    private boolean environmentStatusError, airConditionerStatusError, frequencyConverterStatusError, statusOptionError;
+
     private HardwareValue getHardwareValue() {
         Cabinet cabinet = CabinetCore.getCabinetInfo();
         if (cabinet == null) {
@@ -410,32 +432,46 @@ public class HardwareService extends Service {
             SetupValue setupValue = ModbusService.readSetupValue();
             if (setupValue.e == null) {
                 hValue.setupValue = setupValue;
-            } else {
-                CabinetCore.logAlert("设置参数获取失败");
             }
             EnvironmentStatus environmentStatus = ModbusService.readEnvironmentStatus();
             if (environmentStatus.e == null) {
                 hValue.environmentStatus = environmentStatus;
+                environmentStatusError = false;
             } else {
-                CabinetCore.logAlert("环境信息获取失败");
+                if (!environmentStatusError) {
+                    CabinetCore.logAlert("环境信息获取失败");
+                    environmentStatusError = true;
+                }
             }
             AirConditionerStatus airConditionerStatus = ModbusService.readAirConditionerStatus();
             if (airConditionerStatus.e == null) {
                 hValue.airConditionerStatus = airConditionerStatus;
+                airConditionerStatusError = false;
             } else {
-                CabinetCore.logAlert("控台状态获取失败");
+                if (!airConditionerStatusError) {
+                    CabinetCore.logAlert("空调状态获取失败");
+                    airConditionerStatusError = true;
+                }
             }
             FrequencyConverterStatus frequencyConverterStatus = ModbusService.readFrequencyConverterStatus();
             if (frequencyConverterStatus.e == null) {
                 hValue.frequencyConverterStatus = frequencyConverterStatus;
+                frequencyConverterStatusError = false;
             } else {
-                CabinetCore.logAlert("变频器状态获取失败");
+                if (!frequencyConverterStatusError) {
+                    CabinetCore.logAlert("变频器状态获取失败");
+                    frequencyConverterStatusError = true;
+                }
             }
             StatusOption statusOption = ModbusService.readStatusOption();
             if (statusOption.e == null) {
                 hValue.statusOption = statusOption;
+                statusOptionError = false;
             } else {
-                CabinetCore.logAlert("状态参数获取失败");
+                if(!statusOptionError) {
+                    CabinetCore.logAlert("状态参数获取失败");
+                    statusOptionError = true;
+                }
             }
             hValue.createTime = createTime;
             hValue.cabinet_id = cabinet.id;
