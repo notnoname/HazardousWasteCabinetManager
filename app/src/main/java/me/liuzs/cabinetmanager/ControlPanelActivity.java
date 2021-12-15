@@ -15,12 +15,17 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.kyleduo.switchbutton.SwitchButton;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import me.liuzs.cabinetmanager.model.FilterTime;
 import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.modbus.FrequencyConverterStatus;
 import me.liuzs.cabinetmanager.model.modbus.StatusOption;
+import me.liuzs.cabinetmanager.net.APIJSON;
+import me.liuzs.cabinetmanager.net.RemoteAPI;
 import me.liuzs.cabinetmanager.service.ModbusService;
 import me.liuzs.cabinetmanager.util.Util;
 
@@ -33,11 +38,12 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
 
     public static final int[] ACWorkModelNameResId = {R.string.ac_work_model_auto, R.string.ac_work_model_refrigeration, R.string.ac_work_model_heating, R.string.ac_work_model_dehumidification, R.string.ac_work_model_fan};
     public static final int[] ACRemoteWorkModelNameResId = {R.string.ac_remote_ctrl_model_infrared_receive, R.string.ac_remote_ctrl_model_infrared_launch, R.string.ac_remote_ctrl_model_universal_pair, R.string.ac_remote_ctrl_model_universal};
-    private TextView mFanWorkModelValue, mSoundLightAlertValue, mACCtrlModelValue, mACWorkModelValue, mACPowerValue, mRemoteCtrlModelValue;
+    private TextView mFanWorkModelValue, mSoundLightAlertValue, mACCtrlModelValue, mACWorkModelValue, mACPowerValue, mRemoteCtrlModelValue, mFilterResetTimeValue;
     private Button mFanOpen, mFanClose, mOxygenOpen, mOxygenClose;
     private SwitchButton mFanWorkModel, mACCtrlModel, mACPower;
     private AirConditionerStatus mAirConditionerStatus;
     private StatusOption mStatusOption;
+    private Date mFilterTime = null;
     private final ActivityResultLauncher<Intent> mACWorkModelSelectLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
         if (resultCode == RESULT_OK) {
@@ -98,6 +104,8 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         mACWorkModelValue = findViewById(R.id.tvACWorkModelValue);
         mRemoteCtrlModelValue = findViewById(R.id.tvACRemoteCtrlValue);
 
+        mFilterResetTimeValue = findViewById(R.id.tvFilterValidateDateValue);
+
 
         mFanOpen = findViewById(R.id.btnFanOpen);
         mFanClose = findViewById(R.id.btnFanClose);
@@ -146,15 +154,28 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         });
     }
 
+    private void parseTime(String str) {
+        try {
+            mFilterTime = CabinetCore._SecondFormatter.parse(str);
+        } catch (ParseException ignored) {
+            mFilterTime = null;
+        }
+    }
+
     private void getHardwareStatusInfo() {
+        showProgressDialog();
         getExecutorService().submit(() -> {
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
+            APIJSON<FilterTime> filterResetTime = RemoteAPI.System.filterResetTime();
+            if (filterResetTime.status == APIJSON.Status.ok && filterResetTime.data != null) {
+                parseTime(filterResetTime.data.filter_time);
+            }
             if (mAirConditionerStatus.e != null || mStatusOption.e != null) {
                 mHandler.post(() -> new AlertDialog.Builder(ControlPanelActivity.this).setMessage("设备信息读取失败，请立即检查设备").setNegativeButton("确认", null).show());
-            } else {
-                mHandler.post(this::showStatusOption);
             }
+            mHandler.post(this::showStatusOption);
+            dismissProgressDialog();
         });
     }
 
@@ -213,6 +234,11 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
             mACWorkModelValue.setText(getString(ACWorkModelNameResId[mAirConditionerStatus.workModel.ordinal()]));
             mRemoteCtrlModelValue.setText(getString(ACRemoteWorkModelNameResId[mAirConditionerStatus.remoteWorkModel.ordinal()]));
         }
+        if (mFilterTime != null) {
+            mFilterResetTimeValue.setText("更换时间:" + CabinetCore._YearFormatter.format(mFilterTime));
+        } else {
+            mFilterResetTimeValue.setText("更换时间:获取失败");
+        }
     }
 
     public void onBackButtonClick(View view) {
@@ -222,6 +248,30 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     public void onFCResetButtonClick(View view) {
         setHardware(FrequencyConverterStatus.FCResetAddress, 0, 1);
         Util.sleep(250);
+    }
+
+    public void onFilterResetButtonClick(View view) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("滤芯更换时间重置");
+        alertDialog.setMessage("更换所有滤芯后点击确认按钮.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "确定",
+                (dialog, which) -> {
+                    showProgressDialog();
+                    getExecutorService().submit(() -> {
+                        APIJSON<FilterTime> filterTimeAPIJSON = RemoteAPI.System.filterReset();
+                        if (filterTimeAPIJSON.status == APIJSON.Status.ok && filterTimeAPIJSON.data != null) {
+                            parseTime(filterTimeAPIJSON.data.filter_time);
+                        }
+                        dismissProgressDialog();
+                        mHandler.post(this::showStatusOption);
+                    });
+                    dialog.dismiss();
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", (dialog, which) -> {
+            dialog.dismiss();
+        });
+        alertDialog.show();
+
     }
 
     public void onOptLogButtonClick(View view) {

@@ -32,6 +32,7 @@ import me.liuzs.cabinetmanager.model.Agency;
 import me.liuzs.cabinetmanager.model.Chemical;
 import me.liuzs.cabinetmanager.model.ContainerNoBatchInfo;
 import me.liuzs.cabinetmanager.model.DepositRecord;
+import me.liuzs.cabinetmanager.model.FilterTime;
 import me.liuzs.cabinetmanager.model.User;
 
 public class RemoteAPI {
@@ -497,12 +498,12 @@ public class RemoteAPI {
         /**
          * 滤芯重置
          */
-        public static final String API_FILTER_RESET = API_ROOT + "api/storages/%s/reset_filter_time";
+        public static final String API_FILTER_RESET = API_ROOT + "/api/storages/%s/reset_filter_time";
 
         /**
          * 获取滤芯重置时间
          */
-        public static final String API_FILTER_RESET_TIME = API_ROOT + "api/storages/%s/filter_time";
+        public static final String API_FILTER_RESET_TIME = API_ROOT + "/api/storages/%s/filter_time";
 
         /**
          * 查询管理员名下所有暂存柜列表
@@ -543,7 +544,7 @@ public class RemoteAPI {
          *
          * @return 结果
          */
-        public static APIJSON<String> filterReset() {
+        public static APIJSON<FilterTime> filterReset() {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 String api_url = String.format(API_FILTER_RESET, Objects.requireNonNull(CabinetCore.getCabinetInfo()).id);
@@ -556,7 +557,7 @@ public class RemoteAPI {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, "utf-8");
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
+                    Type jsonType = new TypeToken<APIJSON<FilterTime>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
@@ -574,7 +575,7 @@ public class RemoteAPI {
          *
          * @return 结果
          */
-        public static APIJSON<String> filterResetTime() {
+        public static APIJSON<FilterTime> filterResetTime() {
             try {
                 CloseableHttpClient httpClient = HttpClients.createDefault();
                 String api_url = String.format(API_FILTER_RESET_TIME, Objects.requireNonNull(CabinetCore.getCabinetInfo()).id);
@@ -587,7 +588,7 @@ public class RemoteAPI {
                     HttpEntity entity = httpResponse.getEntity();
                     String content = EntityUtils.toString(entity, "utf-8");
                     Log.d(TAG, content);
-                    Type jsonType = new TypeToken<APIJSON<String>>() {
+                    Type jsonType = new TypeToken<APIJSON<FilterTime>>() {
                     }.getType();
                     return CabinetCore.GSON.fromJson(content, jsonType);
                 } else {
