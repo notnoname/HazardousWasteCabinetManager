@@ -39,20 +39,29 @@ package me.liuzs.cabinetmanager.model.modbus;
  * 运行设置使生效	002004
  */
 public class AirConditionerStatus {
-    public static final int ACStatusAddress = 40573;
-    public static final int ACRemoteWorkModelAddress = 40243;
-    public static final int ACPowerSetAddress = 40244;
-    public static final int ACWorkModelAddress = 40245;
-    public static final int ACTargetTempAddress = 40246;
-    public static final int ACFanSpeedModelAddress = 40247;
-    public static final int ACFanSweepAddress = 40248;
-    public static final int ACCtrlModelAddress = 40250;
+    public static final int ACStatusAddress = 573;
+    public static final int ACRemoteWorkModelAddress = 579;
+    public static final int ACPowerAddress = 580;
+    public static final int ACWorkModelAddress = 581;
+    public static final int ACTargetTempAddress = 582;
+    public static final int ACFanSpeedModelAddress = 583;
+    public static final int ACFanSweepAddress = 584;
+
+    public static final int ACRemoteWorkModelSetAddress = 243;
+    public static final int ACPowerSetAddress = 244;
+    public static final int ACWorkModelSetAddress = 245;
+    public static final int ACTargetTempSetAddress = 246;
+    public static final int ACFanSpeedModelSetAddress = 247;
+    public static final int ACFanSweepSetAddress = 248;
+    public static final int ACCtrlModelSetAddress = 250;
 
 
-    public static final int ACRemoteIDSetCommitAddress = 2001;
-    public static final int ACRemoteWorkModelSetCommitAddress = 2001;
-    public static final int ACThresholdCommitAddress = 2003;
-    public static final int ACSetCommitAddress = 2004;
+
+
+    public static final int ACRemoteIDSetCommitAddress = 1;
+    public static final int ACRemoteWorkModelSetCommitAddress = 2;
+    public static final int ACThresholdCommitAddress = 3;
+    public static final int ACSetCommitAddress = 4;
 
 
     /**

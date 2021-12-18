@@ -81,7 +81,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
             setHardware(StatusOption.UnionWorkModelAddress, 0, b ? StatusOption.FanWorkModel.Auto.ordinal() : StatusOption.FanWorkModel.Manual.ordinal());
         } else if (compoundButton == mACCtrlModel) {
             CabinetCore.logOpt(CabinetCore.RoleType.Operator, "设置", "空调控制模式:" + (b ? "自动" : "手动"));
-            setHardware(AirConditionerStatus.ACCtrlModelAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
+            setHardware(AirConditionerStatus.ACCtrlModelSetAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
         } else if (compoundButton == mACPower) {
             CabinetCore.logOpt(CabinetCore.RoleType.Operator, b ? "开" : "关", "空调");
             setHardware(AirConditionerStatus.ACPowerSetAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
@@ -127,7 +127,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
 
     private void setACWorkModelOption(AirConditionerStatus.WorkModel workModel) {
         getExecutorService().submit(() -> {
-            boolean success = ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACSetCommitAddress, true);
+            boolean success = ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelSetAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACSetCommitAddress, true);
             if (success) {
                 CabinetCore.logOpt(CabinetCore.RoleType.Operator, "设置", "空调工作模式");
                 showToast("空调模式设置成功");
@@ -142,7 +142,7 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
 
     private void setACRemoteWorkModelOption(AirConditionerStatus.RemoteWorkModel workModel) {
         getExecutorService().submit(() -> {
-            boolean success = ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACRemoteWorkModelSetCommitAddress, true);
+            boolean success = ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelSetAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACRemoteWorkModelSetCommitAddress, true);
             if (success) {
                 showToast("遥控器工作模式设置成功");
             } else {

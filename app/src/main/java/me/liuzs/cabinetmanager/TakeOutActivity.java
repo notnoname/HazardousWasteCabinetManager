@@ -348,6 +348,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
     private void reset() {
         initDepositRecord();
         mContainerNoValue.setText(null);
+        mContainerNoValue.requestFocus();
         showDepositRecord();
     }
 

@@ -23,23 +23,23 @@ package me.liuzs.cabinetmanager.model.modbus;
  */
 public class SetupValue {
 
-    public static final int VOCUnionMaxAddress = 40211;
-    public static final int VOCUnionMinAddress = 40212;
-    public static final int FanUnionWorkTimeAddress = 40214;
-    public static final int FanUnionStopTimeAddress = 40213;
-    public static final int FanUnionFrequencyAddress = 40201;
+    public static final int VOCUnionMaxAddress = 211;
+    public static final int VOCUnionMinAddress = 212;
+    public static final int FanUnionStopTimeAddress = 213;
+    public static final int FanUnionWorkTimeAddress = 214;
+    public static final int FanUnionFrequencyAddress = 201;
     public static final int VOCAlertAutoAddress = 40221;
-    public static final int TempHighAlertAutoAddress = 40222;
-    public static final int TempLowAlertAutoAddress = 40223;
-    public static final int HumidityHighAlertAutoAddress = 40224;
-    public static final int HumidityLowAlertAutoAddress = 40225;
-    public static final int VOCAlertAutoThresholdAddress = 40215;
-    public static final int FGAlertAutoThresholdAddress = 40216;
-    public static final int TempHighAlertThresholdAddress = 40217;
-    public static final int TempLowAlertThresholdAddress = 40218;
-    public static final int HumidityHighAlertThresholdAddress = 40219;
-    public static final int HumidityLowAlertThresholdAddress = 40220;
-    public static final int AlertSoundLightAddress = 40226;
+    public static final int TempHighAlertAutoAddress = 222;
+    public static final int TempLowAlertAutoAddress = 223;
+    public static final int HumidityHighAlertAutoAddress = 224;
+    public static final int HumidityLowAlertAutoAddress = 225;
+    public static final int VOCAlertAutoThresholdAddress = 215;
+    public static final int FGAlertAutoThresholdAddress = 216;
+    public static final int TempHighAlertThresholdAddress = 217;
+    public static final int TempLowAlertThresholdAddress = 218;
+    public static final int HumidityHighAlertThresholdAddress = 219;
+    public static final int HumidityLowAlertThresholdAddress = 220;
+    public static final int AlertSoundLightAddress = 226;
     /**
      * VOC联动，最大值
      */

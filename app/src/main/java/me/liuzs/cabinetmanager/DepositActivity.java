@@ -414,6 +414,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
         initDepositRecord();
         showDepositRecord();
         mContainerNoValue.setText(null);
+        mContainerNoValue.requestFocus();
     }
 
     public void onContainerSpecButtonClick(View view) {

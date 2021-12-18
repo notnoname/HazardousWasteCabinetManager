@@ -528,11 +528,11 @@ public class HardwareService extends Service {
             }
             if (controlCommand.autoCtrl != null) {
                 CabinetCore.logOpt("设置", "空调控制模式:" + (controlCommand.autoCtrl ? "自动" : "手动"));
-                setHardware(AirConditionerStatus.ACCtrlModelAddress, AirConditionerStatus.ACSetCommitAddress, controlCommand.autoCtrl ? 1 : 0);
+                setHardware(AirConditionerStatus.ACCtrlModelSetAddress, AirConditionerStatus.ACSetCommitAddress, controlCommand.autoCtrl ? 1 : 0);
             }
             if (controlCommand.powerOn != null) {
                 CabinetCore.logOpt(controlCommand.powerOn ? "开" : "关", "空调");
-                setHardware(AirConditionerStatus.ACCtrlModelAddress, AirConditionerStatus.ACSetCommitAddress, controlCommand.autoCtrl ? 1 : 0);
+                setHardware(AirConditionerStatus.ACCtrlModelSetAddress, AirConditionerStatus.ACSetCommitAddress, controlCommand.autoCtrl ? 1 : 0);
             }
             if (controlCommand.fanPowerOn != null) {
                 if (controlCommand.fanPowerOn) {
@@ -570,11 +570,11 @@ public class HardwareService extends Service {
     }
 
     private boolean setACWorkModelOption(AirConditionerStatus.WorkModel workModel) {
-        return ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACSetCommitAddress, true);
+        return ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelSetAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACSetCommitAddress, true);
     }
 
     private boolean setACRemoteWorkModelOption(AirConditionerStatus.RemoteWorkModel workModel) {
-        return ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACRemoteWorkModelSetCommitAddress, true);
+        return ModbusService.setHardwareHoldingRegisterOption(AirConditionerStatus.ACWorkModelSetAddress, workModel.ordinal()) && ModbusService.setHardwareCoilStatusOption(AirConditionerStatus.ACRemoteWorkModelSetCommitAddress, true);
     }
 
     private boolean setHardware(int valueAddress, int commitAddress, int value) {

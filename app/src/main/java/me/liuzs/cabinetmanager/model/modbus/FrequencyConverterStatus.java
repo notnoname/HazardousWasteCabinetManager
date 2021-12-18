@@ -33,11 +33,11 @@ package me.liuzs.cabinetmanager.model.modbus;
  * 故障复位	40702	1：故障复位，！=1：变频器接受成功后自动归零	R/W
  */
 public class FrequencyConverterStatus {
-    public static final int FCStatusAddress = 40553;
-    public static final int FCRotatingSpeedAddress = 40562;
-    public static final int FCFrequencyAddress = 40557;
-    public static final int FCFrequencyTargetAddress = 40558;
-    public static final int FCResetAddress = 40702;
+    public static final int FCStatusAddress = 553;
+    public static final int FCRotatingSpeedAddress = 562;
+    public static final int FCFrequencyAddress = 557;
+    public static final int FCFrequencyTargetAddress = 558;
+    public static final int FCResetAddress = 702;
 
     public enum Status {
         UnKnown, Clockwise, Counterclockwise, Stop, Fault, PowerOff;

@@ -253,12 +253,12 @@ public class ModbusService {
         try {
             BatchRead<Integer> batch = new BatchRead<>();
             batch.addLocator(0, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACStatusAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACCtrlModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACWorkModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(3, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACTargetTempAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(4, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACFanSpeedModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(5, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACFanSweepAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
-            batch.addLocator(6, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACRemoteWorkModelAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(1, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACCtrlModelSetAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(2, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACWorkModelSetAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(3, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACTargetTempSetAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(4, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACFanSpeedModelSetAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(5, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACFanSweepSetAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
+            batch.addLocator(6, BaseLocator.holdingRegister(ModbusSlaveId, AirConditionerStatus.ACRemoteWorkModelSetAddress - 1, DataType.TWO_BYTE_INT_SIGNED));
 
             ModbusMaster master = getMaster();
 
