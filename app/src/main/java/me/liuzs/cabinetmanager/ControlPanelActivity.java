@@ -172,9 +172,17 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
                 parseTime(filterResetTime.data.filter_time);
             }
             if (mAirConditionerStatus.e != null || mStatusOption.e != null) {
-                mHandler.post(() -> new AlertDialog.Builder(ControlPanelActivity.this).setMessage("设备信息读取失败，请立即检查设备").setNegativeButton("确认", null).show());
+                mHandler.post(() -> {
+                    if (!isFinishing()) {
+                        new AlertDialog.Builder(ControlPanelActivity.this).setMessage("设备信息读取失败，请立即检查设备").setNegativeButton("确认", null).show();
+                    }
+                });
             }
-            mHandler.post(this::showStatusOption);
+            mHandler.post(() -> {
+                if (!isFinishing()) {
+                    showStatusOption();
+                }
+            });
             dismissProgressDialog();
         });
     }
