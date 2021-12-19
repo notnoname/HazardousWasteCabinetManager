@@ -252,8 +252,6 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.action_mqtt:
                 Toast.makeText(this, "Start TVOCs publish.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, MQTTClientActivity.class);
-                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

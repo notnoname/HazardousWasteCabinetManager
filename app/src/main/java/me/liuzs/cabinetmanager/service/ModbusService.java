@@ -23,9 +23,13 @@ import me.liuzs.cabinetmanager.model.modbus.StatusOption;
 @SuppressWarnings("unused")
 public class ModbusService {
     private static final String TAG = "ModbusService";
-    private static String ModbusIP = CabinetCore.getModbusAddress();
     private static final int ModbusPort = 502;
     private static final int ModbusSlaveId = 1;
+    /**
+     * 工厂。
+     */
+    private final static ModbusFactory mModbusFactory = new ModbusFactory();
+    private static String ModbusIP = CabinetCore.getModbusAddress();
 
     public static String getModbusIP() {
         return ModbusIP + ":" + ModbusPort + "(" + ModbusSlaveId + ")";
@@ -36,32 +40,23 @@ public class ModbusService {
     }
 
     /**
-     * 工厂。
-     */
-    private final static ModbusFactory mModbusFactory = new ModbusFactory();
-
-    /**
      * 获取master
      *
      * @return ModbusMaster
      * @throws ModbusInitException exception
      */
-    private static ModbusMaster getMaster() throws ModbusInitException {
+    private synchronized static ModbusMaster getMaster() throws ModbusInitException {
         IpParameters params = new IpParameters();
         params.setHost(ModbusIP);
         params.setPort(ModbusPort);
         // modbusFactory.createRtuMaster(wapper); //RTU 协议
         // modbusFactory.createUdpMaster(params);//UDP 协议
         // modbusFactory.createAsciiMaster(wrapper);//ASCII 协议
-        if (mMaster == null || !mMaster.isConnected()) {
-            mMaster = mModbusFactory.createTcpMaster(params, true);// TCP 协议
-            mMaster.setTimeout(1000);
-            mMaster.init();
-        }
+        ModbusMaster mMaster = mModbusFactory.createTcpMaster(params, false);// TCP 协议
+        mMaster.setTimeout(500);
+        mMaster.init();
         return mMaster;
     }
-
-    private static ModbusMaster mMaster;
 
     /**
      * 读取[01 Coil Status 0x]类型 开关数据
@@ -318,11 +313,11 @@ public class ModbusService {
             setupValue.humidityHighAlertAuto = getIntValue(results, 8) == 1;
             setupValue.humidityLowAlertAuto = getIntValue(results, 9) == 1;
             setupValue.vocAlertAutoThreshold = getIntValue(results, 10) / 100f;
-            setupValue.fgAlertThreshold = getIntValue(results, 11) / 100f;
-            setupValue.tempHighAlertThreshold = getIntValue(results, 12) / 100f;
-            setupValue.tempLowAlertThreshold = getIntValue(results, 13) / 100f;
-            setupValue.humidityHighAlertThreshold = getIntValue(results, 14) / 100f;
-            setupValue.humidityLowAlertThreshold = getIntValue(results, 15) / 100f;
+            setupValue.fgAlertThreshold = getIntValue(results, 11).floatValue();
+            setupValue.tempHighAlertThreshold = getIntValue(results, 12) / 10f;
+            setupValue.tempLowAlertThreshold = getIntValue(results, 13) / 10f;
+            setupValue.humidityHighAlertThreshold = getIntValue(results, 14) / 10f;
+            setupValue.humidityLowAlertThreshold = getIntValue(results, 15) / 10f;
             setupValue.alertSoundLight = getIntValue(results, 16) == 1;
 
         } catch (Exception e) {
@@ -357,7 +352,7 @@ public class ModbusService {
             if (setupValue.vocAlertAutoThreshold != null)
                 writeHoldingRegister(SetupValue.VOCAlertAutoThresholdAddress - 1, (int) (setupValue.vocAlertAutoThreshold * 100));
             if (setupValue.fgAlertThreshold != null)
-                writeHoldingRegister(SetupValue.FGAlertAutoThresholdAddress - 1, (int) (setupValue.fgAlertThreshold * 100));
+                writeHoldingRegister(SetupValue.FGAlertAutoThresholdAddress - 1, (int) (setupValue.fgAlertThreshold).intValue());
             if (setupValue.tempHighAlertThreshold != null)
                 writeHoldingRegister(SetupValue.TempHighAlertThresholdAddress - 1, (int) (setupValue.tempHighAlertThreshold * 10));
             if (setupValue.tempLowAlertThreshold != null)
@@ -406,11 +401,16 @@ public class ModbusService {
     }
 
     private static Integer getIntValue(BatchResults br, Object key) {
-        Object o = br.getValue(key);
-        if (o instanceof Short) {
-            return ((Short) o).intValue();
-        } else {
-            return (Integer) o;
+        try {
+            Object o = br.getValue(key);
+            if (o instanceof Short) {
+                return ((Short) o).intValue();
+            } else {
+                return (Integer) o;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
         }
     }
 }

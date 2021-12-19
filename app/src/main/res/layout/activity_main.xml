@@ -151,7 +151,6 @@
                 android:id="@+id/llAlertStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#40000000"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="8px"
@@ -177,6 +176,7 @@
                 android:id="@+id/llFanStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#40000000"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="16px"
@@ -227,7 +227,7 @@
 
                 <TextView
                     android:id="@+id/textView"
-                    android:layout_width="90px"
+                    android:layout_width="130px"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/rpm"
@@ -240,7 +240,6 @@
                 android:id="@+id/llAC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#40000000"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="16px"
@@ -302,7 +301,7 @@
                     android:textSize="32px" />
 
                 <ImageView
-                    android:layout_width="90px"
+                    android:layout_width="130px"
                     android:layout_height="28px"
                     android:layout_marginLeft="0px"
                     android:layout_marginRight="0px"
@@ -317,6 +316,7 @@
                 android:id="@+id/llPG"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="#40000000"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="16px"
@@ -358,7 +358,7 @@
                     android:textSize="32px" />
 
                 <ImageView
-                    android:layout_width="90px"
+                    android:layout_width="130px"
                     android:layout_height="28px"
                     android:cropToPadding="true"
                     android:src="@drawable/ic_percent_sign"
@@ -369,7 +369,6 @@
                 android:id="@+id/llTVOCs"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="#40000000"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="16px"
@@ -413,7 +412,7 @@
                     android:textSize="32px" />
 
                 <TextView
-                    android:layout_width="90px"
+                    android:layout_width="130px"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/ppm"
@@ -425,6 +424,7 @@
                 android:id="@+id/llHumidity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="#40000000"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
                 android:padding="16px"
@@ -466,7 +466,7 @@
                     android:textSize="32px" />
 
                 <ImageView
-                    android:layout_width="90px"
+                    android:layout_width="130px"
                     android:layout_height="28px"
                     android:cropToPadding="true"
                     android:src="@drawable/ic_percent_sign"
@@ -478,13 +478,12 @@
                 android:id="@+id/llTemp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="#40000000"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="horizontal"
                 android:padding="16px"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/split">
+                app:layout_constraintTop_toBottomOf="@id/llTopTip">
 
                 <TextView
                     android:layout_width="130px"
@@ -521,11 +520,51 @@
                     android:textSize="32px" />
 
                 <ImageView
-                    android:layout_width="90px"
+                    android:layout_width="130px"
                     android:layout_height="28px"
                     android:cropToPadding="true"
                     android:src="@drawable/ic_celsius"
                     tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTopTip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#40000000"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                android:padding="16px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/split">
+
+                <TextView
+                    android:layout_width="200px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10px"
+                    android:layout_marginEnd="10px"
+                    android:background="@drawable/background_info_area"
+                    android:gravity="center"
+                    android:padding="5px"
+                    android:text="低位"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="32px" />
+
+                <TextView
+                    android:layout_width="200px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10px"
+                    android:layout_marginEnd="10px"
+                    android:text="高位"
+                    android:background="@drawable/background_info_area"
+                    android:gravity="center"
+                    android:padding="5px"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="32px" />
 
             </LinearLayout>
 

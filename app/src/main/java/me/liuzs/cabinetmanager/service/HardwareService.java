@@ -105,6 +105,7 @@ public class HardwareService extends Service {
             }
         }
     };
+
     private final IMqttActionListener mMQTTUnSubscriptTopicAction = new IMqttActionListener() {
         @Override
         public void onSuccess(IMqttToken asyncActionToken) {
@@ -150,6 +151,10 @@ public class HardwareService extends Service {
             Log.i(MQTT, "Callback-" + "deliver complete");
         }
     };
+    private Timer mHardwareValueQueryTimer;
+    private MqttAndroidClient mMQTTClient;
+    private Timer mAutoLockTimer;
+    private String mHardwareValueGSONCache;
     private final IMqttMessageListener mMessageListener = (topic, message) -> {
         if (!TextUtils.isEmpty(topic)) {
             Log.i(MQTT, "Message Topic:" + topic);
@@ -163,8 +168,6 @@ public class HardwareService extends Service {
         }
 
     };
-    private Timer mHardwareValueQueryTimer;
-    private MqttAndroidClient mMQTTClient;
     private final IMqttActionListener mMQTTConnectAction = new IMqttActionListener() {
         @Override
         public void onSuccess(IMqttToken asyncActionToken) {
@@ -177,11 +180,15 @@ public class HardwareService extends Service {
         public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
             if (exception != null) {
                 Log.i(MQTT, "Connect failure:" + exception.getMessage());
+            } else {
+                Log.i(MQTT, "Connect failure");
             }
         }
     };
-    private Timer mAutoLockTimer;
-    private String mHardwareValueGSONCache;
+    /**
+     * 当前是否报错
+     */
+    private boolean environmentStatusError, airConditionerStatusError, frequencyConverterStatusError, statusOptionError;
 
     public synchronized static void weight(Steelyard.SteelyardCallback callback) {
         if (mManager == null) {
@@ -245,7 +252,7 @@ public class HardwareService extends Service {
 
     private static MqttConnectOptions setUpConnectionOptions() {
         MqttConnectOptions connOpts = new MqttConnectOptions();
-        connOpts.setCleanSession(true);
+        connOpts.setCleanSession(false);
         connOpts.setAutomaticReconnect(true);
         return connOpts;
     }
@@ -287,8 +294,6 @@ public class HardwareService extends Service {
         if (mMQTTClient == null) {
             mMQTTClient = new MqttAndroidClient(this, RemoteAPI.MQTT.MQTT_ROOT, MQTTClientID);
             mMQTTClient.setCallback(mMqttCallback);
-        }
-        if (!mMQTTClient.isConnected()) {
             Cabinet cabinet = CabinetCore.getCabinetInfo();
             if (cabinet == null || TextUtils.isEmpty(cabinet.id)) {
                 return;
@@ -332,13 +337,15 @@ public class HardwareService extends Service {
                 if (isDoHardwareValueQuery.getAndSet(true)) {
                     return;
                 }
-                Log.d(TAG, "Do hardware value query");
+                //Log.d(TAG, "Do hardware value query");
                 initMQTTClient();
                 List<HardwareValue> values = CabinetCore.getUnSentHardwareValueList();
                 HardwareValue value = getHardwareValue();
-                if (value != null && validateHardwareValueChange(value)) {
+                if (value != null) {
                     notifyValue(value);
-                    values.add(value);
+                    if (validateHardwareValueChange(value)) {
+                        values.add(value);
+                    }
                 }
                 publishValue(values);
                 isDoHardwareValueQuery.set(false);
@@ -415,11 +422,6 @@ public class HardwareService extends Service {
         return result;
     }
 
-    /**
-     * 当前是否报错
-     */
-    private boolean environmentStatusError, airConditionerStatusError, frequencyConverterStatusError, statusOptionError;
-
     private HardwareValue getHardwareValue() {
         Cabinet cabinet = CabinetCore.getCabinetInfo();
         if (cabinet == null) {
@@ -468,7 +470,7 @@ public class HardwareService extends Service {
                 hValue.statusOption = statusOption;
                 statusOptionError = false;
             } else {
-                if(!statusOptionError) {
+                if (!statusOptionError) {
                     CabinetCore.logAlert("状态参数获取失败");
                     statusOptionError = true;
                 }
@@ -566,6 +568,7 @@ public class HardwareService extends Service {
                 CabinetCore.logOpt("设置", "遥控器工作模式");
                 setACRemoteWorkModelOption(controlCommand.remoteWorkModel);
             }
+            mHardwareValueGSONCache = null;
         }
     }
 
@@ -594,6 +597,7 @@ public class HardwareService extends Service {
             SetupValue setupValue = CabinetCore.GSON.fromJson(mqttMessage, SetupValue.class);
             ModbusService.saveSetupValue(setupValue);
             CabinetCore.logOpt("保存", "设置");
+            mHardwareValueGSONCache = null;
         } catch (Exception e) {
             e.printStackTrace();
         }

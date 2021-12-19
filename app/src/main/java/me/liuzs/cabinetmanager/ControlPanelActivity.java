@@ -75,16 +75,15 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        compoundButton.setChecked(b);
         if (compoundButton == mFanWorkModel) {
             CabinetCore.logOpt(CabinetCore.RoleType.Operator, "设置", "风机运行模式:" + (b ? "自动" : "手动"));
-            setHardware(StatusOption.UnionWorkModelAddress, 0, b ? StatusOption.FanWorkModel.Auto.ordinal() : StatusOption.FanWorkModel.Manual.ordinal());
+            setHardware(compoundButton,StatusOption.UnionWorkModelAddress, 0, b ? StatusOption.FanWorkModel.Auto.ordinal() : StatusOption.FanWorkModel.Manual.ordinal());
         } else if (compoundButton == mACCtrlModel) {
             CabinetCore.logOpt(CabinetCore.RoleType.Operator, "设置", "空调控制模式:" + (b ? "自动" : "手动"));
-            setHardware(AirConditionerStatus.ACCtrlModelSetAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
+            setHardware(compoundButton,AirConditionerStatus.ACCtrlModelSetAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
         } else if (compoundButton == mACPower) {
             CabinetCore.logOpt(CabinetCore.RoleType.Operator, b ? "开" : "关", "空调");
-            setHardware(AirConditionerStatus.ACPowerSetAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
+            setHardware(compoundButton,AirConditionerStatus.ACPowerSetAddress, AirConditionerStatus.ACSetCommitAddress, b ? 1 : 0);
         }
     }
 
@@ -199,17 +198,17 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
                 case None:
                     mFanWorkModelValue.setText(R.string.none);
                     mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_red);
-                    mFanWorkModel.setChecked(false);
+                    mFanWorkModel.setCheckedNoEvent(false);
                     break;
                 case Auto:
                     mFanWorkModelValue.setText(R.string.auto);
                     mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
-                    mFanWorkModel.setChecked(true);
+                    mFanWorkModel.setCheckedNoEvent(true);
                     break;
                 case Manual:
                     mFanWorkModelValue.setText(R.string.manual);
                     mFanWorkModelValue.setBackgroundResource(R.drawable.background_state_green);
-                    mFanWorkModel.setChecked(true);
+                    mFanWorkModel.setCheckedNoEvent(false);
                     break;
             }
             if (mStatusOption.fireAlert) {
@@ -224,20 +223,20 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
             if (mAirConditionerStatus.autoCtrl) {
                 mACCtrlModelValue.setText(R.string.auto);
                 mACCtrlModelValue.setBackgroundResource(R.drawable.background_state_green);
-                mACCtrlModel.setChecked(true);
+                mACCtrlModel.setCheckedNoEvent(true);
             } else {
                 mACCtrlModelValue.setText(R.string.manual);
                 mACCtrlModelValue.setBackgroundResource(R.drawable.background_state_green);
-                mACCtrlModel.setChecked(false);
+                mACCtrlModel.setCheckedNoEvent(false);
             }
             if (mAirConditionerStatus.powerOn) {
                 mACPowerValue.setText(R.string.open);
                 mACPowerValue.setBackgroundResource(R.drawable.background_state_green);
-                mACPower.setChecked(true);
+                mACPower.setCheckedNoEvent(true);
             } else {
                 mACPowerValue.setText(R.string.close);
                 mACPowerValue.setBackgroundResource(R.drawable.background_state_red);
-                mACPower.setChecked(false);
+                mACPower.setCheckedNoEvent(false);
             }
             mACWorkModelValue.setText(getString(ACWorkModelNameResId[mAirConditionerStatus.workModel.ordinal()]));
             mRemoteCtrlModelValue.setText(getString(ACRemoteWorkModelNameResId[mAirConditionerStatus.remoteWorkModel.ordinal()]));
@@ -254,8 +253,8 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
     }
 
     public void onFCResetButtonClick(View view) {
-        setHardware(FrequencyConverterStatus.FCResetAddress, 0, 1);
-        Util.sleep(250);
+        setHardware(view, FrequencyConverterStatus.FCResetAddress, 0, 1);
+        //Util.sleep(250);
     }
 
     public void onFilterResetButtonClick(View view) {
@@ -339,20 +338,24 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
         return false;
     }
 
-    private void setHardware(int valueAddress, int commitAddress, int value) {
+    private void setHardware(View view, int valueAddress, int commitAddress, int value) {
+        view.setEnabled(false);
         getExecutorService().submit(() -> {
             boolean success = ModbusService.setHardwareHoldingRegisterOption(valueAddress, value) && (commitAddress == 0 || ModbusService.setHardwareCoilStatusOption(commitAddress, true));
             if (!success) {
                 showToast("操作失败");
-                mHandler.post(this::showStatusOption);
-                return;
             }
+            Util.sleep(1000);
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();
-            if (mStatusOption.e != null || mAirConditionerStatus.e != null) {
-                showToast("信息获取失败");
-            } else {
-                mHandler.post(this::showStatusOption);
+
+            if(!isFinishing()) {
+                mHandler.post(() -> view.setEnabled(true));
+                if (mStatusOption.e != null || mAirConditionerStatus.e != null) {
+                    showToast("信息获取失败");
+                } else {
+                    mHandler.post(this::showStatusOption);
+                }
             }
         });
     }
@@ -372,7 +375,6 @@ public class ControlPanelActivity extends BaseActivity implements CompoundButton
             boolean success = ModbusService.setHardwareCoilStatusOption(address, false);
             if (!success) {
                 showToast("复位失败");
-                mHandler.post(this::showStatusOption);
             }
             mStatusOption = ModbusService.readStatusOption();
             mAirConditionerStatus = ModbusService.readAirConditionerStatus();

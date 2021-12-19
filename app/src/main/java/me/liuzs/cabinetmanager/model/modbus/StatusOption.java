@@ -18,18 +18,18 @@ package me.liuzs.cabinetmanager.model.modbus;
  */
 public class StatusOption {
     public static final int UnionWorkModelAddress = 703;
-    public static final int FanStartAddress = 9;
-    public static final int FanStopAddress = 10;
-    public static final int OxygenStartAddress = 11;
-    public static final int OxygenStopAddress = 12;
+    public static final int FanStartAddress = 2009;
+    public static final int FanStopAddress = 2010;
+    public static final int OxygenStartAddress = 2011;
+    public static final int OxygenStopAddress = 2012;
 
-    public static final int AlertVOCAddress = 17;
-    public static final int AlertFGAddress = 18;
-    public static final int AlertTempHighAddress = 19;
-    public static final int AlertHumidityHighAddress = 20;
-    public static final int AlertTempLowAddress = 21;
-    public static final int AlertHumidityLowAddress = 22;
-    public static final int AlertFireAddress = 23;
+    public static final int AlertVOCAddress = 2017;
+    public static final int AlertFGAddress = 2018;
+    public static final int AlertTempHighAddress = 2019;
+    public static final int AlertHumidityHighAddress = 2021;
+    public static final int AlertTempLowAddress = 2020;
+    public static final int AlertHumidityLowAddress = 2022;
+    public static final int AlertFireAddress = 2023;
 
 
 

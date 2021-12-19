@@ -58,10 +58,10 @@ public class AirConditionerStatus {
 
 
 
-    public static final int ACRemoteIDSetCommitAddress = 1;
-    public static final int ACRemoteWorkModelSetCommitAddress = 2;
-    public static final int ACThresholdCommitAddress = 3;
-    public static final int ACSetCommitAddress = 4;
+    public static final int ACRemoteIDSetCommitAddress = 2001;
+    public static final int ACRemoteWorkModelSetCommitAddress = 2002;
+    public static final int ACThresholdCommitAddress = 2003;
+    public static final int ACSetCommitAddress = 2004;
 
 
     /**

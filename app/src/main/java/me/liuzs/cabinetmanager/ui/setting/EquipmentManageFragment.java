@@ -104,27 +104,24 @@ public class EquipmentManageFragment extends Fragment implements CompoundButton.
         mUnionVOCHigh.setText(String.valueOf(mValue.vocUnionMax));
         mUnionVOCLow.setText(String.valueOf(mValue.vocUnionMin));
 
-
-        mAlertVOC.setChecked(mValue.vocAlertAuto);
+        mAlertVOC.setCheckedNoEvent(mValue.vocAlertAuto);
         mAlertVOCValue.setText(String.valueOf(mValue.vocAlertAutoThreshold));
 
         mAlertFGValue.setText(String.valueOf(mValue.fgAlertThreshold));
 
-        mAlertTempHigh.setChecked(mValue.tempHighAlertAuto);
+        mAlertTempHigh.setCheckedNoEvent(mValue.tempHighAlertAuto);
         mAlertTempHighValue.setText(String.valueOf(mValue.tempHighAlertThreshold));
 
-
-        mAlertTempLow.setChecked(mValue.tempLowAlertAuto);
+        mAlertTempLow.setCheckedNoEvent(mValue.tempLowAlertAuto);
         mAlertTempLowValue.setText(String.valueOf(mValue.tempLowAlertThreshold));
 
-        mAlertHumidityHigh.setChecked(mValue.humidityHighAlertAuto);
-        mAlertHumidityHighValue.setText(String.valueOf(mValue.tempHighAlertThreshold));
+        mAlertHumidityHigh.setCheckedNoEvent(mValue.humidityHighAlertAuto);
+        mAlertHumidityHighValue.setText(String.valueOf(mValue.humidityHighAlertThreshold));
 
+        mAlertHumidityLow.setCheckedNoEvent(mValue.humidityLowAlertAuto);
+        mAlertHumidityLowValue.setText(String.valueOf(mValue.humidityLowAlertThreshold));
 
-        mAlertHumidityLow.setChecked(mValue.humidityLowAlertAuto);
-        mAlertHumidityLowValue.setText(String.valueOf(mValue.tempLowAlertThreshold));
-
-        mAlertSoundLight.setChecked(mValue.alertSoundLight);
+        mAlertSoundLight.setCheckedNoEvent(mValue.alertSoundLight == Boolean.TRUE);
 
     }
 
@@ -148,6 +145,7 @@ public class EquipmentManageFragment extends Fragment implements CompoundButton.
             float humidityLowAlertValue = Float.parseFloat(mAlertHumidityLowValue.getEditableText().toString());
             boolean humidityLowAlert = mAlertHumidityLow.isChecked();
             float fgAlertValue = Float.parseFloat(mAlertFGValue.getEditableText().toString());
+            boolean alertSoundLight = mAlertSoundLight.isChecked();
 
             result = new SetupValue();
             result.fanUnionWorkTime = (int) unionFanRunTime;
@@ -169,10 +167,11 @@ public class EquipmentManageFragment extends Fragment implements CompoundButton.
             result.humidityLowAlertThreshold = humidityLowAlertValue;
             result.humidityLowAlertAuto = humidityLowAlert;
 
+            result.alertSoundLight = alertSoundLight;
 
         } catch (Exception e) {
             e.printStackTrace();
-            mActivity.showToast("输入有误，请检查！");
+            mActivity.showToast("输入有误，请检查.");
         }
         return result;
     }
@@ -207,9 +206,9 @@ public class EquipmentManageFragment extends Fragment implements CompoundButton.
                     mActivity.runOnUiThread(() -> {
                         showValue();
                         if(result) {
-                            mActivity.showToast("设置保存成功!");
+                            mActivity.showToast("设置保存成功.");
                         } else {
-                            mActivity.showToast("设置保存失败!");
+                            mActivity.showToast("设置保存失败.");
                         }
                         mSave.setEnabled(true);
                     });

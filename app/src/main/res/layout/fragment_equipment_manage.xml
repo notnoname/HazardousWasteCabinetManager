@@ -44,7 +44,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvAlertSoundLightLabel"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="DuplicateSpeakableTextCheck" />
+                tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,7 +82,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvAlertHumidityHighLabel"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="DuplicateSpeakableTextCheck" />
+                tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/etAlertHumidityHighValue"
@@ -99,7 +99,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/swAlertHumidityHigh"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/tvAlertHumidityHighUnit"
@@ -252,7 +252,8 @@
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvAlertTempHighLabel"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/etAlertTempHighValue"
@@ -269,7 +270,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/swAlertTemHigh"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/tvAlertTempHighUnit"
@@ -319,7 +320,8 @@
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvAlertFGLabel"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/etAlertFGValue"
@@ -336,7 +338,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/swAlertFG"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:layout_width="30px"
@@ -383,7 +385,8 @@
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvAlertVOCLabel"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/etAlertVOCValue"
@@ -400,7 +403,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/swAlertVOC"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -466,7 +469,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanUnionLabel"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/etFanVOCMaxValue"
@@ -484,7 +487,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvLowVOCUnit"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/tvLowVOCUnit"
@@ -581,7 +584,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanStart"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/tvFanStart"
@@ -612,7 +615,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvFanTimer1Label"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/tvFanTimer1Label"

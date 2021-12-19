@@ -28,7 +28,7 @@ public class SetupValue {
     public static final int FanUnionStopTimeAddress = 213;
     public static final int FanUnionWorkTimeAddress = 214;
     public static final int FanUnionFrequencyAddress = 201;
-    public static final int VOCAlertAutoAddress = 40221;
+    public static final int VOCAlertAutoAddress = 221;
     public static final int TempHighAlertAutoAddress = 222;
     public static final int TempLowAlertAutoAddress = 223;
     public static final int HumidityHighAlertAutoAddress = 224;

@@ -77,8 +77,10 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="um.61b2e5ace0f9bb492b8d7c16" />
             </intent-filter>
         </activity>
@@ -114,7 +116,6 @@
             android:name=".LoginActivity"
             android:label=""
             android:theme="@style/Theme.CabinetManager.NoActionBar" />
-        <activity android:name=".MQTTClientActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -180,6 +181,7 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".service.HardwareService"
             android:enabled="true"
