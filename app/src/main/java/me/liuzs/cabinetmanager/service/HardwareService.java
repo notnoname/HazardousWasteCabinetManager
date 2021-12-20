@@ -225,6 +225,7 @@ public class HardwareService extends Service {
         try {
             TDA04A c = mManager.getTDA04CInstance(0);
 //            c.SetGain(value);
+            Log.d(TAG, String.valueOf(value));
             c.calibrate(TDA04A.CalibrateType.E_CALIBRATE_GAIN);
         } catch (Exception e) {
             e.printStackTrace();
@@ -428,7 +429,7 @@ public class HardwareService extends Service {
             return null;
         }
         long createTime = System.currentTimeMillis();
-        Log.d(TAG, "Get HardwareValue: " + mLogTimeFormat.format(new Date(createTime)));
+        Log.d(TAG, "HardwareValue: " + mLogTimeFormat.format(new Date(createTime)));
         try {
             HardwareValue hValue = new HardwareValue();
             SetupValue setupValue = ModbusService.readSetupValue();
@@ -555,7 +556,7 @@ public class HardwareService extends Service {
                 }
             }
             if (controlCommand.frequencyReset != null) {
-                if (controlCommand.oxygenPowerOn) {
+                if (controlCommand.frequencyReset) {
                     CabinetCore.logOpt("复位", "变频器");
                     setHardware(FrequencyConverterStatus.FCResetAddress, 0, 1);
                 }
