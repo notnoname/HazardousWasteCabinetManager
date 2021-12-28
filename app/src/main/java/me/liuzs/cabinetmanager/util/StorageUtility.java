@@ -2,6 +2,7 @@ package me.liuzs.cabinetmanager.util;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.InputStream;
@@ -22,6 +23,7 @@ public class StorageUtility {
     public static synchronized void init(Context context) {
         INSTANCE.mContext = context;
         BaseDir = context.getExternalFilesDir(null).getAbsolutePath() + File.separator;
+        Log.d("StorageUtility", BaseDir);
         File file = new File(BaseDir);
         if (file.exists() && !file.isDirectory()) {
             file.delete();
@@ -70,7 +72,7 @@ public class StorageUtility {
     }
 
     public static ArrayList<File> getFiles(File directory, boolean recursive) {
-        ArrayList<File> fileList = new ArrayList<File>();
+        ArrayList<File> fileList = new ArrayList<>();
         if (directory != null && directory.exists() && directory.isDirectory()) {
             walkFiles(directory, recursive, null, null, fileList);
         }
@@ -80,7 +82,7 @@ public class StorageUtility {
     // pattern can be for example "(.+(\\.(?i)(jpg|jpeg))$)"
     public static ArrayList<File> getFiles(File directory, boolean recursive,
                                            Pattern fileNameFilter, Pattern directoryNameFilter) {
-        ArrayList<File> fileList = new ArrayList<File>();
+        ArrayList<File> fileList = new ArrayList<>();
         if (directory != null && directory.exists() && directory.isDirectory()) {
             walkFiles(directory, recursive, fileNameFilter, directoryNameFilter, fileList);
         }
