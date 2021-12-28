@@ -13,6 +13,8 @@ import com.serotonin.modbus4j.exception.ModbusTransportException;
 import com.serotonin.modbus4j.ip.IpParameters;
 import com.serotonin.modbus4j.locator.BaseLocator;
 
+import java.util.Objects;
+
 import me.liuzs.cabinetmanager.CabinetCore;
 import me.liuzs.cabinetmanager.model.modbus.AirConditionerStatus;
 import me.liuzs.cabinetmanager.model.modbus.EnvironmentStatus;
@@ -224,9 +226,9 @@ public class ModbusService {
             batch.setContiguousRequests(false);
             BatchResults<Integer> results = master.send(batch);
 
-            environmentStatus.vocLowerPart = getIntValue(results, 0) / 100f;
-            environmentStatus.vocUpperPart = getIntValue(results, 1) / 100f;
-            environmentStatus.fgLowerPart = getIntValue(results, 2);
+            environmentStatus.vocLowerPart = Objects.requireNonNull(getIntValue(results, 0)).floatValue();
+            environmentStatus.vocUpperPart = Objects.requireNonNull(getIntValue(results, 1)).floatValue();
+            environmentStatus.fgLowerPart = Objects.requireNonNull(getIntValue(results, 2)).floatValue();
             environmentStatus.fgUpperPart = getIntValue(results, 3);
             environmentStatus.tempA = getIntValue(results, 4) / 10f;
             environmentStatus.tempB = getIntValue(results, 5) / 10f;
@@ -302,8 +304,8 @@ public class ModbusService {
 
             batch.setContiguousRequests(false);
             BatchResults<Integer> results = master.send(batch);
-            setupValue.vocUnionMax = getIntValue(results, 0) / 100f;
-            setupValue.vocUnionMin = getIntValue(results, 1) / 100f;
+            setupValue.vocUnionMax = getIntValue(results, 0).floatValue();
+            setupValue.vocUnionMin = getIntValue(results, 1).floatValue();
             setupValue.fanUnionWorkTime = getIntValue(results, 2);
             setupValue.fanUnionStopTime = getIntValue(results, 3);
             setupValue.fanUnionFrequency = getIntValue(results, 4) / 100f;
@@ -312,7 +314,7 @@ public class ModbusService {
             setupValue.tempLowAlertAuto = getIntValue(results, 7) == 1;
             setupValue.humidityHighAlertAuto = getIntValue(results, 8) == 1;
             setupValue.humidityLowAlertAuto = getIntValue(results, 9) == 1;
-            setupValue.vocAlertAutoThreshold = getIntValue(results, 10) / 100f;
+            setupValue.vocAlertAutoThreshold = getIntValue(results, 10).floatValue();
             setupValue.fgAlertThreshold = getIntValue(results, 11).floatValue();
             setupValue.tempHighAlertThreshold = getIntValue(results, 12) / 10f;
             setupValue.tempLowAlertThreshold = getIntValue(results, 13) / 10f;
@@ -330,9 +332,9 @@ public class ModbusService {
     public synchronized static boolean saveSetupValue(SetupValue setupValue) {
         try {
             if (setupValue.vocUnionMax != null)
-                writeHoldingRegister(SetupValue.VOCUnionMaxAddress - 1, (int) (setupValue.vocUnionMax * 100));
+                writeHoldingRegister(SetupValue.VOCUnionMaxAddress - 1, setupValue.vocUnionMax.intValue());
             if (setupValue.vocUnionMin != null)
-                writeHoldingRegister(SetupValue.VOCUnionMinAddress - 1, (int) (setupValue.vocUnionMin * 100));
+                writeHoldingRegister(SetupValue.VOCUnionMinAddress - 1, setupValue.vocUnionMin.intValue());
             if (setupValue.fanUnionWorkTime != null)
                 writeHoldingRegister(SetupValue.FanUnionWorkTimeAddress - 1, setupValue.fanUnionWorkTime);
             if (setupValue.fanUnionStopTime != null)
@@ -350,7 +352,7 @@ public class ModbusService {
             if (setupValue.humidityLowAlertAuto != null)
                 writeHoldingRegister(SetupValue.HumidityLowAlertAutoAddress - 1, setupValue.humidityLowAlertAuto ? 1 : 0);
             if (setupValue.vocAlertAutoThreshold != null)
-                writeHoldingRegister(SetupValue.VOCAlertAutoThresholdAddress - 1, (int) (setupValue.vocAlertAutoThreshold * 100));
+                writeHoldingRegister(SetupValue.VOCAlertAutoThresholdAddress - 1, setupValue.vocAlertAutoThreshold.intValue());
             if (setupValue.fgAlertThreshold != null)
                 writeHoldingRegister(SetupValue.FGAlertAutoThresholdAddress - 1, (int) (setupValue.fgAlertThreshold).intValue());
             if (setupValue.tempHighAlertThreshold != null)
