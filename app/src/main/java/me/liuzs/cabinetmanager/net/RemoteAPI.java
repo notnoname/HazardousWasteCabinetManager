@@ -46,7 +46,7 @@ public class RemoteAPI {
     /**
      * HTTP接口Root地址
      */
-    public static final String API_ROOT = "https://www.idburg.cn:8090";
+    public static final String API_ROOT = "https://idburg.cn:8090";
 
     public static final String APP_DOWNLOAD = API_ROOT + "/app_download/hazardous_waste_cabinet_manage.apk";
 
