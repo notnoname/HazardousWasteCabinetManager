@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "me.liuzs.cabinetmanager",
+  "applicationId": "me.liuzs.hazardouswastecabinetmanager",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 72,
-      "versionName": "0.71",
+      "versionCode": 37,
+      "versionName": "0.37",
       "outputFile": "app-release.apk"
     }
   ],

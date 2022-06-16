@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "me.liuzs.hazardouswastecabinetmanager",
+  "variantName": "release_test",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 10,
+      "versionName": "0.10",
+      "outputFile": "app-release_test.apk"
+    }
+  ],
+  "elementType": "File"
+}
