@@ -10,3 +10,4 @@
 local.properties
 /cabinet-release/build/.transforms/
 /app/release/
+/app/release_test/
