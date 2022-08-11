@@ -262,7 +262,8 @@
             android:textSize="28px"
             app:layout_constraintEnd_toStartOf="@+id/btnWeight"
             app:layout_constraintStart_toStartOf="@+id/tvInWeightValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvInWeightValue" />
+            app:layout_constraintTop_toBottomOf="@+id/tvInWeightValue"
+            tools:ignore="TouchTargetSizeCheck" />
 
 
         <LinearLayout
@@ -284,7 +285,8 @@
                 android:onClick="onResetButtonClick"
                 android:text="@string/reset"
                 android:textColor="@color/white"
-                android:textSize="24px" />
+                android:textSize="24px"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnOK"
@@ -296,7 +298,8 @@
                 android:onClick="onSubmitButtonClick"
                 android:text="@string/ok"
                 android:textColor="@color/white"
-                android:textSize="24px" />
+                android:textSize="24px"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -329,7 +332,8 @@
                 android:onClick="onBackButtonClick"
                 android:scaleType="fitCenter"
                 android:src="@drawable/back_button"
-                android:visibility="visible" />
+                android:visibility="visible"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -359,7 +363,8 @@
                     android:layout_height="40px"
                     android:layout_marginStart="10px"
                     android:gravity="start"
-                    android:textSize="28px" />
+                    android:textSize="28px"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

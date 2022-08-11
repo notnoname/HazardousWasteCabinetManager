@@ -45,6 +45,9 @@ abstract class BaseActivity extends AppCompatActivity {
     private Timer mTimer;
     private AuthListener mAuthListener;
     private final ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if(mAuthListener == null) {
+            return;
+        }
         int resultCode = result.getResultCode();
         if (resultCode == RESULT_OK) {
             Intent data = result.getData();

@@ -252,16 +252,13 @@ public class CameraHelper implements Camera.PreviewCallback {
             return mCamera.getParameters().getPreviewSize();
         }
         Camera.Size[] tempSizes = sizes.toArray(new Camera.Size[0]);
-        Arrays.sort(tempSizes, new Comparator<Camera.Size>() {
-            @Override
-            public int compare(Camera.Size o1, Camera.Size o2) {
-                if (o1.width > o2.width) {
-                    return -1;
-                } else if (o1.width == o2.width) {
-                    return o1.height > o2.height ? -1 : 1;
-                } else {
-                    return 1;
-                }
+        Arrays.sort(tempSizes, (o1, o2) -> {
+            if (o1.width > o2.width) {
+                return -1;
+            } else if (o1.width == o2.width) {
+                return o1.height > o2.height ? -1 : 1;
+            } else {
+                return 1;
             }
         });
         sizes = Arrays.asList(tempSizes);

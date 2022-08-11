@@ -391,6 +391,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
             reset();
         } else {
             showProgressDialog();
+            mSubmit.setEnabled(false);
             getExecutorService().submit(() -> {
                 APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.takeInDeposit(mDepositRecord);
                 dismissProgressDialog();
@@ -405,6 +406,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                     showToast(apijson.error);
                     showModelSwitchDialog();
                 }
+                mSubmit.setEnabled(true);
             });
         }
 
@@ -480,7 +482,7 @@ public class DepositActivity extends BaseActivity implements TextWatcher, Compou
                     showToast("货架号必须是数字！");
                 }
             }
-        } else if (editable == mOtherInfoValue.getEditableText()) {
+        } else if (editable == mOtherInfoValue.getEditableText() && mDepositRecord != null) {
             mDepositRecord.remark = editable.toString();
         }
     }

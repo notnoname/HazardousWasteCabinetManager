@@ -26,7 +26,6 @@ import java.util.Objects;
 
 import me.liuzs.cabinetmanager.model.DepositRecord;
 import me.liuzs.cabinetmanager.net.APIJSON;
-import me.liuzs.cabinetmanager.net.DepositRecordListJSON;
 import me.liuzs.cabinetmanager.net.RemoteAPI;
 
 /**
@@ -184,6 +183,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
             showToast("提交成功");
             reset();
         } else {
+            mSubmit.setEnabled(false);
             showProgressDialog();
             getExecutorService().submit(() -> {
                 APIJSON<DepositRecord> apijson = RemoteAPI.Deposit.takeOutDeposit(mDepositRecord);
@@ -200,6 +200,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
                     showToast(apijson.error);
                     showModelSwitchDialog();
                 }
+                mSubmit.setEnabled(true);
             });
         }
     }
@@ -237,7 +238,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
                 record.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
                 record.has_input_weight = !TextUtils.isEmpty(record.input_weight);
                 record.has_output_weight = !TextUtils.isEmpty(record.output_weight);
-                if(record.has_output_weight) {
+                if (record.has_output_weight) {
                     showToast("此单号已经有记录，请勿重复提交.");
                     reset();
                 } else {
@@ -319,9 +320,9 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
                     record.has_storage_rack = !TextUtils.isEmpty(record.storage_rack);
                     record.has_input_weight = !TextUtils.isEmpty(record.input_weight);
                     record.has_output_weight = !TextUtils.isEmpty(record.output_weight);
-                    if(!record.has_storage_rack) {
+                    if (!record.has_storage_rack) {
                         showToast("未查询到入柜记录,请先入柜.");
-                    } else if(record.has_output_weight) {
+                    } else if (record.has_output_weight) {
                         showToast("此单号已经出柜，请勿重复出柜.");
                     } else {
                         record.output_operator = mDepositRecord.output_operator;
@@ -342,7 +343,7 @@ public class TakeOutActivity extends BaseActivity implements CompoundButton.OnCh
     }
 
     private void showModelSwitchDialog() {
-        new AlertDialog.Builder(TakeOutActivity.this).setMessage(R.string.switch_offline_model_tip).setNegativeButton(R.string.ok, (dialog, which) -> mOfflineModel.setChecked(true)).setNeutralButton(R.string.cancel, (dialogInterface, i) -> finish()).show();
+        mHandler.post(() -> new AlertDialog.Builder(TakeOutActivity.this).setMessage(R.string.switch_offline_model_tip).setNegativeButton(R.string.ok, (dialog, which) -> mOfflineModel.setChecked(true)).setNeutralButton(R.string.cancel, (dialogInterface, i) -> finish()).show());
     }
 
     private void reset() {

@@ -59,7 +59,8 @@
                 android:padding="10px"
                 android:text="下载最新包"
                 android:textColor="@color/white"
-                android:textSize="24px" />
+                android:textSize="24px"
+                tools:ignore="TouchTargetSizeCheck" />
         </androidx.appcompat.widget.Toolbar>
 
 

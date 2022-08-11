@@ -17,6 +17,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
+
 public class AuthActivity extends AppCompatActivity {
 
     public static final String KEY_AUTH_TYPE = "KEY_AUTH_TYPE";
@@ -48,7 +50,7 @@ public class AuthActivity extends AppCompatActivity {
             }
         }
     });
-    private TextView.OnEditorActionListener mEnterListener = new TextView.OnEditorActionListener() {
+    private final TextView.OnEditorActionListener mEnterListener = new TextView.OnEditorActionListener() {
 
 
         /**
@@ -118,7 +120,7 @@ public class AuthActivity extends AppCompatActivity {
     public void onFaceIDButtonClick(View view) {
         Intent intent = new Intent(this, RegisterAndRecognizeActivity.class);
         intent.putExtra(RegisterAndRecognizeActivity.PARAM_IS_FOR_REG, false);
-        String account = CabinetCore.getCabinetUser(mType).username;
+        String account = Objects.requireNonNull(CabinetCore.getCabinetUser(mType)).username;
         intent.putExtra(RegisterAndRecognizeActivity.PARAM_AUTH_ACCOUNT, account);
         mLauncher.launch(intent);
     }
