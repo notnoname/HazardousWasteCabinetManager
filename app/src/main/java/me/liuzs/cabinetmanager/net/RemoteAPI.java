@@ -78,7 +78,7 @@ public class RemoteAPI {
         /**
          * MQTT Root地址
          */
-        public static final String MQTT_ROOT = "tcp://47.104.235.225:1883";
+        public static final String MQTT_ROOT = "tcp://idburg.cn:1883";
         public static final String Topic_Hardware_Value_Publish = "storage-env";
         public static final String Topic_Control_Subscribe = "storage-ctr-";
         public static final String Topic_SetupValue_Subscribe = "storage-set-";
