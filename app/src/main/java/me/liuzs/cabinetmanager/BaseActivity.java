@@ -45,7 +45,7 @@ abstract class BaseActivity extends AppCompatActivity {
     private Timer mTimer;
     private AuthListener mAuthListener;
     private final ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if(mAuthListener == null) {
+        if (mAuthListener == null) {
             return;
         }
         int resultCode = result.getResultCode();
@@ -67,16 +67,20 @@ abstract class BaseActivity extends AppCompatActivity {
     public synchronized void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new NewProgressDialog(this, THEME_CIRCLE_PROGRESS);
-        } else {
-            mProgressDialog.dismiss();
         }
-        mHandler.post(() -> mProgressDialog.show());
+        mHandler.post(() -> {
+            if (!mProgressDialog.isShowing()) {
+                mProgressDialog.show();
+            }
+        });
     }
 
     public synchronized void dismissProgressDialog() {
-        if (mProgressDialog != null) {
-            mHandler.post(() -> mProgressDialog.dismiss());
-        }
+        mHandler.post(() -> {
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
+        });
     }
 
     public synchronized void showToast(CharSequence info) {

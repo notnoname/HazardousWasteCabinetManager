@@ -251,7 +251,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvACRemoteCtrlLabel"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -399,7 +399,8 @@
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnFanClose"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="invisible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnOxygenOpen"
@@ -414,7 +415,8 @@
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvOxygenCtrlLabel"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="invisible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnOxygenClose"
@@ -429,7 +431,8 @@
                 android:textSize="28px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnOxygenOpen"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="invisible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
