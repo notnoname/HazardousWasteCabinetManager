@@ -208,7 +208,7 @@ public class EquipmentManageFragment extends Fragment implements CompoundButton.
                         if(result) {
                             mActivity.showToast("设置保存成功.");
                         } else {
-                            mActivity.showToast("设置保存失败.");
+                            mActivity.showToast("有设置保存失败.");
                         }
                         mSave.setEnabled(true);
                     });

@@ -330,46 +330,127 @@ public class ModbusService {
     }
 
     public synchronized static boolean saveSetupValue(SetupValue setupValue) {
-        try {
-            if (setupValue.vocUnionMax != null)
+        boolean result = true;
+        if (setupValue.vocUnionMax != null)
+            try {
                 writeHoldingRegister(SetupValue.VOCUnionMaxAddress - 1, setupValue.vocUnionMax.intValue());
-            if (setupValue.vocUnionMin != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.vocUnionMin != null)
+            try {
                 writeHoldingRegister(SetupValue.VOCUnionMinAddress - 1, setupValue.vocUnionMin.intValue());
-            if (setupValue.fanUnionWorkTime != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.fanUnionWorkTime != null)
+            try {
                 writeHoldingRegister(SetupValue.FanUnionWorkTimeAddress - 1, setupValue.fanUnionWorkTime);
-            if (setupValue.fanUnionStopTime != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.fanUnionStopTime != null)
+            try {
                 writeHoldingRegister(SetupValue.FanUnionStopTimeAddress - 1, setupValue.fanUnionStopTime);
-            if (setupValue.fanUnionFrequency != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.fanUnionFrequency != null)
+            try {
                 writeHoldingRegister(SetupValue.FanUnionFrequencyAddress - 1, (int) (setupValue.fanUnionFrequency * 100));
-            if (setupValue.vocAlertAuto != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.vocAlertAuto != null)
+            try {
                 writeHoldingRegister(SetupValue.VOCAlertAutoAddress - 1, setupValue.vocAlertAuto ? 1 : 0);
-            if (setupValue.tempHighAlertAuto != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.tempHighAlertAuto != null)
+            try {
                 writeHoldingRegister(SetupValue.TempHighAlertAutoAddress - 1, setupValue.tempHighAlertAuto ? 1 : 0);
-            if (setupValue.tempLowAlertAuto != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.tempLowAlertAuto != null)
+            try {
                 writeHoldingRegister(SetupValue.TempLowAlertAutoAddress - 1, setupValue.tempLowAlertAuto ? 1 : 0);
-            if (setupValue.humidityHighAlertAuto != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.humidityHighAlertAuto != null)
+            try {
                 writeHoldingRegister(SetupValue.HumidityHighAlertAutoAddress - 1, setupValue.humidityHighAlertAuto ? 1 : 0);
-            if (setupValue.humidityLowAlertAuto != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.humidityLowAlertAuto != null)
+            try {
                 writeHoldingRegister(SetupValue.HumidityLowAlertAutoAddress - 1, setupValue.humidityLowAlertAuto ? 1 : 0);
-            if (setupValue.vocAlertAutoThreshold != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.vocAlertAutoThreshold != null)
+            try {
                 writeHoldingRegister(SetupValue.VOCAlertAutoThresholdAddress - 1, setupValue.vocAlertAutoThreshold.intValue());
-            if (setupValue.fgAlertThreshold != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.fgAlertThreshold != null)
+            try {
                 writeHoldingRegister(SetupValue.FGAlertAutoThresholdAddress - 1, (int) (setupValue.fgAlertThreshold).intValue());
-            if (setupValue.tempHighAlertThreshold != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.tempHighAlertThreshold != null)
+            try {
                 writeHoldingRegister(SetupValue.TempHighAlertThresholdAddress - 1, (int) (setupValue.tempHighAlertThreshold * 10));
-            if (setupValue.tempLowAlertThreshold != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.tempLowAlertThreshold != null)
+            try {
                 writeHoldingRegister(SetupValue.TempLowAlertThresholdAddress - 1, (int) (setupValue.tempLowAlertThreshold * 10));
-            if (setupValue.humidityHighAlertThreshold != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.humidityHighAlertThreshold != null)
+            try {
                 writeHoldingRegister(SetupValue.HumidityHighAlertThresholdAddress - 1, (int) (setupValue.humidityHighAlertThreshold * 10));
-            if (setupValue.humidityLowAlertThreshold != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.humidityLowAlertThreshold != null)
+            try {
                 writeHoldingRegister(SetupValue.HumidityLowAlertThresholdAddress - 1, (int) (setupValue.humidityLowAlertThreshold * 10));
-            if (setupValue.alertSoundLight != null)
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        if (setupValue.alertSoundLight != null)
+            try {
                 writeHoldingRegister(SetupValue.AlertSoundLightAddress - 1, setupValue.alertSoundLight ? 1 : 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = false;
+            }
+        return result;
     }
 
     /**
