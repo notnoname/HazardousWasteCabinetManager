@@ -397,10 +397,10 @@
                 android:text="@string/sound_light_control"
                 android:textColor="@color/white"
                 android:textSize="28px"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnFanClose"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="invisible" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnOxygenOpen"
@@ -413,10 +413,10 @@
                 android:text="@string/open"
                 android:textColor="@color/white"
                 android:textSize="28px"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvOxygenCtrlLabel"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="invisible" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnOxygenClose"
@@ -429,10 +429,10 @@
                 android:text="@string/close"
                 android:textColor="@color/white"
                 android:textSize="28px"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnOxygenOpen"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="invisible" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
