@@ -50,7 +50,7 @@ public class HardwareService extends Service {
     public static final String MQTT = "MQTT";
     @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat mLogTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-    private static final long mHardwareValueQueryInterval = 20000;
+    private static final long mHardwareValueQueryInterval = 10000;
     public static int Qos = 2;
     private static CabinetManager mManager;
     private final String MQTTClientID = MqttClient.generateClientId();
