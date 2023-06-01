@@ -308,6 +308,8 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        //throw new RuntimeException("崩溃重启测试");
     }
 
     public void onTakeOutButtonClick(View view) {

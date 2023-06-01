@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
+
 import com.puty.sdk.PrinterInstance;
 import com.umeng.commonsdk.UMConfigure;
 import com.videogo.openapi.EZOpenSDK;
@@ -44,6 +46,8 @@ public class CabinetApplication extends Application {
 
     @SuppressLint("HardwareIds")
     private void init() {
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
         UMConfigure.preInit(this, Config.UMENG_APP_KEY, "Default");
         UMConfigure.setLogEnabled(true);
         //初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。

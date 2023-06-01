@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -107,14 +109,15 @@ public class CrashHandler implements UncaughtExceptionHandler {
             @Override
             public void run() {
                 Looper.prepare();
-                Toast.makeText(mContext, "很抱歉,程序出现异常,即将退出.", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "很抱歉,程序出现异常退出,即将重启.", Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         }.start();
         //收集设备参数信息
-        collectDeviceInfo(mContext);
+        //collectDeviceInfo(mContext);
         //保存日志文件
-        saveCrashInfoFile(ex);
+        //saveCrashInfoFile(ex);
+        ProcessPhoenix.triggerRebirth(mContext);
         return true;
     }
 
