@@ -70,7 +70,7 @@ abstract class BaseActivity extends AppCompatActivity {
             mProgressDialog = new NewProgressDialog(this, THEME_CIRCLE_PROGRESS);
         }
         mHandler.post(() -> {
-            if (!mProgressDialog.isShowing()) {
+            if (!isFinishing() && !mProgressDialog.isShowing()) {
                 mProgressDialog.show();
             }
         });
@@ -78,7 +78,7 @@ abstract class BaseActivity extends AppCompatActivity {
 
     public synchronized void dismissProgressDialog() {
         mHandler.post(() -> {
-            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            if (!isFinishing() && mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
         });
